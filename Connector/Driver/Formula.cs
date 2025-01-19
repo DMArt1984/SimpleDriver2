@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using WindowsFormsIDevice.Connector.SGT;
+using WindowsFormsIDevice.Connector.Driver.Component;
 
 namespace WindowsFormsIDevice.Connector.Driver
 {

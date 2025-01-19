@@ -87,7 +87,7 @@ namespace WindowsFormsIDevice.Connector.Driver
                                 switch (part[1].ToLower())
                                 {
                                     case "title":
-                                        Value = (DataType == eDataType.STRING) ? Dispatcher.screenTitle : "";
+                                        //Value = (DataType == eDataType.STRING) ? Dispatcher.screenTitle : "";
                                         break;
 
                                     case "time":
@@ -108,11 +108,11 @@ namespace WindowsFormsIDevice.Connector.Driver
                                 switch (part[1].ToLower())
                                 {
                                     case "enable":
-                                        Value = License.LicenseControl.TagControlEnabled;
+                                        //Value = License.LicenseControl.TagControlEnabled;
                                         break;
 
                                     case "check":
-                                        Value = License.LicenseControl.CheckTagValue();
+                                        //Value = License.LicenseControl.CheckTagValue();
                                         break;
                                 }
                                 break;
@@ -121,15 +121,15 @@ namespace WindowsFormsIDevice.Connector.Driver
                                 switch (part[1].ToLower())
                                 {
                                     case "run":
-                                        Value = WEB.WebServer.run;
+                                        //Value = WEB.WebServer.run;
                                         break;
 
                                     case "port":
-                                        Value = WEB.WebServer.port;
+                                        //Value = WEB.WebServer.port;
                                         break;
 
                                     case "requests":
-                                        Value = WEB.WebServer.items.Select(x => x.urlRequest).ToArray();
+                                        //Value = WEB.WebServer.items.Select(x => x.urlRequest).ToArray();
                                         break;
                                 }
                                 break;
@@ -467,16 +467,16 @@ namespace WindowsFormsIDevice.Connector.Driver
                                 switch (part[1].ToLower())
                                 {
                                     case "count":
-                                        Value = Attention.CountsAll(mask);
+                                        //Value = Attention.CountsAll(mask);
                                         break;
                                     case "info":
-                                        Value = Attention.CountsInfo(mask);
+                                        //Value = Attention.CountsInfo(mask);
                                         break;
                                     case "warning":
-                                        Value = Attention.CountsWarning(mask);
+                                        //Value = Attention.CountsWarning(mask);
                                         break;
                                     case "alarm":
-                                        Value = Attention.CountsAlarm(mask);
+                                        //Value = Attention.CountsAlarm(mask);
                                         break;
 
                                     default:
@@ -488,13 +488,13 @@ namespace WindowsFormsIDevice.Connector.Driver
                                 switch (part[1].ToLower())
                                 {
                                     case "count":
-                                        Value = SoundBox.Count();
+                                        //Value = SoundBox.Count();
                                         break;
                                     case "playing":
-                                        Value = SoundBox.playing;
+                                        //Value = SoundBox.playing;
                                         break;
                                     case "activefilename":
-                                        Value = (SoundBox.playing) ? SoundBox.activeFileName : "";
+                                        //Value = (SoundBox.playing) ? SoundBox.activeFileName : "";
                                         break;
 
                                     default:
