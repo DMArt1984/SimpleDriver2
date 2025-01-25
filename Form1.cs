@@ -47,6 +47,9 @@ namespace WinSimpleIDriver
             // Группы
             CheckGroupColumns();
 
+            // Теги
+            CheckTagColumns();
+
             #endregion
 
 
@@ -172,6 +175,66 @@ namespace WinSimpleIDriver
         }
 
 
+
+        #endregion
+
+        #endregion
+
+        #region Tag
+
+        #region Tag.Columns
+
+        private void CheckTagColumns()
+        {
+            bool checkE = checkBoxTagEditor.Checked;
+            dataGridViewTag.Columns["tagID"].Visible = checkE;
+            dataGridViewTag.Columns["tagAddress"].Visible = checkE;
+            dataGridViewTag.Columns["tagCommand"].Visible = checkE;
+            dataGridViewTag.Columns["tagWriteValue"].Visible = checkE;
+            dataGridViewTag.Columns["tagWriteTag"].Visible = checkE;
+            dataGridViewTag.RowHeadersVisible = checkE;
+            dataGridViewTag.ReadOnly = !checkE;
+            if (checkE)
+            {
+                dataGridViewTag.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+            }
+            else
+            {
+                dataGridViewTag.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            }
+
+            bool checkD = checkBoxTagDesc.Checked;
+            dataGridViewTag.Columns["tagDesc"].Visible = checkD;
+            dataGridViewTag.Columns["tagBlock"].Visible = checkD;
+
+            bool checkR = checkBoxTagRuntime.Checked;
+            dataGridViewTag.Columns["tagValue"].Visible = checkR;
+            dataGridViewTag.Columns["tagStatus"].Visible = checkR;
+            dataGridViewTag.Columns["tagMessage"].Visible = checkR;
+
+            bool checkS = checkBoxTagStatistic.Checked;
+            dataGridViewTag.Columns["tagStatistic"].Visible = checkS;
+        }
+
+        private void checkBoxTagEditor_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckTagColumns();
+        }
+
+        private void checkBoxTagRuntime_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckTagColumns();
+        }
+
+        private void checkBoxTagDesc_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckTagColumns();
+        }
+
+        private void checkBoxTagStatistic_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckTagColumns();
+        }
 
         #endregion
 
