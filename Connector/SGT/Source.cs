@@ -110,6 +110,7 @@ namespace WindowsFormsIDevice.Connector.SGT
 
         // теги для источника
         List<Tag> tags = new List<Tag>();
+        Dictionary<ushort, List<Tag>> dicTagGroup = new Dictionary<ushort, List<Tag>>();
         public int TagsCount => _tagsCount;
         int _tagsCount = 0;
         public int TagsCountGood => tags.Count(x => x.Good);
@@ -813,7 +814,7 @@ namespace WindowsFormsIDevice.Connector.SGT
                     //LoggerConsole.Log($"Source ID={groupId} for group={groupId}...", log);
 
                     // Выбор тегов для опроса
-                    List<Tag> clientTags = tags.Where(x => (x.groupId == groupId || groupId == 0) && x.Off == false).ToList();
+                    List<Tag> clientTags = tags.Where(x => (x.groupId == groupId) && x.Off == false).ToList();
 
                     if (clientTags.Any())
                     {

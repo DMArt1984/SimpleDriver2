@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsIDevice.Log;
 
@@ -97,7 +94,6 @@ namespace WindowsFormsIDevice.Connector.SGT
         void TimerCB(object obj)
         {
             counter++;
-            //LoggerConsole.Log($"RUN group ID={_parent.Id} counter={counter}", Group.log);
 
             // v1
             tikTakReq?.Invoke(_parent);
@@ -142,9 +138,9 @@ namespace WindowsFormsIDevice.Connector.SGT
         public delegate void HandlerReq(IGroupOff group);
         public event HandlerReq tikTakReq;
 
-        public List<GroupManager> managers = new List<GroupManager>();
+        public GroupManager manager; // = new List<GroupManager>();
 
-        public delegate void HandlerInfo(ushort Id, int[] counter, int all, int good);
+        public delegate void HandlerInfo(ushort Id, int counter, int all, int good);
         public event HandlerInfo tikTakInfo;
 
         // Одинаковы ?
@@ -155,35 +151,23 @@ namespace WindowsFormsIDevice.Connector.SGT
 
         public bool AddManager(GroupManager gm)
         {
-            var count = this.managers.Count(x => x.sourceId == gm.sourceId); // && x._parent.Id == gm._parent.Id);
-            if (count > 0)
-                return false;
-
-            this.managers.Add(gm);
+            this.manager = gm;
             return true;
         }
         public bool AddManager(ushort sourceId, out GroupManager gm)
         {
-            gm = null;
-            var count = this.managers.Count(x => x.sourceId == sourceId); // && x._parent.Id == gm._parent.Id);
-            if (count > 0)
-                return false;
-
             gm = new GroupManager(this.Id, this);
-            this.managers.Add(gm);
+            this.manager = gm;
             return true;
         }
 
         public bool RemoveManagers(GroupManager.HandlerReq myMethodName)
         {
-            foreach (var gm in this.managers)
-            {
-                gm.tikTakReq -= myMethodName;
-            }
+            this.manager.tikTakReq -= myMethodName;
             return true;
         }
 
-        public bool IsStop => managers.All(x => x.IsStop); // timer == null;
+        public bool IsStop => manager.IsStop; // timer == null;
 
         public uint UpdateRate
         {
@@ -214,13 +198,11 @@ namespace WindowsFormsIDevice.Connector.SGT
                     _off = value;
                     if (_off == false) // включить
                     {
-                        foreach (var item in managers)
-                            item.On();
+                        manager.On();
                     }
                     else // отключить
                     {
-                        foreach (var item in managers)
-                            item.Off();
+                        manager.Off();
                     } 
 
                     EventChangeParamStatus();
@@ -263,8 +245,7 @@ namespace WindowsFormsIDevice.Connector.SGT
 
         ~Group()
         {
-            foreach (var item in managers)
-                item.StopTimer();
+            manager.StopTimer();
         }
 
         void EventChangeParamStatus()
@@ -283,7 +264,7 @@ namespace WindowsFormsIDevice.Connector.SGT
         {
             int all = tags.Count();
             int good = tags.Count(x => x.Good == true);
-            int[] counter = managers.Select(x => x.counter).ToArray();
+            int counter = manager.counter;
             tikTakInfo?.Invoke(Id, counter, all, good);
         }
 
