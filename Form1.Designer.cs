@@ -56,8 +56,6 @@ namespace WinSimpleIDriver
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.dataGridViewSource = new System.Windows.Forms.DataGridView();
-            this.sourceID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sourceTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -81,10 +79,29 @@ namespace WinSimpleIDriver
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.dataGridViewTag = new System.Windows.Forms.DataGridView();
-            this.groupID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tagID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tagTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagDataType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.groupID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupOn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.groupSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupPeriod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceON = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.sourceAutoRestart = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.sourceDriver = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.sourceAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceMessage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerForm)).BeginInit();
@@ -360,25 +377,21 @@ namespace WinSimpleIDriver
             this.dataGridViewSource.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewSource.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.sourceID,
-            this.sourceTitle});
+            this.sourceTitle,
+            this.sourceON,
+            this.sourceAutoRestart,
+            this.sourceDriver,
+            this.sourceAddress,
+            this.sourceDesc,
+            this.sourceTags,
+            this.sourceStatus,
+            this.sourceMessage,
+            this.sourceStatistic});
             this.dataGridViewSource.Location = new System.Drawing.Point(7, 67);
             this.dataGridViewSource.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridViewSource.Name = "dataGridViewSource";
             this.dataGridViewSource.Size = new System.Drawing.Size(1032, 395);
             this.dataGridViewSource.TabIndex = 1;
-            // 
-            // sourceID
-            // 
-            this.sourceID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.sourceID.HeaderText = "ID";
-            this.sourceID.Name = "sourceID";
-            this.sourceID.ReadOnly = true;
-            this.sourceID.Width = 45;
-            // 
-            // sourceTitle
-            // 
-            this.sourceTitle.HeaderText = "Название";
-            this.sourceTitle.Name = "sourceTitle";
             // 
             // button1
             // 
@@ -528,7 +541,14 @@ namespace WinSimpleIDriver
             this.dataGridViewGroup.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewGroup.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.groupID,
-            this.groupTitle});
+            this.groupTitle,
+            this.groupOn,
+            this.groupSource,
+            this.groupPeriod,
+            this.groupDesc,
+            this.groupTags,
+            this.groupStatus,
+            this.groupStatistic});
             this.dataGridViewGroup.Location = new System.Drawing.Point(7, 67);
             this.dataGridViewGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridViewGroup.Name = "dataGridViewGroup";
@@ -613,25 +633,13 @@ namespace WinSimpleIDriver
             this.dataGridViewTag.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTag.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.tagID,
-            this.tagTitle});
+            this.tagTitle,
+            this.tagDataType});
             this.dataGridViewTag.Location = new System.Drawing.Point(7, 67);
             this.dataGridViewTag.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridViewTag.Name = "dataGridViewTag";
             this.dataGridViewTag.Size = new System.Drawing.Size(1032, 395);
             this.dataGridViewTag.TabIndex = 9;
-            // 
-            // groupID
-            // 
-            this.groupID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.groupID.HeaderText = "ID";
-            this.groupID.Name = "groupID";
-            this.groupID.ReadOnly = true;
-            this.groupID.Width = 45;
-            // 
-            // groupTitle
-            // 
-            this.groupTitle.HeaderText = "Название";
-            this.groupTitle.Name = "groupTitle";
             // 
             // tagID
             // 
@@ -645,6 +653,148 @@ namespace WinSimpleIDriver
             // 
             this.tagTitle.HeaderText = "Название";
             this.tagTitle.Name = "tagTitle";
+            // 
+            // tagDataType
+            // 
+            this.tagDataType.HeaderText = "Тип данных";
+            this.tagDataType.Name = "tagDataType";
+            // 
+            // groupID
+            // 
+            this.groupID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.groupID.HeaderText = "ID";
+            this.groupID.Name = "groupID";
+            this.groupID.ReadOnly = true;
+            this.groupID.Width = 45;
+            // 
+            // groupTitle
+            // 
+            this.groupTitle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.groupTitle.HeaderText = "Название";
+            this.groupTitle.Name = "groupTitle";
+            // 
+            // groupOn
+            // 
+            this.groupOn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.groupOn.HeaderText = "ВКЛ";
+            this.groupOn.Name = "groupOn";
+            this.groupOn.Width = 37;
+            // 
+            // groupSource
+            // 
+            this.groupSource.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.groupSource.HeaderText = "Источник";
+            this.groupSource.Name = "groupSource";
+            // 
+            // groupPeriod
+            // 
+            this.groupPeriod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.groupPeriod.HeaderText = "Опрос (мсек)";
+            this.groupPeriod.Name = "groupPeriod";
+            // 
+            // groupDesc
+            // 
+            this.groupDesc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.groupDesc.HeaderText = "Описание";
+            this.groupDesc.Name = "groupDesc";
+            // 
+            // groupTags
+            // 
+            this.groupTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.groupTags.HeaderText = "Теги";
+            this.groupTags.Name = "groupTags";
+            this.groupTags.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.groupTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.groupTags.Width = 38;
+            // 
+            // groupStatus
+            // 
+            this.groupStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.groupStatus.HeaderText = "Статус";
+            this.groupStatus.Name = "groupStatus";
+            this.groupStatus.ReadOnly = true;
+            // 
+            // groupStatistic
+            // 
+            this.groupStatistic.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.groupStatistic.HeaderText = "Статистика";
+            this.groupStatistic.Name = "groupStatistic";
+            this.groupStatistic.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.groupStatistic.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.groupStatistic.Width = 82;
+            // 
+            // sourceID
+            // 
+            this.sourceID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.sourceID.HeaderText = "ID";
+            this.sourceID.Name = "sourceID";
+            this.sourceID.ReadOnly = true;
+            this.sourceID.Width = 45;
+            // 
+            // sourceTitle
+            // 
+            this.sourceTitle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.sourceTitle.HeaderText = "Название";
+            this.sourceTitle.Name = "sourceTitle";
+            // 
+            // sourceON
+            // 
+            this.sourceON.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.sourceON.HeaderText = "ВКЛ";
+            this.sourceON.Name = "sourceON";
+            this.sourceON.Width = 37;
+            // 
+            // sourceAutoRestart
+            // 
+            this.sourceAutoRestart.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.sourceAutoRestart.HeaderText = "АПП";
+            this.sourceAutoRestart.Name = "sourceAutoRestart";
+            this.sourceAutoRestart.Width = 39;
+            // 
+            // sourceDriver
+            // 
+            this.sourceDriver.HeaderText = "Драйвер";
+            this.sourceDriver.Name = "sourceDriver";
+            // 
+            // sourceAddress
+            // 
+            this.sourceAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.sourceAddress.HeaderText = "Адрес";
+            this.sourceAddress.Name = "sourceAddress";
+            // 
+            // sourceDesc
+            // 
+            this.sourceDesc.HeaderText = "Описание";
+            this.sourceDesc.Name = "sourceDesc";
+            // 
+            // sourceTags
+            // 
+            this.sourceTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.sourceTags.HeaderText = "Теги";
+            this.sourceTags.Name = "sourceTags";
+            this.sourceTags.ReadOnly = true;
+            this.sourceTags.Width = 57;
+            // 
+            // sourceStatus
+            // 
+            this.sourceStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.sourceStatus.HeaderText = "Статус";
+            this.sourceStatus.Name = "sourceStatus";
+            this.sourceStatus.ReadOnly = true;
+            // 
+            // sourceMessage
+            // 
+            this.sourceMessage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.sourceMessage.HeaderText = "Сообщение";
+            this.sourceMessage.Name = "sourceMessage";
+            this.sourceMessage.ReadOnly = true;
+            // 
+            // sourceStatistic
+            // 
+            this.sourceStatistic.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.sourceStatistic.HeaderText = "Статистика";
+            this.sourceStatistic.Name = "sourceStatistic";
+            this.sourceStatistic.Width = 101;
             // 
             // Form1
             // 
@@ -712,8 +862,6 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemExit;
         private System.Windows.Forms.DataGridView dataGridViewSource;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sourceID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sourceTitle;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
@@ -729,8 +877,6 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.DataGridView dataGridViewGroup;
-        private System.Windows.Forms.DataGridViewTextBoxColumn groupID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn groupTitle;
         private System.Windows.Forms.CheckBox checkBox7;
         private System.Windows.Forms.CheckBox checkBox8;
         private System.Windows.Forms.CheckBox checkBox9;
@@ -741,6 +887,27 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.DataGridView dataGridViewTag;
         private System.Windows.Forms.DataGridViewTextBoxColumn tagID;
         private System.Windows.Forms.DataGridViewTextBoxColumn tagTitle;
+        private System.Windows.Forms.DataGridViewComboBoxColumn tagDataType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupTitle;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn groupOn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupSource;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupPeriod;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupDesc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupStatistic;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceTitle;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn sourceON;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn sourceAutoRestart;
+        private System.Windows.Forms.DataGridViewComboBoxColumn sourceDriver;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceAddress;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceDesc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceMessage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceStatistic;
     }
 }
 
