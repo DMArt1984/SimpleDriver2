@@ -71,6 +71,16 @@ namespace WinSimpleIDriver
             dataGridViewSource.Columns["sourceAutoRestart"].Visible = checkE;
             dataGridViewSource.Columns["sourceDriver"].Visible = checkE;
             dataGridViewSource.Columns["sourceAddress"].Visible = checkE;
+            dataGridViewSource.RowHeadersVisible = checkE;
+            dataGridViewSource.ReadOnly = !checkE;
+            if (checkE)
+            {
+                dataGridViewSource.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+            }
+            else
+            {
+                dataGridViewSource.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            }
 
             bool checkD = checkBoxSourceDesc.Checked;
             dataGridViewSource.Columns["sourceDesc"].Visible = checkD;
@@ -120,6 +130,15 @@ namespace WinSimpleIDriver
             bool checkE = checkBoxGroupEditor.Checked;
             dataGridViewGroup.Columns["groupID"].Visible = checkE;
             dataGridViewGroup.Columns["groupPeriod"].Visible = checkE;
+            dataGridViewGroup.RowHeadersVisible = checkE;
+            dataGridViewGroup.ReadOnly = !checkE;
+            if (checkE)
+            {
+                dataGridViewGroup.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+            } else
+            {
+                dataGridViewGroup.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            }
 
             bool checkD = checkBoxGroupDesc.Checked;
             dataGridViewGroup.Columns["groupDesc"].Visible = checkD;
