@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,6 +23,9 @@ namespace WinSimpleIDriver
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // Версия
+            ToolStripMenuItemVer.Text += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
             #region Table Enum
             // Устройства
             ComboBox cbDriver = new ComboBox();
@@ -64,9 +68,9 @@ namespace WinSimpleIDriver
 
         // ===============================================================
 
-        #region Source
+        #region Source.DGV
 
-        #region Sourse.Columns
+        #region Sourse.DGV.Columns
         private void CheckSourceColumns()
         {
             bool checkE = checkBoxSourceEditor.Checked;
@@ -98,6 +102,7 @@ namespace WinSimpleIDriver
 
         }
 
+        #region Source.DGV.Event
         private void checkBoxSourceEditor_CheckedChanged(object sender, EventArgs e)
         {
             CheckSourceColumns();
@@ -117,16 +122,17 @@ namespace WinSimpleIDriver
         {
             CheckSourceColumns();
         }
+        #endregion
+
 
         #endregion
 
 
-
         #endregion
 
-        #region Group
+        #region Group.DGV
 
-        #region Group.Columns
+        #region Group.DGV.Columns
 
         private void CheckGroupColumns()
         {
@@ -154,6 +160,8 @@ namespace WinSimpleIDriver
             dataGridViewGroup.Columns["groupStatistic"].Visible = checkS;
         }
 
+        #region Group.DGV.Event
+
         private void checkBoxGroupEditor_CheckedChanged(object sender, EventArgs e)
         {
             CheckGroupColumns();
@@ -173,16 +181,16 @@ namespace WinSimpleIDriver
         {
             CheckGroupColumns();
         }
-
+        #endregion
 
 
         #endregion
 
         #endregion
 
-        #region Tag
+        #region Tag.DGV
 
-        #region Tag.Columns
+        #region Tag.DGV.Columns
 
         private void CheckTagColumns()
         {
@@ -205,7 +213,7 @@ namespace WinSimpleIDriver
 
             bool checkD = checkBoxTagDesc.Checked;
             dataGridViewTag.Columns["tagDesc"].Visible = checkD;
-            dataGridViewTag.Columns["tagBlock"].Visible = checkD;
+            
 
             bool checkR = checkBoxTagRuntime.Checked;
             dataGridViewTag.Columns["tagValue"].Visible = checkR;
@@ -214,8 +222,13 @@ namespace WinSimpleIDriver
 
             bool checkS = checkBoxTagStatistic.Checked;
             dataGridViewTag.Columns["tagStatistic"].Visible = checkS;
+
+            bool checkBP = checkBoxTagBP.Checked;
+            dataGridViewTag.Columns["tagBlock"].Visible = checkBP;
+            dataGridViewTag.Columns["tagPage"].Visible = checkBP;
         }
 
+        #region Tag.DGV.Event
         private void checkBoxTagEditor_CheckedChanged(object sender, EventArgs e)
         {
             CheckTagColumns();
@@ -236,10 +249,24 @@ namespace WinSimpleIDriver
             CheckTagColumns();
         }
 
+        private void checkBoxTagBP_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckTagColumns();
+        }
+        #endregion
+
+
         #endregion
 
         #endregion
 
+        #region Menu.File.Event
 
+        private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
     }
 }
