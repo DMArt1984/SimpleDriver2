@@ -16,6 +16,8 @@ namespace WinSimpleIDriver
 {
     public partial class Form1 : Form
     {
+        DataTable dtTags;
+
         public Form1()
         {
             InitializeComponent();
@@ -61,6 +63,9 @@ namespace WinSimpleIDriver
 
             // Новый проект
             FormClear();
+
+            // DataTables
+            dtTags = DataTableLib.GetEmptyDataTableForTags(dataGridViewTag, "Tags");
         }
 
         // ================================================================================================================
@@ -185,7 +190,8 @@ namespace WinSimpleIDriver
 
         private void SourceFilter()
         {
-
+            DataTableLib.TableFilter(textBoxSourceFilter.Text, dataGridViewSource, 
+                DataTableLib.GetColumnIndexFilterSource(), DataTableLib.GetPairFilterSource());
         }
 
         #endregion
@@ -327,7 +333,9 @@ namespace WinSimpleIDriver
 
         private void GroupFilter()
         {
-
+            string text = comboBoxGroupFilterSource.Text;
+            DataTableLib.TableFilter(textBoxGroupFilter.Text, dataGridViewGroup, 
+                DataTableLib.GetColumnIndexFilterGroup(), DataTableLib.GetPairFilterGroup(text));
         }
 
         #endregion
@@ -518,7 +526,13 @@ namespace WinSimpleIDriver
 
         private void TagFilter()
         {
+            string text1 = comboBoxTagFilterSource.Text;
+            string text2 = comboBoxTagFilterGroup.Text;
+            string text3 = comboBoxTagFilterBlock.Text;
+            string text4 = comboBoxTagFilterPage.Text;
 
+            DataTableLib.TableFilter(textBoxTagFilter.Text, dataGridViewTag,
+                DataTableLib.GetColumnIndexFilterTag(), DataTableLib.GetPairFilterTag(text1, text2, text3, text4));
         }
 
         #endregion

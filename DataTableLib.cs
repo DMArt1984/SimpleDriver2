@@ -13,21 +13,33 @@ namespace WinSimpleIDriver
     public struct DGVSourcesCol
     {
         public int Title;
+        public int Driver;
+        public int Address;
+        public int Desc;
         public int Status;
         public int Message;
     }
     public struct DGVGroupsCol
     {
         public int Title;
+        public int Source;
+        public int Desc;
         public int Status;
     }
     public struct DGVTagsCol
     {
         public int Title;
         public int Value;
+        public int DataType;
+        public int Address;
+        public int Desc;
         public int Status;
         public int Message;
 
+        public int Source;
+        public int Group;
+        public int Block;
+        public int Page;
     }
 
     class DataTableLib
@@ -43,6 +55,9 @@ namespace WinSimpleIDriver
             sourcesCol = new DGVSourcesCol 
             { 
                 Title = sources.Columns["sourceTitle"].Index,
+                Driver = sources.Columns["sourceDriver"].Index,
+                Address = sources.Columns["sourceAddress"].Index,
+                Desc = sources.Columns["sourceDesc"].Index,
                 Status = sources.Columns["sourceStatus"].Index,
                 Message = sources.Columns["sourceMessage"].Index
             };
@@ -50,17 +65,75 @@ namespace WinSimpleIDriver
             groupsCol = new DGVGroupsCol
             {
                 Title = groups.Columns["groupTitle"].Index,
+                Source = groups.Columns["groupSource"].Index,
+                Desc = groups.Columns["groupDesc"].Index,
                 Status = groups.Columns["groupStatus"].Index
             };
 
             tagsCol = new DGVTagsCol
             {
-                 Title = tags.Columns["tagTitle"].Index,
-                 Value = tags.Columns["tagValue"].Index,
-                 Status = tags.Columns["tagStatus"].Index,
-                 Message = tags.Columns["tagMessage"].Index
+                Title = tags.Columns["tagTitle"].Index,
+                Value = tags.Columns["tagValue"].Index,
+                DataType = tags.Columns["tagDataType"].Index,
+                Address = tags.Columns["tagAddress"].Index,
+                Desc = tags.Columns["tagDesc"].Index,
+                Status = tags.Columns["tagStatus"].Index,
+                Message = tags.Columns["tagMessage"].Index,
+                Source = tags.Columns["tagSource"].Index,
+                Group = tags.Columns["tagGroup"].Index,
+                Block = tags.Columns["tagBlock"].Index,
+                Page = tags.Columns["tagPage"].Index
             };
         }
+
+        // Номера колонок для фильтра в массив
+        static public int[] GetColumnIndexFilterSource()
+        {
+            return new int[]
+            {
+                sourcesCol.Title, sourcesCol.Driver, sourcesCol.Address, sourcesCol.Desc, sourcesCol.Status, sourcesCol.Message
+            };
+        }
+        static public PairFilterCol[] GetPairFilterSource()
+        {
+            return new PairFilterCol[] { };
+        }
+
+        // Номера колонок для фильтра в массив
+        static public int[] GetColumnIndexFilterGroup()
+        {
+            return new int[]
+            {
+                groupsCol.Title, groupsCol.Desc, groupsCol.Status
+            };
+        }
+        static public PairFilterCol[] GetPairFilterGroup(string text)
+        {
+            return new PairFilterCol[] 
+            { 
+                new PairFilterCol { col = groupsCol.Source, filter = text }
+            };
+        }
+
+        // Номера колонок для фильтра в массив
+        static public int[] GetColumnIndexFilterTag()
+        {
+            return new int[]
+            {
+                tagsCol.Title, tagsCol.Value, tagsCol.DataType, tagsCol.Address, tagsCol.Desc, tagsCol.Status, tagsCol.Message
+            };
+        }
+        static public PairFilterCol[] GetPairFilterTag(string textSource, string textGroup, string textBlock, string textPage)
+        {
+            return new PairFilterCol[]
+            {
+                new PairFilterCol { col = tagsCol.Source, filter = textSource },
+                new PairFilterCol { col = tagsCol.Group, filter = textGroup },
+                new PairFilterCol { col = tagsCol.Block, filter = textBlock },
+                new PairFilterCol { col = tagsCol.Page, filter = textPage }
+            };
+        }
+
 
         //
         static public DataGridViewRow GetRowDGV(DataGridView dgv, DataRow row)
@@ -179,8 +252,6 @@ namespace WinSimpleIDriver
 
         }
 
-
-
         #region Tags
 
         static public DataRow AddRowForTags(DataTable dt, DataGridView dgv,
@@ -262,5 +333,107 @@ namespace WinSimpleIDriver
         }
 
         #endregion
+
+        // ================================================================================
+
+        static public void TableFilter(string FilterText, DataGridView dgv, int[] cells, PairFilterCol[] pairs)
+        {
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+                row.Visible = ( String.IsNullOrWhiteSpace(FilterText) || CellsContainsFilterA(row, cells, FilterText) || CellsContainsFilterB(row, pairs));
+            }
+        }
+
+        public struct PairFilterCol
+        {
+            public int col;
+            public string filter;
+        }
+
+        static public bool CellsContainsFilterB(DataGridViewRow row, PairFilterCol[] pairs)
+        {
+            foreach (var item in pairs)
+            {
+                if (row.Cells[item.col].Value.ToString().Contains(item.filter))
+                    return true;
+            }
+            return false;
+        }
+
+        static public ushort GetSelIdFromTable(object senderDGV)
+        {
+            ushort Id = 0;
+            DataGridView dgv = senderDGV as DataGridView;
+            if (dgv != null && dgv.SelectedRows.Count > 0)
+            {
+                DataGridViewRow row = dgv.SelectedRows[0];
+                if (row != null)
+                {
+                    Id = ushort.Parse(row.Cells[0].Value.ToString());
+                }
+            }
+            return Id;
+        }
+
+        // Несколько фильтров для одной ячейки
+        static public bool CellContainsFilters(DataGridViewRow row, int indexCell, string[] filter)
+        {
+            foreach (var item in filter)
+            {
+                if (CellContainsFilter(row, indexCell, item))
+                    return true;
+            }
+            return false;
+        }
+
+        // Один фильтр для нескольких ячеек
+        static public bool CellsContainsFilterA(DataGridViewRow row, int[] indexCells, string filter)
+        {
+            foreach (var index in indexCells)
+            {
+                if (CellContainsFilter(row, index, filter))
+                    return true;
+            }
+            return false;
+        }
+
+        // Один фильтр для одной ячейки
+        static public bool CellContainsFilter(DataGridViewRow row, int indexCell, string filter)
+        {
+            if (row == null || row.IsNewRow || indexCell < 0 || String.IsNullOrWhiteSpace(filter))
+                return false;
+            return (row.Cells[indexCell].Value == null) ? false : row.Cells[indexCell].Value.ToString().Contains(filter);
+        }
+
+
+        // Замена для нескольких ячеек
+        static public int ReplaceFilter(DataGridViewRow row, int[] indexCells, string ValueFrom, string ValueTo)
+        {
+            int i = 0;
+            foreach (var index in indexCells)
+            {
+                i += ReplaceFilter(row, index, ValueFrom, ValueTo);
+            }
+            return i;
+        }
+
+        // Замена для одной ячейки
+        static public int ReplaceFilter(DataGridViewRow row, int indexCell, string ValueFrom, string ValueTo)
+        {
+            if (row == null || indexCell < 0 || String.IsNullOrWhiteSpace(ValueFrom))
+                return 0;
+
+            if (row.Cells[indexCell].Value == null)
+                return 0;
+
+            if (row.Cells[indexCell].Value.ToString().Contains(ValueFrom) == false)
+                return 0;
+
+            row.Cells[indexCell].Value = row.Cells[indexCell].Value.ToString().Replace(ValueFrom, ValueTo);
+            return 1;
+        }
+
     }
 }
