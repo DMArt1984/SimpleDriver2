@@ -88,6 +88,7 @@
     <Compile Include="Connector\SGT\Source.cs" />
     <Compile Include="Connector\SGT\Tag.cs" />
     <Compile Include="Connector\Driver\TestTable.cs" />
+    <Compile Include="DataTableLib.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -26,6 +26,9 @@ namespace WinSimpleIDriver
             // Версия
             ToolStripMenuItemVer.Text += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
+            // Установка номеров колонок
+            DataTableLib.SetDGVColumns(dataGridViewSource, dataGridViewGroup, dataGridViewTag);
+
             #region Table Enum
             // Устройства
             ComboBox cbDriver = new ComboBox();
@@ -56,12 +59,33 @@ namespace WinSimpleIDriver
 
             #endregion
 
-
+            // Новый проект
+            FormClear();
         }
 
         // ================================================================================================================
 
         #region Menu.File.Event
+
+        private void ToolStripMenuItemNew_Click(object sender, EventArgs e)
+        {
+            FormClear();
+        }
+
+        // Новый проект
+        private void FormClear()
+        {
+            // treeView
+            treeView1.Nodes["Sources"].Nodes.Clear();
+            treeView1.Nodes["Blocks"].Nodes.Clear();
+            treeView1.Nodes["Pages"].Nodes.Clear();
+
+            //DGV
+            dataGridViewSource.Rows.Clear();
+            dataGridViewGroup.Rows.Clear();
+            dataGridViewTag.Rows.Clear();
+
+        }
 
         private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
         {
@@ -476,6 +500,8 @@ namespace WinSimpleIDriver
         }
 
         
+
+
 
 
         #endregion
