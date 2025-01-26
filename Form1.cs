@@ -215,9 +215,12 @@ namespace WinSimpleIDriver
             bool checkR = checkBoxGroupRuntime.Checked;
             dataGridViewGroup.Columns["groupStatus"].Visible = checkR;
 
-            bool checkS = checkBoxGroupStatistic.Checked;
-            dataGridViewGroup.Columns["groupTags"].Visible = checkS;
-            dataGridViewGroup.Columns["groupStatistic"].Visible = checkS;
+            bool checkST = checkBoxGroupStatistic.Checked;
+            dataGridViewGroup.Columns["groupTags"].Visible = checkST;
+            dataGridViewGroup.Columns["groupStatistic"].Visible = checkST;
+
+            bool checkSource = checkBoxGroupSource.Checked;
+            dataGridViewGroup.Columns["groupSource"].Visible = checkSource;
         }
 
 
@@ -241,6 +244,11 @@ namespace WinSimpleIDriver
         }
 
         private void checkBoxGroupRuntime_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckGroupColumns();
+        }
+
+        private void checkBoxGroupSource_CheckedChanged(object sender, EventArgs e)
         {
             CheckGroupColumns();
         }
@@ -343,6 +351,10 @@ namespace WinSimpleIDriver
             bool checkBP = checkBoxTagBP.Checked;
             dataGridViewTag.Columns["tagBlock"].Visible = checkBP;
             dataGridViewTag.Columns["tagPage"].Visible = checkBP;
+
+            bool checkSG = checkBoxTagSG.Checked;
+            dataGridViewTag.Columns["tagSource"].Visible = checkSG;
+            dataGridViewTag.Columns["tagGroup"].Visible = checkSG;
         }
 
 
@@ -370,6 +382,11 @@ namespace WinSimpleIDriver
         }
 
         private void checkBoxTagBP_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckTagColumns();
+        }
+
+        private void checkBoxTagSG_CheckedChanged(object sender, EventArgs e)
         {
             CheckTagColumns();
         }
@@ -457,12 +474,16 @@ namespace WinSimpleIDriver
         {
 
         }
-        #endregion
 
+        
+
+
+        #endregion
 
         #endregion
 
         // ================================================================================================================
+
 
 
     }
