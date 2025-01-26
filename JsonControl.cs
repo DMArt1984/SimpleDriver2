@@ -16,7 +16,9 @@ namespace WindowsFormsIDevice
 {
     class JsonControl
     {
+        const int version = 1000; // Версия
 
+        #region Convert From/To Json
         // Строка в Json данные
         static public dynamic Deserialize_Json_Data(string input = "")
         {
@@ -55,54 +57,12 @@ namespace WindowsFormsIDevice
             }
             return json;
         }
+        #endregion
 
         // Проверить наличие свойства
         static public bool IsProp(dynamic obj, string prop)
         {
             return (obj != null && !String.IsNullOrEmpty(prop)) ? ((IDictionary<String, object>)obj).ContainsKey(prop) : false;
-        }
-
-        // Проверка наличия свойств
-        
-
-
-        // Получить список строк
-        static public string[] GetArrayString(dynamic obj, string prop)
-        {
-            if (IsProp(obj, prop))
-            {
-                try
-                {
-                    var data = (List<object>)((IDictionary<string, object>)obj)[prop];
-                    return data.Select(x => x.ToString().Trim()).Where(y => String.IsNullOrWhiteSpace(y) == false).ToArray();
-                } catch
-                {
-                    return new string[] { };
-                }
-            }
-            return new string[] { };
-        }
-
-
-        // Получить строковое значение
-        static public string GetString(dynamic obj, string prop, string defaultValue = "")
-        {
-            if (IsProp(obj, prop))
-            {
-                string value = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
-                if (!String.IsNullOrWhiteSpace(value))
-                    return value;
-            }
-            return defaultValue;
-        }
-
-        static public string GetString(dynamic obj)
-        {
-            string value = Convert.ToString(obj);
-            if (!String.IsNullOrWhiteSpace(value))
-                return value;
-
-            return "";
         }
 
         // Получить массив строковых значений
@@ -119,131 +79,6 @@ namespace WindowsFormsIDevice
             return myArray;
         }
 
-        // Получить числовое значение, ограниченное 0 - 100
-        static public byte GetByte100(dynamic obj, string prop, byte defaultValue = 0)
-        {
-            byte value = GetByte(obj, prop, defaultValue);
-            if (value < 0)
-                value = 0;
-            if (value > 100)
-                value = 100;
-            return value;
-        }
-
-        // Получить числовое значение (byte)
-        static public byte GetByte(dynamic obj, string prop, byte defaultValue = 0)
-        {
-            if (IsProp(obj, prop))
-            {
-                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
-                bool result = byte.TryParse(stringValue, out byte value);
-                if (result)
-                    return value;
-            }
-            return defaultValue;
-        }
-
-        // Получить числовое значение (short)
-        static public short GetShort(dynamic obj, string prop, short defaultValue = 0)
-        {
-            if (IsProp(obj, prop))
-            {
-                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
-                bool result = short.TryParse(stringValue, out short value);
-                if (result)
-                    return value;
-            }
-            return defaultValue;
-        }
-
-        static public short GetShort(dynamic obj)
-        {
-            string stringValue = Convert.ToString(obj);
-            bool result = short.TryParse(stringValue, out short value);
-            if (result)
-                return value;
-
-            return 0;
-        }
-
-        static public ushort GetUShort(dynamic obj)
-        {
-            string stringValue = Convert.ToString(obj);
-            bool result = ushort.TryParse(stringValue, out ushort value);
-            if (result)
-                return value;
-
-            return 0;
-        }
-
-        // Получить числовое значение (int)
-        static public int GetInt(dynamic obj, string prop, int defaultValue = 0)
-        {
-            if (IsProp(obj, prop))
-            {
-                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
-                bool result = int.TryParse(stringValue, out int value);
-                if (result)
-                    return value;
-            }
-            return defaultValue;
-        }
-
-        static public int GetInt(dynamic obj)
-        {
-            string stringValue = Convert.ToString(obj);
-            bool result = int.TryParse(stringValue, out int value);
-            if (result)
-                return value;
-
-            return 0;
-        }
-
-        // Получить числовое значение (uint)
-        static public uint GetUint(dynamic obj, string prop, uint defaultValue = 0)
-        {
-            if (IsProp(obj, prop))
-            {
-                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
-                bool result = uint.TryParse(stringValue, out uint value);
-                if (result)
-                    return value;
-            }
-            return defaultValue;
-        }
-
-        static public uint GetUint(dynamic obj)
-        {
-            string stringValue = Convert.ToString(obj);
-            bool result = uint.TryParse(stringValue, out uint value);
-            if (result)
-                return value;
-
-            return 0;
-        }
-
-        // Получить числовое значение (long)
-        static public long GetLong(dynamic obj, string prop, long defaultValue = 0)
-        {
-            if (IsProp(obj, prop))
-            {
-                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
-                bool result = long.TryParse(stringValue, out long value);
-                if (result)
-                    return value;
-            }
-            return defaultValue;
-        }
-        static public long GetLong(dynamic obj)
-        {
-            string stringValue = Convert.ToString(obj);
-            bool result = long.TryParse(stringValue, out long value);
-            if (result)
-                return value;
-
-            return 0;
-        }
-
         // Получить объект со свойством Json
         static public ExpandoObject GetJson(dynamic obj, ExpandoObject defaultValue = null)
         {
@@ -255,33 +90,6 @@ namespace WindowsFormsIDevice
             {
                 return null;
             }
-        }
-
-
-        // Получить логическое значение
-        static public bool GetBool(dynamic obj, string prop, bool defaultValue = false)
-        {
-            if (IsProp(obj, prop))
-            {
-                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]).ToLower();
-                bool result = bool.TryParse(stringValue, out bool value);
-                if (result)
-                    return value;
-
-                return !(String.IsNullOrWhiteSpace(stringValue) || stringValue.ToLower() == "false" || stringValue == "0");
-            }
-            return defaultValue;
-        }
-        static public bool GetBool(dynamic obj)
-        {
-            if (obj == null)
-                return false;
-            string stringValue = Convert.ToString(obj).ToLower();
-            bool result = bool.TryParse(stringValue, out bool value);
-            if (result)
-                return value;
-
-            return !(String.IsNullOrWhiteSpace(stringValue) || stringValue.ToLower() == "false" || stringValue == "0");
         }
 
         // Получить значение типа источника
@@ -388,6 +196,212 @@ namespace WindowsFormsIDevice
             result.RemoveAll(x => String.IsNullOrWhiteSpace(x));
             return result;
         }
+
+        // Получить список строк
+        static public string[] GetArrayString(dynamic obj, string prop)
+        {
+            if (IsProp(obj, prop))
+            {
+                try
+                {
+                    var data = (List<object>)((IDictionary<string, object>)obj)[prop];
+                    return data.Select(x => x.ToString().Trim()).Where(y => String.IsNullOrWhiteSpace(y) == false).ToArray();
+                } catch
+                {
+                    return new string[] { };
+                }
+            }
+            return new string[] { };
+        }
+
+        #region Get Bool
+
+        // Получить логическое значение
+        static public bool GetBool(dynamic obj, string prop, bool defaultValue = false)
+        {
+            if (IsProp(obj, prop))
+            {
+                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]).ToLower();
+                bool result = bool.TryParse(stringValue, out bool value);
+                if (result)
+                    return value;
+
+                return !(String.IsNullOrWhiteSpace(stringValue) || stringValue.ToLower() == "false" || stringValue == "0");
+            }
+            return defaultValue;
+        }
+        static public bool GetBool(dynamic obj)
+        {
+            if (obj == null)
+                return false;
+            string stringValue = Convert.ToString(obj).ToLower();
+            bool result = bool.TryParse(stringValue, out bool value);
+            if (result)
+                return value;
+
+            return !(String.IsNullOrWhiteSpace(stringValue) || stringValue.ToLower() == "false" || stringValue == "0");
+        }
+
+        #endregion
+
+        #region Get Byte
+
+        // Получить числовое значение, ограниченное 0 - 100
+        static public byte GetByte100(dynamic obj, string prop, byte defaultValue = 0)
+        {
+            byte value = GetByte(obj, prop, defaultValue);
+            if (value < 0)
+                value = 0;
+            if (value > 100)
+                value = 100;
+            return value;
+        }
+
+        // Получить числовое значение (byte)
+        static public byte GetByte(dynamic obj, string prop, byte defaultValue = 0)
+        {
+            if (IsProp(obj, prop))
+            {
+                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
+                bool result = byte.TryParse(stringValue, out byte value);
+                if (result)
+                    return value;
+            }
+            return defaultValue;
+        }
+
+        #endregion
+
+        #region Get Number
+
+        // Получить числовое значение (short)
+        static public short GetShort(dynamic obj, string prop, short defaultValue = 0)
+        {
+            if (IsProp(obj, prop))
+            {
+                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
+                bool result = short.TryParse(stringValue, out short value);
+                if (result)
+                    return value;
+            }
+            return defaultValue;
+        }
+
+        static public short GetShort(dynamic obj)
+        {
+            string stringValue = Convert.ToString(obj);
+            bool result = short.TryParse(stringValue, out short value);
+            if (result)
+                return value;
+
+            return 0;
+        }
+
+        static public ushort GetUShort(dynamic obj)
+        {
+            string stringValue = Convert.ToString(obj);
+            bool result = ushort.TryParse(stringValue, out ushort value);
+            if (result)
+                return value;
+
+            return 0;
+        }
+
+        // Получить числовое значение (int)
+        static public int GetInt(dynamic obj, string prop, int defaultValue = 0)
+        {
+            if (IsProp(obj, prop))
+            {
+                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
+                bool result = int.TryParse(stringValue, out int value);
+                if (result)
+                    return value;
+            }
+            return defaultValue;
+        }
+
+        static public int GetInt(dynamic obj)
+        {
+            string stringValue = Convert.ToString(obj);
+            bool result = int.TryParse(stringValue, out int value);
+            if (result)
+                return value;
+
+            return 0;
+        }
+
+        // Получить числовое значение (uint)
+        static public uint GetUint(dynamic obj, string prop, uint defaultValue = 0)
+        {
+            if (IsProp(obj, prop))
+            {
+                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
+                bool result = uint.TryParse(stringValue, out uint value);
+                if (result)
+                    return value;
+            }
+            return defaultValue;
+        }
+
+        static public uint GetUint(dynamic obj)
+        {
+            string stringValue = Convert.ToString(obj);
+            bool result = uint.TryParse(stringValue, out uint value);
+            if (result)
+                return value;
+
+            return 0;
+        }
+
+        // Получить числовое значение (long)
+        static public long GetLong(dynamic obj, string prop, long defaultValue = 0)
+        {
+            if (IsProp(obj, prop))
+            {
+                string stringValue = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
+                bool result = long.TryParse(stringValue, out long value);
+                if (result)
+                    return value;
+            }
+            return defaultValue;
+        }
+        static public long GetLong(dynamic obj)
+        {
+            string stringValue = Convert.ToString(obj);
+            bool result = long.TryParse(stringValue, out long value);
+            if (result)
+                return value;
+
+            return 0;
+        }
+
+        #endregion
+
+        #region Get String
+
+        // Получить строковое значение
+        static public string GetString(dynamic obj, string prop, string defaultValue = "")
+        {
+            if (IsProp(obj, prop))
+            {
+                string value = Convert.ToString(((IDictionary<string, object>)obj)[prop]);
+                if (!String.IsNullOrWhiteSpace(value))
+                    return value;
+            }
+            return defaultValue;
+        }
+
+        static public string GetString(dynamic obj)
+        {
+            string value = Convert.ToString(obj);
+            if (!String.IsNullOrWhiteSpace(value))
+                return value;
+
+            return "";
+        }
+
+        #endregion
+
 
 
     }

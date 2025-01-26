@@ -59,6 +59,22 @@ namespace WinSimpleIDriver
 
         }
 
+        // ================================================================================================================
+
+        #region Menu.File.Event
+
+        private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
+
+
+
+        #endregion
+
+
         private void ToolStripMenuItemViewTree_Click(object sender, EventArgs e)
         {
             bool check = !ToolStripMenuItemViewTree.Checked;
@@ -66,9 +82,9 @@ namespace WinSimpleIDriver
             ToolStripMenuItemViewTree.Checked = check;
         }
 
-        // ===============================================================
+        // ================================================================================================================
 
-        #region Source.DGV
+        #region Source
 
         #region Sourse.DGV.Columns
         private void CheckSourceColumns()
@@ -102,7 +118,10 @@ namespace WinSimpleIDriver
 
         }
 
-        #region Source.DGV.Event
+
+        #endregion
+
+        #region Source.Event
         private void checkBoxSourceEditor_CheckedChanged(object sender, EventArgs e)
         {
             CheckSourceColumns();
@@ -124,13 +143,54 @@ namespace WinSimpleIDriver
         }
         #endregion
 
+        #region Source.TextFilter.Event
+        private void textBoxSourceFilter_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        #region Source.DGV.Event
+
+        private void dataGridViewSource_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewSource_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewSource_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewSource_SelectionChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridViewSource_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewSource_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+
+        }
 
         #endregion
 
 
         #endregion
 
-        #region Group.DGV
+        // ================================================================================================================
+
+        #region Group
 
         #region Group.DGV.Columns
 
@@ -160,7 +220,10 @@ namespace WinSimpleIDriver
             dataGridViewGroup.Columns["groupStatistic"].Visible = checkS;
         }
 
-        #region Group.DGV.Event
+
+        #endregion
+
+        #region Group.Event
 
         private void checkBoxGroupEditor_CheckedChanged(object sender, EventArgs e)
         {
@@ -183,12 +246,66 @@ namespace WinSimpleIDriver
         }
         #endregion
 
+        #region Group.ComboFilter.Event
+
+        private void comboBoxGroupFilterSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxGroupFilterSource_TextChanged(object sender, EventArgs e)
+        {
+
+        }
 
         #endregion
 
+        #region Group.TextFilter.Event
+        private void textBoxGroupFilter_TextChanged(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
-        #region Tag.DGV
+        #region Group.DGV.Event
+
+        private void dataGridViewGroup_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewGroup_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewGroup_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewGroup_SelectionChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridViewGroup_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewGroup_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+
+        }
+        #endregion
+
+
+        #endregion
+
+        // ================================================================================================================
+
+        #region Tag
 
         #region Tag.DGV.Columns
 
@@ -228,7 +345,10 @@ namespace WinSimpleIDriver
             dataGridViewTag.Columns["tagPage"].Visible = checkBP;
         }
 
-        #region Tag.DGV.Event
+
+        #endregion
+
+        #region Tag.Event
         private void checkBoxTagEditor_CheckedChanged(object sender, EventArgs e)
         {
             CheckTagColumns();
@@ -255,18 +375,95 @@ namespace WinSimpleIDriver
         }
         #endregion
 
+        #region Tag.ComboFilter.Event
 
-        #endregion
-
-        #endregion
-
-        #region Menu.File.Event
-
-        private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
+        private void comboBoxTagFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.Close();
+
+        }
+
+        private void comboBoxTagFilterSource_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxTagFilterGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxTagFilterGroup_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxTagFilterBlock_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxTagFilterBlock_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxTagFilterPage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxTagFilterPage_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
         #endregion
+
+        #region Tag.TextFilter.Event
+        private void textBoxTagFilter_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+
+        #region Tag.DGV.Event
+
+        private void dataGridViewTag_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewTag_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewTag_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewTag_SelectionChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridViewTag_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewTag_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+
+        }
+        #endregion
+
+
+        #endregion
+
+        // ================================================================================================================
+
+
     }
 }
