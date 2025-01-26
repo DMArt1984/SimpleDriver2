@@ -40,10 +40,25 @@ namespace WinSimpleIDriver
         // Определение номеров колонок
         static public void SetDGVColumns(DataGridView sources, DataGridView groups, DataGridView tags)
         {
-            sourcesCol = new DGVSourcesCol { 
+            sourcesCol = new DGVSourcesCol 
+            { 
                 Title = sources.Columns["sourceTitle"].Index,
                 Status = sources.Columns["sourceStatus"].Index,
                 Message = sources.Columns["sourceMessage"].Index
+            };
+
+            groupsCol = new DGVGroupsCol
+            {
+                Title = groups.Columns["groupTitle"].Index,
+                Status = groups.Columns["groupStatus"].Index
+            };
+
+            tagsCol = new DGVTagsCol
+            {
+                 Title = tags.Columns["tagTitle"].Index,
+                 Value = tags.Columns["tagValue"].Index,
+                 Status = tags.Columns["tagStatus"].Index,
+                 Message = tags.Columns["tagMessage"].Index
             };
         }
 

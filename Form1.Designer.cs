@@ -139,6 +139,9 @@ namespace WinSimpleIDriver
             this.tagStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tagMessage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tagStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonSourceFilter = new System.Windows.Forms.Button();
+            this.buttonGroupFilter = new System.Windows.Forms.Button();
+            this.buttonTagFilter = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerForm)).BeginInit();
@@ -359,6 +362,7 @@ namespace WinSimpleIDriver
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1055, 500);
@@ -366,6 +370,7 @@ namespace WinSimpleIDriver
             // 
             // tabPageSource
             // 
+            this.tabPageSource.Controls.Add(this.buttonSourceFilter);
             this.tabPageSource.Controls.Add(this.buttonSourceHelp);
             this.tabPageSource.Controls.Add(this.checkBoxSourceStatistic);
             this.tabPageSource.Controls.Add(this.checkBoxSourceDesc);
@@ -382,7 +387,7 @@ namespace WinSimpleIDriver
             this.tabPageSource.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageSource.Size = new System.Drawing.Size(1047, 470);
             this.tabPageSource.TabIndex = 0;
-            this.tabPageSource.Text = "Источники";
+            this.tabPageSource.Text = "Источники данных";
             this.tabPageSource.UseVisualStyleBackColor = true;
             // 
             // buttonSourceHelp
@@ -450,7 +455,7 @@ namespace WinSimpleIDriver
             this.textBoxSourceFilter.Location = new System.Drawing.Point(7, 39);
             this.textBoxSourceFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxSourceFilter.Name = "textBoxSourceFilter";
-            this.textBoxSourceFilter.Size = new System.Drawing.Size(1032, 22);
+            this.textBoxSourceFilter.Size = new System.Drawing.Size(956, 22);
             this.textBoxSourceFilter.TabIndex = 5;
             this.textBoxSourceFilter.TextChanged += new System.EventHandler(this.textBoxSourceFilter_TextChanged);
             // 
@@ -516,6 +521,7 @@ namespace WinSimpleIDriver
             // 
             // tabPageGroup
             // 
+            this.tabPageGroup.Controls.Add(this.buttonGroupFilter);
             this.tabPageGroup.Controls.Add(this.checkBoxGroupSource);
             this.tabPageGroup.Controls.Add(this.checkBoxGroupRuntime);
             this.tabPageGroup.Controls.Add(this.comboBoxGroupFilterSource);
@@ -533,7 +539,7 @@ namespace WinSimpleIDriver
             this.tabPageGroup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageGroup.Size = new System.Drawing.Size(1047, 470);
             this.tabPageGroup.TabIndex = 1;
-            this.tabPageGroup.Text = "Группы";
+            this.tabPageGroup.Text = "Группы опроса";
             this.tabPageGroup.UseVisualStyleBackColor = true;
             // 
             // checkBoxGroupRuntime
@@ -602,7 +608,7 @@ namespace WinSimpleIDriver
             this.textBoxGroupFilter.Location = new System.Drawing.Point(212, 39);
             this.textBoxGroupFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxGroupFilter.Name = "textBoxGroupFilter";
-            this.textBoxGroupFilter.Size = new System.Drawing.Size(827, 22);
+            this.textBoxGroupFilter.Size = new System.Drawing.Size(751, 22);
             this.textBoxGroupFilter.TabIndex = 13;
             this.textBoxGroupFilter.TextChanged += new System.EventHandler(this.textBoxGroupFilter_TextChanged);
             // 
@@ -734,6 +740,7 @@ namespace WinSimpleIDriver
             // 
             // tabPageTag
             // 
+            this.tabPageTag.Controls.Add(this.buttonTagFilter);
             this.tabPageTag.Controls.Add(this.checkBoxTagSG);
             this.tabPageTag.Controls.Add(this.checkBoxTagBP);
             this.tabPageTag.Controls.Add(this.comboBoxTagFilterPage);
@@ -802,7 +809,7 @@ namespace WinSimpleIDriver
             this.textBoxTagFilter.Location = new System.Drawing.Point(611, 39);
             this.textBoxTagFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxTagFilter.Name = "textBoxTagFilter";
-            this.textBoxTagFilter.Size = new System.Drawing.Size(428, 22);
+            this.textBoxTagFilter.Size = new System.Drawing.Size(352, 22);
             this.textBoxTagFilter.TabIndex = 13;
             this.textBoxTagFilter.TextChanged += new System.EventHandler(this.textBoxTagFilter_TextChanged);
             // 
@@ -1211,6 +1218,39 @@ namespace WinSimpleIDriver
             this.tagStatistic.ReadOnly = true;
             this.tagStatistic.Width = 101;
             // 
+            // buttonSourceFilter
+            // 
+            this.buttonSourceFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSourceFilter.Location = new System.Drawing.Point(969, 38);
+            this.buttonSourceFilter.Name = "buttonSourceFilter";
+            this.buttonSourceFilter.Size = new System.Drawing.Size(70, 24);
+            this.buttonSourceFilter.TabIndex = 11;
+            this.buttonSourceFilter.Text = "Фильтр";
+            this.buttonSourceFilter.UseVisualStyleBackColor = true;
+            this.buttonSourceFilter.Click += new System.EventHandler(this.buttonSourceFilter_Click);
+            // 
+            // buttonGroupFilter
+            // 
+            this.buttonGroupFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonGroupFilter.Location = new System.Drawing.Point(969, 38);
+            this.buttonGroupFilter.Name = "buttonGroupFilter";
+            this.buttonGroupFilter.Size = new System.Drawing.Size(70, 24);
+            this.buttonGroupFilter.TabIndex = 20;
+            this.buttonGroupFilter.Text = "Фильтр";
+            this.buttonGroupFilter.UseVisualStyleBackColor = true;
+            this.buttonGroupFilter.Click += new System.EventHandler(this.buttonGroupFilter_Click);
+            // 
+            // buttonTagFilter
+            // 
+            this.buttonTagFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonTagFilter.Location = new System.Drawing.Point(969, 38);
+            this.buttonTagFilter.Name = "buttonTagFilter";
+            this.buttonTagFilter.Size = new System.Drawing.Size(70, 24);
+            this.buttonTagFilter.TabIndex = 25;
+            this.buttonTagFilter.Text = "Фильтр";
+            this.buttonTagFilter.UseVisualStyleBackColor = true;
+            this.buttonTagFilter.Click += new System.EventHandler(this.buttonTagFilter_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1355,6 +1395,9 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.DataGridViewTextBoxColumn tagStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn tagMessage;
         private System.Windows.Forms.DataGridViewTextBoxColumn tagStatistic;
+        private System.Windows.Forms.Button buttonSourceFilter;
+        private System.Windows.Forms.Button buttonGroupFilter;
+        private System.Windows.Forms.Button buttonTagFilter;
     }
 }
 

@@ -167,8 +167,23 @@ namespace WinSimpleIDriver
         }
         #endregion
 
+        #region Source.Filter
+
         #region Source.TextFilter.Event
         private void textBoxSourceFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(textBoxSourceFilter.Text))
+                SourceFilter();
+        }
+
+        private void buttonSourceFilter_Click(object sender, EventArgs e)
+        {
+            SourceFilter();
+        }
+
+        #endregion
+
+        private void SourceFilter()
         {
 
         }
@@ -278,25 +293,43 @@ namespace WinSimpleIDriver
         }
         #endregion
 
+        #region Group.Filter
+
         #region Group.ComboFilter.Event
 
         private void comboBoxGroupFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            //SaveTextComboBox(comboBoxGroupFilterSource);
+            GroupFilter();
         }
 
         private void comboBoxGroupFilterSource_TextChanged(object sender, EventArgs e)
         {
-
+            if (String.IsNullOrWhiteSpace(comboBoxGroupFilterSource.Text))
+                GroupFilter();
         }
-
+        
         #endregion
 
         #region Group.TextFilter.Event
         private void textBoxGroupFilter_TextChanged(object sender, EventArgs e)
         {
+            if (String.IsNullOrWhiteSpace(textBoxGroupFilter.Text))
+                GroupFilter();
+        }
+        #endregion
+
+        private void buttonGroupFilter_Click(object sender, EventArgs e)
+        {
+            SaveTextComboBox(comboBoxGroupFilterSource);
+            GroupFilter();
+        }
+
+        private void GroupFilter()
+        {
 
         }
+
         #endregion
 
         #region Group.DGV.Event
@@ -416,46 +449,52 @@ namespace WinSimpleIDriver
         }
         #endregion
 
+        #region Tag.Filter
+
         #region Tag.ComboFilter.Event
 
         private void comboBoxTagFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            TagFilter();
         }
 
         private void comboBoxTagFilterSource_TextChanged(object sender, EventArgs e)
         {
-
+            if (String.IsNullOrWhiteSpace(comboBoxTagFilterSource.Text))
+                TagFilter();
         }
 
         private void comboBoxTagFilterGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            TagFilter();
         }
 
         private void comboBoxTagFilterGroup_TextChanged(object sender, EventArgs e)
         {
-
+            if (String.IsNullOrWhiteSpace(comboBoxTagFilterGroup.Text))
+                TagFilter();
         }
 
         private void comboBoxTagFilterBlock_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            TagFilter();
         }
 
         private void comboBoxTagFilterBlock_TextChanged(object sender, EventArgs e)
         {
-
+            if (String.IsNullOrWhiteSpace(comboBoxTagFilterBlock.Text))
+                TagFilter();
         }
 
         private void comboBoxTagFilterPage_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            TagFilter();
         }
 
         private void comboBoxTagFilterPage_TextChanged(object sender, EventArgs e)
         {
-
+            if (String.IsNullOrWhiteSpace(comboBoxTagFilterPage.Text))
+                TagFilter();
         }
 
         #endregion
@@ -463,8 +502,25 @@ namespace WinSimpleIDriver
         #region Tag.TextFilter.Event
         private void textBoxTagFilter_TextChanged(object sender, EventArgs e)
         {
+            if (String.IsNullOrWhiteSpace(textBoxTagFilter.Text))
+                TagFilter();
+        }
+        #endregion
+
+        private void buttonTagFilter_Click(object sender, EventArgs e)
+        {
+            SaveTextComboBox(comboBoxTagFilterSource);
+            SaveTextComboBox(comboBoxTagFilterGroup);
+            SaveTextComboBox(comboBoxTagFilterBlock);
+            SaveTextComboBox(comboBoxTagFilterPage);
+            TagFilter();
+        }
+
+        private void TagFilter()
+        {
 
         }
+
         #endregion
 
         #region Tag.DGV.Event
@@ -499,7 +555,7 @@ namespace WinSimpleIDriver
 
         }
 
-        
+
 
 
 
@@ -510,7 +566,20 @@ namespace WinSimpleIDriver
 
         // ================================================================================================================
 
+        private void SaveTextComboBox(ComboBox comboBox, string text = "")
+        {
+            if (text == "")
+                text = comboBox.Text;
 
+            if (String.IsNullOrWhiteSpace(text) == false)
+            {
+                if (comboBox.Items.Contains(text) == false)
+                {
+                    comboBox.Items.Add(text);
+                }
+            }
+        }
 
+        
     }
 }
