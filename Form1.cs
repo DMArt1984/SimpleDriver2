@@ -29,7 +29,8 @@ namespace WinSimpleIDriver
             ToolStripMenuItemVer.Text += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             // Установка номеров колонок
-            DataTableLib.SetDGVColumns(dataGridViewSource, dataGridViewGroup, dataGridViewTag);
+            DataTableLib.SetDGVColumns(dataGridViewSource, dataGridViewGroup, dataGridViewTag,
+                                        dataGridViewInclude, dataGridViewChange);
 
             #region Table Enum
             // Устройства
@@ -580,6 +581,81 @@ namespace WinSimpleIDriver
 
         // ================================================================================================================
 
+        #region Include
+
+        private void buttonIncludeLeft_Click(object sender, EventArgs e)
+        {
+            splitContainerInclude.Panel2Collapsed = !splitContainerInclude.Panel2Collapsed;
+        }
+
+        #region Include.Filter
+
+        #region Include.TextFilter.Event
+
+        private void textBoxIncludeFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(textBoxIncludeFilter.Text))
+                IncludeFilter();
+        }
+        private void buttonIncludeFilter_Click(object sender, EventArgs e)
+        {
+            IncludeFilter();
+        }
+        private void IncludeFilter()
+        {
+            DataTableLib.TableFilter(textBoxIncludeFilter.Text, dataGridViewInclude,
+                DataTableLib.GetColumnIndexFilterInclude(), DataTableLib.GetPairFilterInclude());
+        }
+
+        #endregion
+
+        #endregion
+
+        
+
+
+
+
+        #region Include-Change
+
+        private void buttonIncludeRight_Click(object sender, EventArgs e)
+        {
+            splitContainerInclude.Panel1Collapsed = !splitContainerInclude.Panel1Collapsed;
+        }
+
+        #region Include.Filter
+
+        #region Include.TextFilter.Event
+
+        private void textBoxChangeFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(textBoxChangeFilter.Text))
+                ChangeFilter();
+        }
+
+        private void buttonChangeFilter_Click(object sender, EventArgs e)
+        {
+            ChangeFilter();
+        }
+
+        private void ChangeFilter()
+        {
+            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewInclude, DataTableLib.includeCol.Prefix));
+            DataTableLib.TableFilter(textBoxChangeFilter.Text, dataGridViewChange,
+                DataTableLib.GetColumnIndexFilterChange(), DataTableLib.GetPairFilterChange(text));
+        }
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+
+        // ================================================================================================================
+
         private void SaveTextComboBox(ComboBox comboBox, string text = "")
         {
             if (text == "")
@@ -594,6 +670,15 @@ namespace WinSimpleIDriver
             }
         }
 
+
+
         
+
+        
+
+        
+
+
+
     }
 }

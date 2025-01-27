@@ -42,15 +42,31 @@ namespace WinSimpleIDriver
         public int Page;
     }
 
+    public struct DGVIncludeCol
+    {
+        public int Prefix;
+        public int FileName;
+    }
+    public struct DGVChangeCol
+    {
+        public int Prefix;
+        public int ChangeFrom;
+        public int ChangeTo;
+    }
+
+
     class DataTableLib
     {
         // Номера колонок в DGV
         static public DGVSourcesCol sourcesCol = new DGVSourcesCol();
         static public DGVGroupsCol groupsCol = new DGVGroupsCol();
         static public DGVTagsCol tagsCol = new DGVTagsCol();
+        static public DGVIncludeCol includeCol = new DGVIncludeCol();
+        static public DGVChangeCol changeCol = new DGVChangeCol();
 
         // Определение номеров колонок
-        static public void SetDGVColumns(DataGridView sources, DataGridView groups, DataGridView tags)
+        static public void SetDGVColumns(DataGridView sources, DataGridView groups, DataGridView tags, 
+                                            DataGridView includes, DataGridView changes)
         {
             sourcesCol = new DGVSourcesCol 
             { 
@@ -84,9 +100,25 @@ namespace WinSimpleIDriver
                 Block = tags.Columns["tagBlock"].Index,
                 Page = tags.Columns["tagPage"].Index
             };
+
+            // ---
+
+            includeCol = new DGVIncludeCol
+            {
+                Prefix = includes.Columns["includePrefix"].Index,
+                FileName = includes.Columns["includeFileName"].Index
+            };
+
+            changeCol = new DGVChangeCol
+            {
+                Prefix = changes.Columns["changePrefix"].Index,
+                ChangeFrom = changes.Columns["changeFrom"].Index,
+                ChangeTo = changes.Columns["changeTo"].Index
+            };
+
         }
 
-        // Номера колонок для фильтра в массив
+        // Источники. Номера колонок для фильтра в массив
         static public int[] GetColumnIndexFilterSource()
         {
             return new int[]
@@ -99,7 +131,7 @@ namespace WinSimpleIDriver
             return new PairFilterCol[] { };
         }
 
-        // Номера колонок для фильтра в массив
+        // Группы. Номера колонок для фильтра в массив
         static public int[] GetColumnIndexFilterGroup()
         {
             return new int[]
@@ -115,7 +147,7 @@ namespace WinSimpleIDriver
             };
         }
 
-        // Номера колонок для фильтра в массив
+        // Теги. Номера колонок для фильтра в массив
         static public int[] GetColumnIndexFilterTag()
         {
             return new int[]
@@ -131,6 +163,35 @@ namespace WinSimpleIDriver
                 new PairFilterCol { col = tagsCol.Group, filter = textGroup },
                 new PairFilterCol { col = tagsCol.Block, filter = textBlock },
                 new PairFilterCol { col = tagsCol.Page, filter = textPage }
+            };
+        }
+
+        // Классы. Номера колонок для фильтра в массив
+        static public int[] GetColumnIndexFilterInclude()
+        {
+            return new int[]
+            {
+                includeCol.Prefix, includeCol.FileName
+            };
+        }
+        static public PairFilterCol[] GetPairFilterInclude()
+        {
+            return new PairFilterCol[] { };
+        }
+
+        // Замены. Номера колонок для фильтра в массив
+        static public int[] GetColumnIndexFilterChange()
+        {
+            return new int[]
+            {
+                changeCol.Prefix, changeCol.ChangeFrom, changeCol.ChangeTo
+            };
+        }
+        static public PairFilterCol[] GetPairFilterChange(string text)
+        {
+            return new PairFilterCol[]
+            {
+                new PairFilterCol { col = changeCol.Prefix, filter = text }
             };
         }
 
@@ -342,7 +403,7 @@ namespace WinSimpleIDriver
             {
                 if (row.IsNewRow)
                     continue;
-                row.Visible = ( String.IsNullOrWhiteSpace(FilterText) || CellsContainsFilterA(row, cells, FilterText) || CellsContainsFilterB(row, pairs));
+                row.Visible = ( String.IsNullOrWhiteSpace(FilterText) || CellsContainsFilterA(row, cells, FilterText)) && CellsContainsFilterB(row, pairs);
             }
         }
 
@@ -354,12 +415,12 @@ namespace WinSimpleIDriver
 
         static public bool CellsContainsFilterB(DataGridViewRow row, PairFilterCol[] pairs)
         {
+            bool result = true;
             foreach (var item in pairs)
             {
-                if (row.Cells[item.col].Value.ToString().Contains(item.filter))
-                    return true;
+                result = result && (String.IsNullOrWhiteSpace(item.filter) || (row.Cells[item.col].Value != null && row.Cells[item.col].Value.ToString() == (item.filter)));
             }
-            return false;
+            return result;
         }
 
         static public ushort GetSelIdFromTable(object senderDGV)
@@ -433,6 +494,23 @@ namespace WinSimpleIDriver
 
             row.Cells[indexCell].Value = row.Cells[indexCell].Value.ToString().Replace(ValueFrom, ValueTo);
             return 1;
+        }
+
+        // Получить значение из выбранной строки
+        static public string GetValueFromCurrentRow(DataGridView dgv, int col)
+        {
+            var row = dgv.CurrentRow;
+            if (row == null)
+                return "";
+
+            if (row.IsNewRow)
+                return "";
+
+            var value = row.Cells[col].Value;
+            if (value == null)
+                return "";
+
+            return value.ToString();
         }
 
     }
