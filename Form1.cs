@@ -126,14 +126,14 @@ namespace WinSimpleIDriver
             dataGridViewSource.Columns["sourceAddress"].Visible = checkE;
             dataGridViewSource.RowHeadersVisible = checkE;
             dataGridViewSource.ReadOnly = !checkE;
-            if (checkE)
-            {
-                dataGridViewSource.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
-            }
-            else
-            {
-                dataGridViewSource.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            }
+            //if (checkE)
+            //{
+            //    dataGridViewSource.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+            //}
+            //else
+            //{
+            //    dataGridViewSource.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            //}
 
             bool checkD = checkBoxSourceDesc.Checked;
             dataGridViewSource.Columns["sourceDesc"].Visible = checkD;
@@ -247,13 +247,13 @@ namespace WinSimpleIDriver
             dataGridViewGroup.Columns["groupPeriod"].Visible = checkE;
             dataGridViewGroup.RowHeadersVisible = checkE;
             dataGridViewGroup.ReadOnly = !checkE;
-            if (checkE)
-            {
-                dataGridViewGroup.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
-            } else
-            {
-                dataGridViewGroup.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            }
+            //if (checkE)
+            //{
+            //    dataGridViewGroup.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+            //} else
+            //{
+            //    dataGridViewGroup.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            //}
 
             bool checkD = checkBoxGroupDesc.Checked;
             dataGridViewGroup.Columns["groupDesc"].Visible = checkD;
@@ -393,14 +393,14 @@ namespace WinSimpleIDriver
             dataGridViewTag.Columns["tagWriteTag"].Visible = checkE;
             dataGridViewTag.RowHeadersVisible = checkE;
             dataGridViewTag.ReadOnly = !checkE;
-            if (checkE)
-            {
-                dataGridViewTag.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
-            }
-            else
-            {
-                dataGridViewTag.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            }
+            //if (checkE)
+            //{
+            //    dataGridViewTag.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+            //}
+            //else
+            //{
+            //    dataGridViewTag.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            //}
 
             bool checkD = checkBoxTagDesc.Checked;
             dataGridViewTag.Columns["tagDesc"].Visible = checkD;
@@ -586,6 +586,7 @@ namespace WinSimpleIDriver
         private void buttonIncludeLeft_Click(object sender, EventArgs e)
         {
             splitContainerInclude.Panel2Collapsed = !splitContainerInclude.Panel2Collapsed;
+            SetComboBoxChangeFilterInclude();
         }
 
         #region Include.Filter
@@ -611,9 +612,11 @@ namespace WinSimpleIDriver
 
         #endregion
 
-        
-
-
+        private void dataGridViewInclude_SelectionChanged(object sender, EventArgs e)
+        {
+            SaveTextComboBox(comboBoxChangeFilterInclude);
+            SetComboBoxChangeFilterInclude();
+        }
 
 
         #region Include-Change
@@ -621,9 +624,17 @@ namespace WinSimpleIDriver
         private void buttonIncludeRight_Click(object sender, EventArgs e)
         {
             splitContainerInclude.Panel1Collapsed = !splitContainerInclude.Panel1Collapsed;
+            SetComboBoxChangeFilterInclude();
         }
 
         #region Include.Filter
+
+        #region Change.ComboFilter.Event
+        private void comboBoxChangeFilterInclude_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ChangeFilter();
+        }
+        #endregion
 
         #region Include.TextFilter.Event
 
@@ -635,14 +646,35 @@ namespace WinSimpleIDriver
 
         private void buttonChangeFilter_Click(object sender, EventArgs e)
         {
+            SaveTextComboBox(comboBoxChangeFilterInclude);
+            ChangeFilter();
+        }
+
+        private void SetComboBoxChangeFilterInclude()
+        {
+            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewInclude, DataTableLib.includeCol.Prefix));
+            comboBoxChangeFilterInclude.Text = text;
             ChangeFilter();
         }
 
         private void ChangeFilter()
         {
-            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewInclude, DataTableLib.includeCol.Prefix));
+            string text = comboBoxChangeFilterInclude.Text;
+            
             DataTableLib.TableFilter(textBoxChangeFilter.Text, dataGridViewChange,
                 DataTableLib.GetColumnIndexFilterChange(), DataTableLib.GetPairFilterChange(text));
+        }
+
+        private void dataGridViewChange_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            string text = comboBoxChangeFilterInclude.Text;
+            if (String.IsNullOrWhiteSpace(text) == false)
+            {
+                var row = dataGridViewChange.CurrentRow;
+                if (row != null)
+                    row.Cells[DataTableLib.changeCol.Prefix].Value = text;
+                //dataGridViewChange.Rows[dataGridViewChange.Rows.Count - 1].Cells[DataTableLib.changeCol.Prefix].Value = text;
+            }
         }
 
         #endregion
@@ -670,15 +702,6 @@ namespace WinSimpleIDriver
             }
         }
 
-
-
         
-
-        
-
-        
-
-
-
     }
 }

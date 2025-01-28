@@ -29,14 +29,14 @@ namespace WinSimpleIDriver
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Источники/Группы/Теги");
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Блоки");
-            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("Страницы");
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Источники/Группы/Теги");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Блоки");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Страницы");
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -162,6 +162,7 @@ namespace WinSimpleIDriver
             this.changePrefix = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.changeFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.changeTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.comboBoxChangeFilterInclude = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerForm)).BeginInit();
@@ -364,19 +365,19 @@ namespace WinSimpleIDriver
             this.treeView1.Location = new System.Drawing.Point(7, 29);
             this.treeView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.treeView1.Name = "treeView1";
-            treeNode13.Name = "Sources";
-            treeNode13.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode13.Text = "Источники/Группы/Теги";
-            treeNode14.Name = "Blocks";
-            treeNode14.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode14.Text = "Блоки";
-            treeNode15.Name = "Pages";
-            treeNode15.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode15.Text = "Страницы";
+            treeNode10.Name = "Sources";
+            treeNode10.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode10.Text = "Источники/Группы/Теги";
+            treeNode11.Name = "Blocks";
+            treeNode11.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode11.Text = "Блоки";
+            treeNode12.Name = "Pages";
+            treeNode12.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode12.Text = "Страницы";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode13,
-            treeNode14,
-            treeNode15});
+            treeNode10,
+            treeNode11,
+            treeNode12});
             this.treeView1.Size = new System.Drawing.Size(213, 461);
             this.treeView1.TabIndex = 0;
             // 
@@ -385,8 +386,8 @@ namespace WinSimpleIDriver
             this.tabControl1.Controls.Add(this.tabPageSource);
             this.tabControl1.Controls.Add(this.tabPageGroup);
             this.tabControl1.Controls.Add(this.tabPageTag);
-            this.tabControl1.Controls.Add(this.tabPagePage);
             this.tabControl1.Controls.Add(this.tabPageIncludes);
+            this.tabControl1.Controls.Add(this.tabPagePage);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -537,7 +538,9 @@ namespace WinSimpleIDriver
             this.sourceStatistic});
             this.dataGridViewSource.Location = new System.Drawing.Point(7, 67);
             this.dataGridViewSource.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.dataGridViewSource.MultiSelect = false;
             this.dataGridViewSource.Name = "dataGridViewSource";
+            this.dataGridViewSource.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewSource.Size = new System.Drawing.Size(1162, 395);
             this.dataGridViewSource.TabIndex = 1;
             this.dataGridViewSource.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewSource_CellBeginEdit);
@@ -688,7 +691,9 @@ namespace WinSimpleIDriver
             this.groupStatistic});
             this.dataGridViewGroup.Location = new System.Drawing.Point(7, 67);
             this.dataGridViewGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.dataGridViewGroup.MultiSelect = false;
             this.dataGridViewGroup.Name = "dataGridViewGroup";
+            this.dataGridViewGroup.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewGroup.Size = new System.Drawing.Size(1162, 391);
             this.dataGridViewGroup.TabIndex = 9;
             this.dataGridViewGroup.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewGroup_CellBeginEdit);
@@ -701,10 +706,10 @@ namespace WinSimpleIDriver
             // groupID
             // 
             this.groupID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle21.Format = "N2";
-            dataGridViewCellStyle21.NullValue = null;
-            this.groupID.DefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle17.Format = "N2";
+            dataGridViewCellStyle17.NullValue = null;
+            this.groupID.DefaultCellStyle = dataGridViewCellStyle17;
             this.groupID.HeaderText = "ID";
             this.groupID.Name = "groupID";
             this.groupID.ReadOnly = true;
@@ -897,7 +902,9 @@ namespace WinSimpleIDriver
             this.tagStatistic});
             this.dataGridViewTag.Location = new System.Drawing.Point(7, 67);
             this.dataGridViewTag.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.dataGridViewTag.MultiSelect = false;
             this.dataGridViewTag.Name = "dataGridViewTag";
+            this.dataGridViewTag.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewTag.Size = new System.Drawing.Size(1162, 391);
             this.dataGridViewTag.TabIndex = 9;
             this.dataGridViewTag.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewTag_CellBeginEdit);
@@ -1019,10 +1026,10 @@ namespace WinSimpleIDriver
             // sourceID
             // 
             this.sourceID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle22.Format = "N2";
-            dataGridViewCellStyle22.NullValue = null;
-            this.sourceID.DefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle18.Format = "N2";
+            dataGridViewCellStyle18.NullValue = null;
+            this.sourceID.DefaultCellStyle = dataGridViewCellStyle18;
             this.sourceID.HeaderText = "ID";
             this.sourceID.Name = "sourceID";
             this.sourceID.ReadOnly = true;
@@ -1157,10 +1164,10 @@ namespace WinSimpleIDriver
             // tagID
             // 
             this.tagID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle23.Format = "N2";
-            dataGridViewCellStyle23.NullValue = null;
-            this.tagID.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle19.Format = "N2";
+            dataGridViewCellStyle19.NullValue = null;
+            this.tagID.DefaultCellStyle = dataGridViewCellStyle19;
             this.tagID.HeaderText = "ID";
             this.tagID.Name = "tagID";
             this.tagID.ReadOnly = true;
@@ -1302,9 +1309,12 @@ namespace WinSimpleIDriver
             this.includeChanges});
             this.dataGridViewInclude.Location = new System.Drawing.Point(3, 32);
             this.dataGridViewInclude.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.dataGridViewInclude.MultiSelect = false;
             this.dataGridViewInclude.Name = "dataGridViewInclude";
+            this.dataGridViewInclude.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewInclude.Size = new System.Drawing.Size(553, 362);
             this.dataGridViewInclude.TabIndex = 2;
+            this.dataGridViewInclude.SelectionChanged += new System.EventHandler(this.dataGridViewInclude_SelectionChanged);
             // 
             // dataGridViewChange
             // 
@@ -1319,9 +1329,12 @@ namespace WinSimpleIDriver
             this.changeTo});
             this.dataGridViewChange.Location = new System.Drawing.Point(26, 32);
             this.dataGridViewChange.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.dataGridViewChange.MultiSelect = false;
             this.dataGridViewChange.Name = "dataGridViewChange";
+            this.dataGridViewChange.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewChange.Size = new System.Drawing.Size(550, 362);
             this.dataGridViewChange.TabIndex = 3;
+            this.dataGridViewChange.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewChange_UserAddedRow);
             // 
             // splitContainerInclude
             // 
@@ -1340,6 +1353,7 @@ namespace WinSimpleIDriver
             // 
             // splitContainerInclude.Panel2
             // 
+            this.splitContainerInclude.Panel2.Controls.Add(this.comboBoxChangeFilterInclude);
             this.splitContainerInclude.Panel2.Controls.Add(this.buttonChangeFilter);
             this.splitContainerInclude.Panel2.Controls.Add(this.textBoxChangeFilter);
             this.splitContainerInclude.Panel2.Controls.Add(this.buttonIncludeRight);
@@ -1386,10 +1400,10 @@ namespace WinSimpleIDriver
             // 
             this.textBoxChangeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxChangeFilter.Location = new System.Drawing.Point(26, 4);
+            this.textBoxChangeFilter.Location = new System.Drawing.Point(231, 4);
             this.textBoxChangeFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxChangeFilter.Name = "textBoxChangeFilter";
-            this.textBoxChangeFilter.Size = new System.Drawing.Size(474, 22);
+            this.textBoxChangeFilter.Size = new System.Drawing.Size(269, 22);
             this.textBoxChangeFilter.TabIndex = 15;
             this.textBoxChangeFilter.TextChanged += new System.EventHandler(this.textBoxChangeFilter_TextChanged);
             // 
@@ -1418,10 +1432,10 @@ namespace WinSimpleIDriver
             // includeID
             // 
             this.includeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle24.Format = "N2";
-            dataGridViewCellStyle24.NullValue = null;
-            this.includeID.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle20.Format = "N2";
+            dataGridViewCellStyle20.NullValue = null;
+            this.includeID.DefaultCellStyle = dataGridViewCellStyle20;
             this.includeID.HeaderText = "ID";
             this.includeID.Name = "includeID";
             this.includeID.ReadOnly = true;
@@ -1450,10 +1464,10 @@ namespace WinSimpleIDriver
             // changeID
             // 
             this.changeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle25.Format = "N2";
-            dataGridViewCellStyle25.NullValue = null;
-            this.changeID.DefaultCellStyle = dataGridViewCellStyle25;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle16.Format = "N2";
+            dataGridViewCellStyle16.NullValue = null;
+            this.changeID.DefaultCellStyle = dataGridViewCellStyle16;
             this.changeID.HeaderText = "ID";
             this.changeID.Name = "changeID";
             this.changeID.ReadOnly = true;
@@ -1476,6 +1490,16 @@ namespace WinSimpleIDriver
             this.changeTo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.changeTo.HeaderText = "На что меняем";
             this.changeTo.Name = "changeTo";
+            // 
+            // comboBoxChangeFilterInclude
+            // 
+            this.comboBoxChangeFilterInclude.FormattingEnabled = true;
+            this.comboBoxChangeFilterInclude.Location = new System.Drawing.Point(26, 3);
+            this.comboBoxChangeFilterInclude.Name = "comboBoxChangeFilterInclude";
+            this.comboBoxChangeFilterInclude.Size = new System.Drawing.Size(199, 25);
+            this.comboBoxChangeFilterInclude.Sorted = true;
+            this.comboBoxChangeFilterInclude.TabIndex = 18;
+            this.comboBoxChangeFilterInclude.SelectedIndexChanged += new System.EventHandler(this.comboBoxChangeFilterInclude_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -1651,6 +1675,7 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.DataGridViewTextBoxColumn changePrefix;
         private System.Windows.Forms.DataGridViewTextBoxColumn changeFrom;
         private System.Windows.Forms.DataGridViewTextBoxColumn changeTo;
+        private System.Windows.Forms.ComboBox comboBoxChangeFilterInclude;
     }
 }
 
