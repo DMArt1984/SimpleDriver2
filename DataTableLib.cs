@@ -12,6 +12,7 @@ namespace WinSimpleIDriver
 {
     public struct DGVSourcesCol
     {
+        public int Calc;
         public int Title;
         public int Driver;
         public int Address;
@@ -21,6 +22,7 @@ namespace WinSimpleIDriver
     }
     public struct DGVGroupsCol
     {
+        public int Calc;
         public int Title;
         public int Source;
         public int Desc;
@@ -28,6 +30,7 @@ namespace WinSimpleIDriver
     }
     public struct DGVTagsCol
     {
+        public int Calc;
         public int Title;
         public int Value;
         public int DataType;
@@ -35,7 +38,6 @@ namespace WinSimpleIDriver
         public int Desc;
         public int Status;
         public int Message;
-
         public int Source;
         public int Group;
         public int Block;
@@ -69,7 +71,8 @@ namespace WinSimpleIDriver
                                             DataGridView includes, DataGridView changes)
         {
             sourcesCol = new DGVSourcesCol 
-            { 
+            {
+                Calc = sources.Columns["sourceCalc"].Index,
                 Title = sources.Columns["sourceTitle"].Index,
                 Driver = sources.Columns["sourceDriver"].Index,
                 Address = sources.Columns["sourceAddress"].Index,
@@ -80,6 +83,7 @@ namespace WinSimpleIDriver
 
             groupsCol = new DGVGroupsCol
             {
+                Calc = groups.Columns["groupCalc"].Index,
                 Title = groups.Columns["groupTitle"].Index,
                 Source = groups.Columns["groupSource"].Index,
                 Desc = groups.Columns["groupDesc"].Index,
@@ -88,6 +92,7 @@ namespace WinSimpleIDriver
 
             tagsCol = new DGVTagsCol
             {
+                Calc = tags.Columns["tagCalc"].Index,
                 Title = tags.Columns["tagTitle"].Index,
                 Value = tags.Columns["tagValue"].Index,
                 DataType = tags.Columns["tagDataType"].Index,

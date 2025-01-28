@@ -29,15 +29,15 @@ namespace WinSimpleIDriver
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Источники/Группы/Теги");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Блоки");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Классы");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Страницы");
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Источники/Группы/Теги");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Блоки");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Классы");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Страницы");
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,15 +82,6 @@ namespace WinSimpleIDriver
             this.buttonGroupDel = new System.Windows.Forms.Button();
             this.buttonGroupCopy = new System.Windows.Forms.Button();
             this.dataGridViewGroup = new System.Windows.Forms.DataGridView();
-            this.groupID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupOn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.groupSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupPeriod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageTag = new System.Windows.Forms.TabPage();
             this.checkBoxTagDesc = new System.Windows.Forms.CheckBox();
             this.checkBoxTagRuntime = new System.Windows.Forms.CheckBox();
@@ -112,39 +103,11 @@ namespace WinSimpleIDriver
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.sourceID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sourceTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sourceON = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.sourceAutoRestart = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.sourceDriver = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.sourceAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sourceDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sourceStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sourceMessage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sourceTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sourceStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.checkBoxGroupSource = new System.Windows.Forms.CheckBox();
             this.checkBoxTagSG = new System.Windows.Forms.CheckBox();
             this.buttonSourceFilter = new System.Windows.Forms.Button();
             this.buttonGroupFilter = new System.Windows.Forms.Button();
             this.buttonTagFilter = new System.Windows.Forms.Button();
-            this.tagID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagON = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.tagValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagGroup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagDataType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.tagAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagCommand = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.tagWriteValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagWriteTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagBlock = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagPage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagMessage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageIncludes = new System.Windows.Forms.TabPage();
             this.dataGridViewInclude = new System.Windows.Forms.DataGridView();
             this.dataGridViewChange = new System.Windows.Forms.DataGridView();
@@ -164,6 +127,46 @@ namespace WinSimpleIDriver
             this.changeFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.changeTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.comboBoxChangeFilterInclude = new System.Windows.Forms.ComboBox();
+            this.sourceID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceCalc = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.sourceTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceON = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.sourceAutoRestart = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.sourceDriver = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.sourceAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceMessage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sourceStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupCalc = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.groupTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupOn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.groupSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupPeriod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagCalc = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.tagTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagON = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.tagValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagGroup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagDataType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.tagAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagCommand = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.tagWriteValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagWriteTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagBlock = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagPage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagMessage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerForm)).BeginInit();
@@ -366,27 +369,27 @@ namespace WinSimpleIDriver
             this.treeView1.Location = new System.Drawing.Point(7, 29);
             this.treeView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "Sources";
-            treeNode1.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode1.Tag = "Source";
-            treeNode1.Text = "Источники/Группы/Теги";
-            treeNode2.Name = "Blocks";
-            treeNode2.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode2.Tag = "Block";
-            treeNode2.Text = "Блоки";
-            treeNode3.Name = "Includes";
-            treeNode3.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode3.Tag = "Include";
-            treeNode3.Text = "Классы";
-            treeNode4.Name = "Pages";
-            treeNode4.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode4.Tag = "Page";
-            treeNode4.Text = "Страницы";
+            treeNode5.Name = "Sources";
+            treeNode5.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode5.Tag = "Source";
+            treeNode5.Text = "Источники/Группы/Теги";
+            treeNode6.Name = "Blocks";
+            treeNode6.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode6.Tag = "Block";
+            treeNode6.Text = "Блоки";
+            treeNode7.Name = "Includes";
+            treeNode7.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode7.Tag = "Include";
+            treeNode7.Text = "Классы";
+            treeNode8.Name = "Pages";
+            treeNode8.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode8.Tag = "Page";
+            treeNode8.Text = "Страницы";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2,
-            treeNode3,
-            treeNode4});
+            treeNode5,
+            treeNode6,
+            treeNode7,
+            treeNode8});
             this.treeView1.Size = new System.Drawing.Size(213, 461);
             this.treeView1.TabIndex = 0;
             // 
@@ -495,6 +498,7 @@ namespace WinSimpleIDriver
             this.textBoxSourceFilter.Name = "textBoxSourceFilter";
             this.textBoxSourceFilter.Size = new System.Drawing.Size(1086, 22);
             this.textBoxSourceFilter.TabIndex = 5;
+            this.textBoxSourceFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxSourceFilter.TextChanged += new System.EventHandler(this.textBoxSourceFilter_TextChanged);
             // 
             // buttonSourceView
@@ -535,6 +539,7 @@ namespace WinSimpleIDriver
             this.dataGridViewSource.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewSource.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.sourceID,
+            this.sourceCalc,
             this.sourceTitle,
             this.sourceON,
             this.sourceAutoRestart,
@@ -650,6 +655,7 @@ namespace WinSimpleIDriver
             this.textBoxGroupFilter.Name = "textBoxGroupFilter";
             this.textBoxGroupFilter.Size = new System.Drawing.Size(881, 22);
             this.textBoxGroupFilter.TabIndex = 13;
+            this.textBoxGroupFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxGroupFilter.TextChanged += new System.EventHandler(this.textBoxGroupFilter_TextChanged);
             // 
             // buttonGroupView
@@ -690,6 +696,7 @@ namespace WinSimpleIDriver
             this.dataGridViewGroup.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewGroup.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.groupID,
+            this.groupCalc,
             this.groupTitle,
             this.groupOn,
             this.groupSource,
@@ -711,74 +718,6 @@ namespace WinSimpleIDriver
             this.dataGridViewGroup.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dataGridViewGroup_RowStateChanged);
             this.dataGridViewGroup.SelectionChanged += new System.EventHandler(this.dataGridViewGroup_SelectionChanged);
             this.dataGridViewGroup.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewGroup_UserAddedRow);
-            // 
-            // groupID
-            // 
-            this.groupID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N2";
-            dataGridViewCellStyle2.NullValue = null;
-            this.groupID.DefaultCellStyle = dataGridViewCellStyle2;
-            this.groupID.HeaderText = "ID";
-            this.groupID.Name = "groupID";
-            this.groupID.ReadOnly = true;
-            this.groupID.Width = 45;
-            // 
-            // groupTitle
-            // 
-            this.groupTitle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.groupTitle.HeaderText = "Название";
-            this.groupTitle.Name = "groupTitle";
-            // 
-            // groupOn
-            // 
-            this.groupOn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.groupOn.HeaderText = "ВКЛ";
-            this.groupOn.Name = "groupOn";
-            this.groupOn.Width = 37;
-            // 
-            // groupSource
-            // 
-            this.groupSource.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.groupSource.HeaderText = "Источник";
-            this.groupSource.Name = "groupSource";
-            // 
-            // groupPeriod
-            // 
-            this.groupPeriod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.groupPeriod.HeaderText = "Опрос (мсек)";
-            this.groupPeriod.Name = "groupPeriod";
-            // 
-            // groupDesc
-            // 
-            this.groupDesc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.groupDesc.HeaderText = "Описание";
-            this.groupDesc.Name = "groupDesc";
-            // 
-            // groupStatus
-            // 
-            this.groupStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.groupStatus.HeaderText = "Статус";
-            this.groupStatus.Name = "groupStatus";
-            this.groupStatus.ReadOnly = true;
-            // 
-            // groupTags
-            // 
-            this.groupTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.groupTags.HeaderText = "Теги";
-            this.groupTags.Name = "groupTags";
-            this.groupTags.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.groupTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.groupTags.Width = 38;
-            // 
-            // groupStatistic
-            // 
-            this.groupStatistic.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.groupStatistic.HeaderText = "Статистика";
-            this.groupStatistic.Name = "groupStatistic";
-            this.groupStatistic.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.groupStatistic.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.groupStatistic.Width = 82;
             // 
             // tabPageTag
             // 
@@ -853,6 +792,7 @@ namespace WinSimpleIDriver
             this.textBoxTagFilter.Name = "textBoxTagFilter";
             this.textBoxTagFilter.Size = new System.Drawing.Size(482, 22);
             this.textBoxTagFilter.TabIndex = 13;
+            this.textBoxTagFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxTagFilter.TextChanged += new System.EventHandler(this.textBoxTagFilter_TextChanged);
             // 
             // buttonTagView
@@ -893,6 +833,7 @@ namespace WinSimpleIDriver
             this.dataGridViewTag.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTag.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.tagID,
+            this.tagCalc,
             this.tagTitle,
             this.tagON,
             this.tagValue,
@@ -1032,17 +973,303 @@ namespace WinSimpleIDriver
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
             this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
             // 
+            // checkBoxGroupSource
+            // 
+            this.checkBoxGroupSource.AutoSize = true;
+            this.checkBoxGroupSource.Checked = true;
+            this.checkBoxGroupSource.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxGroupSource.Location = new System.Drawing.Point(663, 10);
+            this.checkBoxGroupSource.Name = "checkBoxGroupSource";
+            this.checkBoxGroupSource.Size = new System.Drawing.Size(83, 21);
+            this.checkBoxGroupSource.TabIndex = 19;
+            this.checkBoxGroupSource.Text = "Источник";
+            this.checkBoxGroupSource.UseVisualStyleBackColor = true;
+            this.checkBoxGroupSource.CheckedChanged += new System.EventHandler(this.checkBoxGroupSource_CheckedChanged);
+            // 
+            // checkBoxTagSG
+            // 
+            this.checkBoxTagSG.AutoSize = true;
+            this.checkBoxTagSG.Checked = true;
+            this.checkBoxTagSG.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxTagSG.Location = new System.Drawing.Point(841, 10);
+            this.checkBoxTagSG.Name = "checkBoxTagSG";
+            this.checkBoxTagSG.Size = new System.Drawing.Size(130, 21);
+            this.checkBoxTagSG.TabIndex = 24;
+            this.checkBoxTagSG.Text = "Источник/Группа";
+            this.checkBoxTagSG.UseVisualStyleBackColor = true;
+            this.checkBoxTagSG.CheckedChanged += new System.EventHandler(this.checkBoxTagSG_CheckedChanged);
+            // 
+            // buttonSourceFilter
+            // 
+            this.buttonSourceFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSourceFilter.Location = new System.Drawing.Point(1099, 38);
+            this.buttonSourceFilter.Name = "buttonSourceFilter";
+            this.buttonSourceFilter.Size = new System.Drawing.Size(70, 24);
+            this.buttonSourceFilter.TabIndex = 11;
+            this.buttonSourceFilter.Text = "Фильтр";
+            this.buttonSourceFilter.UseVisualStyleBackColor = true;
+            this.buttonSourceFilter.Click += new System.EventHandler(this.buttonSourceFilter_Click);
+            // 
+            // buttonGroupFilter
+            // 
+            this.buttonGroupFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonGroupFilter.Location = new System.Drawing.Point(1099, 38);
+            this.buttonGroupFilter.Name = "buttonGroupFilter";
+            this.buttonGroupFilter.Size = new System.Drawing.Size(70, 24);
+            this.buttonGroupFilter.TabIndex = 20;
+            this.buttonGroupFilter.Text = "Фильтр";
+            this.buttonGroupFilter.UseVisualStyleBackColor = true;
+            this.buttonGroupFilter.Click += new System.EventHandler(this.buttonGroupFilter_Click);
+            // 
+            // buttonTagFilter
+            // 
+            this.buttonTagFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonTagFilter.Location = new System.Drawing.Point(1099, 38);
+            this.buttonTagFilter.Name = "buttonTagFilter";
+            this.buttonTagFilter.Size = new System.Drawing.Size(70, 24);
+            this.buttonTagFilter.TabIndex = 25;
+            this.buttonTagFilter.Text = "Фильтр";
+            this.buttonTagFilter.UseVisualStyleBackColor = true;
+            this.buttonTagFilter.Click += new System.EventHandler(this.buttonTagFilter_Click);
+            // 
+            // tabPageIncludes
+            // 
+            this.tabPageIncludes.Controls.Add(this.splitContainerInclude);
+            this.tabPageIncludes.Location = new System.Drawing.Point(4, 26);
+            this.tabPageIncludes.Name = "tabPageIncludes";
+            this.tabPageIncludes.Size = new System.Drawing.Size(1177, 470);
+            this.tabPageIncludes.TabIndex = 4;
+            this.tabPageIncludes.Text = "Классы";
+            this.tabPageIncludes.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewInclude
+            // 
+            this.dataGridViewInclude.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewInclude.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewInclude.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.includeID,
+            this.includePrefix,
+            this.includeFileName,
+            this.includeChanges});
+            this.dataGridViewInclude.Location = new System.Drawing.Point(3, 32);
+            this.dataGridViewInclude.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.dataGridViewInclude.MultiSelect = false;
+            this.dataGridViewInclude.Name = "dataGridViewInclude";
+            this.dataGridViewInclude.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewInclude.Size = new System.Drawing.Size(553, 362);
+            this.dataGridViewInclude.TabIndex = 2;
+            this.dataGridViewInclude.SelectionChanged += new System.EventHandler(this.dataGridViewInclude_SelectionChanged);
+            // 
+            // dataGridViewChange
+            // 
+            this.dataGridViewChange.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewChange.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewChange.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.changeID,
+            this.changePrefix,
+            this.changeFrom,
+            this.changeTo});
+            this.dataGridViewChange.Location = new System.Drawing.Point(26, 32);
+            this.dataGridViewChange.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.dataGridViewChange.MultiSelect = false;
+            this.dataGridViewChange.Name = "dataGridViewChange";
+            this.dataGridViewChange.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewChange.Size = new System.Drawing.Size(550, 362);
+            this.dataGridViewChange.TabIndex = 3;
+            this.dataGridViewChange.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewChange_UserAddedRow);
+            // 
+            // splitContainerInclude
+            // 
+            this.splitContainerInclude.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainerInclude.Location = new System.Drawing.Point(3, 69);
+            this.splitContainerInclude.Name = "splitContainerInclude";
+            // 
+            // splitContainerInclude.Panel1
+            // 
+            this.splitContainerInclude.Panel1.Controls.Add(this.buttonIncludeFilter);
+            this.splitContainerInclude.Panel1.Controls.Add(this.textBoxIncludeFilter);
+            this.splitContainerInclude.Panel1.Controls.Add(this.buttonIncludeLeft);
+            this.splitContainerInclude.Panel1.Controls.Add(this.dataGridViewInclude);
+            // 
+            // splitContainerInclude.Panel2
+            // 
+            this.splitContainerInclude.Panel2.Controls.Add(this.comboBoxChangeFilterInclude);
+            this.splitContainerInclude.Panel2.Controls.Add(this.buttonChangeFilter);
+            this.splitContainerInclude.Panel2.Controls.Add(this.textBoxChangeFilter);
+            this.splitContainerInclude.Panel2.Controls.Add(this.buttonIncludeRight);
+            this.splitContainerInclude.Panel2.Controls.Add(this.dataGridViewChange);
+            this.splitContainerInclude.Size = new System.Drawing.Size(1171, 398);
+            this.splitContainerInclude.SplitterDistance = 580;
+            this.splitContainerInclude.SplitterWidth = 10;
+            this.splitContainerInclude.TabIndex = 4;
+            // 
+            // buttonIncludeLeft
+            // 
+            this.buttonIncludeLeft.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.buttonIncludeLeft.Location = new System.Drawing.Point(560, 137);
+            this.buttonIncludeLeft.Name = "buttonIncludeLeft";
+            this.buttonIncludeLeft.Size = new System.Drawing.Size(17, 118);
+            this.buttonIncludeLeft.TabIndex = 3;
+            this.buttonIncludeLeft.Text = ">";
+            this.buttonIncludeLeft.UseVisualStyleBackColor = true;
+            this.buttonIncludeLeft.Click += new System.EventHandler(this.buttonIncludeLeft_Click);
+            // 
+            // buttonIncludeRight
+            // 
+            this.buttonIncludeRight.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.buttonIncludeRight.Location = new System.Drawing.Point(4, 137);
+            this.buttonIncludeRight.Name = "buttonIncludeRight";
+            this.buttonIncludeRight.Size = new System.Drawing.Size(17, 118);
+            this.buttonIncludeRight.TabIndex = 4;
+            this.buttonIncludeRight.Text = "<";
+            this.buttonIncludeRight.UseVisualStyleBackColor = true;
+            this.buttonIncludeRight.Click += new System.EventHandler(this.buttonIncludeRight_Click);
+            // 
+            // textBoxIncludeFilter
+            // 
+            this.textBoxIncludeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxIncludeFilter.Location = new System.Drawing.Point(3, 4);
+            this.textBoxIncludeFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxIncludeFilter.Name = "textBoxIncludeFilter";
+            this.textBoxIncludeFilter.Size = new System.Drawing.Size(477, 22);
+            this.textBoxIncludeFilter.TabIndex = 14;
+            this.textBoxIncludeFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxIncludeFilter.TextChanged += new System.EventHandler(this.textBoxIncludeFilter_TextChanged);
+            // 
+            // textBoxChangeFilter
+            // 
+            this.textBoxChangeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxChangeFilter.Location = new System.Drawing.Point(231, 4);
+            this.textBoxChangeFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxChangeFilter.Name = "textBoxChangeFilter";
+            this.textBoxChangeFilter.Size = new System.Drawing.Size(269, 22);
+            this.textBoxChangeFilter.TabIndex = 15;
+            this.textBoxChangeFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxChangeFilter.TextChanged += new System.EventHandler(this.textBoxChangeFilter_TextChanged);
+            // 
+            // buttonIncludeFilter
+            // 
+            this.buttonIncludeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonIncludeFilter.Location = new System.Drawing.Point(486, 3);
+            this.buttonIncludeFilter.Name = "buttonIncludeFilter";
+            this.buttonIncludeFilter.Size = new System.Drawing.Size(70, 24);
+            this.buttonIncludeFilter.TabIndex = 15;
+            this.buttonIncludeFilter.Text = "Фильтр";
+            this.buttonIncludeFilter.UseVisualStyleBackColor = true;
+            this.buttonIncludeFilter.Click += new System.EventHandler(this.buttonIncludeFilter_Click);
+            // 
+            // buttonChangeFilter
+            // 
+            this.buttonChangeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonChangeFilter.Location = new System.Drawing.Point(506, 3);
+            this.buttonChangeFilter.Name = "buttonChangeFilter";
+            this.buttonChangeFilter.Size = new System.Drawing.Size(70, 24);
+            this.buttonChangeFilter.TabIndex = 16;
+            this.buttonChangeFilter.Text = "Фильтр";
+            this.buttonChangeFilter.UseVisualStyleBackColor = true;
+            this.buttonChangeFilter.Click += new System.EventHandler(this.buttonChangeFilter_Click);
+            // 
+            // includeID
+            // 
+            this.includeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            dataGridViewCellStyle6.NullValue = null;
+            this.includeID.DefaultCellStyle = dataGridViewCellStyle6;
+            this.includeID.HeaderText = "ID";
+            this.includeID.Name = "includeID";
+            this.includeID.ReadOnly = true;
+            this.includeID.Width = 45;
+            // 
+            // includePrefix
+            // 
+            this.includePrefix.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.includePrefix.HeaderText = "Префикс";
+            this.includePrefix.Name = "includePrefix";
+            // 
+            // includeFileName
+            // 
+            this.includeFileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.includeFileName.HeaderText = "Имя файла";
+            this.includeFileName.Name = "includeFileName";
+            // 
+            // includeChanges
+            // 
+            this.includeChanges.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.includeChanges.HeaderText = "Замены";
+            this.includeChanges.Name = "includeChanges";
+            this.includeChanges.ReadOnly = true;
+            this.includeChanges.Width = 82;
+            // 
+            // changeID
+            // 
+            this.changeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Format = "N2";
+            dataGridViewCellStyle7.NullValue = null;
+            this.changeID.DefaultCellStyle = dataGridViewCellStyle7;
+            this.changeID.HeaderText = "ID";
+            this.changeID.Name = "changeID";
+            this.changeID.ReadOnly = true;
+            this.changeID.Width = 45;
+            // 
+            // changePrefix
+            // 
+            this.changePrefix.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.changePrefix.HeaderText = "Префикс";
+            this.changePrefix.Name = "changePrefix";
+            // 
+            // changeFrom
+            // 
+            this.changeFrom.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.changeFrom.HeaderText = "Что меняем";
+            this.changeFrom.Name = "changeFrom";
+            // 
+            // changeTo
+            // 
+            this.changeTo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.changeTo.HeaderText = "На что меняем";
+            this.changeTo.Name = "changeTo";
+            // 
+            // comboBoxChangeFilterInclude
+            // 
+            this.comboBoxChangeFilterInclude.FormattingEnabled = true;
+            this.comboBoxChangeFilterInclude.Location = new System.Drawing.Point(26, 3);
+            this.comboBoxChangeFilterInclude.Name = "comboBoxChangeFilterInclude";
+            this.comboBoxChangeFilterInclude.Size = new System.Drawing.Size(199, 25);
+            this.comboBoxChangeFilterInclude.Sorted = true;
+            this.comboBoxChangeFilterInclude.TabIndex = 18;
+            this.comboBoxChangeFilterInclude.SelectedIndexChanged += new System.EventHandler(this.comboBoxChangeFilterInclude_SelectedIndexChanged);
+            // 
             // sourceID
             // 
             this.sourceID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N2";
-            dataGridViewCellStyle1.NullValue = null;
-            this.sourceID.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Format = "N2";
+            dataGridViewCellStyle8.NullValue = null;
+            this.sourceID.DefaultCellStyle = dataGridViewCellStyle8;
             this.sourceID.HeaderText = "ID";
             this.sourceID.Name = "sourceID";
             this.sourceID.ReadOnly = true;
             this.sourceID.Width = 45;
+            // 
+            // sourceCalc
+            // 
+            this.sourceCalc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.sourceCalc.HeaderText = "Р";
+            this.sourceCalc.Name = "sourceCalc";
+            this.sourceCalc.ReadOnly = true;
+            this.sourceCalc.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.sourceCalc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.sourceCalc.Width = 40;
             // 
             // sourceTitle
             // 
@@ -1111,76 +1338,101 @@ namespace WinSimpleIDriver
             this.sourceStatistic.Name = "sourceStatistic";
             this.sourceStatistic.Width = 101;
             // 
-            // checkBoxGroupSource
+            // groupID
             // 
-            this.checkBoxGroupSource.AutoSize = true;
-            this.checkBoxGroupSource.Checked = true;
-            this.checkBoxGroupSource.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxGroupSource.Location = new System.Drawing.Point(663, 10);
-            this.checkBoxGroupSource.Name = "checkBoxGroupSource";
-            this.checkBoxGroupSource.Size = new System.Drawing.Size(83, 21);
-            this.checkBoxGroupSource.TabIndex = 19;
-            this.checkBoxGroupSource.Text = "Источник";
-            this.checkBoxGroupSource.UseVisualStyleBackColor = true;
-            this.checkBoxGroupSource.CheckedChanged += new System.EventHandler(this.checkBoxGroupSource_CheckedChanged);
+            this.groupID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle9.Format = "N2";
+            dataGridViewCellStyle9.NullValue = null;
+            this.groupID.DefaultCellStyle = dataGridViewCellStyle9;
+            this.groupID.HeaderText = "ID";
+            this.groupID.Name = "groupID";
+            this.groupID.ReadOnly = true;
+            this.groupID.Width = 45;
             // 
-            // checkBoxTagSG
+            // groupCalc
             // 
-            this.checkBoxTagSG.AutoSize = true;
-            this.checkBoxTagSG.Checked = true;
-            this.checkBoxTagSG.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxTagSG.Location = new System.Drawing.Point(841, 10);
-            this.checkBoxTagSG.Name = "checkBoxTagSG";
-            this.checkBoxTagSG.Size = new System.Drawing.Size(130, 21);
-            this.checkBoxTagSG.TabIndex = 24;
-            this.checkBoxTagSG.Text = "Источник/Группа";
-            this.checkBoxTagSG.UseVisualStyleBackColor = true;
-            this.checkBoxTagSG.CheckedChanged += new System.EventHandler(this.checkBoxTagSG_CheckedChanged);
+            this.groupCalc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.groupCalc.HeaderText = "Р";
+            this.groupCalc.Name = "groupCalc";
+            this.groupCalc.ReadOnly = true;
+            this.groupCalc.Width = 21;
             // 
-            // buttonSourceFilter
+            // groupTitle
             // 
-            this.buttonSourceFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSourceFilter.Location = new System.Drawing.Point(1099, 38);
-            this.buttonSourceFilter.Name = "buttonSourceFilter";
-            this.buttonSourceFilter.Size = new System.Drawing.Size(70, 24);
-            this.buttonSourceFilter.TabIndex = 11;
-            this.buttonSourceFilter.Text = "Фильтр";
-            this.buttonSourceFilter.UseVisualStyleBackColor = true;
-            this.buttonSourceFilter.Click += new System.EventHandler(this.buttonSourceFilter_Click);
+            this.groupTitle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.groupTitle.HeaderText = "Название";
+            this.groupTitle.Name = "groupTitle";
             // 
-            // buttonGroupFilter
+            // groupOn
             // 
-            this.buttonGroupFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGroupFilter.Location = new System.Drawing.Point(1099, 38);
-            this.buttonGroupFilter.Name = "buttonGroupFilter";
-            this.buttonGroupFilter.Size = new System.Drawing.Size(70, 24);
-            this.buttonGroupFilter.TabIndex = 20;
-            this.buttonGroupFilter.Text = "Фильтр";
-            this.buttonGroupFilter.UseVisualStyleBackColor = true;
-            this.buttonGroupFilter.Click += new System.EventHandler(this.buttonGroupFilter_Click);
+            this.groupOn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.groupOn.HeaderText = "ВКЛ";
+            this.groupOn.Name = "groupOn";
+            this.groupOn.Width = 37;
             // 
-            // buttonTagFilter
+            // groupSource
             // 
-            this.buttonTagFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonTagFilter.Location = new System.Drawing.Point(1099, 38);
-            this.buttonTagFilter.Name = "buttonTagFilter";
-            this.buttonTagFilter.Size = new System.Drawing.Size(70, 24);
-            this.buttonTagFilter.TabIndex = 25;
-            this.buttonTagFilter.Text = "Фильтр";
-            this.buttonTagFilter.UseVisualStyleBackColor = true;
-            this.buttonTagFilter.Click += new System.EventHandler(this.buttonTagFilter_Click);
+            this.groupSource.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.groupSource.HeaderText = "Источник";
+            this.groupSource.Name = "groupSource";
+            // 
+            // groupPeriod
+            // 
+            this.groupPeriod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.groupPeriod.HeaderText = "Опрос (мсек)";
+            this.groupPeriod.Name = "groupPeriod";
+            // 
+            // groupDesc
+            // 
+            this.groupDesc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.groupDesc.HeaderText = "Описание";
+            this.groupDesc.Name = "groupDesc";
+            // 
+            // groupStatus
+            // 
+            this.groupStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.groupStatus.HeaderText = "Статус";
+            this.groupStatus.Name = "groupStatus";
+            this.groupStatus.ReadOnly = true;
+            // 
+            // groupTags
+            // 
+            this.groupTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.groupTags.HeaderText = "Теги";
+            this.groupTags.Name = "groupTags";
+            this.groupTags.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.groupTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.groupTags.Width = 38;
+            // 
+            // groupStatistic
+            // 
+            this.groupStatistic.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.groupStatistic.HeaderText = "Статистика";
+            this.groupStatistic.Name = "groupStatistic";
+            this.groupStatistic.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.groupStatistic.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.groupStatistic.Width = 82;
             // 
             // tagID
             // 
             this.tagID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            dataGridViewCellStyle3.NullValue = null;
-            this.tagID.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle10.Format = "N2";
+            dataGridViewCellStyle10.NullValue = null;
+            this.tagID.DefaultCellStyle = dataGridViewCellStyle10;
             this.tagID.HeaderText = "ID";
             this.tagID.Name = "tagID";
             this.tagID.ReadOnly = true;
             this.tagID.Width = 45;
+            // 
+            // tagCalc
+            // 
+            this.tagCalc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.tagCalc.HeaderText = "Р";
+            this.tagCalc.Name = "tagCalc";
+            this.tagCalc.ReadOnly = true;
+            this.tagCalc.Width = 21;
             // 
             // tagTitle
             // 
@@ -1295,221 +1547,6 @@ namespace WinSimpleIDriver
             this.tagStatistic.ReadOnly = true;
             this.tagStatistic.Width = 101;
             // 
-            // tabPageIncludes
-            // 
-            this.tabPageIncludes.Controls.Add(this.splitContainerInclude);
-            this.tabPageIncludes.Location = new System.Drawing.Point(4, 26);
-            this.tabPageIncludes.Name = "tabPageIncludes";
-            this.tabPageIncludes.Size = new System.Drawing.Size(1177, 470);
-            this.tabPageIncludes.TabIndex = 4;
-            this.tabPageIncludes.Text = "Классы";
-            this.tabPageIncludes.UseVisualStyleBackColor = true;
-            // 
-            // dataGridViewInclude
-            // 
-            this.dataGridViewInclude.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridViewInclude.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewInclude.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.includeID,
-            this.includePrefix,
-            this.includeFileName,
-            this.includeChanges});
-            this.dataGridViewInclude.Location = new System.Drawing.Point(3, 32);
-            this.dataGridViewInclude.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.dataGridViewInclude.MultiSelect = false;
-            this.dataGridViewInclude.Name = "dataGridViewInclude";
-            this.dataGridViewInclude.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewInclude.Size = new System.Drawing.Size(553, 362);
-            this.dataGridViewInclude.TabIndex = 2;
-            this.dataGridViewInclude.SelectionChanged += new System.EventHandler(this.dataGridViewInclude_SelectionChanged);
-            // 
-            // dataGridViewChange
-            // 
-            this.dataGridViewChange.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridViewChange.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewChange.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.changeID,
-            this.changePrefix,
-            this.changeFrom,
-            this.changeTo});
-            this.dataGridViewChange.Location = new System.Drawing.Point(26, 32);
-            this.dataGridViewChange.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.dataGridViewChange.MultiSelect = false;
-            this.dataGridViewChange.Name = "dataGridViewChange";
-            this.dataGridViewChange.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewChange.Size = new System.Drawing.Size(550, 362);
-            this.dataGridViewChange.TabIndex = 3;
-            this.dataGridViewChange.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewChange_UserAddedRow);
-            // 
-            // splitContainerInclude
-            // 
-            this.splitContainerInclude.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainerInclude.Location = new System.Drawing.Point(3, 69);
-            this.splitContainerInclude.Name = "splitContainerInclude";
-            // 
-            // splitContainerInclude.Panel1
-            // 
-            this.splitContainerInclude.Panel1.Controls.Add(this.buttonIncludeFilter);
-            this.splitContainerInclude.Panel1.Controls.Add(this.textBoxIncludeFilter);
-            this.splitContainerInclude.Panel1.Controls.Add(this.buttonIncludeLeft);
-            this.splitContainerInclude.Panel1.Controls.Add(this.dataGridViewInclude);
-            // 
-            // splitContainerInclude.Panel2
-            // 
-            this.splitContainerInclude.Panel2.Controls.Add(this.comboBoxChangeFilterInclude);
-            this.splitContainerInclude.Panel2.Controls.Add(this.buttonChangeFilter);
-            this.splitContainerInclude.Panel2.Controls.Add(this.textBoxChangeFilter);
-            this.splitContainerInclude.Panel2.Controls.Add(this.buttonIncludeRight);
-            this.splitContainerInclude.Panel2.Controls.Add(this.dataGridViewChange);
-            this.splitContainerInclude.Size = new System.Drawing.Size(1171, 398);
-            this.splitContainerInclude.SplitterDistance = 580;
-            this.splitContainerInclude.SplitterWidth = 10;
-            this.splitContainerInclude.TabIndex = 4;
-            // 
-            // buttonIncludeLeft
-            // 
-            this.buttonIncludeLeft.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.buttonIncludeLeft.Location = new System.Drawing.Point(560, 137);
-            this.buttonIncludeLeft.Name = "buttonIncludeLeft";
-            this.buttonIncludeLeft.Size = new System.Drawing.Size(17, 118);
-            this.buttonIncludeLeft.TabIndex = 3;
-            this.buttonIncludeLeft.Text = ">";
-            this.buttonIncludeLeft.UseVisualStyleBackColor = true;
-            this.buttonIncludeLeft.Click += new System.EventHandler(this.buttonIncludeLeft_Click);
-            // 
-            // buttonIncludeRight
-            // 
-            this.buttonIncludeRight.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonIncludeRight.Location = new System.Drawing.Point(4, 137);
-            this.buttonIncludeRight.Name = "buttonIncludeRight";
-            this.buttonIncludeRight.Size = new System.Drawing.Size(17, 118);
-            this.buttonIncludeRight.TabIndex = 4;
-            this.buttonIncludeRight.Text = "<";
-            this.buttonIncludeRight.UseVisualStyleBackColor = true;
-            this.buttonIncludeRight.Click += new System.EventHandler(this.buttonIncludeRight_Click);
-            // 
-            // textBoxIncludeFilter
-            // 
-            this.textBoxIncludeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxIncludeFilter.Location = new System.Drawing.Point(3, 4);
-            this.textBoxIncludeFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBoxIncludeFilter.Name = "textBoxIncludeFilter";
-            this.textBoxIncludeFilter.Size = new System.Drawing.Size(477, 22);
-            this.textBoxIncludeFilter.TabIndex = 14;
-            this.textBoxIncludeFilter.TextChanged += new System.EventHandler(this.textBoxIncludeFilter_TextChanged);
-            // 
-            // textBoxChangeFilter
-            // 
-            this.textBoxChangeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxChangeFilter.Location = new System.Drawing.Point(231, 4);
-            this.textBoxChangeFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBoxChangeFilter.Name = "textBoxChangeFilter";
-            this.textBoxChangeFilter.Size = new System.Drawing.Size(269, 22);
-            this.textBoxChangeFilter.TabIndex = 15;
-            this.textBoxChangeFilter.TextChanged += new System.EventHandler(this.textBoxChangeFilter_TextChanged);
-            // 
-            // buttonIncludeFilter
-            // 
-            this.buttonIncludeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonIncludeFilter.Location = new System.Drawing.Point(486, 3);
-            this.buttonIncludeFilter.Name = "buttonIncludeFilter";
-            this.buttonIncludeFilter.Size = new System.Drawing.Size(70, 24);
-            this.buttonIncludeFilter.TabIndex = 15;
-            this.buttonIncludeFilter.Text = "Фильтр";
-            this.buttonIncludeFilter.UseVisualStyleBackColor = true;
-            this.buttonIncludeFilter.Click += new System.EventHandler(this.buttonIncludeFilter_Click);
-            // 
-            // buttonChangeFilter
-            // 
-            this.buttonChangeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonChangeFilter.Location = new System.Drawing.Point(506, 3);
-            this.buttonChangeFilter.Name = "buttonChangeFilter";
-            this.buttonChangeFilter.Size = new System.Drawing.Size(70, 24);
-            this.buttonChangeFilter.TabIndex = 16;
-            this.buttonChangeFilter.Text = "Фильтр";
-            this.buttonChangeFilter.UseVisualStyleBackColor = true;
-            this.buttonChangeFilter.Click += new System.EventHandler(this.buttonChangeFilter_Click);
-            // 
-            // includeID
-            // 
-            this.includeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N2";
-            dataGridViewCellStyle4.NullValue = null;
-            this.includeID.DefaultCellStyle = dataGridViewCellStyle4;
-            this.includeID.HeaderText = "ID";
-            this.includeID.Name = "includeID";
-            this.includeID.ReadOnly = true;
-            this.includeID.Width = 45;
-            // 
-            // includePrefix
-            // 
-            this.includePrefix.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.includePrefix.HeaderText = "Префикс";
-            this.includePrefix.Name = "includePrefix";
-            // 
-            // includeFileName
-            // 
-            this.includeFileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.includeFileName.HeaderText = "Имя файла";
-            this.includeFileName.Name = "includeFileName";
-            // 
-            // includeChanges
-            // 
-            this.includeChanges.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.includeChanges.HeaderText = "Замены";
-            this.includeChanges.Name = "includeChanges";
-            this.includeChanges.ReadOnly = true;
-            this.includeChanges.Width = 82;
-            // 
-            // changeID
-            // 
-            this.changeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N2";
-            dataGridViewCellStyle5.NullValue = null;
-            this.changeID.DefaultCellStyle = dataGridViewCellStyle5;
-            this.changeID.HeaderText = "ID";
-            this.changeID.Name = "changeID";
-            this.changeID.ReadOnly = true;
-            this.changeID.Width = 45;
-            // 
-            // changePrefix
-            // 
-            this.changePrefix.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.changePrefix.HeaderText = "Префикс";
-            this.changePrefix.Name = "changePrefix";
-            // 
-            // changeFrom
-            // 
-            this.changeFrom.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.changeFrom.HeaderText = "Что меняем";
-            this.changeFrom.Name = "changeFrom";
-            // 
-            // changeTo
-            // 
-            this.changeTo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.changeTo.HeaderText = "На что меняем";
-            this.changeTo.Name = "changeTo";
-            // 
-            // comboBoxChangeFilterInclude
-            // 
-            this.comboBoxChangeFilterInclude.FormattingEnabled = true;
-            this.comboBoxChangeFilterInclude.Location = new System.Drawing.Point(26, 3);
-            this.comboBoxChangeFilterInclude.Name = "comboBoxChangeFilterInclude";
-            this.comboBoxChangeFilterInclude.Size = new System.Drawing.Size(199, 25);
-            this.comboBoxChangeFilterInclude.Sorted = true;
-            this.comboBoxChangeFilterInclude.TabIndex = 18;
-            this.comboBoxChangeFilterInclude.SelectedIndexChanged += new System.EventHandler(this.comboBoxChangeFilterInclude_SelectedIndexChanged);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1611,15 +1648,6 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.DataGridView dataGridViewTag;
         private System.Windows.Forms.CheckBox checkBoxSourceStatistic;
         private System.Windows.Forms.Button buttonSourceHelp;
-        private System.Windows.Forms.DataGridViewTextBoxColumn groupID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn groupTitle;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn groupOn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn groupSource;
-        private System.Windows.Forms.DataGridViewTextBoxColumn groupPeriod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn groupDesc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn groupStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn groupTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn groupStatistic;
         private System.Windows.Forms.ComboBox comboBoxGroupFilterSource;
         private System.Windows.Forms.CheckBox checkBoxGroupRuntime;
         private System.Windows.Forms.CheckBox checkBoxTagStatistic;
@@ -1633,39 +1661,11 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sourceID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sourceTitle;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn sourceON;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn sourceAutoRestart;
-        private System.Windows.Forms.DataGridViewComboBoxColumn sourceDriver;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sourceAddress;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sourceDesc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sourceStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sourceMessage;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sourceTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sourceStatistic;
         private System.Windows.Forms.CheckBox checkBoxGroupSource;
         private System.Windows.Forms.CheckBox checkBoxTagSG;
         private System.Windows.Forms.Button buttonSourceFilter;
         private System.Windows.Forms.Button buttonGroupFilter;
         private System.Windows.Forms.Button buttonTagFilter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagTitle;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn tagON;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagValue;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagSource;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagGroup;
-        private System.Windows.Forms.DataGridViewComboBoxColumn tagDataType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagAddress;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn tagCommand;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagWriteValue;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagWriteTag;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagDesc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagBlock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagPage;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagMessage;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagStatistic;
         private System.Windows.Forms.TabPage tabPageIncludes;
         private System.Windows.Forms.DataGridView dataGridViewChange;
         private System.Windows.Forms.DataGridView dataGridViewInclude;
@@ -1685,6 +1685,46 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.DataGridViewTextBoxColumn changeFrom;
         private System.Windows.Forms.DataGridViewTextBoxColumn changeTo;
         private System.Windows.Forms.ComboBox comboBoxChangeFilterInclude;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceID;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn sourceCalc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceTitle;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn sourceON;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn sourceAutoRestart;
+        private System.Windows.Forms.DataGridViewComboBoxColumn sourceDriver;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceAddress;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceDesc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceMessage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourceStatistic;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupID;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn groupCalc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupTitle;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn groupOn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupSource;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupPeriod;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupDesc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn groupStatistic;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagID;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn tagCalc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagTitle;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn tagON;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagSource;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagGroup;
+        private System.Windows.Forms.DataGridViewComboBoxColumn tagDataType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagAddress;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn tagCommand;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagWriteValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagWriteTag;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagDesc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagBlock;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagPage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagMessage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagStatistic;
     }
 }
 

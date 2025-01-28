@@ -139,6 +139,7 @@ namespace WinSimpleIDriver
             dataGridViewSource.Columns["sourceDesc"].Visible = checkD;
 
             bool checkR = checkBoxSourceRuntime.Checked;
+            dataGridViewSource.Columns["sourceCalc"].Visible = checkR;
             dataGridViewSource.Columns["sourceStatus"].Visible = checkR;
             dataGridViewSource.Columns["sourceMessage"].Visible = checkR;
 
@@ -259,6 +260,7 @@ namespace WinSimpleIDriver
             dataGridViewGroup.Columns["groupDesc"].Visible = checkD;
 
             bool checkR = checkBoxGroupRuntime.Checked;
+            dataGridViewGroup.Columns["groupCalc"].Visible = checkR;
             dataGridViewGroup.Columns["groupStatus"].Visible = checkR;
 
             bool checkST = checkBoxGroupStatistic.Checked;
@@ -407,6 +409,7 @@ namespace WinSimpleIDriver
             
 
             bool checkR = checkBoxTagRuntime.Checked;
+            dataGridViewTag.Columns["tagCalc"].Visible = checkR;
             dataGridViewTag.Columns["tagValue"].Visible = checkR;
             dataGridViewTag.Columns["tagStatus"].Visible = checkR;
             dataGridViewTag.Columns["tagMessage"].Visible = checkR;
@@ -685,6 +688,13 @@ namespace WinSimpleIDriver
 
         #endregion
 
+
+        // ================================================================================================================
+
+        #region Tree
+
+
+        #endregion
 
         // ================================================================================================================
 
