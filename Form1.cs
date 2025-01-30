@@ -44,6 +44,7 @@ namespace WinSimpleIDriver
             foreach (string title in Enum.GetNames(typeof(eDataType)))
                 cbTypeData.Items.Add(title);
             ((DataGridViewComboBoxColumn)dataGridViewTag.Columns["tagDataType"]).DataSource = cbTypeData.Items;
+            ((DataGridViewComboBoxColumn)dataGridViewStructure.Columns["structureDataType"]).DataSource = cbTypeData.Items;
             #endregion
 
             #region View
@@ -688,6 +689,13 @@ namespace WinSimpleIDriver
 
         #endregion
 
+        // ================================================================================================================
+
+        #region Structure
+
+
+
+        #endregion
 
         // ================================================================================================================
 
@@ -712,6 +720,39 @@ namespace WinSimpleIDriver
             }
         }
 
-        
+        private void buttonStructureFilter_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonTargetFilter_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxTargetFilterSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxStructureFilter_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxTargetFilter_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridViewStructure_SelectionChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridViewTarget_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+
+        }
     }
 }

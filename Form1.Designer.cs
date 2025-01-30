@@ -31,8 +31,9 @@ namespace WinSimpleIDriver
         {
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Источники/Группы/Теги");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Блоки");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Классы");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Страницы");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Структуры");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Классы");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Страницы");
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -187,6 +188,11 @@ namespace WinSimpleIDriver
             this.structureTagSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.structureTemplate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.structureGroup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonTargetFilter = new System.Windows.Forms.Button();
+            this.textBoxTargetFilter = new System.Windows.Forms.TextBox();
+            this.buttonStructureFilter = new System.Windows.Forms.Button();
+            this.textBoxStructureFilter = new System.Windows.Forms.TextBox();
+            this.comboBoxTargetFilterSource = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerForm)).BeginInit();
@@ -404,19 +410,23 @@ namespace WinSimpleIDriver
             treeNode2.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             treeNode2.Tag = "Block";
             treeNode2.Text = "Блоки";
-            treeNode3.Name = "Includes";
+            treeNode3.Name = "Structures";
             treeNode3.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode3.Tag = "Include";
-            treeNode3.Text = "Классы";
-            treeNode4.Name = "Pages";
+            treeNode3.Text = "Структуры";
+            treeNode4.Name = "Includes";
             treeNode4.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode4.Tag = "Page";
-            treeNode4.Text = "Страницы";
+            treeNode4.Tag = "Include";
+            treeNode4.Text = "Классы";
+            treeNode5.Name = "Pages";
+            treeNode5.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode5.Tag = "Page";
+            treeNode5.Text = "Страницы";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2,
             treeNode3,
-            treeNode4});
+            treeNode4,
+            treeNode5});
             this.treeView1.Size = new System.Drawing.Size(213, 461);
             this.treeView1.TabIndex = 0;
             // 
@@ -1587,19 +1597,24 @@ namespace WinSimpleIDriver
             // 
             // splitContainerStructure
             // 
-            this.splitContainerStructure.Location = new System.Drawing.Point(3, 65);
+            this.splitContainerStructure.Location = new System.Drawing.Point(3, 43);
             this.splitContainerStructure.Name = "splitContainerStructure";
             this.splitContainerStructure.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainerStructure.Panel1
             // 
+            this.splitContainerStructure.Panel1.Controls.Add(this.buttonStructureFilter);
+            this.splitContainerStructure.Panel1.Controls.Add(this.textBoxStructureFilter);
             this.splitContainerStructure.Panel1.Controls.Add(this.dataGridViewStructure);
             // 
             // splitContainerStructure.Panel2
             // 
+            this.splitContainerStructure.Panel2.Controls.Add(this.comboBoxTargetFilterSource);
+            this.splitContainerStructure.Panel2.Controls.Add(this.buttonTargetFilter);
             this.splitContainerStructure.Panel2.Controls.Add(this.dataGridViewTarget);
-            this.splitContainerStructure.Size = new System.Drawing.Size(1171, 402);
-            this.splitContainerStructure.SplitterDistance = 184;
+            this.splitContainerStructure.Panel2.Controls.Add(this.textBoxTargetFilter);
+            this.splitContainerStructure.Size = new System.Drawing.Size(1171, 424);
+            this.splitContainerStructure.SplitterDistance = 194;
             this.splitContainerStructure.TabIndex = 0;
             // 
             // dataGridViewStructure
@@ -1617,13 +1632,14 @@ namespace WinSimpleIDriver
             this.structureTagSource,
             this.structureTemplate,
             this.structureGroup});
-            this.dataGridViewStructure.Location = new System.Drawing.Point(3, 4);
+            this.dataGridViewStructure.Location = new System.Drawing.Point(3, 34);
             this.dataGridViewStructure.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridViewStructure.MultiSelect = false;
             this.dataGridViewStructure.Name = "dataGridViewStructure";
             this.dataGridViewStructure.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewStructure.Size = new System.Drawing.Size(1163, 176);
+            this.dataGridViewStructure.Size = new System.Drawing.Size(1163, 156);
             this.dataGridViewStructure.TabIndex = 10;
+            this.dataGridViewStructure.SelectionChanged += new System.EventHandler(this.dataGridViewStructure_SelectionChanged);
             // 
             // dataGridViewTarget
             // 
@@ -1643,8 +1659,9 @@ namespace WinSimpleIDriver
             this.dataGridViewTarget.MultiSelect = false;
             this.dataGridViewTarget.Name = "dataGridViewTarget";
             this.dataGridViewTarget.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewTarget.Size = new System.Drawing.Size(1163, 178);
+            this.dataGridViewTarget.Size = new System.Drawing.Size(1163, 190);
             this.dataGridViewTarget.TabIndex = 11;
+            this.dataGridViewTarget.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewTarget_UserAddedRow);
             // 
             // targetID
             // 
@@ -1746,6 +1763,62 @@ namespace WinSimpleIDriver
             this.structureGroup.HeaderText = "Группа";
             this.structureGroup.Name = "structureGroup";
             // 
+            // buttonTargetFilter
+            // 
+            this.buttonTargetFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonTargetFilter.Location = new System.Drawing.Point(486, 4);
+            this.buttonTargetFilter.Name = "buttonTargetFilter";
+            this.buttonTargetFilter.Size = new System.Drawing.Size(70, 24);
+            this.buttonTargetFilter.TabIndex = 17;
+            this.buttonTargetFilter.Text = "Фильтр";
+            this.buttonTargetFilter.UseVisualStyleBackColor = true;
+            this.buttonTargetFilter.Click += new System.EventHandler(this.buttonTargetFilter_Click);
+            // 
+            // textBoxTargetFilter
+            // 
+            this.textBoxTargetFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxTargetFilter.Location = new System.Drawing.Point(208, 5);
+            this.textBoxTargetFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxTargetFilter.Name = "textBoxTargetFilter";
+            this.textBoxTargetFilter.Size = new System.Drawing.Size(272, 22);
+            this.textBoxTargetFilter.TabIndex = 16;
+            this.textBoxTargetFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxTargetFilter.TextChanged += new System.EventHandler(this.textBoxTargetFilter_TextChanged);
+            // 
+            // buttonStructureFilter
+            // 
+            this.buttonStructureFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonStructureFilter.Location = new System.Drawing.Point(486, 6);
+            this.buttonStructureFilter.Name = "buttonStructureFilter";
+            this.buttonStructureFilter.Size = new System.Drawing.Size(70, 24);
+            this.buttonStructureFilter.TabIndex = 19;
+            this.buttonStructureFilter.Text = "Фильтр";
+            this.buttonStructureFilter.UseVisualStyleBackColor = true;
+            this.buttonStructureFilter.Click += new System.EventHandler(this.buttonStructureFilter_Click);
+            // 
+            // textBoxStructureFilter
+            // 
+            this.textBoxStructureFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxStructureFilter.Location = new System.Drawing.Point(3, 7);
+            this.textBoxStructureFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxStructureFilter.Name = "textBoxStructureFilter";
+            this.textBoxStructureFilter.Size = new System.Drawing.Size(477, 22);
+            this.textBoxStructureFilter.TabIndex = 18;
+            this.textBoxStructureFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxStructureFilter.TextChanged += new System.EventHandler(this.textBoxStructureFilter_TextChanged);
+            // 
+            // comboBoxTargetFilterSource
+            // 
+            this.comboBoxTargetFilterSource.FormattingEnabled = true;
+            this.comboBoxTargetFilterSource.Location = new System.Drawing.Point(3, 4);
+            this.comboBoxTargetFilterSource.Name = "comboBoxTargetFilterSource";
+            this.comboBoxTargetFilterSource.Size = new System.Drawing.Size(199, 25);
+            this.comboBoxTargetFilterSource.Sorted = true;
+            this.comboBoxTargetFilterSource.TabIndex = 19;
+            this.comboBoxTargetFilterSource.SelectedIndexChanged += new System.EventHandler(this.comboBoxTargetFilterSource_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1790,7 +1863,9 @@ namespace WinSimpleIDriver
             this.splitContainerInclude.ResumeLayout(false);
             this.tabPageStructures.ResumeLayout(false);
             this.splitContainerStructure.Panel1.ResumeLayout(false);
+            this.splitContainerStructure.Panel1.PerformLayout();
             this.splitContainerStructure.Panel2.ResumeLayout(false);
+            this.splitContainerStructure.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerStructure)).EndInit();
             this.splitContainerStructure.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStructure)).EndInit();
@@ -1949,6 +2024,11 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.DataGridViewTextBoxColumn targetAddress;
         private System.Windows.Forms.DataGridViewTextBoxColumn targetTitle;
         private System.Windows.Forms.DataGridViewTextBoxColumn targetDesc;
+        private System.Windows.Forms.Button buttonStructureFilter;
+        private System.Windows.Forms.TextBox textBoxStructureFilter;
+        private System.Windows.Forms.ComboBox comboBoxTargetFilterSource;
+        private System.Windows.Forms.Button buttonTargetFilter;
+        private System.Windows.Forms.TextBox textBoxTargetFilter;
     }
 }
 
