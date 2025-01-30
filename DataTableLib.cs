@@ -44,6 +44,24 @@ namespace WinSimpleIDriver
         public int Page;
     }
 
+
+    public struct DGVStructureCol
+    {
+        public int Title;
+        public int Connector;
+        public int TagSource;
+        public int Template;
+        public int Group;
+    }
+    public struct DGVTargetCol
+    {
+        public int Structure;
+        public int Address;
+        public int Tag;
+        public int Desc;
+    }
+
+
     public struct DGVIncludeCol
     {
         public int Prefix;
@@ -57,18 +75,23 @@ namespace WinSimpleIDriver
     }
 
 
+
+
     class DataTableLib
     {
         // Номера колонок в DGV
         static public DGVSourcesCol sourcesCol = new DGVSourcesCol();
         static public DGVGroupsCol groupsCol = new DGVGroupsCol();
         static public DGVTagsCol tagsCol = new DGVTagsCol();
+        static public DGVStructureCol structureCol = new DGVStructureCol();
+        static public DGVTargetCol targetCol = new DGVTargetCol();
         static public DGVIncludeCol includeCol = new DGVIncludeCol();
         static public DGVChangeCol changeCol = new DGVChangeCol();
-
+        
         // Определение номеров колонок
         static public void SetDGVColumns(DataGridView sources, DataGridView groups, DataGridView tags, 
-                                            DataGridView includes, DataGridView changes)
+                                            DataGridView includes, DataGridView changes,
+                                            DataGridView structures, DataGridView targets)
         {
             sourcesCol = new DGVSourcesCol 
             {
@@ -104,6 +127,25 @@ namespace WinSimpleIDriver
                 Group = tags.Columns["tagGroup"].Index,
                 Block = tags.Columns["tagBlock"].Index,
                 Page = tags.Columns["tagPage"].Index
+            };
+
+            // ---
+
+            structureCol = new DGVStructureCol
+            {
+                 Title = structures.Columns["structureTitle"].Index,
+                 Connector = structures.Columns["structureConnector"].Index,
+                 TagSource = structures.Columns["structureTagSource"].Index,
+                 Template = structures.Columns["structureTemplate"].Index,
+                 Group = structures.Columns["structureGroup"].Index
+            };
+
+            targetCol = new DGVTargetCol
+            {
+                 Structure = targets.Columns["targetStructure"].Index,
+                 Address = targets.Columns["targetAddress"].Index,
+                 Tag = targets.Columns["targetTitle"].Index,
+                 Desc = targets.Columns["targetDesc"].Index
             };
 
             // ---
@@ -170,6 +212,32 @@ namespace WinSimpleIDriver
                 new PairFilterCol { col = tagsCol.Page, filter = textPage }
             };
         }
+
+        // Структуры. Номера колонок для фильтра в массив
+        static public int[] GetColumnIndexFilterStructure()
+        {
+            return new int[]
+            {
+                structureCol.Title, structureCol.Template, structureCol.TagSource, structureCol.Group, structureCol.Connector
+            };
+        }
+
+        // Цели. Номера колонок для фильтра в массив
+        static public int[] GetColumnIndexFilterTarget()
+        {
+            return new int[]
+            {
+                targetCol.Tag, targetCol.Desc, targetCol.Address
+            };
+        }
+        static public PairFilterCol[] GetPairFilterTarget(string textStructure)
+        {
+            return new PairFilterCol[]
+            {
+                new PairFilterCol { col = targetCol.Structure, filter = textStructure }
+            };
+        }
+
 
         // Классы. Номера колонок для фильтра в массив
         static public int[] GetColumnIndexFilterInclude()

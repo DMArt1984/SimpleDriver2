@@ -30,7 +30,8 @@ namespace WinSimpleIDriver
 
             // Установка номеров колонок
             DataTableLib.SetDGVColumns(dataGridViewSource, dataGridViewGroup, dataGridViewTag,
-                                        dataGridViewInclude, dataGridViewChange);
+                                        dataGridViewInclude, dataGridViewChange,
+                                        dataGridViewStructure, dataGridViewTarget);
 
             #region Table Enum
             // Устройства
@@ -111,6 +112,22 @@ namespace WinSimpleIDriver
             bool check = !ToolStripMenuItemViewTree.Checked;
             splitContainerForm.Panel1Collapsed = !check;
             ToolStripMenuItemViewTree.Checked = check;
+        }
+
+        // ================================================================================================================
+
+        private void SaveTextComboBox(ComboBox comboBox, string text = "")
+        {
+            if (text == "")
+                text = comboBox.Text;
+
+            if (String.IsNullOrWhiteSpace(text) == false)
+            {
+                if (comboBox.Items.Contains(text) == false)
+                {
+                    comboBox.Items.Add(text);
+                }
+            }
         }
 
         // ================================================================================================================
@@ -631,7 +648,7 @@ namespace WinSimpleIDriver
             SetComboBoxChangeFilterInclude();
         }
 
-        #region Include.Filter
+        #region Change.Filter
 
         #region Change.ComboFilter.Event
         private void comboBoxChangeFilterInclude_SelectedIndexChanged(object sender, EventArgs e)
@@ -640,7 +657,7 @@ namespace WinSimpleIDriver
         }
         #endregion
 
-        #region Include.TextFilter.Event
+        #region Change.TextFilter.Event
 
         private void textBoxChangeFilter_TextChanged(object sender, EventArgs e)
         {
@@ -693,34 +710,43 @@ namespace WinSimpleIDriver
 
         #region Structure
 
-
-
-        #endregion
-
-        // ================================================================================================================
-
-        #region Tree
-
-
-        #endregion
-
-        // ================================================================================================================
-
-        private void SaveTextComboBox(ComboBox comboBox, string text = "")
+        private void buttonStructureLeft_Click(object sender, EventArgs e)
         {
-            if (text == "")
-                text = comboBox.Text;
 
-            if (String.IsNullOrWhiteSpace(text) == false)
-            {
-                if (comboBox.Items.Contains(text) == false)
-                {
-                    comboBox.Items.Add(text);
-                }
-            }
         }
 
+        #region Structure.Filter
+
+        #region Structure.TextFilter.Event
+        private void textBoxStructureFilter_TextChanged(object sender, EventArgs e)
+        {
+
+        }
         private void buttonStructureFilter_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+        private void dataGridViewStructure_SelectionChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+
+        #region Structure-Target
+
+        private void buttonStructureRight_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #region Target.Filter
+
+        #region Target.ComboFilter.Event
+        private void comboBoxTargetFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
@@ -730,22 +756,7 @@ namespace WinSimpleIDriver
 
         }
 
-        private void comboBoxTargetFilterSource_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBoxStructureFilter_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void textBoxTargetFilter_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridViewStructure_SelectionChanged(object sender, EventArgs e)
         {
 
         }
@@ -754,5 +765,19 @@ namespace WinSimpleIDriver
         {
 
         }
+
+        #endregion
+        #endregion
+        #endregion
+        #endregion
+
+        // ================================================================================================================
+
+
+        
+
+
+
+        
     }
 }
