@@ -655,6 +655,11 @@ namespace WinSimpleIDriver
         {
             ChangeFilter();
         }
+        private void comboBoxChangeFilterInclude_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(comboBoxChangeFilterInclude.Text))
+                ChangeFilter();
+        }
         #endregion
 
         #region Change.TextFilter.Event
@@ -712,7 +717,8 @@ namespace WinSimpleIDriver
 
         private void buttonStructureLeft_Click(object sender, EventArgs e)
         {
-
+            splitContainerStructure.Panel2Collapsed = !splitContainerStructure.Panel2Collapsed;
+            SetComboBoxTargetFilterStructure();
         }
 
         #region Structure.Filter
@@ -720,17 +726,40 @@ namespace WinSimpleIDriver
         #region Structure.TextFilter.Event
         private void textBoxStructureFilter_TextChanged(object sender, EventArgs e)
         {
-
+            if (String.IsNullOrWhiteSpace(textBoxStructureFilter.Text))
+                StructureFilter();
         }
         private void buttonStructureFilter_Click(object sender, EventArgs e)
         {
+            StructureFilter();
+        }
 
+        private void StructureFilter()
+        {
+            DataTableLib.TableFilter(textBoxStructureFilter.Text, dataGridViewStructure,
+                DataTableLib.GetColumnIndexFilterStructure(), DataTableLib.GetPairFilterStructure());
         }
 
         #endregion
         private void dataGridViewStructure_SelectionChanged(object sender, EventArgs e)
         {
+            SaveTextComboBox(comboBoxTargetFilterSource);
+            SetComboBoxTargetFilterStructure();
+        }
 
+        private void SetComboBoxTargetFilterStructure()
+        {
+            string text = (splitContainerStructure.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewStructure, DataTableLib.structureCol.Title));
+            comboBoxTargetFilterSource.Text = text;
+            TargetFilter();
+        }
+
+        private void TargetFilter()
+        {
+            string text = comboBoxTargetFilterSource.Text;
+
+            DataTableLib.TableFilter(textBoxTargetFilter.Text, dataGridViewTarget,
+                DataTableLib.GetColumnIndexFilterTarget(), DataTableLib.GetPairFilterTarget(text));
         }
 
         #endregion
@@ -740,7 +769,8 @@ namespace WinSimpleIDriver
 
         private void buttonStructureRight_Click(object sender, EventArgs e)
         {
-
+            splitContainerStructure.Panel1Collapsed = !splitContainerStructure.Panel1Collapsed;
+            SetComboBoxTargetFilterStructure();
         }
 
         #region Target.Filter
@@ -748,36 +778,56 @@ namespace WinSimpleIDriver
         #region Target.ComboFilter.Event
         private void comboBoxTargetFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            TargetFilter();
+        }
+        private void comboBoxTargetFilterSource_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(comboBoxTargetFilterSource.Text))
+                TargetFilter();
         }
 
         private void buttonTargetFilter_Click(object sender, EventArgs e)
         {
-
+            SaveTextComboBox(comboBoxTargetFilterSource);
+            TargetFilter();
         }
 
         private void textBoxTargetFilter_TextChanged(object sender, EventArgs e)
         {
-
+            if (String.IsNullOrWhiteSpace(textBoxTargetFilter.Text))
+                TargetFilter();
         }
 
         private void dataGridViewTarget_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-
+            string text = comboBoxTargetFilterSource.Text;
+            if (String.IsNullOrWhiteSpace(text) == false)
+            {
+                var row = dataGridViewTarget.CurrentRow;
+                if (row != null)
+                    row.Cells[DataTableLib.targetCol.Structure].Value = text;
+            }
         }
 
+        
+
+
+
         #endregion
+
         #endregion
+
         #endregion
+
         #endregion
 
         // ================================================================================================================
 
 
-        
 
 
 
-        
+
+
     }
 }

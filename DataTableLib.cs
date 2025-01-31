@@ -221,6 +221,10 @@ namespace WinSimpleIDriver
                 structureCol.Title, structureCol.Template, structureCol.TagSource, structureCol.Group, structureCol.Connector
             };
         }
+        static public PairFilterCol[] GetPairFilterStructure()
+        {
+            return new PairFilterCol[] { };
+        }
 
         // Цели. Номера колонок для фильтра в массив
         static public int[] GetColumnIndexFilterTarget()
