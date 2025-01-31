@@ -14,8 +14,17 @@ using WindowsFormsIDevice.Connector.SGT;
 
 namespace WinSimpleIDriver
 {
+    
     public partial class Form1 : Form
     {
+        // Дерево проекта
+        TreeNode treeSGT; // Источники/Группы/Теги
+        TreeNode treeBlock; // Блоки
+        TreeNode treeStructure; // Структуры
+        TreeNode treeInclude; // Классы
+        TreeNode treePage; // Страницы
+
+        // Теги
         DataTable dtTags;
 
         public Form1()
@@ -64,6 +73,13 @@ namespace WinSimpleIDriver
 
             #endregion
 
+            // Дерево
+            treeSGT = treeView1.Nodes["Sources"]; // Источники/Группы/Теги
+            treeBlock = treeView1.Nodes["Blocks"]; // Блоки
+            treeStructure = treeView1.Nodes["Structures"]; // Структуры
+            treeInclude = treeView1.Nodes["Includes"]; // Классы
+            treePage = treeView1.Nodes["Pages"]; // Страницы
+
             // Новый проект
             FormClear();
 
@@ -84,11 +100,15 @@ namespace WinSimpleIDriver
         private void FormClear()
         {
             // treeView
-            treeView1.Nodes["Sources"].Nodes.Clear();
-            treeView1.Nodes["Blocks"].Nodes.Clear();
-            treeView1.Nodes["Pages"].Nodes.Clear();
+            treeSGT.Nodes.Clear();
+            treeBlock.Nodes.Clear();
+            treeStructure.Nodes.Clear();
+            treeInclude.Nodes.Clear();
+            treePage.Nodes.Clear();
 
-            //DGV
+            DrawTreeSGT();
+
+            // DGV
             dataGridViewSource.Rows.Clear();
             dataGridViewGroup.Rows.Clear();
             dataGridViewTag.Rows.Clear();
@@ -144,14 +164,6 @@ namespace WinSimpleIDriver
             dataGridViewSource.Columns["sourceAddress"].Visible = checkE;
             dataGridViewSource.RowHeadersVisible = checkE;
             dataGridViewSource.ReadOnly = !checkE;
-            //if (checkE)
-            //{
-            //    dataGridViewSource.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
-            //}
-            //else
-            //{
-            //    dataGridViewSource.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            //}
 
             bool checkD = checkBoxSourceDesc.Checked;
             dataGridViewSource.Columns["sourceDesc"].Visible = checkD;
@@ -240,6 +252,10 @@ namespace WinSimpleIDriver
 
         private void dataGridViewSource_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
+            var newID = DataTableLib.GetNewID(dataGridViewSource);
+            var row = dataGridViewSource.CurrentRow;
+            if (row != null)
+                row.Cells[0].Value = newID;
 
         }
 
@@ -266,13 +282,6 @@ namespace WinSimpleIDriver
             dataGridViewGroup.Columns["groupPeriod"].Visible = checkE;
             dataGridViewGroup.RowHeadersVisible = checkE;
             dataGridViewGroup.ReadOnly = !checkE;
-            //if (checkE)
-            //{
-            //    dataGridViewGroup.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
-            //} else
-            //{
-            //    dataGridViewGroup.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            //}
 
             bool checkD = checkBoxGroupDesc.Checked;
             dataGridViewGroup.Columns["groupDesc"].Visible = checkD;
@@ -413,14 +422,6 @@ namespace WinSimpleIDriver
             dataGridViewTag.Columns["tagWriteTag"].Visible = checkE;
             dataGridViewTag.RowHeadersVisible = checkE;
             dataGridViewTag.ReadOnly = !checkE;
-            //if (checkE)
-            //{
-            //    dataGridViewTag.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
-            //}
-            //else
-            //{
-            //    dataGridViewTag.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            //}
 
             bool checkD = checkBoxTagDesc.Checked;
             dataGridViewTag.Columns["tagDesc"].Visible = checkD;
@@ -809,7 +810,7 @@ namespace WinSimpleIDriver
             }
         }
 
-        
+
 
 
 
@@ -823,11 +824,84 @@ namespace WinSimpleIDriver
 
         // ================================================================================================================
 
+        #region Tree
+
+        
+
+        private void DrawTreeSGT()
+        {
+            
+
+            List<TableIdentity> collections = new List<TableIdentity>();
+            foreach (DataGridViewRow row in dataGridViewSource.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+
+                var value = row.Cells[DataTableLib.sourcesCol.Title].Value;
+                if (value == null)
+                    continue;
+
+                if (String.IsNullOrWhiteSpace(value.ToString()))
+                    continue;
+
+                collections.Add(new TableIdentity { Id = Convert.ToUInt16(row.Cells[0].Value), Title = value.ToString() });
+            }
+
+            // Источники
+            treeSGT.Nodes.Clear();
+            //treeSGT = new TreeNode("Источники данных");
+            treeSGT.Tag = new TreeProjTag(TreeProjCategory.sources, 0);
+            treeSGT.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
+            //treeSGT.ImageIndex = 2;
+            //treeSGT.SelectedImageIndex = 1;
+            foreach (var item in collections)
+            {
+                TreeNode one = new TreeNode($"{item.Title}");
+                one.Tag = new TreeProjTag(TreeProjCategory.sourceItem, item.Id);
+                one.NodeFont = new Font(this.Font.FontFamily, 9, FontStyle.Regular);
+                one.ImageIndex = 0;
+                treeSGT.Nodes.Add(one);
+            }
+            //treeSGT.Text += (EditorControl.sources.Count > 0) ? $" [ {EditorControl.sources.Count} ]" : "";
+            //treeViewProject.Nodes.Add(treeSources);
+        }
+
+        #region Tree.lib
+        // Установить количество по спискам
+        private void SetCountTreeNode(TreeNode tn)
+        {
+            foreach (TreeNode child in tn.Nodes)
+            {
+                SetCountTreeNodeChild(child);
+            }
+        }
+
+        // Установить количество 
+        private void SetCountTreeNodeChild(TreeNode tn)
+        {
+            var count = tn.Nodes.Count;
+            if (count <= 1)
+            {
+                tn.Text = tn.Text.Split('[')[0].Trim();
+            }
+            else
+            {
+                tn.Text = tn.Text.Split('[')[0].Trim() + " [" + count.ToString() + "]";
+            }
+
+        }
 
 
 
 
+        #endregion
 
+        #endregion
 
+        private void testToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DrawTreeSGT();
+        }
     }
 }

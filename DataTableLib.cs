@@ -10,6 +10,7 @@ using WindowsFormsIDevice.Connector.SGT;
 
 namespace WinSimpleIDriver
 {
+    #region DGV
     public struct DGVSourcesCol
     {
         public int Calc;
@@ -73,9 +74,38 @@ namespace WinSimpleIDriver
         public int ChangeFrom;
         public int ChangeTo;
     }
+    #endregion
 
+    #region Class Tree
+    public enum TreeProjCategory
+    {
+        sources, // Источники
+        sourceItem, // Источник
+        groupItem, // Группа
+        tagItem, // Тег
+        structures, // Структуры
+        targetItem, // Элементы структуры
+        includes, // Классы
+        changeItem, // Элементы класса
+        blocks // Блоки
+    }
+    public class TreeProjTag
+    {
+        public TreeProjCategory category;
+        public ushort Id;
+        public TreeProjTag(TreeProjCategory category, ushort Id)
+        {
+            this.category = category;
+            this.Id = Id;
+        }
+    }
+    #endregion
 
-
+    public struct TableIdentity
+    {
+        public ushort Id;
+        public string Title;
+    }
 
     class DataTableLib
     {
@@ -588,6 +618,38 @@ namespace WinSimpleIDriver
                 return "";
 
             return value.ToString();
+        }
+
+        // ==============================================================================
+
+        // Получить максимальный ID из таблицы
+        static public ushort GetNewID(DataGridView dgv)
+        {
+            ushort newID = 0;
+            foreach (DataGridViewRow item in dgv.Rows)
+            {
+                if (item.IsNewRow)
+                    continue;
+
+                if (item.Cells[0].Value == DBNull.Value)
+                    continue;
+
+                ushort id = Convert.ToUInt16(item.Cells[0].Value);
+                if (id > newID)
+                    newID = id;
+            }
+            return ++newID;
+        }
+
+        // Копировать строку таблицы
+        static public DataGridViewRow CloneWithValues(DataGridViewRow row)
+        {
+            DataGridViewRow clonedRow = (DataGridViewRow)row.Clone();
+            for (Int32 index = 0; index < row.Cells.Count; index++)
+            {
+                clonedRow.Cells[index].Value = row.Cells[index].Value;
+            }
+            return clonedRow;
         }
 
     }
