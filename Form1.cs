@@ -1098,6 +1098,19 @@ namespace WinSimpleIDriver
             UpdateDGVTagSourceLink();
         }
 
+        private void tabControl1_Selected(object sender, TabControlEventArgs e)
+        {
+            string tabName = tabControl1.TabPages[tabControl1.SelectedIndex].Name;
+            switch (tabName)
+            {
+                case "tabPageSource":
+                    DataTableLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DataTableLib.sourcesCol.Title, DataTableLib.sourcesCol.CountTags, DataTableLib.tagsCol.Source);
+                    break;
+
+            }
+
+
+        }
 
 
     }

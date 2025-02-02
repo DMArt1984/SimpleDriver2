@@ -59,7 +59,8 @@ namespace WinSimpleIDriver
                 Address = sources.Columns["sourceAddress"].Index,
                 Desc = sources.Columns["sourceDesc"].Index,
                 Status = sources.Columns["sourceStatus"].Index,
-                Message = sources.Columns["sourceMessage"].Index
+                Message = sources.Columns["sourceMessage"].Index,
+                CountTags = sources.Columns["sourceTags"].Index
             };
 
             groupsCol = new DGVGroupsCol
@@ -606,6 +607,51 @@ namespace WinSimpleIDriver
                 if (row != null)
                     row.Cells[colParentTitle].Value = text;
             }
+        }
+
+        // =============================================================================================
+
+        // Расставить количества элементов
+        static public void SetCountForUsed(DataGridView dgvSource, DataGridView dgvTag, int colTitle, int colCount, int colUsed)
+        {
+            Dictionary<string, int> dic = GetDicForUsed(dgvTag, colUsed);
+
+            foreach (DataGridViewRow item in dgvSource.Rows)
+            {
+                var itemTitle = item.Cells[colTitle].Value;
+                if (itemTitle == null)
+                    continue;
+
+                int count = 0;
+                if (dic.ContainsKey(itemTitle.ToString()))
+                    count = dic[itemTitle.ToString()];
+
+                if (item.Cells[colCount].Value == null || count != (int)item.Cells[colCount].Value)
+                    item.Cells[colCount].Value = count;
+
+            }
+        }
+
+        // Получить словарь с количеством повторений
+        static public Dictionary<string, int> GetDicForUsed(DataGridView dgv, int indexCol)
+        {
+            Dictionary<string, int> dic = new Dictionary<string, int>();
+            foreach (DataGridViewRow item in dgv.Rows)
+            {
+                var objName = item.Cells[indexCol].Value;
+                if (objName == null)
+                    continue;
+                string name = objName.ToString();
+                if (dic.ContainsKey(name))
+                {
+                    dic[name]++;
+                }
+                else
+                {
+                    dic.Add(name, 1);
+                }
+            }
+            return dic;
         }
 
     }

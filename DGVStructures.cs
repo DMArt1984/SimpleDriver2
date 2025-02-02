@@ -16,6 +16,7 @@ namespace WinSimpleIDriver
         public int Desc;
         public int Status;
         public int Message;
+        public int CountTags;
     }
     public struct DGVGroupsCol
     {
