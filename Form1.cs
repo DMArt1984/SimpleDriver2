@@ -870,7 +870,7 @@ namespace WinSimpleIDriver
             treeSGT.Nodes.Clear();
             //treeSGT = new TreeNode("Источники данных");
             treeSGT.Tag = new TreeProjTag(TreeProjCategory.sources, 0);
-            treeSGT.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
+            treeSGT.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
             //treeSGT.ImageIndex = 2;
             //treeSGT.SelectedImageIndex = 1;
 
@@ -879,7 +879,7 @@ namespace WinSimpleIDriver
             {
                 TreeNode tnSource = new TreeNode($"{itemSource.Title}");
                 tnSource.Tag = new TreeProjTag(TreeProjCategory.sourceItem, itemSource.Id);
-                tnSource.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
+                tnSource.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
                 tnSource.ImageIndex = 0;
 
                 // Список групп
@@ -890,7 +890,7 @@ namespace WinSimpleIDriver
 
                     TreeNode tnGroup = new TreeNode($"{itemGroup.Title}");
                     tnGroup.Tag = new TreeProjTag(TreeProjCategory.groupItem, itemGroup.Id);
-                    tnGroup.NodeFont = new Font(this.Font.FontFamily, 9, FontStyle.Regular);
+                    tnGroup.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
                     tnGroup.ImageIndex = 0;
 
                     // Список тегов
@@ -914,6 +914,66 @@ namespace WinSimpleIDriver
             }
             //treeSGT.Text += (EditorControl.sources.Count > 0) ? $" [ {EditorControl.sources.Count} ]" : "";
             //treeViewProject.Nodes.Add(treeSources);
+        }
+
+        // Построить дерево для Блоков
+        private void DrawTreeBlock()
+        {
+            // Получение списка путей групп из таблицы тегов
+            List<string> blocks = new List<string>();
+            foreach (DataGridViewRow row in dataGridViewTag.Rows)
+            {
+                var block = row.Cells[DataTableLib.tagsCol.Block].Value;
+                if (block == null)
+                    continue;
+
+                if (String.IsNullOrWhiteSpace(block.ToString()))
+                    continue;
+
+                blocks.Add(block.ToString());
+            }
+            // Убираем повторения
+            blocks = blocks.Distinct().OrderBy(x => x).ToList();
+
+            // Блоки
+            treeBlock.Nodes.Clear();
+            //treeBlock = new TreeNode("Блоки");
+            treeBlock.Tag = new TreeProjTag(TreeProjCategory.blocks, 0);
+            treeBlock.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
+            //treeBlock.ImageIndex = 2;
+            //treeBlock.SelectedImageIndex = 1;
+
+            // Перебор всех путей
+            foreach (string pathBlock in blocks)
+            {
+                if (String.IsNullOrWhiteSpace(pathBlock))
+                    continue;
+
+                TreeNode tn = treeBlock;
+                string[] parts = pathBlock.Split('.'); // A.B.C.D
+                foreach (string item in parts)
+                {
+                    if (String.IsNullOrWhiteSpace(item))
+                        continue;
+
+                    var exist = tn.Nodes.Find(item, false);
+                    if (exist == null || exist.Length == 0)
+                    {
+                        TreeNode next = new TreeNode(item);
+                        next.Name = item;
+                        next.Tag = new TreeProjTag(TreeProjCategory.blocks, 0);
+                        next.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
+                        tn.Nodes.Add(next);
+                        tn = next;
+                    } else
+                    {
+                        tn = exist[0];
+                    }
+
+                }
+
+            }
+
         }
 
         #region Tree.lib
@@ -951,6 +1011,7 @@ namespace WinSimpleIDriver
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DrawTreeSGT(); // Построение дерева Источники/Группы/Теги
+            DrawTreeBlock(); // Построить дерево для Блоков
         }
 
         private void dataGridViewStructure_UserAddedRow(object sender, DataGridViewRowEventArgs e)
@@ -999,5 +1060,9 @@ namespace WinSimpleIDriver
         {
             UpdateDGVTagSourceLink();
         }
+
+
+
+
     }
 }
