@@ -100,14 +100,11 @@ namespace WinSimpleIDriver
         private void FormClear()
         {
             // treeView
-            //treeSGT.Nodes.Clear();
-            //treeBlock.Nodes.Clear();
-            //treeStructure.Nodes.Clear();
-            treeInclude.Nodes.Clear();
             treePage.Nodes.Clear();
             DrawTreeSGT();
             DrawTreeBlock();
             DrawTreeStructure();
+            DrawTreeInclude();
 
             // DGV
             dataGridViewSource.Rows.Clear();
@@ -983,7 +980,7 @@ namespace WinSimpleIDriver
                     {
                         TreeNode next = new TreeNode(item);
                         next.Name = item;
-                        next.Tag = new TreeProjTag(TreeProjCategory.blocks, 0);
+                        next.Tag = new TreeProjTag(TreeProjCategory.blockItem, 0);
                         next.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
                         tn.Nodes.Add(next);
                         tn = next;
@@ -1018,7 +1015,7 @@ namespace WinSimpleIDriver
             foreach (var itemStructure in collectionStructure)
             {
                 TreeNode tnStructure = new TreeNode($"{itemStructure.Title}");
-                tnStructure.Tag = new TreeProjTag(TreeProjCategory.structures, itemStructure.Id);
+                tnStructure.Tag = new TreeProjTag(TreeProjCategory.structureItem, itemStructure.Id);
                 tnStructure.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
                 tnStructure.ImageIndex = 0;
 
@@ -1034,13 +1031,52 @@ namespace WinSimpleIDriver
                     tnTarget.ImageIndex = 0;
 
                     tnStructure.Nodes.Add(tnTarget); // тег структуры
-
                 }
-
                 treeStructure.Nodes.Add(tnStructure); // структура
             }
 
         }
+
+        // Построить дерево для Классов
+        private void DrawTreeInclude()
+        {
+            // Получить списки для дерева
+            var collectionInclude = MyTree.SetTreeCollection(dataGridViewInclude, DataTableLib.includeCol.Prefix);
+            var collectionChange = MyTree.SetTreeCollection(dataGridViewChange, DataTableLib.changeCol.ChangeFrom, DataTableLib.changeCol.Prefix);
+
+            // Классы
+            treeInclude.Nodes.Clear();
+            //treeInclude = new TreeNode("Классы");
+            treeInclude.Tag = new TreeProjTag(TreeProjCategory.includes, 0);
+            treeInclude.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
+            //treeInclude.ImageIndex = 2;
+            //treeInclude.SelectedImageIndex = 1;
+
+            // Список классов
+            foreach (var itemInclude in collectionInclude)
+            {
+                TreeNode tnInclude = new TreeNode($"{itemInclude.Title}");
+                tnInclude.Tag = new TreeProjTag(TreeProjCategory.includeItem, itemInclude.Id);
+                tnInclude.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
+                tnInclude.ImageIndex = 0;
+
+                // Список замен
+                foreach (var itemChange in collectionChange)
+                {
+                    if (itemChange.Link != itemInclude.Title)
+                        continue;
+
+                    TreeNode tnChange = new TreeNode($"{itemChange.Title}");
+                    tnChange.Tag = new TreeProjTag(TreeProjCategory.changeItem, itemChange.Id);
+                    tnChange.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
+                    tnChange.ImageIndex = 0;
+
+                    tnInclude.Nodes.Add(tnChange); // замена
+                }
+                treeInclude.Nodes.Add(tnInclude); // классы
+            }
+        }
+
 
         #endregion
 
@@ -1054,6 +1090,7 @@ namespace WinSimpleIDriver
             DrawTreeSGT(); // Построение дерева Источники/Группы/Теги
             DrawTreeBlock(); // Построить дерево для Блоков
             DrawTreeStructure(); // Построить дерево для Структур
+            DrawTreeInclude(); // Построить дерево для Классов
         }
 
         private void testTagSourceToolStripMenuItem_Click(object sender, EventArgs e)

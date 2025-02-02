@@ -15,10 +15,13 @@ namespace WinSimpleIDriver
         groupItem, // Группа
         tagItem, // Тег
         structures, // Структуры
-        targetItem, // Элементы структуры
+        structureItem, // Структура
+        targetItem, // Тег структуры
         includes, // Классы
-        changeItem, // Элементы класса
-        blocks // Блоки
+        includeItem, // Класс
+        changeItem, // Замены класса
+        blocks, // Блоки
+        blockItem // Блок
     }
     public class TreeProjTag
     {
