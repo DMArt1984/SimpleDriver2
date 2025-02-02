@@ -89,6 +89,7 @@
     <Compile Include="Connector\SGT\Tag.cs" />
     <Compile Include="Connector\Driver\TestTable.cs" />
     <Compile Include="DataTableLib.cs" />
+    <Compile Include="DGVStructures.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +99,7 @@
     <Compile Include="JsonControl.cs" />
     <Compile Include="Log\LoggerConsole.cs" />
     <Compile Include="Log\LogHelper.cs" />
+    <Compile Include="myTree.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

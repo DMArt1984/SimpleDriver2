@@ -252,11 +252,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewSource_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            var newID = DataTableLib.GetNewID(dataGridViewSource);
-            var row = dataGridViewSource.CurrentRow;
-            if (row != null)
-                row.Cells[0].Value = newID;
-
+            DataTableLib.ForNewRow(dataGridViewSource);
         }
 
         private void dataGridViewSource_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -394,7 +390,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewGroup_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-
+            DataTableLib.ForNewRow(dataGridViewGroup);
         }
 
         private void dataGridViewGroup_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -584,7 +580,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewTag_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-
+            DataTableLib.ForNewRow(dataGridViewTag);
         }
 
         private void dataGridViewTag_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -694,14 +690,17 @@ namespace WinSimpleIDriver
 
         private void dataGridViewChange_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            string text = comboBoxChangeFilterInclude.Text;
-            if (String.IsNullOrWhiteSpace(text) == false)
-            {
-                var row = dataGridViewChange.CurrentRow;
-                if (row != null)
-                    row.Cells[DataTableLib.changeCol.Prefix].Value = text;
-                //dataGridViewChange.Rows[dataGridViewChange.Rows.Count - 1].Cells[DataTableLib.changeCol.Prefix].Value = text;
-            }
+            DataTableLib.ForNewRow(dataGridViewChange); // new ID
+
+            DataTableLib.SetParentInRow(dataGridViewChange, comboBoxChangeFilterInclude, DataTableLib.changeCol.Prefix); // filter
+
+            //string text = comboBoxChangeFilterInclude.Text;
+            //if (String.IsNullOrWhiteSpace(text) == false)
+            //{
+            //    var row = dataGridViewChange.CurrentRow;
+            //    if (row != null)
+            //        row.Cells[DataTableLib.changeCol.Prefix].Value = text;
+            //}
         }
 
         #endregion
@@ -801,13 +800,18 @@ namespace WinSimpleIDriver
 
         private void dataGridViewTarget_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            string text = comboBoxTargetFilterSource.Text;
-            if (String.IsNullOrWhiteSpace(text) == false)
-            {
-                var row = dataGridViewTarget.CurrentRow;
-                if (row != null)
-                    row.Cells[DataTableLib.targetCol.Structure].Value = text;
-            }
+            DataTableLib.ForNewRow(dataGridViewTarget); // new ID
+
+            DataTableLib.SetParentInRow(dataGridViewTarget, comboBoxTargetFilterSource, DataTableLib.targetCol.Structure); // filter
+
+            // filter
+            //string text = comboBoxTargetFilterSource.Text;
+            //if (String.IsNullOrWhiteSpace(text) == false)
+            //{
+            //    var row = dataGridViewTarget.CurrentRow;
+            //    if (row != null)
+            //        row.Cells[DataTableLib.targetCol.Structure].Value = text;
+            //}
         }
 
 
@@ -826,27 +830,54 @@ namespace WinSimpleIDriver
 
         #region Tree
 
-        
-
-        private void DrawTreeSGT()
+        // Получить список для дерева без ссылок
+        private List<TableIdentity> TreeCollectionWithoutLink(DataGridView dgv, int colTitle)
         {
-            
-
             List<TableIdentity> collections = new List<TableIdentity>();
-            foreach (DataGridViewRow row in dataGridViewSource.Rows)
+            foreach (DataGridViewRow row in dgv.Rows)
             {
                 if (row.IsNewRow)
                     continue;
 
-                var value = row.Cells[DataTableLib.sourcesCol.Title].Value;
-                if (value == null)
+                var cellValue = row.Cells[colTitle].Value;
+                if (cellValue == null)
                     continue;
 
-                if (String.IsNullOrWhiteSpace(value.ToString()))
+                if (String.IsNullOrWhiteSpace(cellValue.ToString()))
                     continue;
 
-                collections.Add(new TableIdentity { Id = Convert.ToUInt16(row.Cells[0].Value), Title = value.ToString() });
+                var cellId = row.Cells[0].Value;
+                if (cellId == null)
+                    continue;
+
+                collections.Add(new TableIdentity { Id = Convert.ToUInt16(cellId), Title = cellValue.ToString(), Link = 0 });
             }
+            return collections;
+        }
+
+        // Построить дерево для Источники/Группы/Теги
+        private void DrawTreeSGT()
+        {
+            var collectionSource = TreeCollectionWithoutLink(dataGridViewSource, DataTableLib.sourcesCol.Title);
+            var collectionGroup = TreeCollectionWithoutLink(dataGridViewGroup, DataTableLib.groupsCol.Title);
+            var collectionTag = TreeCollectionWithoutLink(dataGridViewTag, DataTableLib.tagsCol.Title);
+
+            // Получить список для дерева
+            //List<TableIdentity> collections = new List<TableIdentity>();
+            //foreach (DataGridViewRow row in dataGridViewSource.Rows)
+            //{
+            //    if (row.IsNewRow)
+            //        continue;
+
+            //    var value = row.Cells[DataTableLib.sourcesCol.Title].Value;
+            //    if (value == null)
+            //        continue;
+
+            //    if (String.IsNullOrWhiteSpace(value.ToString()))
+            //        continue;
+
+            //    collections.Add(new TableIdentity { Id = Convert.ToUInt16(row.Cells[0].Value), Title = value.ToString(), Link = 0 });
+            //}
 
             // Источники
             treeSGT.Nodes.Clear();
@@ -855,10 +886,10 @@ namespace WinSimpleIDriver
             treeSGT.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
             //treeSGT.ImageIndex = 2;
             //treeSGT.SelectedImageIndex = 1;
-            foreach (var item in collections)
+            foreach (var itemSource in collectionSource)
             {
-                TreeNode one = new TreeNode($"{item.Title}");
-                one.Tag = new TreeProjTag(TreeProjCategory.sourceItem, item.Id);
+                TreeNode one = new TreeNode($"{itemSource.Title}");
+                one.Tag = new TreeProjTag(TreeProjCategory.sourceItem, itemSource.Id);
                 one.NodeFont = new Font(this.Font.FontFamily, 9, FontStyle.Regular);
                 one.ImageIndex = 0;
                 treeSGT.Nodes.Add(one);
@@ -902,6 +933,16 @@ namespace WinSimpleIDriver
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DrawTreeSGT();
+        }
+
+        private void dataGridViewStructure_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewStructure);
+        }
+
+        private void dataGridViewInclude_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewInclude); // new ID
         }
     }
 }

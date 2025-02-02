@@ -10,101 +10,12 @@ using WindowsFormsIDevice.Connector.SGT;
 
 namespace WinSimpleIDriver
 {
-    #region DGV
-    public struct DGVSourcesCol
-    {
-        public int Calc;
-        public int Title;
-        public int Driver;
-        public int Address;
-        public int Desc;
-        public int Status;
-        public int Message;
-    }
-    public struct DGVGroupsCol
-    {
-        public int Calc;
-        public int Title;
-        public int Source;
-        public int Desc;
-        public int Status;
-    }
-    public struct DGVTagsCol
-    {
-        public int Calc;
-        public int Title;
-        public int Value;
-        public int DataType;
-        public int Address;
-        public int Desc;
-        public int Status;
-        public int Message;
-        public int Source;
-        public int Group;
-        public int Block;
-        public int Page;
-    }
-
-
-    public struct DGVStructureCol
-    {
-        public int Title;
-        public int Connector;
-        public int TagSource;
-        public int Template;
-        public int Group;
-    }
-    public struct DGVTargetCol
-    {
-        public int Structure;
-        public int Address;
-        public int Tag;
-        public int Desc;
-    }
-
-
-    public struct DGVIncludeCol
-    {
-        public int Prefix;
-        public int FileName;
-    }
-    public struct DGVChangeCol
-    {
-        public int Prefix;
-        public int ChangeFrom;
-        public int ChangeTo;
-    }
-    #endregion
-
-    #region Class Tree
-    public enum TreeProjCategory
-    {
-        sources, // Источники
-        sourceItem, // Источник
-        groupItem, // Группа
-        tagItem, // Тег
-        structures, // Структуры
-        targetItem, // Элементы структуры
-        includes, // Классы
-        changeItem, // Элементы класса
-        blocks // Блоки
-    }
-    public class TreeProjTag
-    {
-        public TreeProjCategory category;
-        public ushort Id;
-        public TreeProjTag(TreeProjCategory category, ushort Id)
-        {
-            this.category = category;
-            this.Id = Id;
-        }
-    }
-    #endregion
-
+    
     public struct TableIdentity
     {
         public ushort Id;
         public string Title;
+        public ushort Link; // Ссылка на уровень выше
     }
 
     class DataTableLib
@@ -117,7 +28,24 @@ namespace WinSimpleIDriver
         static public DGVTargetCol targetCol = new DGVTargetCol();
         static public DGVIncludeCol includeCol = new DGVIncludeCol();
         static public DGVChangeCol changeCol = new DGVChangeCol();
-        
+
+        public struct ColumnValue
+        {
+            public int column;
+            public dynamic value;
+            public ColumnValue(int column, dynamic value)
+            {
+                this.column = column;
+                this.value = value;
+            }
+        }
+
+        public struct PairFilterCol
+        {
+            public int col;
+            public string filter;
+        }
+
         // Определение номеров колонок
         static public void SetDGVColumns(DataGridView sources, DataGridView groups, DataGridView tags, 
                                             DataGridView includes, DataGridView changes,
@@ -195,6 +123,8 @@ namespace WinSimpleIDriver
 
         }
 
+        #region Source
+
         // Источники. Номера колонок для фильтра в массив
         static public int[] GetColumnIndexFilterSource()
         {
@@ -207,6 +137,10 @@ namespace WinSimpleIDriver
         {
             return new PairFilterCol[] { };
         }
+
+        #endregion
+
+        #region Group
 
         // Группы. Номера колонок для фильтра в массив
         static public int[] GetColumnIndexFilterGroup()
@@ -223,6 +157,10 @@ namespace WinSimpleIDriver
                 new PairFilterCol { col = groupsCol.Source, filter = text }
             };
         }
+
+        #endregion
+
+        #region Tag
 
         // Теги. Номера колонок для фильтра в массив
         static public int[] GetColumnIndexFilterTag()
@@ -242,6 +180,10 @@ namespace WinSimpleIDriver
                 new PairFilterCol { col = tagsCol.Page, filter = textPage }
             };
         }
+
+        #endregion
+
+        #region Structure and Target
 
         // Структуры. Номера колонок для фильтра в массив
         static public int[] GetColumnIndexFilterStructure()
@@ -272,6 +214,9 @@ namespace WinSimpleIDriver
             };
         }
 
+        #endregion
+
+        #region Include and Change
 
         // Классы. Номера колонок для фильтра в массив
         static public int[] GetColumnIndexFilterInclude()
@@ -302,6 +247,7 @@ namespace WinSimpleIDriver
             };
         }
 
+        #endregion
 
         //
         static public DataGridViewRow GetRowDGV(DataGridView dgv, DataRow row)
@@ -322,35 +268,28 @@ namespace WinSimpleIDriver
                        .First();
         }
 
+        //
         static public DataRow GetDTRow(DataTable dt, uint Id)
         {
             DataRow rowTag = dt.Rows.Find(Id);
             return rowTag;
         }
 
-        static public void SetValue(DataTable dt, uint Id, dynamic value)
+        //
+        static public void SetTagValue(DataTable dt, uint Id, dynamic value)
         {
             DataRow rowTag = dt.Rows.Find(Id);
             if (rowTag != null)
                 rowTag[tagsCol.Value] = value;
         }
 
-        static public void SetValue(DataRow rowTag, dynamic value)
+        static public void SetTagValue(DataRow rowTag, dynamic value)
         {
             if (rowTag != null)
                 rowTag[tagsCol.Value] = value;
         }
 
-        public struct ColumnValue
-        {
-            public int column;
-            public dynamic value;
-            public ColumnValue(int column, dynamic value)
-            {
-                this.column = column;
-                this.value = value;
-            }
-        }
+        
 
         static public void SetValue(DataTable dt, uint Id, ColumnValue[] cv)
         {
@@ -514,11 +453,7 @@ namespace WinSimpleIDriver
             }
         }
 
-        public struct PairFilterCol
-        {
-            public int col;
-            public string filter;
-        }
+        
 
         static public bool CellsContainsFilterB(DataGridViewRow row, PairFilterCol[] pairs)
         {
@@ -623,7 +558,7 @@ namespace WinSimpleIDriver
         // ==============================================================================
 
         // Получить максимальный ID из таблицы
-        static public ushort GetNewID(DataGridView dgv)
+        static public ushort GetMaxID(DataGridView dgv)
         {
             ushort newID = 0;
             foreach (DataGridViewRow item in dgv.Rows)
@@ -642,7 +577,7 @@ namespace WinSimpleIDriver
         }
 
         // Копировать строку таблицы
-        static public DataGridViewRow CloneWithValues(DataGridViewRow row)
+        static public DataGridViewRow CloneRowWithValues(DataGridViewRow row)
         {
             DataGridViewRow clonedRow = (DataGridViewRow)row.Clone();
             for (Int32 index = 0; index < row.Cells.Count; index++)
@@ -650,6 +585,27 @@ namespace WinSimpleIDriver
                 clonedRow.Cells[index].Value = row.Cells[index].Value;
             }
             return clonedRow;
+        }
+
+        // При появлении новой строки таблицы
+        static public void ForNewRow(DataGridView dgv)
+        {
+            var newID = DataTableLib.GetMaxID(dgv);
+            var row = dgv.CurrentRow;
+            if (row != null)
+                row.Cells[0].Value = newID;
+        }
+
+        // Добавление ссылки на родительский элемент
+        static public void SetParentInRow(DataGridView dgv, ComboBox cb, int colParentTitle)
+        {
+            string text = cb.Text;
+            if (String.IsNullOrWhiteSpace(text) == false)
+            {
+                var row = dgv.CurrentRow;
+                if (row != null)
+                    row.Cells[colParentTitle].Value = text;
+            }
         }
 
     }
