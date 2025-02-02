@@ -847,7 +847,7 @@ namespace WinSimpleIDriver
                 if (String.IsNullOrWhiteSpace(title))
                     continue;
 
-                string parentTitle = (colParentTitle > 0) ? row.Cells[colParentTitle].Value.ToString() ?? "" : "";
+                string parentTitle = (colParentTitle > 0) ?  (row.Cells[colParentTitle].Value != null) ? row.Cells[colParentTitle].Value.ToString() : "" : "";
 
                 var cellId = row.Cells[0].Value;
                 if (cellId == null)
@@ -950,7 +950,7 @@ namespace WinSimpleIDriver
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DrawTreeSGT();
+            DrawTreeSGT(); // Построение дерева Источники/Группы/Теги
         }
 
         private void dataGridViewStructure_UserAddedRow(object sender, DataGridViewRowEventArgs e)
@@ -961,6 +961,43 @@ namespace WinSimpleIDriver
         private void dataGridViewInclude_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
             DataTableLib.ForNewRow(dataGridViewInclude); // new ID
+        }
+
+        // Обновить связи тегов к источникам от групп
+        private void UpdateDGVTagSourceLink()
+        {
+            // Получить списки для...
+            var collectionGroup = SetTreeCollection(dataGridViewGroup, DataTableLib.groupsCol.Title, DataTableLib.groupsCol.Source);
+
+            foreach (DataGridViewRow row in dataGridViewTag.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+
+                string sourceTitle = "";
+
+                var group = row.Cells[DataTableLib.tagsCol.Group].Value;
+                if (group != null)
+                {
+                    string groupTitle = group.ToString();
+                    if (String.IsNullOrWhiteSpace(groupTitle) == false)
+                    {
+                        var groupItem = collectionGroup.FirstOrDefault(x => x.Title == groupTitle);
+                        if (groupItem.Id > 0)
+                        {
+                            sourceTitle = (String.IsNullOrWhiteSpace(groupItem.Link)) ? "" : groupItem.Link;
+                        }
+                    }
+                }
+
+                row.Cells[DataTableLib.tagsCol.Source].Value = sourceTitle;
+            }
+
+        }
+
+        private void testTagSourceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateDGVTagSourceLink();
         }
     }
 }
