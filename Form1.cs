@@ -866,7 +866,6 @@ namespace WinSimpleIDriver
             var collectionGroup = SetTreeCollection(dataGridViewGroup, DataTableLib.groupsCol.Title, DataTableLib.groupsCol.Source);
             var collectionTag = SetTreeCollection(dataGridViewTag, DataTableLib.tagsCol.Title, DataTableLib.tagsCol.Group);
 
-
             // Источники
             treeSGT.Nodes.Clear();
             //treeSGT = new TreeNode("Источники данных");
@@ -874,13 +873,44 @@ namespace WinSimpleIDriver
             treeSGT.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
             //treeSGT.ImageIndex = 2;
             //treeSGT.SelectedImageIndex = 1;
+
+            // Список источников
             foreach (var itemSource in collectionSource)
             {
-                TreeNode one = new TreeNode($"{itemSource.Title}");
-                one.Tag = new TreeProjTag(TreeProjCategory.sourceItem, itemSource.Id);
-                one.NodeFont = new Font(this.Font.FontFamily, 9, FontStyle.Regular);
-                one.ImageIndex = 0;
-                treeSGT.Nodes.Add(one);
+                TreeNode tnSource = new TreeNode($"{itemSource.Title}");
+                tnSource.Tag = new TreeProjTag(TreeProjCategory.sourceItem, itemSource.Id);
+                tnSource.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
+                tnSource.ImageIndex = 0;
+
+                // Список групп
+                foreach (var itemGroup in collectionGroup)
+                {
+                    if (itemGroup.Link != itemSource.Title)
+                        continue;
+
+                    TreeNode tnGroup = new TreeNode($"{itemGroup.Title}");
+                    tnGroup.Tag = new TreeProjTag(TreeProjCategory.groupItem, itemGroup.Id);
+                    tnGroup.NodeFont = new Font(this.Font.FontFamily, 9, FontStyle.Regular);
+                    tnGroup.ImageIndex = 0;
+
+                    // Список тегов
+                    foreach (var itemTag in collectionTag)
+                    {
+                        if (itemTag.Link != itemGroup.Title)
+                            continue;
+
+                        TreeNode tnTag = new TreeNode($"{itemTag.Title}");
+                        tnTag.Tag = new TreeProjTag(TreeProjCategory.tagItem, itemTag.Id);
+                        tnTag.NodeFont = new Font(this.Font.FontFamily, 8, FontStyle.Regular);
+                        tnTag.ImageIndex = 0;
+
+                        tnGroup.Nodes.Add(tnTag); // тег
+                    }
+
+                    tnSource.Nodes.Add(tnGroup); // группа
+                }
+
+                treeSGT.Nodes.Add(tnSource); // источник
             }
             //treeSGT.Text += (EditorControl.sources.Count > 0) ? $" [ {EditorControl.sources.Count} ]" : "";
             //treeViewProject.Nodes.Add(treeSources);
