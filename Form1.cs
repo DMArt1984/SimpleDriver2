@@ -100,13 +100,13 @@ namespace WinSimpleIDriver
         private void FormClear()
         {
             // treeView
-            treeSGT.Nodes.Clear();
-            treeBlock.Nodes.Clear();
+            //treeSGT.Nodes.Clear();
+            //treeBlock.Nodes.Clear();
             treeStructure.Nodes.Clear();
             treeInclude.Nodes.Clear();
             treePage.Nodes.Clear();
-
             DrawTreeSGT();
+            DrawTreeBlock();
 
             // DGV
             dataGridViewSource.Rows.Clear();
@@ -556,6 +556,41 @@ namespace WinSimpleIDriver
 
         #endregion
 
+        #region Tag.DGV
+        // Обновить связи тегов к источникам от групп
+        private void UpdateDGVTagSourceLink()
+        {
+            // Получить списки для...
+            var collectionGroup = MyTree.SetTreeCollection(dataGridViewGroup, DataTableLib.groupsCol.Title, DataTableLib.groupsCol.Source);
+
+            foreach (DataGridViewRow row in dataGridViewTag.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+
+                string sourceTitle = "";
+
+                var group = row.Cells[DataTableLib.tagsCol.Group].Value;
+                if (group != null)
+                {
+                    string groupTitle = group.ToString();
+                    if (String.IsNullOrWhiteSpace(groupTitle) == false)
+                    {
+                        var groupItem = collectionGroup.FirstOrDefault(x => x.Title == groupTitle);
+                        if (groupItem.Id > 0)
+                        {
+                            sourceTitle = (String.IsNullOrWhiteSpace(groupItem.Link)) ? "" : groupItem.Link;
+                        }
+                    }
+                }
+
+                row.Cells[DataTableLib.tagsCol.Source].Value = sourceTitle;
+            }
+
+        }
+        #endregion
+
+
         #region Tag.DGV.Event
 
         private void dataGridViewTag_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
@@ -605,6 +640,11 @@ namespace WinSimpleIDriver
         {
             splitContainerInclude.Panel2Collapsed = !splitContainerInclude.Panel2Collapsed;
             SetComboBoxChangeFilterInclude();
+        }
+
+        private void dataGridViewInclude_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewInclude); // new ID
         }
 
         #region Include.Filter
@@ -721,6 +761,11 @@ namespace WinSimpleIDriver
             SetComboBoxTargetFilterStructure();
         }
 
+        private void dataGridViewStructure_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewStructure);
+        }
+
         #region Structure.Filter
 
         #region Structure.TextFilter.Event
@@ -830,41 +875,17 @@ namespace WinSimpleIDriver
 
         #region Tree
 
-        // Получить список для дерева без ссылок
-        private List<TableIdentity> SetTreeCollection(DataGridView dgv, int colTitle, int colParentTitle = 0)
-        {
-            List<TableIdentity> collections = new List<TableIdentity>();
-            foreach (DataGridViewRow row in dgv.Rows)
-            {
-                if (row.IsNewRow)
-                    continue;
+        
 
-                var cellValue = row.Cells[colTitle].Value;
-                if (cellValue == null)
-                    continue;
-
-                string title = cellValue.ToString();
-                if (String.IsNullOrWhiteSpace(title))
-                    continue;
-
-                string parentTitle = (colParentTitle > 0) ?  (row.Cells[colParentTitle].Value != null) ? row.Cells[colParentTitle].Value.ToString() : "" : "";
-
-                var cellId = row.Cells[0].Value;
-                if (cellId == null)
-                    continue;
-
-                collections.Add(new TableIdentity { Id = Convert.ToUInt16(cellId), Title = title, Link = parentTitle });
-            }
-            return collections;
-        }
-
+        #region Tree.lib
+        
         // Построить дерево для Источники/Группы/Теги
         private void DrawTreeSGT()
         {
             // Получить списки для дерева
-            var collectionSource = SetTreeCollection(dataGridViewSource, DataTableLib.sourcesCol.Title);
-            var collectionGroup = SetTreeCollection(dataGridViewGroup, DataTableLib.groupsCol.Title, DataTableLib.groupsCol.Source);
-            var collectionTag = SetTreeCollection(dataGridViewTag, DataTableLib.tagsCol.Title, DataTableLib.tagsCol.Group);
+            var collectionSource = MyTree.SetTreeCollection(dataGridViewSource, DataTableLib.sourcesCol.Title);
+            var collectionGroup = MyTree.SetTreeCollection(dataGridViewGroup, DataTableLib.groupsCol.Title, DataTableLib.groupsCol.Source);
+            var collectionTag = MyTree.SetTreeCollection(dataGridViewTag, DataTableLib.tagsCol.Title, DataTableLib.tagsCol.Group);
 
             // Источники
             treeSGT.Nodes.Clear();
@@ -965,7 +986,8 @@ namespace WinSimpleIDriver
                         next.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
                         tn.Nodes.Add(next);
                         tn = next;
-                    } else
+                    }
+                    else
                     {
                         tn = exist[0];
                     }
@@ -976,91 +998,26 @@ namespace WinSimpleIDriver
 
         }
 
-        #region Tree.lib
-        // Установить количество по спискам
-        private void SetCountTreeNode(TreeNode tn)
-        {
-            foreach (TreeNode child in tn.Nodes)
-            {
-                SetCountTreeNodeChild(child);
-            }
-        }
-
-        // Установить количество 
-        private void SetCountTreeNodeChild(TreeNode tn)
-        {
-            var count = tn.Nodes.Count;
-            if (count <= 1)
-            {
-                tn.Text = tn.Text.Split('[')[0].Trim();
-            }
-            else
-            {
-                tn.Text = tn.Text.Split('[')[0].Trim() + " [" + count.ToString() + "]";
-            }
-
-        }
-
-
+        
 
 
         #endregion
 
+
         #endregion
 
+
+        // TEST
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DrawTreeSGT(); // Построение дерева Источники/Группы/Теги
             DrawTreeBlock(); // Построить дерево для Блоков
         }
 
-        private void dataGridViewStructure_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        {
-            DataTableLib.ForNewRow(dataGridViewStructure);
-        }
-
-        private void dataGridViewInclude_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        {
-            DataTableLib.ForNewRow(dataGridViewInclude); // new ID
-        }
-
-        // Обновить связи тегов к источникам от групп
-        private void UpdateDGVTagSourceLink()
-        {
-            // Получить списки для...
-            var collectionGroup = SetTreeCollection(dataGridViewGroup, DataTableLib.groupsCol.Title, DataTableLib.groupsCol.Source);
-
-            foreach (DataGridViewRow row in dataGridViewTag.Rows)
-            {
-                if (row.IsNewRow)
-                    continue;
-
-                string sourceTitle = "";
-
-                var group = row.Cells[DataTableLib.tagsCol.Group].Value;
-                if (group != null)
-                {
-                    string groupTitle = group.ToString();
-                    if (String.IsNullOrWhiteSpace(groupTitle) == false)
-                    {
-                        var groupItem = collectionGroup.FirstOrDefault(x => x.Title == groupTitle);
-                        if (groupItem.Id > 0)
-                        {
-                            sourceTitle = (String.IsNullOrWhiteSpace(groupItem.Link)) ? "" : groupItem.Link;
-                        }
-                    }
-                }
-
-                row.Cells[DataTableLib.tagsCol.Source].Value = sourceTitle;
-            }
-
-        }
-
         private void testTagSourceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateDGVTagSourceLink();
         }
-
 
 
 

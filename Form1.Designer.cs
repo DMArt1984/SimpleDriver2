@@ -417,7 +417,7 @@ namespace WinSimpleIDriver
             // 
             this.splitContainerForm.Panel2.Controls.Add(this.tabControl1);
             this.splitContainerForm.Size = new System.Drawing.Size(1415, 500);
-            this.splitContainerForm.SplitterDistance = 225;
+            this.splitContainerForm.SplitterDistance = 238;
             this.splitContainerForm.SplitterWidth = 5;
             this.splitContainerForm.TabIndex = 2;
             // 
@@ -435,7 +435,7 @@ namespace WinSimpleIDriver
             this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView1.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.treeView1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.treeView1.Location = new System.Drawing.Point(7, 29);
             this.treeView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.treeView1.Name = "treeView1";
@@ -464,7 +464,7 @@ namespace WinSimpleIDriver
             treeNode3,
             treeNode4,
             treeNode5});
-            this.treeView1.Size = new System.Drawing.Size(213, 461);
+            this.treeView1.Size = new System.Drawing.Size(226, 461);
             this.treeView1.TabIndex = 0;
             // 
             // tabControl1
@@ -481,7 +481,7 @@ namespace WinSimpleIDriver
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1185, 500);
+            this.tabControl1.Size = new System.Drawing.Size(1172, 500);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPageSource
@@ -1016,7 +1016,7 @@ namespace WinSimpleIDriver
             this.tabPageTag.Location = new System.Drawing.Point(4, 26);
             this.tabPageTag.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageTag.Name = "tabPageTag";
-            this.tabPageTag.Size = new System.Drawing.Size(1177, 470);
+            this.tabPageTag.Size = new System.Drawing.Size(1164, 470);
             this.tabPageTag.TabIndex = 2;
             this.tabPageTag.Text = "Теги";
             this.tabPageTag.UseVisualStyleBackColor = true;
@@ -1024,7 +1024,7 @@ namespace WinSimpleIDriver
             // buttonTagFilter
             // 
             this.buttonTagFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonTagFilter.Location = new System.Drawing.Point(1099, 38);
+            this.buttonTagFilter.Location = new System.Drawing.Point(1086, 38);
             this.buttonTagFilter.Name = "buttonTagFilter";
             this.buttonTagFilter.Size = new System.Drawing.Size(70, 24);
             this.buttonTagFilter.TabIndex = 25;
@@ -1165,7 +1165,7 @@ namespace WinSimpleIDriver
             this.textBoxTagFilter.Location = new System.Drawing.Point(611, 39);
             this.textBoxTagFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxTagFilter.Name = "textBoxTagFilter";
-            this.textBoxTagFilter.Size = new System.Drawing.Size(482, 22);
+            this.textBoxTagFilter.Size = new System.Drawing.Size(469, 22);
             this.textBoxTagFilter.TabIndex = 13;
             this.textBoxTagFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxTagFilter.TextChanged += new System.EventHandler(this.textBoxTagFilter_TextChanged);
@@ -1230,7 +1230,7 @@ namespace WinSimpleIDriver
             this.dataGridViewTag.MultiSelect = false;
             this.dataGridViewTag.Name = "dataGridViewTag";
             this.dataGridViewTag.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewTag.Size = new System.Drawing.Size(1162, 379);
+            this.dataGridViewTag.Size = new System.Drawing.Size(1149, 379);
             this.dataGridViewTag.TabIndex = 9;
             this.dataGridViewTag.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewTag_CellBeginEdit);
             this.dataGridViewTag.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTag_CellEndEdit);
