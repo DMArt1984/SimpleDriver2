@@ -831,7 +831,7 @@ namespace WinSimpleIDriver
         #region Tree
 
         // Получить список для дерева без ссылок
-        private List<TableIdentity> TreeCollectionWithoutLink(DataGridView dgv, int colTitle)
+        private List<TableIdentity> SetTreeCollection(DataGridView dgv, int colTitle, int colParentTitle = 0)
         {
             List<TableIdentity> collections = new List<TableIdentity>();
             foreach (DataGridViewRow row in dgv.Rows)
@@ -843,14 +843,17 @@ namespace WinSimpleIDriver
                 if (cellValue == null)
                     continue;
 
-                if (String.IsNullOrWhiteSpace(cellValue.ToString()))
+                string title = cellValue.ToString();
+                if (String.IsNullOrWhiteSpace(title))
                     continue;
+
+                string parentTitle = (colParentTitle > 0) ? row.Cells[colParentTitle].Value.ToString() ?? "" : "";
 
                 var cellId = row.Cells[0].Value;
                 if (cellId == null)
                     continue;
 
-                collections.Add(new TableIdentity { Id = Convert.ToUInt16(cellId), Title = cellValue.ToString(), Link = 0 });
+                collections.Add(new TableIdentity { Id = Convert.ToUInt16(cellId), Title = title, Link = parentTitle });
             }
             return collections;
         }
@@ -858,26 +861,11 @@ namespace WinSimpleIDriver
         // Построить дерево для Источники/Группы/Теги
         private void DrawTreeSGT()
         {
-            var collectionSource = TreeCollectionWithoutLink(dataGridViewSource, DataTableLib.sourcesCol.Title);
-            var collectionGroup = TreeCollectionWithoutLink(dataGridViewGroup, DataTableLib.groupsCol.Title);
-            var collectionTag = TreeCollectionWithoutLink(dataGridViewTag, DataTableLib.tagsCol.Title);
+            // Получить списки для дерева
+            var collectionSource = SetTreeCollection(dataGridViewSource, DataTableLib.sourcesCol.Title);
+            var collectionGroup = SetTreeCollection(dataGridViewGroup, DataTableLib.groupsCol.Title, DataTableLib.groupsCol.Source);
+            var collectionTag = SetTreeCollection(dataGridViewTag, DataTableLib.tagsCol.Title, DataTableLib.tagsCol.Group);
 
-            // Получить список для дерева
-            //List<TableIdentity> collections = new List<TableIdentity>();
-            //foreach (DataGridViewRow row in dataGridViewSource.Rows)
-            //{
-            //    if (row.IsNewRow)
-            //        continue;
-
-            //    var value = row.Cells[DataTableLib.sourcesCol.Title].Value;
-            //    if (value == null)
-            //        continue;
-
-            //    if (String.IsNullOrWhiteSpace(value.ToString()))
-            //        continue;
-
-            //    collections.Add(new TableIdentity { Id = Convert.ToUInt16(row.Cells[0].Value), Title = value.ToString(), Link = 0 });
-            //}
 
             // Источники
             treeSGT.Nodes.Clear();

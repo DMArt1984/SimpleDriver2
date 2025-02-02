@@ -15,7 +15,7 @@ namespace WinSimpleIDriver
     {
         public ushort Id;
         public string Title;
-        public ushort Link; // Ссылка на уровень выше
+        public string Link; // Ссылка на уровень выше
     }
 
     class DataTableLib
