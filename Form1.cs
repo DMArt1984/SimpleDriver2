@@ -102,11 +102,12 @@ namespace WinSimpleIDriver
             // treeView
             //treeSGT.Nodes.Clear();
             //treeBlock.Nodes.Clear();
-            treeStructure.Nodes.Clear();
+            //treeStructure.Nodes.Clear();
             treeInclude.Nodes.Clear();
             treePage.Nodes.Clear();
             DrawTreeSGT();
             DrawTreeBlock();
+            DrawTreeStructure();
 
             // DGV
             dataGridViewSource.Rows.Clear();
@@ -998,8 +999,48 @@ namespace WinSimpleIDriver
 
         }
 
-        
+        // Построить дерево для Структур
+        private void DrawTreeStructure()
+        {
+            // Получить списки для дерева
+            var collectionStructure = MyTree.SetTreeCollection(dataGridViewStructure, DataTableLib.structureCol.Title);
+            var collectionTarget = MyTree.SetTreeCollection(dataGridViewTarget, DataTableLib.targetCol.Tag, DataTableLib.targetCol.Structure);
 
+            // Структуры
+            treeStructure.Nodes.Clear();
+            //treeStructure = new TreeNode("Структуры");
+            treeStructure.Tag = new TreeProjTag(TreeProjCategory.structures, 0);
+            treeStructure.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
+            //treeStructure.ImageIndex = 2;
+            //treeStructure.SelectedImageIndex = 1;
+
+            // Список структур
+            foreach (var itemStructure in collectionStructure)
+            {
+                TreeNode tnStructure = new TreeNode($"{itemStructure.Title}");
+                tnStructure.Tag = new TreeProjTag(TreeProjCategory.structures, itemStructure.Id);
+                tnStructure.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
+                tnStructure.ImageIndex = 0;
+
+                // Список тегов структур
+                foreach (var itemTarget in collectionTarget)
+                {
+                    if (itemTarget.Link != itemStructure.Title)
+                        continue;
+
+                    TreeNode tnTarget = new TreeNode($"{itemTarget.Title}");
+                    tnTarget.Tag = new TreeProjTag(TreeProjCategory.targetItem, itemTarget.Id);
+                    tnTarget.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
+                    tnTarget.ImageIndex = 0;
+
+                    tnStructure.Nodes.Add(tnTarget); // тег структуры
+
+                }
+
+                treeStructure.Nodes.Add(tnStructure); // структура
+            }
+
+        }
 
         #endregion
 
@@ -1012,6 +1053,7 @@ namespace WinSimpleIDriver
         {
             DrawTreeSGT(); // Построение дерева Источники/Группы/Теги
             DrawTreeBlock(); // Построить дерево для Блоков
+            DrawTreeStructure(); // Построить дерево для Структур
         }
 
         private void testTagSourceToolStripMenuItem_Click(object sender, EventArgs e)
