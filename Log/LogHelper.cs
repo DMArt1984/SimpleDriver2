@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using WindowsFormsIDevice;
+using System.Windows.Forms;
 
 namespace WinSimpleIDriver.Log
 {
@@ -33,7 +34,11 @@ namespace WinSimpleIDriver.Log
 
     public class LogHelper
     {
-        private static object sync = new object();
+        private static object syncFile = new object();
+        private static object syncDGV = new object();
+
+        static public DataGridView dgv; // DGV для записи лога
+
         public static void Log(string message = "", Exception ex = null, bool writeConsole = false)
         {
             try
@@ -60,7 +65,7 @@ namespace WinSimpleIDriver.Log
                     Console.WriteLine(message);  // Пишем в консоль
                 }
 
-                lock (sync)
+                lock (syncFile)
                 {
                     File.AppendAllText(fileName, fullText + "\r\n", Encoding.GetEncoding("Windows-1251")); // Пишем в файл
                 }
@@ -71,12 +76,33 @@ namespace WinSimpleIDriver.Log
             }
         }
 
+        public static void DGV(eLogCategory category, string message)
+        {
+            if (dgv == null)
+                return;
+
+            if (dgv is DataGridView == false)
+                return;
+
+            lock (syncDGV)
+            {
+                try
+                {
+                    dgv.Rows.Add(dgv.Rows.Count + 1, DateTime.Now, category.ToString().ToUpper(), message);
+                } catch
+                {
+
+                }
+            }
+        }
+
         public static void LogApp(string message)
         {
             if (String.IsNullOrWhiteSpace(message))
                 return;
 
-            Log("[APP] " + message, null, true);
+            Log($"[{eLogCategory.App.ToString().ToUpper()}] " + message, null, true);
+            DGV(eLogCategory.App, message);
         }
 
         public static void LogUser(string message)
@@ -84,7 +110,8 @@ namespace WinSimpleIDriver.Log
             if (String.IsNullOrWhiteSpace(message))
                 return;
 
-            Log("[USER] " + message);
+            Log($"[{ eLogCategory.User.ToString().ToUpper()}] " + message);
+            DGV(eLogCategory.User, message);
         }
 
         public static void LogError(string message)
@@ -92,12 +119,14 @@ namespace WinSimpleIDriver.Log
             if (String.IsNullOrWhiteSpace(message))
                 return;
 
-            Log("[ERROR] " + message);
+            Log($"[{ eLogCategory.Error.ToString().ToUpper()}] " + message);
+            DGV(eLogCategory.Error, message);
         }
 
         public static void LogException(Exception ex, string message = "")
         {
-            Log("[EXEPTION] " + message, ex, false);
+            Log($"[{eLogCategory.Exeption.ToString().ToUpper()}] " + message, ex, false);
+            DGV(eLogCategory.Exeption, message);
         }
 
         public static void LogTraffic(string message)
@@ -105,7 +134,7 @@ namespace WinSimpleIDriver.Log
             if (String.IsNullOrWhiteSpace(message))
                 return;
 
-            Log("[TRAFFIC] " + message);
+            Log($"[{eLogCategory.Traffic.ToString().ToUpper()}] " + message);
         }
 
         // ------------------------------------------------------------------
@@ -121,7 +150,7 @@ namespace WinSimpleIDriver.Log
             bool OK2 = DateTime.TryParse(Stop, out DateTime dtStop);
 
             // получаем данные из файла(ов)
-            lock (sync)
+            lock (syncFile)
             {
                 try
                 {

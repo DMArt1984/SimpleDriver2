@@ -38,6 +38,9 @@ namespace WinSimpleIDriver
             // Версия
             ToolStripMenuItemVer.Text += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
+            // log
+            LogHelper.dgv = dataGridViewLog;
+
             // Установка номеров колонок
             DataTableLib.SetDGVColumns(dataGridViewSource, dataGridViewGroup, dataGridViewTag,
                                         dataGridViewInclude, dataGridViewChange,
@@ -92,8 +95,7 @@ namespace WinSimpleIDriver
 
         // ================================================================================================================
 
-        #region Status
-
+        #region Status and log
         // Установить сообщение
         private string SetLabelMessage(string message = "")
         {
@@ -101,6 +103,7 @@ namespace WinSimpleIDriver
             LogHelper.LogApp(message);
             return message;
         }
+
 
         #endregion
 
