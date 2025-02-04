@@ -7,7 +7,7 @@ using System.IO.Ports;
 using System.IO;
 using System.Collections;
 
-namespace WindowsFormsIDevice.Connector.Driver.Component
+namespace WinSimpleIDriver.Connector.Driver.Component
 {
     class ModbusRTUmaster
     {

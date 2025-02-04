@@ -8,9 +8,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WindowsFormsIDevice.Connector.SGT;
+using WinSimpleIDriver.Connector.SGT;
 
-namespace WindowsFormsIDevice.Connector.Driver
+namespace WinSimpleIDriver.Connector.Driver
 {
     class AppUDP: DeviceNet
     {

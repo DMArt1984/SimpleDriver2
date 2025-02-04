@@ -9,8 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using WindowsFormsIDevice.Connector;
-using WindowsFormsIDevice.Connector.SGT;
+using WinSimpleIDriver.Connector;
+using WinSimpleIDriver.Connector.SGT;
+using WinSimpleIDriver.Log;
 
 namespace WinSimpleIDriver
 {
@@ -85,15 +86,60 @@ namespace WinSimpleIDriver
 
             // DataTables
             dtTags = DataTableLib.GetEmptyDataTableForTags(dataGridViewTag, "Tags");
+
+            SetLabelMessage();
         }
 
         // ================================================================================================================
+
+        #region Status
+
+        // Установить сообщение
+        private string SetLabelMessage(string message = "")
+        {
+            toolStripStatusLabelMessage.Text = message;
+            LogHelper.LogApp(message);
+            return message;
+        }
+
+        #endregion
+
 
         #region Menu.File.Event
 
         private void ToolStripMenuItemNew_Click(object sender, EventArgs e)
         {
+            SetLabelMessage("Новый проект");
             FormClear();
+        }
+
+        private void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
+        {
+            SetLabelMessage("Открыть проект");
+
+        }
+
+        private void ToolStripMenuItemSave_Click(object sender, EventArgs e)
+        {
+            SetLabelMessage("Сохранить проект");
+
+        }
+
+        private void ToolStripMenuItemSaveAs_Click(object sender, EventArgs e)
+        {
+            SetLabelMessage("Сохранить проект как...");
+
+        }
+
+        private void ToolStripMenuItemImport_Click(object sender, EventArgs e)
+        {
+            SetLabelMessage("Импорт проекта");
+
+        }
+
+        private void ToolStripMenuItemExport_Click(object sender, EventArgs e)
+        {
+            SetLabelMessage("Экспорт проекта");
         }
 
         // Новый проект
@@ -115,12 +161,9 @@ namespace WinSimpleIDriver
 
         private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
         {
+            SetLabelMessage("Выход из приложения");
             this.Close();
         }
-
-
-
-
 
         #endregion
 
@@ -1083,6 +1126,7 @@ namespace WinSimpleIDriver
 
         #endregion
 
+        // ================================================================================================================
 
         // TEST
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1111,6 +1155,17 @@ namespace WinSimpleIDriver
 
 
         }
+
+        
+
+
+
+
+
+
+
+        // ===============================================================================================================
+
 
 
     }

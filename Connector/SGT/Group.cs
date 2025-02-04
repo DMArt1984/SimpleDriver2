@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using WindowsFormsIDevice.Log;
+using WindowsFormsIDevice;
+using WinSimpleIDriver.Log;
 
-namespace WindowsFormsIDevice.Connector.SGT
+namespace WinSimpleIDriver.Connector.SGT
 {
     public interface IGroupOff
     {

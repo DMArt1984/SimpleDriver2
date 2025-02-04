@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.NetworkInformation;
 
-namespace WindowsFormsIDevice.Connector.Driver.Component
+namespace WinSimpleIDriver.Connector.Driver.Component
 {
     class Pinger
     {

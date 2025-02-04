@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Hylasoft.Opc.Common;
 using Hylasoft.Opc.Da;
 using Hylasoft.Opc.Ua;
-using WindowsFormsIDevice.Connector.SGT;
+using WinSimpleIDriver.Connector.SGT;
 
-namespace WindowsFormsIDevice.Connector.Driver
+namespace WinSimpleIDriver.Connector.Driver
 {
     class HylasoftOPCUA : DeviceNet
     {

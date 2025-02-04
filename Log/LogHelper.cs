@@ -3,8 +3,9 @@ using System.Text;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using WindowsFormsIDevice;
 
-namespace WindowsFormsIDevice.Log
+namespace WinSimpleIDriver.Log
 {
     //
     public enum eLogCategory
@@ -30,7 +31,7 @@ namespace WindowsFormsIDevice.Log
         }
     }
 
-    class LogHelper
+    public class LogHelper
     {
         private static object sync = new object();
         public static void Log(string message = "", Exception ex = null, bool writeConsole = false)

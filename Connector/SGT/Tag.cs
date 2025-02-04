@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WindowsFormsIDevice.Log;
+using WindowsFormsIDevice;
+using WinSimpleIDriver.Log;
 
-namespace WindowsFormsIDevice.Connector.SGT
+namespace WinSimpleIDriver.Connector.SGT
 {
     public enum eDataType // типы данных
     {

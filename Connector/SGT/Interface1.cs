@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsFormsIDevice.Connector.SGT
+namespace WinSimpleIDriver.Connector.SGT
 {
 
     public struct CodeMessage // Код и Сообщение

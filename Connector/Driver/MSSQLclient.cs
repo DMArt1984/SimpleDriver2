@@ -4,9 +4,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WindowsFormsIDevice.Connector.SGT;
+using WinSimpleIDriver.Connector.SGT;
 
-namespace WindowsFormsIDevice.Connector.Driver
+namespace WinSimpleIDriver.Connector.Driver
 {
     class MSSQLclient : DeviceNet
     {

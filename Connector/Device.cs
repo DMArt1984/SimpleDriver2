@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WindowsFormsIDevice.Connector.SGT;
-using WindowsFormsIDevice.Log;
+using WinSimpleIDriver.Connector.SGT;
+using WinSimpleIDriver.Log;
 
-namespace WindowsFormsIDevice.Connector
+namespace WinSimpleIDriver.Connector
 {
     public enum eDriverType // тип драйвера
     {

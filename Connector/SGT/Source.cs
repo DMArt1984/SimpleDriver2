@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Timers;
 using System.Threading.Tasks;
-using WindowsFormsIDevice.Log;
+using WinSimpleIDriver.Log;
 using System.Windows.Forms;
-using WindowsFormsIDevice.Connector.Driver;
+using WinSimpleIDriver.Connector.Driver;
 using System.Threading;
 using System.Collections.Concurrent;
 
-namespace WindowsFormsIDevice.Connector.SGT
+namespace WinSimpleIDriver.Connector.SGT
 {
     public enum eSourceStatus
     {

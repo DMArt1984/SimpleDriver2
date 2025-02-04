@@ -8,11 +8,11 @@ using Newtonsoft.Json.Converters;
 using System.Dynamic;
 using System.IO;
 using System.Windows.Forms;
-using WindowsFormsIDevice.Log;
-using WindowsFormsIDevice.Connector;
+using WinSimpleIDriver.Log;
+using WinSimpleIDriver.Connector;
 
 
-namespace WindowsFormsIDevice
+namespace WinSimpleIDriver
 {
     class JsonControl
     {
