@@ -23,7 +23,6 @@ namespace WinSimpleIDriver
         TreeNode treeBlock; // Блоки
         TreeNode treeStructure; // Структуры
         TreeNode treeInclude; // Классы
-        TreeNode treePage; // Страницы
 
         // Теги
         DataTable dtTags;
@@ -78,11 +77,10 @@ namespace WinSimpleIDriver
             #endregion
 
             // Дерево
-            treeSGT = treeView1.Nodes["Sources"]; // Источники/Группы/Теги
-            treeBlock = treeView1.Nodes["Blocks"]; // Блоки
-            treeStructure = treeView1.Nodes["Structures"]; // Структуры
-            treeInclude = treeView1.Nodes["Includes"]; // Классы
-            treePage = treeView1.Nodes["Pages"]; // Страницы
+            treeSGT = treeViewProject.Nodes["Sources"]; // Источники/Группы/Теги
+            treeBlock = treeViewProject.Nodes["Blocks"]; // Блоки
+            treeStructure = treeViewProject.Nodes["Structures"]; // Структуры
+            treeInclude = treeViewProject.Nodes["Includes"]; // Классы
 
             // Новый проект
             FormClear();
@@ -149,7 +147,6 @@ namespace WinSimpleIDriver
         private void FormClear()
         {
             // treeView
-            treePage.Nodes.Clear();
             DrawTreeSGT();
             DrawTreeBlock();
             DrawTreeStructure();
@@ -919,10 +916,112 @@ namespace WinSimpleIDriver
 
         #region Tree
 
-        
+        // Двойное нажатие на ветку из дерева
+        private void treeViewProject_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var selNode = treeViewProject.SelectedNode;
+            TreeProjectSelector(selNode);
+            OpenTab(selNode);
+            SetTreeFilter(selNode);
+        }
+
+        // Выбрана ветка из дерева
+        private void treeViewProject_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            var selNode = treeViewProject.SelectedNode;
+            TreeProjContexMenu(selNode);
+        }
+
+        // Пункты контекстного меню
+        private void TreeProjContexMenu(TreeNode selNode)
+        {
+            if (selNode.Tag == null)
+                return;
+
+            var tpt = (selNode.Tag as TreeProjTag);
+
+            // Контекстное меню в зависимости от категории
+            contextMenuStripTreeProj.Items[0].Visible = false;
+            switch (tpt.category)
+            {
+                case TreeProjCategory.sourceItem:
+                case TreeProjCategory.groupItem:
+                case TreeProjCategory.tagItem:
+                case TreeProjCategory.structureItem:
+                case TreeProjCategory.targetItem:
+                case TreeProjCategory.includeItem:
+                case TreeProjCategory.changeItem:
+                    contextMenuStripTreeProj.Items[0].Visible = true;
+                    break;
+
+            }
+        }
+
+
+        // Добавить в фильт тегов источник, группу и т.п.
+        public void SetTreeFilter(TreeNode selNode)
+        {
+            if (selNode.Tag == null)
+                return;
+
+            var tpt = (selNode.Tag as TreeProjTag);
+            switch (tpt.category)
+            {
+                case TreeProjCategory.sourceItem:
+                    //SetTreeSourceFilter(selNode);
+                    break;
+
+                case TreeProjCategory.groupItem:
+                    //SetTreeGroupFilter(selNode);
+                    break;
+
+                case TreeProjCategory.blocks:
+                    //SetTreeBlockFilter(selNode);
+                    break;
+            }
+        }
+
+        // Редактирование ветки из дерева
+        private void TreeProjectSelector(TreeNode selNode)
+        {
+            if (selNode.Tag == null)
+                return;
+
+            var tpt = (selNode.Tag as TreeProjTag);
+
+            // Категория из дерева
+            switch (tpt.category)
+            {
+                case TreeProjCategory.sources:
+                    break;
+
+                case TreeProjCategory.sourceItem:
+                    break;
+
+                case TreeProjCategory.groupItem:
+                    break;
+
+                case TreeProjCategory.tagItem:
+                    break;
+
+                case TreeProjCategory.structures:
+                    break;
+
+                case TreeProjCategory.targetItem:
+                    break;
+
+                case TreeProjCategory.includes:
+                    break;
+
+                case TreeProjCategory.includeItem:
+                    break;
+
+            }
+
+        }
 
         #region Tree.lib
-        
+
         // Построить дерево для Источники/Группы/Теги
         private void DrawTreeSGT()
         {
@@ -1129,6 +1228,75 @@ namespace WinSimpleIDriver
 
         #endregion
 
+        #region TAB
+        private void OpenTab(TreeNode selNode)
+        {
+            if (selNode.Tag == null)
+                return;
+
+            var tpt = (selNode.Tag as TreeProjTag);
+
+            OpenTab(tpt.category, tpt.Id);
+        }
+
+        public void OpenTab(TreeProjCategory category, int Id = 0, string title = "")
+        {
+            // Открыть активную вкладку
+            // Открыть активную вкладку
+            switch (category)
+            {
+                case TreeProjCategory.sources:
+                    tabControlProject.SelectTab(tabPageSource);
+                    break;
+
+                case TreeProjCategory.sourceItem:
+                    tabControlProject.SelectTab(tabPageSource);
+                    DataTableLib.ShowRow(dataGridViewSource, Id, title);
+                    break;
+
+                case TreeProjCategory.groupItem:
+                    tabControlProject.SelectTab(tabPageGroup);
+                    DataTableLib.ShowRow(dataGridViewGroup, Id, title);
+                    break;
+
+                case TreeProjCategory.tagItem:
+                    tabControlProject.SelectTab(tabPageTag);
+                    DataTableLib.ShowRow(dataGridViewTag, Id, title);
+                    break;
+
+
+                case TreeProjCategory.structures:
+                    tabControlProject.SelectTab(tabPageStructure);
+                    break;
+
+                case TreeProjCategory.structureItem:
+                    tabControlProject.SelectTab(tabPageStructure);
+                    DataTableLib.ShowRow(dataGridViewStructure, Id, title);
+                    break;
+
+                case TreeProjCategory.targetItem:
+                    tabControlProject.SelectTab(tabPageStructure);
+                    DataTableLib.ShowRow(dataGridViewTarget, Id, title);
+                    break;
+
+
+                case TreeProjCategory.includes:
+                    tabControlProject.SelectTab(tabPageInclude);
+                    break;
+
+                case TreeProjCategory.includeItem :
+                    tabControlProject.SelectTab(tabPageInclude);
+                    DataTableLib.ShowRow(dataGridViewInclude, Id, title);
+                    break;
+
+                case TreeProjCategory.changeItem:
+                    tabControlProject.SelectTab(tabPageInclude);
+                    DataTableLib.ShowRow(dataGridViewChange, Id, title);
+                    break;
+            }
+        }
+        #endregion
+
         // ================================================================================================================
 
         // TEST
@@ -1147,7 +1315,7 @@ namespace WinSimpleIDriver
 
         private void tabControl1_Selected(object sender, TabControlEventArgs e)
         {
-            string tabName = tabControl1.TabPages[tabControl1.SelectedIndex].Name;
+            string tabName = tabControlProject.TabPages[tabControlProject.SelectedIndex].Name;
             switch (tabName)
             {
                 case "tabPageSource":
@@ -1160,6 +1328,10 @@ namespace WinSimpleIDriver
         }
 
         
+
+
+
+
 
 
 

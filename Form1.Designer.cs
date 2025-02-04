@@ -29,11 +29,12 @@ namespace WinSimpleIDriver
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Источники/Группы/Теги");
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Блоки");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Структуры");
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Классы");
-            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Страницы");
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Источники/Группы/Теги");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Блоки");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Структуры");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Классы");
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -41,7 +42,6 @@ namespace WinSimpleIDriver
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,8 +68,10 @@ namespace WinSimpleIDriver
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainerForm = new System.Windows.Forms.SplitContainer();
             this.labelProject = new System.Windows.Forms.Label();
-            this.treeView1 = new System.Windows.Forms.TreeView();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.treeViewProject = new System.Windows.Forms.TreeView();
+            this.contextMenuStripTreeProj = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControlProject = new System.Windows.Forms.TabControl();
             this.tabPageSource = new System.Windows.Forms.TabPage();
             this.buttonSourceFilter = new System.Windows.Forms.Button();
             this.buttonSourceHelp = new System.Windows.Forms.Button();
@@ -153,7 +155,7 @@ namespace WinSimpleIDriver
             this.tagStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tagMessage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tagStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabPageStructures = new System.Windows.Forms.TabPage();
+            this.tabPageStructure = new System.Windows.Forms.TabPage();
             this.splitContainerStructure = new System.Windows.Forms.SplitContainer();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonStructureLeft = new System.Windows.Forms.Button();
@@ -179,7 +181,7 @@ namespace WinSimpleIDriver
             this.targetAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.targetDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textBoxTargetFilter = new System.Windows.Forms.TextBox();
-            this.tabPageIncludes = new System.Windows.Forms.TabPage();
+            this.tabPageInclude = new System.Windows.Forms.TabPage();
             this.splitContainerInclude = new System.Windows.Forms.SplitContainer();
             this.buttonIncludeFilter = new System.Windows.Forms.Button();
             this.textBoxIncludeFilter = new System.Windows.Forms.TextBox();
@@ -198,7 +200,6 @@ namespace WinSimpleIDriver
             this.changePrefix = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.changeFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.changeTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabPagePage = new System.Windows.Forms.TabPage();
             this.tabPageLog = new System.Windows.Forms.TabPage();
             this.dataGridViewLog = new System.Windows.Forms.DataGridView();
             this.logID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -211,21 +212,22 @@ namespace WinSimpleIDriver
             this.splitContainerForm.Panel1.SuspendLayout();
             this.splitContainerForm.Panel2.SuspendLayout();
             this.splitContainerForm.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.contextMenuStripTreeProj.SuspendLayout();
+            this.tabControlProject.SuspendLayout();
             this.tabPageSource.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSource)).BeginInit();
             this.tabPageGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewGroup)).BeginInit();
             this.tabPageTag.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTag)).BeginInit();
-            this.tabPageStructures.SuspendLayout();
+            this.tabPageStructure.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerStructure)).BeginInit();
             this.splitContainerStructure.Panel1.SuspendLayout();
             this.splitContainerStructure.Panel2.SuspendLayout();
             this.splitContainerStructure.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStructure)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTarget)).BeginInit();
-            this.tabPageIncludes.SuspendLayout();
+            this.tabPageInclude.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerInclude)).BeginInit();
             this.splitContainerInclude.Panel1.SuspendLayout();
             this.splitContainerInclude.Panel2.SuspendLayout();
@@ -272,59 +274,59 @@ namespace WinSimpleIDriver
             // ToolStripMenuItemNew
             // 
             this.ToolStripMenuItemNew.Name = "ToolStripMenuItemNew";
-            this.ToolStripMenuItemNew.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemNew.Size = new System.Drawing.Size(162, 22);
             this.ToolStripMenuItemNew.Text = "Новый";
             this.ToolStripMenuItemNew.Click += new System.EventHandler(this.ToolStripMenuItemNew_Click);
             // 
             // ToolStripMenuItemOpen
             // 
             this.ToolStripMenuItemOpen.Name = "ToolStripMenuItemOpen";
-            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(162, 22);
             this.ToolStripMenuItemOpen.Text = "Открыть";
             this.ToolStripMenuItemOpen.Click += new System.EventHandler(this.ToolStripMenuItemOpen_Click);
             // 
             // ToolStripMenuItemSave
             // 
             this.ToolStripMenuItemSave.Name = "ToolStripMenuItemSave";
-            this.ToolStripMenuItemSave.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemSave.Size = new System.Drawing.Size(162, 22);
             this.ToolStripMenuItemSave.Text = "Сохранить";
             this.ToolStripMenuItemSave.Click += new System.EventHandler(this.ToolStripMenuItemSave_Click);
             // 
             // ToolStripMenuItemSaveAs
             // 
             this.ToolStripMenuItemSaveAs.Name = "ToolStripMenuItemSaveAs";
-            this.ToolStripMenuItemSaveAs.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemSaveAs.Size = new System.Drawing.Size(162, 22);
             this.ToolStripMenuItemSaveAs.Text = "Сохранить как...";
             this.ToolStripMenuItemSaveAs.Click += new System.EventHandler(this.ToolStripMenuItemSaveAs_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(159, 6);
             // 
             // ToolStripMenuItemImport
             // 
             this.ToolStripMenuItemImport.Name = "ToolStripMenuItemImport";
-            this.ToolStripMenuItemImport.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemImport.Size = new System.Drawing.Size(162, 22);
             this.ToolStripMenuItemImport.Text = "Импорт";
             this.ToolStripMenuItemImport.Click += new System.EventHandler(this.ToolStripMenuItemImport_Click);
             // 
             // ToolStripMenuItemExport
             // 
             this.ToolStripMenuItemExport.Name = "ToolStripMenuItemExport";
-            this.ToolStripMenuItemExport.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemExport.Size = new System.Drawing.Size(162, 22);
             this.ToolStripMenuItemExport.Text = "Экспорт";
             this.ToolStripMenuItemExport.Click += new System.EventHandler(this.ToolStripMenuItemExport_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(159, 6);
             // 
             // ToolStripMenuItemExit
             // 
             this.ToolStripMenuItemExit.Name = "ToolStripMenuItemExit";
-            this.ToolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemExit.Size = new System.Drawing.Size(162, 22);
             this.ToolStripMenuItemExit.Text = "Выход";
             this.ToolStripMenuItemExit.Click += new System.EventHandler(this.ToolStripMenuItemExit_Click);
             // 
@@ -432,11 +434,11 @@ namespace WinSimpleIDriver
             // splitContainerForm.Panel1
             // 
             this.splitContainerForm.Panel1.Controls.Add(this.labelProject);
-            this.splitContainerForm.Panel1.Controls.Add(this.treeView1);
+            this.splitContainerForm.Panel1.Controls.Add(this.treeViewProject);
             // 
             // splitContainerForm.Panel2
             // 
-            this.splitContainerForm.Panel2.Controls.Add(this.tabControl1);
+            this.splitContainerForm.Panel2.Controls.Add(this.tabControlProject);
             this.splitContainerForm.Size = new System.Drawing.Size(1278, 500);
             this.splitContainerForm.SplitterDistance = 214;
             this.splitContainerForm.SplitterWidth = 5;
@@ -451,61 +453,71 @@ namespace WinSimpleIDriver
             this.labelProject.TabIndex = 1;
             this.labelProject.Text = "Проект";
             // 
-            // treeView1
+            // treeViewProject
             // 
-            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.treeViewProject.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.treeView1.Location = new System.Drawing.Point(7, 29);
-            this.treeView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.treeView1.Name = "treeView1";
-            treeNode6.Name = "Sources";
+            this.treeViewProject.ContextMenuStrip = this.contextMenuStripTreeProj;
+            this.treeViewProject.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.treeViewProject.Location = new System.Drawing.Point(7, 29);
+            this.treeViewProject.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.treeViewProject.Name = "treeViewProject";
+            treeNode5.Name = "Sources";
+            treeNode5.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode5.Tag = "Source";
+            treeNode5.Text = "Источники/Группы/Теги";
+            treeNode6.Name = "Blocks";
             treeNode6.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode6.Tag = "Source";
-            treeNode6.Text = "Источники/Группы/Теги";
-            treeNode7.Name = "Blocks";
+            treeNode6.Tag = "Block";
+            treeNode6.Text = "Блоки";
+            treeNode7.Name = "Structures";
             treeNode7.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode7.Tag = "Block";
-            treeNode7.Text = "Блоки";
-            treeNode8.Name = "Structures";
+            treeNode7.Text = "Структуры";
+            treeNode8.Name = "Includes";
             treeNode8.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode8.Text = "Структуры";
-            treeNode9.Name = "Includes";
-            treeNode9.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode9.Tag = "Include";
-            treeNode9.Text = "Классы";
-            treeNode10.Name = "Pages";
-            treeNode10.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode10.Tag = "Page";
-            treeNode10.Text = "Страницы";
-            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode8.Tag = "Include";
+            treeNode8.Text = "Классы";
+            this.treeViewProject.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode5,
             treeNode6,
             treeNode7,
-            treeNode8,
-            treeNode9,
-            treeNode10});
-            this.treeView1.Size = new System.Drawing.Size(202, 461);
-            this.treeView1.TabIndex = 0;
+            treeNode8});
+            this.treeViewProject.Size = new System.Drawing.Size(202, 461);
+            this.treeViewProject.TabIndex = 0;
+            this.treeViewProject.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewProject_AfterSelect);
+            this.treeViewProject.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.treeViewProject_MouseDoubleClick);
             // 
-            // tabControl1
+            // contextMenuStripTreeProj
             // 
-            this.tabControl1.Controls.Add(this.tabPageSource);
-            this.tabControl1.Controls.Add(this.tabPageGroup);
-            this.tabControl1.Controls.Add(this.tabPageTag);
-            this.tabControl1.Controls.Add(this.tabPageStructures);
-            this.tabControl1.Controls.Add(this.tabPageIncludes);
-            this.tabControl1.Controls.Add(this.tabPagePage);
-            this.tabControl1.Controls.Add(this.tabPageLog);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabControl1.Multiline = true;
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1059, 500);
-            this.tabControl1.TabIndex = 0;
-            this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
+            this.contextMenuStripTreeProj.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemCopy});
+            this.contextMenuStripTreeProj.Name = "contextMenuStripTree";
+            this.contextMenuStripTreeProj.Size = new System.Drawing.Size(140, 26);
+            // 
+            // toolStripMenuItemCopy
+            // 
+            this.toolStripMenuItemCopy.Name = "toolStripMenuItemCopy";
+            this.toolStripMenuItemCopy.Size = new System.Drawing.Size(139, 22);
+            this.toolStripMenuItemCopy.Text = "Копировать";
+            // 
+            // tabControlProject
+            // 
+            this.tabControlProject.Controls.Add(this.tabPageSource);
+            this.tabControlProject.Controls.Add(this.tabPageGroup);
+            this.tabControlProject.Controls.Add(this.tabPageTag);
+            this.tabControlProject.Controls.Add(this.tabPageStructure);
+            this.tabControlProject.Controls.Add(this.tabPageInclude);
+            this.tabControlProject.Controls.Add(this.tabPageLog);
+            this.tabControlProject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlProject.Location = new System.Drawing.Point(0, 0);
+            this.tabControlProject.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tabControlProject.Multiline = true;
+            this.tabControlProject.Name = "tabControlProject";
+            this.tabControlProject.SelectedIndex = 0;
+            this.tabControlProject.Size = new System.Drawing.Size(1059, 500);
+            this.tabControlProject.TabIndex = 0;
+            this.tabControlProject.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             // 
             // tabPageSource
             // 
@@ -676,10 +688,10 @@ namespace WinSimpleIDriver
             // sourceID
             // 
             this.sourceID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle10.Format = "N0";
-            dataGridViewCellStyle10.NullValue = null;
-            this.sourceID.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle9.Format = "N0";
+            dataGridViewCellStyle9.NullValue = null;
+            this.sourceID.DefaultCellStyle = dataGridViewCellStyle9;
             this.sourceID.HeaderText = "ID";
             this.sourceID.Name = "sourceID";
             this.sourceID.ReadOnly = true;
@@ -780,7 +792,7 @@ namespace WinSimpleIDriver
             this.tabPageGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageGroup.Name = "tabPageGroup";
             this.tabPageGroup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPageGroup.Size = new System.Drawing.Size(1164, 470);
+            this.tabPageGroup.Size = new System.Drawing.Size(1051, 470);
             this.tabPageGroup.TabIndex = 1;
             this.tabPageGroup.Text = "Группы опроса";
             this.tabPageGroup.UseVisualStyleBackColor = true;
@@ -932,7 +944,7 @@ namespace WinSimpleIDriver
             this.dataGridViewGroup.MultiSelect = false;
             this.dataGridViewGroup.Name = "dataGridViewGroup";
             this.dataGridViewGroup.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewGroup.Size = new System.Drawing.Size(1162, 379);
+            this.dataGridViewGroup.Size = new System.Drawing.Size(1162, 375);
             this.dataGridViewGroup.TabIndex = 9;
             this.dataGridViewGroup.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewGroup_CellBeginEdit);
             this.dataGridViewGroup.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewGroup_CellEndEdit);
@@ -944,10 +956,10 @@ namespace WinSimpleIDriver
             // groupID
             // 
             this.groupID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle11.Format = "N0";
-            dataGridViewCellStyle11.NullValue = null;
-            this.groupID.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle10.Format = "N0";
+            dataGridViewCellStyle10.NullValue = null;
+            this.groupID.DefaultCellStyle = dataGridViewCellStyle10;
             this.groupID.HeaderText = "ID";
             this.groupID.Name = "groupID";
             this.groupID.ReadOnly = true;
@@ -1253,7 +1265,7 @@ namespace WinSimpleIDriver
             this.dataGridViewTag.MultiSelect = false;
             this.dataGridViewTag.Name = "dataGridViewTag";
             this.dataGridViewTag.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewTag.Size = new System.Drawing.Size(1036, 375);
+            this.dataGridViewTag.Size = new System.Drawing.Size(1036, 371);
             this.dataGridViewTag.TabIndex = 9;
             this.dataGridViewTag.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewTag_CellBeginEdit);
             this.dataGridViewTag.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTag_CellEndEdit);
@@ -1265,10 +1277,10 @@ namespace WinSimpleIDriver
             // tagID
             // 
             this.tagID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle12.Format = "N0";
-            dataGridViewCellStyle12.NullValue = null;
-            this.tagID.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle11.Format = "N0";
+            dataGridViewCellStyle11.NullValue = null;
+            this.tagID.DefaultCellStyle = dataGridViewCellStyle11;
             this.tagID.HeaderText = "ID";
             this.tagID.Name = "tagID";
             this.tagID.ReadOnly = true;
@@ -1395,15 +1407,15 @@ namespace WinSimpleIDriver
             this.tagStatistic.ReadOnly = true;
             this.tagStatistic.Width = 101;
             // 
-            // tabPageStructures
+            // tabPageStructure
             // 
-            this.tabPageStructures.Controls.Add(this.splitContainerStructure);
-            this.tabPageStructures.Location = new System.Drawing.Point(4, 26);
-            this.tabPageStructures.Name = "tabPageStructures";
-            this.tabPageStructures.Size = new System.Drawing.Size(1164, 470);
-            this.tabPageStructures.TabIndex = 5;
-            this.tabPageStructures.Text = "Структуры";
-            this.tabPageStructures.UseVisualStyleBackColor = true;
+            this.tabPageStructure.Controls.Add(this.splitContainerStructure);
+            this.tabPageStructure.Location = new System.Drawing.Point(4, 26);
+            this.tabPageStructure.Name = "tabPageStructure";
+            this.tabPageStructure.Size = new System.Drawing.Size(1051, 470);
+            this.tabPageStructure.TabIndex = 5;
+            this.tabPageStructure.Text = "Структуры";
+            this.tabPageStructure.UseVisualStyleBackColor = true;
             // 
             // splitContainerStructure
             // 
@@ -1502,10 +1514,10 @@ namespace WinSimpleIDriver
             // structureID
             // 
             this.structureID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle13.Format = "N0";
-            dataGridViewCellStyle13.NullValue = null;
-            this.structureID.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle12.Format = "N0";
+            dataGridViewCellStyle12.NullValue = null;
+            this.structureID.DefaultCellStyle = dataGridViewCellStyle12;
             this.structureID.HeaderText = "ID";
             this.structureID.Name = "structureID";
             this.structureID.ReadOnly = true;
@@ -1622,10 +1634,10 @@ namespace WinSimpleIDriver
             // targetID
             // 
             this.targetID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle14.Format = "N0";
-            dataGridViewCellStyle14.NullValue = null;
-            this.targetID.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle13.Format = "N0";
+            dataGridViewCellStyle13.NullValue = null;
+            this.targetID.DefaultCellStyle = dataGridViewCellStyle13;
             this.targetID.HeaderText = "ID";
             this.targetID.Name = "targetID";
             this.targetID.ReadOnly = true;
@@ -1667,15 +1679,15 @@ namespace WinSimpleIDriver
             this.textBoxTargetFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxTargetFilter.TextChanged += new System.EventHandler(this.textBoxTargetFilter_TextChanged);
             // 
-            // tabPageIncludes
+            // tabPageInclude
             // 
-            this.tabPageIncludes.Controls.Add(this.splitContainerInclude);
-            this.tabPageIncludes.Location = new System.Drawing.Point(4, 26);
-            this.tabPageIncludes.Name = "tabPageIncludes";
-            this.tabPageIncludes.Size = new System.Drawing.Size(1164, 470);
-            this.tabPageIncludes.TabIndex = 4;
-            this.tabPageIncludes.Text = "Классы";
-            this.tabPageIncludes.UseVisualStyleBackColor = true;
+            this.tabPageInclude.Controls.Add(this.splitContainerInclude);
+            this.tabPageInclude.Location = new System.Drawing.Point(4, 26);
+            this.tabPageInclude.Name = "tabPageInclude";
+            this.tabPageInclude.Size = new System.Drawing.Size(1051, 470);
+            this.tabPageInclude.TabIndex = 4;
+            this.tabPageInclude.Text = "Классы";
+            this.tabPageInclude.UseVisualStyleBackColor = true;
             // 
             // splitContainerInclude
             // 
@@ -1699,7 +1711,7 @@ namespace WinSimpleIDriver
             this.splitContainerInclude.Panel2.Controls.Add(this.textBoxChangeFilter);
             this.splitContainerInclude.Panel2.Controls.Add(this.buttonIncludeRight);
             this.splitContainerInclude.Panel2.Controls.Add(this.dataGridViewChange);
-            this.splitContainerInclude.Size = new System.Drawing.Size(1158, 382);
+            this.splitContainerInclude.Size = new System.Drawing.Size(1158, 378);
             this.splitContainerInclude.SplitterDistance = 573;
             this.splitContainerInclude.SplitterWidth = 10;
             this.splitContainerInclude.TabIndex = 4;
@@ -1730,7 +1742,7 @@ namespace WinSimpleIDriver
             // buttonIncludeLeft
             // 
             this.buttonIncludeLeft.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.buttonIncludeLeft.Location = new System.Drawing.Point(553, 129);
+            this.buttonIncludeLeft.Location = new System.Drawing.Point(553, 127);
             this.buttonIncludeLeft.Name = "buttonIncludeLeft";
             this.buttonIncludeLeft.Size = new System.Drawing.Size(17, 118);
             this.buttonIncludeLeft.TabIndex = 3;
@@ -1754,7 +1766,7 @@ namespace WinSimpleIDriver
             this.dataGridViewInclude.MultiSelect = false;
             this.dataGridViewInclude.Name = "dataGridViewInclude";
             this.dataGridViewInclude.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewInclude.Size = new System.Drawing.Size(546, 346);
+            this.dataGridViewInclude.Size = new System.Drawing.Size(546, 342);
             this.dataGridViewInclude.TabIndex = 2;
             this.dataGridViewInclude.SelectionChanged += new System.EventHandler(this.dataGridViewInclude_SelectionChanged);
             this.dataGridViewInclude.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewInclude_UserAddedRow);
@@ -1762,10 +1774,10 @@ namespace WinSimpleIDriver
             // includeID
             // 
             this.includeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle15.Format = "N0";
-            dataGridViewCellStyle15.NullValue = null;
-            this.includeID.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle14.Format = "N0";
+            dataGridViewCellStyle14.NullValue = null;
+            this.includeID.DefaultCellStyle = dataGridViewCellStyle14;
             this.includeID.HeaderText = "ID";
             this.includeID.Name = "includeID";
             this.includeID.ReadOnly = true;
@@ -1805,7 +1817,7 @@ namespace WinSimpleIDriver
             // buttonChangeFilter
             // 
             this.buttonChangeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonChangeFilter.Location = new System.Drawing.Point(470, 3);
+            this.buttonChangeFilter.Location = new System.Drawing.Point(464, 3);
             this.buttonChangeFilter.Name = "buttonChangeFilter";
             this.buttonChangeFilter.Size = new System.Drawing.Size(70, 24);
             this.buttonChangeFilter.TabIndex = 16;
@@ -1820,7 +1832,7 @@ namespace WinSimpleIDriver
             this.textBoxChangeFilter.Location = new System.Drawing.Point(231, 4);
             this.textBoxChangeFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxChangeFilter.Name = "textBoxChangeFilter";
-            this.textBoxChangeFilter.Size = new System.Drawing.Size(233, 22);
+            this.textBoxChangeFilter.Size = new System.Drawing.Size(227, 22);
             this.textBoxChangeFilter.TabIndex = 15;
             this.textBoxChangeFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxChangeFilter.TextChanged += new System.EventHandler(this.textBoxChangeFilter_TextChanged);
@@ -1828,7 +1840,7 @@ namespace WinSimpleIDriver
             // buttonIncludeRight
             // 
             this.buttonIncludeRight.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonIncludeRight.Location = new System.Drawing.Point(4, 129);
+            this.buttonIncludeRight.Location = new System.Drawing.Point(4, 127);
             this.buttonIncludeRight.Name = "buttonIncludeRight";
             this.buttonIncludeRight.Size = new System.Drawing.Size(17, 118);
             this.buttonIncludeRight.TabIndex = 4;
@@ -1852,17 +1864,17 @@ namespace WinSimpleIDriver
             this.dataGridViewChange.MultiSelect = false;
             this.dataGridViewChange.Name = "dataGridViewChange";
             this.dataGridViewChange.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewChange.Size = new System.Drawing.Size(514, 346);
+            this.dataGridViewChange.Size = new System.Drawing.Size(508, 342);
             this.dataGridViewChange.TabIndex = 3;
             this.dataGridViewChange.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewChange_UserAddedRow);
             // 
             // changeID
             // 
             this.changeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle16.Format = "N0";
-            dataGridViewCellStyle16.NullValue = null;
-            this.changeID.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle15.Format = "N0";
+            dataGridViewCellStyle15.NullValue = null;
+            this.changeID.DefaultCellStyle = dataGridViewCellStyle15;
             this.changeID.HeaderText = "ID";
             this.changeID.Name = "changeID";
             this.changeID.ReadOnly = true;
@@ -1885,16 +1897,6 @@ namespace WinSimpleIDriver
             this.changeTo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.changeTo.HeaderText = "На что меняем";
             this.changeTo.Name = "changeTo";
-            // 
-            // tabPagePage
-            // 
-            this.tabPagePage.Location = new System.Drawing.Point(4, 26);
-            this.tabPagePage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPagePage.Name = "tabPagePage";
-            this.tabPagePage.Size = new System.Drawing.Size(1164, 470);
-            this.tabPagePage.TabIndex = 3;
-            this.tabPagePage.Text = "Страницы";
-            this.tabPagePage.UseVisualStyleBackColor = true;
             // 
             // tabPageLog
             // 
@@ -1924,10 +1926,10 @@ namespace WinSimpleIDriver
             // logID
             // 
             this.logID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle9.Format = "N0";
-            dataGridViewCellStyle9.NullValue = null;
-            this.logID.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle16.Format = "N0";
+            dataGridViewCellStyle16.NullValue = null;
+            this.logID.DefaultCellStyle = dataGridViewCellStyle16;
             this.logID.HeaderText = "ID";
             this.logID.Name = "logID";
             this.logID.Width = 45;
@@ -1975,7 +1977,8 @@ namespace WinSimpleIDriver
             this.splitContainerForm.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerForm)).EndInit();
             this.splitContainerForm.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
+            this.contextMenuStripTreeProj.ResumeLayout(false);
+            this.tabControlProject.ResumeLayout(false);
             this.tabPageSource.ResumeLayout(false);
             this.tabPageSource.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSource)).EndInit();
@@ -1985,7 +1988,7 @@ namespace WinSimpleIDriver
             this.tabPageTag.ResumeLayout(false);
             this.tabPageTag.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTag)).EndInit();
-            this.tabPageStructures.ResumeLayout(false);
+            this.tabPageStructure.ResumeLayout(false);
             this.splitContainerStructure.Panel1.ResumeLayout(false);
             this.splitContainerStructure.Panel1.PerformLayout();
             this.splitContainerStructure.Panel2.ResumeLayout(false);
@@ -1994,7 +1997,7 @@ namespace WinSimpleIDriver
             this.splitContainerStructure.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStructure)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTarget)).EndInit();
-            this.tabPageIncludes.ResumeLayout(false);
+            this.tabPageInclude.ResumeLayout(false);
             this.splitContainerInclude.Panel1.ResumeLayout(false);
             this.splitContainerInclude.Panel1.PerformLayout();
             this.splitContainerInclude.Panel2.ResumeLayout(false);
@@ -2018,12 +2021,11 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage;
         private System.Windows.Forms.SplitContainer splitContainerForm;
         private System.Windows.Forms.Label labelProject;
-        private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TreeView treeViewProject;
+        private System.Windows.Forms.TabControl tabControlProject;
         private System.Windows.Forms.TabPage tabPageSource;
         private System.Windows.Forms.TabPage tabPageGroup;
         private System.Windows.Forms.TabPage tabPageTag;
-        private System.Windows.Forms.TabPage tabPagePage;
         private System.Windows.Forms.ToolStripMenuItem вилToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem поискToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem пускСтопToolStripMenuItem;
@@ -2082,7 +2084,7 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.Button buttonSourceFilter;
         private System.Windows.Forms.Button buttonGroupFilter;
         private System.Windows.Forms.Button buttonTagFilter;
-        private System.Windows.Forms.TabPage tabPageIncludes;
+        private System.Windows.Forms.TabPage tabPageInclude;
         private System.Windows.Forms.DataGridView dataGridViewChange;
         private System.Windows.Forms.DataGridView dataGridViewInclude;
         private System.Windows.Forms.SplitContainer splitContainerInclude;
@@ -2093,7 +2095,7 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.Button buttonIncludeFilter;
         private System.Windows.Forms.Button buttonChangeFilter;
         private System.Windows.Forms.ComboBox comboBoxChangeFilterInclude;
-        private System.Windows.Forms.TabPage tabPageStructures;
+        private System.Windows.Forms.TabPage tabPageStructure;
         private System.Windows.Forms.SplitContainer splitContainerStructure;
         private System.Windows.Forms.DataGridView dataGridViewStructure;
         private System.Windows.Forms.DataGridView dataGridViewTarget;
@@ -2175,6 +2177,8 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.DataGridViewTextBoxColumn logDT;
         private System.Windows.Forms.DataGridViewTextBoxColumn logCategory;
         private System.Windows.Forms.DataGridViewTextBoxColumn logText;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripTreeProj;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopy;
     }
 }
 

@@ -654,5 +654,51 @@ namespace WinSimpleIDriver
             return dic;
         }
 
+        // Показать строку в таблице
+        static public void ShowRow(DataGridView dgv, DataGridViewRow row)
+        {
+            row.Visible = true; // показываем столбец даже если он скрыт
+            row.Selected = true;
+            dgv.FirstDisplayedScrollingRowIndex = row.Index;
+        }
+        static public void ShowRow(DataGridView dgv, int Id = 0, string title = "")
+        {
+            if (Id > 0)
+            {
+                ShowRow(dgv, GetRowByID(dgv, Id));
+            }
+            else if (title != "")
+            {
+                ShowRow(dgv, GetRowByTitle(dgv, title));
+            }
+        }
+
+        // Получить строку по ID
+        static public DataGridViewRow GetRowByID(DataGridView dgv, int Id)
+        {
+            foreach (DataGridViewRow item in dgv.Rows)
+            {
+                if (item.IsNewRow)
+                    continue;
+                if (item.Cells[0].Value.ToString() == Id.ToString())
+                    return item;
+            }
+            return dgv.Rows[dgv.Rows.Count - 1];
+        }
+
+        // Получить строку по Названию (колонка после ID)
+        static public DataGridViewRow GetRowByTitle(DataGridView dgv, string title)
+        {
+            foreach (DataGridViewRow item in dgv.Rows)
+            {
+                if (item.IsNewRow)
+                    continue;
+                if (item.Cells[1].Value.ToString() == title)
+                    return item;
+            }
+            return dgv.Rows[dgv.Rows.Count - 1];
+        }
+
+
     }
 }
