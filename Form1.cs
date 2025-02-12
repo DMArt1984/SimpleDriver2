@@ -63,7 +63,7 @@ namespace WinSimpleIDriver
             #region View
             // Вид - Дерево
             bool check = ToolStripMenuItemViewTree.Checked;
-            splitContainerForm.Panel1Collapsed = !check;
+            splitContainerTreeMain.Panel1Collapsed = !check;
 
             // Источники
             CheckSourceColumns();
@@ -171,7 +171,7 @@ namespace WinSimpleIDriver
         private void ToolStripMenuItemViewTree_Click(object sender, EventArgs e)
         {
             bool check = !ToolStripMenuItemViewTree.Checked;
-            splitContainerForm.Panel1Collapsed = !check;
+            splitContainerTreeMain.Panel1Collapsed = !check;
             ToolStripMenuItemViewTree.Checked = check;
         }
 
