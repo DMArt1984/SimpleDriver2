@@ -55,17 +55,16 @@ namespace WinSimpleIDriver
             this.ToolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.вилToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemViewTree = new System.Windows.Forms.ToolStripMenuItem();
-            this.пускСтопToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.поискToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Log2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemVer = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testTagSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelMessage1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelMessage2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelMessage3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainerTreeMain = new System.Windows.Forms.SplitContainer();
             this.labelProject = new System.Windows.Forms.Label();
             this.treeViewProject = new System.Windows.Forms.TreeView();
@@ -206,7 +205,7 @@ namespace WinSimpleIDriver
             this.logCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.logText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainerLogMain = new System.Windows.Forms.SplitContainer();
-            this.LogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTreeMain)).BeginInit();
@@ -247,9 +246,6 @@ namespace WinSimpleIDriver
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.вилToolStripMenuItem,
-            this.пускСтопToolStripMenuItem,
-            this.поискToolStripMenuItem,
-            this.LogToolStripMenuItem,
             this.ToolStripMenuItemHelp,
             this.testToolStripMenuItem,
             this.testTagSourceToolStripMenuItem});
@@ -338,7 +334,8 @@ namespace WinSimpleIDriver
             // вилToolStripMenuItem
             // 
             this.вилToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemViewTree});
+            this.ToolStripMenuItemViewTree,
+            this.Log2ToolStripMenuItem});
             this.вилToolStripMenuItem.Name = "вилToolStripMenuItem";
             this.вилToolStripMenuItem.Size = new System.Drawing.Size(39, 19);
             this.вилToolStripMenuItem.Text = "Вид";
@@ -352,17 +349,12 @@ namespace WinSimpleIDriver
             this.ToolStripMenuItemViewTree.Text = "Дерево";
             this.ToolStripMenuItemViewTree.Click += new System.EventHandler(this.ToolStripMenuItemViewTree_Click);
             // 
-            // пускСтопToolStripMenuItem
+            // Log2ToolStripMenuItem
             // 
-            this.пускСтопToolStripMenuItem.Name = "пускСтопToolStripMenuItem";
-            this.пускСтопToolStripMenuItem.Size = new System.Drawing.Size(78, 19);
-            this.пускСтопToolStripMenuItem.Text = "Пуск/Стоп";
-            // 
-            // поискToolStripMenuItem
-            // 
-            this.поискToolStripMenuItem.Name = "поискToolStripMenuItem";
-            this.поискToolStripMenuItem.Size = new System.Drawing.Size(54, 19);
-            this.поискToolStripMenuItem.Text = "Поиск";
+            this.Log2ToolStripMenuItem.Name = "Log2ToolStripMenuItem";
+            this.Log2ToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.Log2ToolStripMenuItem.Text = "Лог";
+            this.Log2ToolStripMenuItem.Click += new System.EventHandler(this.Log2ToolStripMenuItem_Click);
             // 
             // ToolStripMenuItemHelp
             // 
@@ -395,10 +387,10 @@ namespace WinSimpleIDriver
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelMessage,
+            this.toolStripStatusLabelMessage1,
             this.toolStripProgressBar1,
-            this.toolStripStatusLabel2,
-            this.toolStripStatusLabel3});
+            this.toolStripStatusLabelMessage2,
+            this.toolStripStatusLabelMessage3});
             this.statusStrip1.Location = new System.Drawing.Point(0, 580);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
@@ -406,28 +398,28 @@ namespace WinSimpleIDriver
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatusLabelMessage
+            // toolStripStatusLabelMessage1
             // 
-            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
-            this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(12, 17);
-            this.toolStripStatusLabelMessage.Text = "-";
+            this.toolStripStatusLabelMessage1.Name = "toolStripStatusLabelMessage1";
+            this.toolStripStatusLabelMessage1.Size = new System.Drawing.Size(12, 17);
+            this.toolStripStatusLabelMessage1.Text = "-";
             // 
             // toolStripProgressBar1
             // 
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
             this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
             // 
-            // toolStripStatusLabel2
+            // toolStripStatusLabelMessage2
             // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(12, 17);
-            this.toolStripStatusLabel2.Text = "-";
+            this.toolStripStatusLabelMessage2.Name = "toolStripStatusLabelMessage2";
+            this.toolStripStatusLabelMessage2.Size = new System.Drawing.Size(12, 17);
+            this.toolStripStatusLabelMessage2.Text = "-";
             // 
-            // toolStripStatusLabel3
+            // toolStripStatusLabelMessage3
             // 
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(12, 17);
-            this.toolStripStatusLabel3.Text = "-";
+            this.toolStripStatusLabelMessage3.Name = "toolStripStatusLabelMessage3";
+            this.toolStripStatusLabelMessage3.Size = new System.Drawing.Size(12, 17);
+            this.toolStripStatusLabelMessage3.Text = "-";
             // 
             // splitContainerTreeMain
             // 
@@ -680,7 +672,7 @@ namespace WinSimpleIDriver
             this.dataGridViewSource.MultiSelect = false;
             this.dataGridViewSource.Name = "dataGridViewSource";
             this.dataGridViewSource.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewSource.Size = new System.Drawing.Size(1024, 337);
+            this.dataGridViewSource.Size = new System.Drawing.Size(1024, 341);
             this.dataGridViewSource.TabIndex = 1;
             this.dataGridViewSource.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewSource_CellBeginEdit);
             this.dataGridViewSource.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewSource_CellEndEdit);
@@ -792,11 +784,11 @@ namespace WinSimpleIDriver
             this.tabPageGroup.Controls.Add(this.buttonGroupDel);
             this.tabPageGroup.Controls.Add(this.buttonGroupCopy);
             this.tabPageGroup.Controls.Add(this.dataGridViewGroup);
-            this.tabPageGroup.Location = new System.Drawing.Point(4, 26);
+            this.tabPageGroup.Location = new System.Drawing.Point(4, 22);
             this.tabPageGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageGroup.Name = "tabPageGroup";
             this.tabPageGroup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPageGroup.Size = new System.Drawing.Size(1037, 408);
+            this.tabPageGroup.Size = new System.Drawing.Size(1037, 412);
             this.tabPageGroup.TabIndex = 1;
             this.tabPageGroup.Text = "Группы опроса";
             this.tabPageGroup.UseVisualStyleBackColor = true;
@@ -948,7 +940,7 @@ namespace WinSimpleIDriver
             this.dataGridViewGroup.MultiSelect = false;
             this.dataGridViewGroup.Name = "dataGridViewGroup";
             this.dataGridViewGroup.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewGroup.Size = new System.Drawing.Size(1024, 337);
+            this.dataGridViewGroup.Size = new System.Drawing.Size(1024, 341);
             this.dataGridViewGroup.TabIndex = 9;
             this.dataGridViewGroup.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewGroup_CellBeginEdit);
             this.dataGridViewGroup.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewGroup_CellEndEdit);
@@ -1052,10 +1044,10 @@ namespace WinSimpleIDriver
             this.tabPageTag.Controls.Add(this.buttonTagDel);
             this.tabPageTag.Controls.Add(this.buttonTagCopy);
             this.tabPageTag.Controls.Add(this.dataGridViewTag);
-            this.tabPageTag.Location = new System.Drawing.Point(4, 26);
+            this.tabPageTag.Location = new System.Drawing.Point(4, 22);
             this.tabPageTag.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageTag.Name = "tabPageTag";
-            this.tabPageTag.Size = new System.Drawing.Size(1037, 408);
+            this.tabPageTag.Size = new System.Drawing.Size(1037, 412);
             this.tabPageTag.TabIndex = 2;
             this.tabPageTag.Text = "Теги";
             this.tabPageTag.UseVisualStyleBackColor = true;
@@ -1269,7 +1261,7 @@ namespace WinSimpleIDriver
             this.dataGridViewTag.MultiSelect = false;
             this.dataGridViewTag.Name = "dataGridViewTag";
             this.dataGridViewTag.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewTag.Size = new System.Drawing.Size(1024, 335);
+            this.dataGridViewTag.Size = new System.Drawing.Size(1024, 339);
             this.dataGridViewTag.TabIndex = 9;
             this.dataGridViewTag.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewTag_CellBeginEdit);
             this.dataGridViewTag.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTag_CellEndEdit);
@@ -1414,9 +1406,9 @@ namespace WinSimpleIDriver
             // tabPageStructure
             // 
             this.tabPageStructure.Controls.Add(this.splitContainerStructure);
-            this.tabPageStructure.Location = new System.Drawing.Point(4, 26);
+            this.tabPageStructure.Location = new System.Drawing.Point(4, 22);
             this.tabPageStructure.Name = "tabPageStructure";
-            this.tabPageStructure.Size = new System.Drawing.Size(1037, 408);
+            this.tabPageStructure.Size = new System.Drawing.Size(1037, 412);
             this.tabPageStructure.TabIndex = 5;
             this.tabPageStructure.Text = "Структуры";
             this.tabPageStructure.UseVisualStyleBackColor = true;
@@ -1446,8 +1438,8 @@ namespace WinSimpleIDriver
             this.splitContainerStructure.Panel2.Controls.Add(this.buttonTargetFilter);
             this.splitContainerStructure.Panel2.Controls.Add(this.dataGridViewTarget);
             this.splitContainerStructure.Panel2.Controls.Add(this.textBoxTargetFilter);
-            this.splitContainerStructure.Size = new System.Drawing.Size(1031, 362);
-            this.splitContainerStructure.SplitterDistance = 165;
+            this.splitContainerStructure.Size = new System.Drawing.Size(1031, 366);
+            this.splitContainerStructure.SplitterDistance = 166;
             this.splitContainerStructure.TabIndex = 0;
             // 
             // label1
@@ -1513,7 +1505,7 @@ namespace WinSimpleIDriver
             this.dataGridViewStructure.MultiSelect = false;
             this.dataGridViewStructure.Name = "dataGridViewStructure";
             this.dataGridViewStructure.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewStructure.Size = new System.Drawing.Size(1023, 127);
+            this.dataGridViewStructure.Size = new System.Drawing.Size(1023, 128);
             this.dataGridViewStructure.TabIndex = 10;
             this.dataGridViewStructure.SelectionChanged += new System.EventHandler(this.dataGridViewStructure_SelectionChanged);
             this.dataGridViewStructure.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewStructure_UserAddedRow);
@@ -1634,7 +1626,7 @@ namespace WinSimpleIDriver
             this.dataGridViewTarget.MultiSelect = false;
             this.dataGridViewTarget.Name = "dataGridViewTarget";
             this.dataGridViewTarget.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewTarget.Size = new System.Drawing.Size(1023, 158);
+            this.dataGridViewTarget.Size = new System.Drawing.Size(1023, 161);
             this.dataGridViewTarget.TabIndex = 11;
             this.dataGridViewTarget.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewTarget_UserAddedRow);
             // 
@@ -1689,9 +1681,9 @@ namespace WinSimpleIDriver
             // tabPageInclude
             // 
             this.tabPageInclude.Controls.Add(this.splitContainerInclude);
-            this.tabPageInclude.Location = new System.Drawing.Point(4, 26);
+            this.tabPageInclude.Location = new System.Drawing.Point(4, 22);
             this.tabPageInclude.Name = "tabPageInclude";
-            this.tabPageInclude.Size = new System.Drawing.Size(1037, 408);
+            this.tabPageInclude.Size = new System.Drawing.Size(1037, 412);
             this.tabPageInclude.TabIndex = 4;
             this.tabPageInclude.Text = "Классы";
             this.tabPageInclude.UseVisualStyleBackColor = true;
@@ -1718,7 +1710,7 @@ namespace WinSimpleIDriver
             this.splitContainerInclude.Panel2.Controls.Add(this.textBoxChangeFilter);
             this.splitContainerInclude.Panel2.Controls.Add(this.buttonIncludeRight);
             this.splitContainerInclude.Panel2.Controls.Add(this.dataGridViewChange);
-            this.splitContainerInclude.Size = new System.Drawing.Size(1031, 312);
+            this.splitContainerInclude.Size = new System.Drawing.Size(1031, 316);
             this.splitContainerInclude.SplitterDistance = 510;
             this.splitContainerInclude.SplitterWidth = 10;
             this.splitContainerInclude.TabIndex = 4;
@@ -1749,7 +1741,7 @@ namespace WinSimpleIDriver
             // buttonIncludeLeft
             // 
             this.buttonIncludeLeft.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.buttonIncludeLeft.Location = new System.Drawing.Point(490, 94);
+            this.buttonIncludeLeft.Location = new System.Drawing.Point(490, 96);
             this.buttonIncludeLeft.Name = "buttonIncludeLeft";
             this.buttonIncludeLeft.Size = new System.Drawing.Size(17, 118);
             this.buttonIncludeLeft.TabIndex = 3;
@@ -1773,7 +1765,7 @@ namespace WinSimpleIDriver
             this.dataGridViewInclude.MultiSelect = false;
             this.dataGridViewInclude.Name = "dataGridViewInclude";
             this.dataGridViewInclude.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewInclude.Size = new System.Drawing.Size(483, 276);
+            this.dataGridViewInclude.Size = new System.Drawing.Size(483, 280);
             this.dataGridViewInclude.TabIndex = 2;
             this.dataGridViewInclude.SelectionChanged += new System.EventHandler(this.dataGridViewInclude_SelectionChanged);
             this.dataGridViewInclude.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewInclude_UserAddedRow);
@@ -1824,7 +1816,7 @@ namespace WinSimpleIDriver
             // buttonChangeFilter
             // 
             this.buttonChangeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonChangeFilter.Location = new System.Drawing.Point(430, 3);
+            this.buttonChangeFilter.Location = new System.Drawing.Point(424, 3);
             this.buttonChangeFilter.Name = "buttonChangeFilter";
             this.buttonChangeFilter.Size = new System.Drawing.Size(76, 24);
             this.buttonChangeFilter.TabIndex = 16;
@@ -1839,7 +1831,7 @@ namespace WinSimpleIDriver
             this.textBoxChangeFilter.Location = new System.Drawing.Point(231, 4);
             this.textBoxChangeFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxChangeFilter.Name = "textBoxChangeFilter";
-            this.textBoxChangeFilter.Size = new System.Drawing.Size(193, 22);
+            this.textBoxChangeFilter.Size = new System.Drawing.Size(187, 22);
             this.textBoxChangeFilter.TabIndex = 15;
             this.textBoxChangeFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxChangeFilter.TextChanged += new System.EventHandler(this.textBoxChangeFilter_TextChanged);
@@ -1847,7 +1839,7 @@ namespace WinSimpleIDriver
             // buttonIncludeRight
             // 
             this.buttonIncludeRight.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonIncludeRight.Location = new System.Drawing.Point(4, 94);
+            this.buttonIncludeRight.Location = new System.Drawing.Point(4, 96);
             this.buttonIncludeRight.Name = "buttonIncludeRight";
             this.buttonIncludeRight.Size = new System.Drawing.Size(17, 118);
             this.buttonIncludeRight.TabIndex = 4;
@@ -1871,7 +1863,7 @@ namespace WinSimpleIDriver
             this.dataGridViewChange.MultiSelect = false;
             this.dataGridViewChange.Name = "dataGridViewChange";
             this.dataGridViewChange.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewChange.Size = new System.Drawing.Size(480, 276);
+            this.dataGridViewChange.Size = new System.Drawing.Size(474, 280);
             this.dataGridViewChange.TabIndex = 3;
             this.dataGridViewChange.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewChange_UserAddedRow);
             // 
@@ -1972,12 +1964,11 @@ namespace WinSimpleIDriver
             this.splitContainerLogMain.SplitterDistance = 438;
             this.splitContainerLogMain.TabIndex = 3;
             // 
-            // LogToolStripMenuItem
+            // notifyIcon1
             // 
-            this.LogToolStripMenuItem.Name = "LogToolStripMenuItem";
-            this.LogToolStripMenuItem.Size = new System.Drawing.Size(39, 19);
-            this.LogToolStripMenuItem.Text = "Лог";
-            this.LogToolStripMenuItem.Click += new System.EventHandler(this.LogToolStripMenuItem_Click);
+            this.notifyIcon1.Text = "WinSimpleDriver";
+            this.notifyIcon1.Visible = true;
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
             // Form1
             // 
@@ -2046,7 +2037,7 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage1;
         private System.Windows.Forms.SplitContainer splitContainerTreeMain;
         private System.Windows.Forms.Label labelProject;
         private System.Windows.Forms.TreeView treeViewProject;
@@ -2055,8 +2046,6 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.TabPage tabPageGroup;
         private System.Windows.Forms.TabPage tabPageTag;
         private System.Windows.Forms.ToolStripMenuItem вилToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem поискToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem пускСтопToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemHelp;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemViewTree;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemNew;
@@ -2104,8 +2093,8 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.ComboBox comboBoxTagFilterPage;
         private System.Windows.Forms.CheckBox checkBoxTagBP;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemVer;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage2;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage3;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.CheckBox checkBoxGroupSource;
         private System.Windows.Forms.CheckBox checkBoxTagSG;
@@ -2207,7 +2196,8 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTreeProj;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopy;
         private System.Windows.Forms.SplitContainer splitContainerLogMain;
-        private System.Windows.Forms.ToolStripMenuItem LogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem Log2ToolStripMenuItem;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
 

@@ -34,11 +34,23 @@ namespace WinSimpleIDriver
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // Заголовок
+            this.Text += $" {Settings.settingsFileName}";
+            notifyIcon1.Text = this.Text;
+
             // Версия
             ToolStripMenuItemVer.Text += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-            // log
-            LogHelper.dgv = dataGridViewLog;
+            // свернуть окно
+            if (Settings.tray)
+                WindowState = FormWindowState.Minimized;
+
+            // трей
+            notifyIcon1.Visible = Settings.tray;
+
+            // Log DGV
+            LogForm.rowLong = AddRowLongLogDGV;
+            LogForm.rowShort = AddRowShortLogDGV;
 
             // Установка номеров колонок
             DataTableLib.SetDGVColumns(dataGridViewSource, dataGridViewGroup, dataGridViewTag,
@@ -88,59 +100,128 @@ namespace WinSimpleIDriver
             // DataTables
             dtTags = DataTableLib.GetEmptyDataTableForTags(dataGridViewTag, "Tags");
 
-            SetLabelMessage();
+            SetLeftLabelMessage1();
+
+            MessageBox.Show(Settings.x);
         }
 
         // ================================================================================================================
 
-        #region Status and log
-        // Установить сообщение
-        private string SetLabelMessage(string message = "")
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            toolStripStatusLabelMessage.Text = message;
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        #region Status
+        // Установить сообщение 1
+        private string SetLeftLabelMessage1(string message = "")
+        {
+            toolStripStatusLabelMessage1.Text = message;
+            LogHelper.LogApp(message);
+            return message;
+        }
+        // Установить сообщение 2
+        private string SetMidLabelMessage2(string message = "")
+        {
+            toolStripStatusLabelMessage2.Text = message;
+            LogHelper.LogApp(message);
+            return message;
+        }
+        // Установить сообщение 3
+        private string SetRightLabelMessage3(string message = "")
+        {
+            toolStripStatusLabelMessage3.Text = message;
             LogHelper.LogApp(message);
             return message;
         }
 
-
         #endregion
 
 
-        #region Menu.File.Event
+        #region Log
 
+        // Дублировать лог в таблицу формы
+        private void AddRowLongLogDGV(eMessageType mtype, string category, string message)
+        {
+            if (Settings.logTable == false || String.IsNullOrWhiteSpace(message))
+                return;
+
+            if (InvokeRequired)
+            {
+                Invoke((Action<eMessageType, string, string>)AddRowLongLogDGV, mtype, category, message);
+            }
+            else
+            {
+                dataGridViewLog.Rows.Add(dataGridViewLog.Rows.Count + 1, DateTime.Now, category, mtype.ToString().ToUpper(), message);
+            }
+        }
+        private void AddRowShortLogDGV(CodeMessage cm, string category)
+        {
+            AddRowLongLogDGV(LogForm.GetMessageType(cm), category, cm.message);
+        }
+
+        #endregion
+
+        // ================================================================================================================
+
+        #region Menu.File.Event
+        private void ToolStripMenuItemViewTree_Click(object sender, EventArgs e)
+        {
+            bool check = !ToolStripMenuItemViewTree.Checked;
+            splitContainerTreeMain.Panel1Collapsed = !check;
+            ToolStripMenuItemViewTree.Checked = check;
+        }
+        private void Log2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (splitContainerLogMain.Panel1Collapsed == false && splitContainerLogMain.Panel2Collapsed == false)
+            {
+                splitContainerLogMain.Panel1Collapsed = true;
+                splitContainerLogMain.Panel2Collapsed = false;
+            }
+            else if (splitContainerLogMain.Panel1Collapsed == true && splitContainerLogMain.Panel2Collapsed == false)
+            {
+                splitContainerLogMain.Panel1Collapsed = false;
+                splitContainerLogMain.Panel2Collapsed = true;
+            }
+            else
+            {
+                splitContainerLogMain.Panel1Collapsed = false;
+                splitContainerLogMain.Panel2Collapsed = false;
+            }
+        }
         private void ToolStripMenuItemNew_Click(object sender, EventArgs e)
         {
-            SetLabelMessage("Новый проект");
+            SetLeftLabelMessage1("Новый проект");
             FormClear();
         }
 
         private void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
         {
-            SetLabelMessage("Открыть проект");
+            SetLeftLabelMessage1("Открыть проект");
 
         }
 
         private void ToolStripMenuItemSave_Click(object sender, EventArgs e)
         {
-            SetLabelMessage("Сохранить проект");
+            SetLeftLabelMessage1("Сохранить проект");
 
         }
 
         private void ToolStripMenuItemSaveAs_Click(object sender, EventArgs e)
         {
-            SetLabelMessage("Сохранить проект как...");
+            SetLeftLabelMessage1("Сохранить проект как...");
 
         }
 
         private void ToolStripMenuItemImport_Click(object sender, EventArgs e)
         {
-            SetLabelMessage("Импорт проекта");
+            SetLeftLabelMessage1("Импорт проекта");
 
         }
 
         private void ToolStripMenuItemExport_Click(object sender, EventArgs e)
         {
-            SetLabelMessage("Экспорт проекта");
+            SetLeftLabelMessage1("Экспорт проекта");
         }
 
         // Новый проект
@@ -161,19 +242,11 @@ namespace WinSimpleIDriver
 
         private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
         {
-            SetLabelMessage("Выход из приложения");
+            SetLeftLabelMessage1("Выход из приложения");
             this.Close();
         }
 
         #endregion
-
-
-        private void ToolStripMenuItemViewTree_Click(object sender, EventArgs e)
-        {
-            bool check = !ToolStripMenuItemViewTree.Checked;
-            splitContainerTreeMain.Panel1Collapsed = !check;
-            ToolStripMenuItemViewTree.Checked = check;
-        }
 
         // ================================================================================================================
 
@@ -1329,25 +1402,22 @@ namespace WinSimpleIDriver
 
         private void LogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (splitContainerLogMain.Panel1Collapsed == false && splitContainerLogMain.Panel2Collapsed == false)
-            {
-                splitContainerLogMain.Panel1Collapsed = true;
-                splitContainerLogMain.Panel2Collapsed = false;
-            } else if (splitContainerLogMain.Panel1Collapsed == true && splitContainerLogMain.Panel2Collapsed == false)
-            {
-                splitContainerLogMain.Panel1Collapsed = false;
-                splitContainerLogMain.Panel2Collapsed = true;
-            } else
-            {
-                splitContainerLogMain.Panel1Collapsed = false;
-                splitContainerLogMain.Panel2Collapsed = false;
-            }
+            
         }
 
+        
 
+        private void пускСтопToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
+        }
 
+        private void поискToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        
 
 
 
