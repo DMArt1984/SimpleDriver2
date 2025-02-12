@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DML.Log;
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
@@ -299,7 +300,7 @@ namespace WinSimpleIDriver.Connector.Driver
                 {
                     if (client.statusLastAnswer == ModbusRTUmaster.excExceptionConnectionLost) // если ошибка связи (порта)
                     {
-                        Log.LogHelper.LogError($"ModbusRTU.excExceptionConnectionLost for {address}");
+                        LogHelper.LogError($"ModbusRTU.excExceptionConnectionLost for {address}");
                         return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={client.statusLastAnswer}");
                     }
                     return new TagResult(0, -client.statusLastAnswer, ModbusRTUmaster.exc[client.statusLastAnswer]);
@@ -323,7 +324,7 @@ namespace WinSimpleIDriver.Connector.Driver
                     case eDataType.Double:
                         if (bytes.Length*MBit != count * RegsInValue * MX) // <
                         {
-                            Log.LogHelper.LogError($"Проверка на тип данных: (bytes.Length = {bytes.Length}) != (count * RegsInValue * 2 = {count * RegsInValue * 2})");
+                            LogHelper.LogError($"Проверка на тип данных: (bytes.Length = {bytes.Length}) != (count * RegsInValue * 2 = {count * RegsInValue * 2})");
                             return new TagResult(0, eTagCode.inconsistency);
                         }
                         break;
@@ -594,7 +595,7 @@ namespace WinSimpleIDriver.Connector.Driver
                 {
                     if (client.statusLastAnswer == ModbusRTUmaster.excExceptionConnectionLost)
                     {
-                        Log.LogHelper.LogError($"Есть ошибки в ответе: ModbusRTUmaster.excExceptionConnectionLost for {address}");
+                        LogHelper.LogError($"Есть ошибки в ответе: ModbusRTUmaster.excExceptionConnectionLost for {address}");
                         return new TagResult(0, eTagCode.breakError);
                     }
                     return new TagResult(0, -client.statusLastAnswer, ModbusRTUmaster.exc[client.statusLastAnswer]);

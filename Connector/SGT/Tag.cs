@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WindowsFormsIDevice;
-using WinSimpleIDriver.Log;
+using DML;
+using DML.Log;
 
 namespace WinSimpleIDriver.Connector.SGT
 {

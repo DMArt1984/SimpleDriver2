@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DML.Log;
 using Hylasoft.Opc.Common;
 using Hylasoft.Opc.Da;
 using Hylasoft.Opc.Ua;
@@ -186,7 +187,7 @@ namespace WinSimpleIDriver.Connector.Driver
                 //Console.WriteLine($"Tag exeption");
                 if (ex.HResult.ToString("X") == "80131500") // Error establishing a connection OR BadConnectionClosed
                 {
-                    Log.LogHelper.LogError($"Ошибка связи с сервером: {ex.HResult} {ex.Message}");
+                    LogHelper.LogError($"Ошибка связи с сервером: {ex.HResult} {ex.Message}");
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} {ex.Message}");
                 }
 
@@ -239,7 +240,7 @@ namespace WinSimpleIDriver.Connector.Driver
             {
                 if (ex.HResult.ToString("X") == "80131500") // Error establishing a connection OR BadConnectionClosed
                 {
-                    Log.LogHelper.LogError($"Ошибка связи с сервером: {ex.HResult} {ex.Message}");
+                    LogHelper.LogError($"Ошибка связи с сервером: {ex.HResult} {ex.Message}");
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} {ex.Message}");
                 }
                 return new TagResult(newValue, ex.HResult, ex.Message);

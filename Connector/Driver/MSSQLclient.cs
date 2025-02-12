@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DML.Log;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -269,7 +270,7 @@ namespace WinSimpleIDriver.Connector.Driver
             {
                 if (ex.Number == 0)
                 {
-                    Log.LogHelper.LogError($"Ошибка связи с SQL сервером: {ex.HResult} [{ex.Number}] {ex.Message}");
+                    LogHelper.LogError($"Ошибка связи с SQL сервером: {ex.HResult} [{ex.Number}] {ex.Message}");
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} [{ex.Number}] {ex.Message}");
                 }
                 return new TagResult(Value, ex.HResult, $"[{ex.Number}] {ex.Message}");
@@ -278,7 +279,7 @@ namespace WinSimpleIDriver.Connector.Driver
             {
                 if (ex.HResult.ToString("X") == "80131904" || ex.HResult.ToString("X") == "FFFFFDA8") // ошибка сервера?
                 {
-                    Log.LogHelper.LogError($"Ошибка SQL сервера: {ex.HResult} {ex.Message}");
+                    LogHelper.LogError($"Ошибка SQL сервера: {ex.HResult} {ex.Message}");
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} {ex.Message}");
                 }
                 return new TagResult(Value, ex.HResult, ex.Message);

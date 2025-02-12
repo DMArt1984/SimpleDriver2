@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WinSimpleIDriver.Connector.SGT;
+using DML.Log;
 
 namespace WinSimpleIDriver.Connector.Driver
 {
@@ -380,7 +381,7 @@ namespace WinSimpleIDriver.Connector.Driver
 
             } catch (Exception ex)
             {
-                Log.LogHelper.LogException(ex, $"new UdpClient({localPort})");
+                LogHelper.LogException(ex, $"new UdpClient({localPort})");
             }
         }
 

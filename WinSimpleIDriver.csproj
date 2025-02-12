@@ -33,6 +33,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>WinSimpleIDriver.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>app15.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="h-opc, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\H.Opc.0.9.3\lib\h-opc.dll</HintPath>
@@ -97,15 +103,15 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="INIfile.cs" />
-    <Compile Include="JsonControl.cs" />
-    <Compile Include="Log\LoggerConsole.cs" />
-    <Compile Include="Log\LogHelper.cs" />
+    <Compile Include="DML\INIfile.cs" />
+    <Compile Include="DML\JsonControl.cs" />
+    <Compile Include="DML\Log\LoggerConsole.cs" />
+    <Compile Include="DML\Log\LogHelper.cs" />
     <Compile Include="myTree.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="SimpleConverter.cs" />
+    <Compile Include="DML\Settings.cs" />
+    <Compile Include="DML\SimpleConverter.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -136,6 +142,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="app15.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,7 +11,8 @@ using System.Windows.Forms;
 
 using WinSimpleIDriver.Connector;
 using WinSimpleIDriver.Connector.SGT;
-using WinSimpleIDriver.Log;
+using DML.Log;
+using DML;
 
 namespace WinSimpleIDriver
 {
@@ -111,6 +112,8 @@ namespace WinSimpleIDriver
         {
             this.WindowState = FormWindowState.Normal;
         }
+
+        // ================================================================================================================
 
         #region Status
         // Установить сообщение 1
@@ -750,6 +753,7 @@ namespace WinSimpleIDriver
 
         #region Include
 
+        #region Include.Event
         private void buttonIncludeLeft_Click(object sender, EventArgs e)
         {
             splitContainerInclude.Panel2Collapsed = !splitContainerInclude.Panel2Collapsed;
@@ -760,6 +764,7 @@ namespace WinSimpleIDriver
         {
             DataTableLib.ForNewRow(dataGridViewInclude); // new ID
         }
+        #endregion
 
         #region Include.Filter
 
@@ -869,6 +874,7 @@ namespace WinSimpleIDriver
 
         #region Structure
 
+        #region Structure.Event
         private void buttonStructureLeft_Click(object sender, EventArgs e)
         {
             splitContainerStructure.Panel2Collapsed = !splitContainerStructure.Panel2Collapsed;
@@ -879,6 +885,7 @@ namespace WinSimpleIDriver
         {
             DataTableLib.ForNewRow(dataGridViewStructure);
         }
+        #endregion
 
         #region Structure.Filter
 
@@ -922,7 +929,6 @@ namespace WinSimpleIDriver
         }
 
         #endregion
-
 
         #region Structure-Target
 
@@ -989,6 +995,7 @@ namespace WinSimpleIDriver
 
         #region Tree
 
+        #region Tree.Event
         // Двойное нажатие на ветку из дерева
         private void treeViewProject_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -1004,6 +1011,7 @@ namespace WinSimpleIDriver
             var selNode = treeViewProject.SelectedNode;
             TreeProjContexMenu(selNode);
         }
+        #endregion
 
         // Пункты контекстного меню
         private void TreeProjContexMenu(TreeNode selNode)
@@ -1302,6 +1310,21 @@ namespace WinSimpleIDriver
         #endregion
 
         #region TAB
+
+        #region TAB.Event
+        private void tabControl1_Selected(object sender, TabControlEventArgs e)
+        {
+            string tabName = tabControlProject.TabPages[tabControlProject.SelectedIndex].Name;
+            switch (tabName)
+            {
+                case "tabPageSource":
+                    DataTableLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DataTableLib.sourcesCol.Title, DataTableLib.sourcesCol.CountTags, DataTableLib.tagsCol.Source);
+                    break;
+
+            }
+        }
+        #endregion
+
         private void OpenTab(TreeNode selNode)
         {
             if (selNode.Tag == null)
@@ -1372,6 +1395,10 @@ namespace WinSimpleIDriver
 
         // ================================================================================================================
 
+
+
+        // ================================================================================================================
+
         // TEST
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1386,44 +1413,7 @@ namespace WinSimpleIDriver
             UpdateDGVTagSourceLink();
         }
 
-        private void tabControl1_Selected(object sender, TabControlEventArgs e)
-        {
-            string tabName = tabControlProject.TabPages[tabControlProject.SelectedIndex].Name;
-            switch (tabName)
-            {
-                case "tabPageSource":
-                    DataTableLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DataTableLib.sourcesCol.Title, DataTableLib.sourcesCol.CountTags, DataTableLib.tagsCol.Source);
-                    break;
-
-            }
-
-
-        }
-
-        private void LogToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         
-
-        private void пускСтопToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void поискToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        
-
-
-
-
-
-
 
 
         // ===============================================================================================================

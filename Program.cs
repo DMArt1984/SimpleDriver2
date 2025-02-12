@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DML;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,10 +24,10 @@ namespace WinSimpleIDriver
 
             // Получение настроек
             string myExeDir = new FileInfo(Assembly.GetEntryAssembly().Location).Directory.ToString();
-            string fileName0 = myExeDir + $"\\{Settings.settingsFileName}";
-            //string fileName1 = "C:\\Users\\Professional\\Source\\Repos\\WinSimpleIDriver\\bin\\Debug\\Settings.ini"; // myExeDir + $"\\{Settings.settingsFileName}";
+            string fileName = myExeDir + $"\\{Settings.settingsFileName}";
+            //string fileName1 = "C:\\Users\\Professional\\Source\\Repos\\WinSimpleIDriver\\bin\\Debug\\Settings.ini";
             //string fileName2 = "C:\\Users\\Professional\\Source\\Repos\\FTPclientToSQL\\bin\\Debug\\Settings.ini";
-            var iniFile = new INIfile(fileName0);
+            var iniFile = new INIfile(fileName);
             Settings.Set(iniFile);
             //var eee = iniFile.GetKeys(fileName0, "APPLICATION");
 

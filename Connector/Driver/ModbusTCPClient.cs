@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DML.Log;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -269,7 +270,7 @@ namespace WinSimpleIDriver.Connector.Driver
                 {
                     if (client.statusLastAnswer == SocetModbusTCPmaster.excExceptionConnectionLost)
                     {
-                        Log.LogHelper.LogError($"Есть ошибки в ответе: SocetModbusTCP.excExceptionConnectionLost for {address}");
+                        LogHelper.LogError($"Есть ошибки в ответе: SocetModbusTCP.excExceptionConnectionLost for {address}");
                         return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={client.statusLastAnswer}");
                     }
                     return new TagResult(0, -client.statusLastAnswer, SocetModbusTCPmaster.exc[client.statusLastAnswer]);
@@ -293,7 +294,7 @@ namespace WinSimpleIDriver.Connector.Driver
                     case eDataType.Double:
                         if (bytes.Length * MBit != count * RegsInValue * MX) // <
                         {
-                            Log.LogHelper.LogError($"Проверка на тип данных: (bytes.Length = {bytes.Length}) != (count * RegsInValue * 2 = {count * RegsInValue * 2})");
+                            LogHelper.LogError($"Проверка на тип данных: (bytes.Length = {bytes.Length}) != (count * RegsInValue * 2 = {count * RegsInValue * 2})");
                             return new TagResult(0, eTagCode.inconsistency);
                         }
                         break;
@@ -564,7 +565,7 @@ namespace WinSimpleIDriver.Connector.Driver
                 {
                     if (client.statusLastAnswer == SocetModbusTCPmaster.excExceptionConnectionLost)
                     {
-                        Log.LogHelper.LogError($"Есть ошибки в ответе: SocetModbusTCP.excExceptionConnectionLost for {address}");
+                        LogHelper.LogError($"Есть ошибки в ответе: SocetModbusTCP.excExceptionConnectionLost for {address}");
                         return new TagResult(0, eTagCode.breakError);
                     }
                     return new TagResult(0, -client.statusLastAnswer, SocetModbusTCPmaster.exc[client.statusLastAnswer]);

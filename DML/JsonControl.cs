@@ -8,11 +8,11 @@ using Newtonsoft.Json.Converters;
 using System.Dynamic;
 using System.IO;
 using System.Windows.Forms;
-using WinSimpleIDriver.Log;
+using DML.Log;
 using WinSimpleIDriver.Connector;
 
 
-namespace WinSimpleIDriver
+namespace DML
 {
     class JsonControl
     {

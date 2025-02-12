@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Timers;
 using System.Threading.Tasks;
-using WinSimpleIDriver.Log;
+using DML.Log;
 using System.Windows.Forms;
 using WinSimpleIDriver.Connector.Driver;
 using System.Threading;
 using System.Collections.Concurrent;
+using DML;
 
 namespace WinSimpleIDriver.Connector.SGT
 {

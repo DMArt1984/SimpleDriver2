@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using WindowsFormsIDevice;
-using WinSimpleIDriver.Log;
+using DML;
+using DML.Log;
 
 namespace WinSimpleIDriver.Connector.SGT
 {
