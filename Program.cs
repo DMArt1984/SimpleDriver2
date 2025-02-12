@@ -22,11 +22,13 @@ namespace WinSimpleIDriver
             }
 
             // Получение настроек
-            string myExeDir = ""; // new FileInfo(Assembly.GetEntryAssembly().Location).Directory.ToString();
-            string fileName = myExeDir + $"\\{Settings.settingsFileName}";
-            var iniFile = new INIfile(fileName);
+            string myExeDir = new FileInfo(Assembly.GetEntryAssembly().Location).Directory.ToString();
+            string fileName0 = myExeDir + $"\\{Settings.settingsFileName}";
+            //string fileName1 = "C:\\Users\\Professional\\Source\\Repos\\WinSimpleIDriver\\bin\\Debug\\Settings.ini"; // myExeDir + $"\\{Settings.settingsFileName}";
+            //string fileName2 = "C:\\Users\\Professional\\Source\\Repos\\FTPclientToSQL\\bin\\Debug\\Settings.ini";
+            var iniFile = new INIfile(fileName0);
             Settings.Set(iniFile);
-            var eee = iniFile.GetKeys(fileName, "APPLICATION");
+            //var eee = iniFile.GetKeys(fileName0, "APPLICATION");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

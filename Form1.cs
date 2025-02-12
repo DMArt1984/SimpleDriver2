@@ -102,7 +102,7 @@ namespace WinSimpleIDriver
 
             SetLeftLabelMessage1();
 
-            MessageBox.Show(Settings.x);
+            //MessageBox.Show(Settings.x);
         }
 
         // ================================================================================================================
