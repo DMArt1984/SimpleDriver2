@@ -1327,7 +1327,24 @@ namespace WinSimpleIDriver
 
         }
 
-        
+        private void LogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (splitContainerLogMain.Panel1Collapsed == false && splitContainerLogMain.Panel2Collapsed == false)
+            {
+                splitContainerLogMain.Panel1Collapsed = true;
+                splitContainerLogMain.Panel2Collapsed = false;
+            } else if (splitContainerLogMain.Panel1Collapsed == true && splitContainerLogMain.Panel2Collapsed == false)
+            {
+                splitContainerLogMain.Panel1Collapsed = false;
+                splitContainerLogMain.Panel2Collapsed = true;
+            } else
+            {
+                splitContainerLogMain.Panel1Collapsed = false;
+                splitContainerLogMain.Panel2Collapsed = false;
+            }
+        }
+
+
 
 
 
