@@ -82,8 +82,8 @@ namespace WinSimpleIDriver
             #region Filter
             static public void TextFilter()
             {
-                DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtSource.GetColumnIndexFilter(), DTLib.dtSource.GetPairFilter());
+                TableFilter(tbFilter.Text, dgv,
+                    GetColumnIndexFilter(), GetPairFilter());
             }
             #endregion
 
@@ -117,6 +117,10 @@ namespace WinSimpleIDriver
                 return new PairFilterCol[] { };
             }
 
+            static public void CopyDGVRow()
+            {
+                DTLib.CopyDGVRow(dgv, col.Title);
+            }
 
         }
 
@@ -168,8 +172,8 @@ namespace WinSimpleIDriver
             static public void TextFilter()
             {
                 string text = coFilterSource.Text;
-                DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtGroup.GetColumnIndexFilter(), DTLib.dtGroup.GetPairFilter(text));
+                TableFilter(tbFilter.Text, dgv,
+                    GetColumnIndexFilter(), GetPairFilter(text));
             }
             #endregion
 
@@ -271,8 +275,8 @@ namespace WinSimpleIDriver
                 string text3 = coFilterBlock.Text;
                 string text4 = coFilterPage.Text;
 
-                DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtTag.GetColumnIndexFilter(), DTLib.dtTag.GetPairFilter(text1, text2, text3, text4));
+                TableFilter(tbFilter.Text, dgv,
+                    GetColumnIndexFilter(), GetPairFilter(text1, text2, text3, text4));
             }
             #endregion
 
@@ -280,7 +284,7 @@ namespace WinSimpleIDriver
             static public void UpdateDGVTagSourceLink()
             {
                 // Получить списки для...
-                var collectionGroup = MyTree.SetTreeCollection(DTLib.dtGroup.dgv, DTLib.dtGroup.col.Title, DTLib.dtGroup.col.Source);
+                var collectionGroup = MyTree.SetTreeCollection(dtGroup.dgv, dtGroup.col.Title, dtGroup.col.Source);
 
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
@@ -289,7 +293,7 @@ namespace WinSimpleIDriver
 
                     string sourceTitle = "";
 
-                    var group = row.Cells[DTLib.dtTag.col.Group].Value;
+                    var group = row.Cells[col.Group].Value;
                     if (group != null)
                     {
                         string groupTitle = group.ToString();
@@ -303,7 +307,7 @@ namespace WinSimpleIDriver
                         }
                     }
 
-                    row.Cells[DTLib.dtTag.col.Source].Value = sourceTitle;
+                    row.Cells[col.Source].Value = sourceTitle;
                 }
 
             }
@@ -463,8 +467,8 @@ namespace WinSimpleIDriver
             #region Filter
             static public void StructureFilter()
             {
-                DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtStructure.GetColumnIndexFilter(), DTLib.dtStructure.GetPairFilter());
+                TableFilter(tbFilter.Text, dgv,
+                    GetColumnIndexFilter(), GetPairFilter());
             }
             #endregion
 
@@ -514,8 +518,8 @@ namespace WinSimpleIDriver
             {
                 string text = coFilterParent.Text;
 
-                DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtTarget.GetColumnIndexFilter(), DTLib.dtTarget.GetPairFilter(text));
+                TableFilter(tbFilter.Text, dgv,
+                    GetColumnIndexFilter(), GetPairFilter(text));
             }
             #endregion
 
@@ -567,8 +571,8 @@ namespace WinSimpleIDriver
             #region Filter
             static public void IncludeFilter()
             {
-                DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtInclude.GetColumnIndexFilter(), DTLib.dtInclude.GetPairFilter());
+                TableFilter(tbFilter.Text, dgv,
+                    GetColumnIndexFilter(), GetPairFilter());
             }
             #endregion
 
@@ -613,8 +617,8 @@ namespace WinSimpleIDriver
             {
                 string text = coFilterParent.Text;
 
-                DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtIncludeChild.GetColumnIndexFilter(), DTLib.dtIncludeChild.GetPairFilter(text));
+                TableFilter(tbFilter.Text, dgv,
+                    GetColumnIndexFilter(), GetPairFilter(text));
             }
             #endregion
 
@@ -649,7 +653,29 @@ namespace WinSimpleIDriver
 
         #endregion
 
-        //
+        #region LIB
+
+        #region GET
+
+        #region Header
+        // Получить заголовок столбца по имени
+        static public string GetTitleFromName(DataGridView dgv, string name)
+        {
+            return dgv.Columns[name].HeaderText;
+        }
+        // Получить тия столбца по заголовку
+        static public string GetNameFromTitle(DataGridView dgv, string title)
+        {
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                if (col.HeaderText == title)
+                    return col.Name;
+            }
+            return "";
+        }
+        #endregion
+
+        // Получить DGV строку
         static public DataGridViewRow GetRowDGV(DataGridView dgv, DataRow row)
         {
             var Id = Convert.ToString(row[0]);
@@ -658,7 +684,7 @@ namespace WinSimpleIDriver
                         .Where(r => r.Cells[0].Value.ToString() == Id)
                         .First();
         }
-
+        // Получить DGV строку
         static public DataGridViewRow GetRowDGV(DataGridView dgv, ushort Id)
         {
             var _Id = Convert.ToString(Id);
@@ -668,18 +694,122 @@ namespace WinSimpleIDriver
                        .First();
         }
 
-        //
+        // Получить DT строку
         static public DataRow GetDTRow(DataTable dt, uint Id)
         {
             DataRow rowTag = dt.Rows.Find(Id);
             return rowTag;
         }
 
-        
+        // Получить значение из выбранной строки
+        static public string GetValueFromCurrentRow(DataGridView dgv, int col)
+        {
+            var row = dgv.CurrentRow;
+            if (row == null)
+                return "";
 
-        
+            if (row.IsNewRow)
+                return "";
 
-        static public void SetValue(DataTable dt, uint Id, ColumnValue[] cv)
+            var value = row.Cells[col].Value;
+            if (value == null)
+                return "";
+
+            return value.ToString();
+        }
+
+        // Получить пустую таблицу DataTable
+        static public DataTable GetEmptyDataTableForTags(DataGridView dgv, string name)
+        {
+            DataTable table = new DataTable(name);
+
+            for (int i = 0; i < dgv.ColumnCount; ++i)
+            {
+                table.Columns.Add(new DataColumn(dgv.Columns[i].Name));
+                dgv.Columns[i].DataPropertyName = dgv.Columns[i].Name;
+            }
+            table.Columns[0].DataType = typeof(int);
+
+            return table;
+        }
+        
+        
+        // Получить строку по ID
+        static public DataGridViewRow GetRowByID(DataGridView dgv, int Id)
+        {
+            foreach (DataGridViewRow item in dgv.Rows)
+            {
+                if (item.IsNewRow)
+                    continue;
+                if (item.Cells[0].Value.ToString() == Id.ToString())
+                    return item;
+            }
+            return dgv.Rows[dgv.Rows.Count - 1];
+        }
+
+        // Получить строку по Названию (колонка после ID)
+        static public DataGridViewRow GetRowByTitle(DataGridView dgv, string title)
+        {
+            foreach (DataGridViewRow item in dgv.Rows)
+            {
+                if (item.IsNewRow)
+                    continue;
+                if (item.Cells[1].Value.ToString() == title)
+                    return item;
+            }
+            return dgv.Rows[dgv.Rows.Count - 1];
+        }
+
+        // ID
+        static public ushort GetSelIdFromTable(object senderDGV)
+        {
+            ushort Id = 0;
+            DataGridView dgv = senderDGV as DataGridView;
+            if (dgv != null && dgv.SelectedRows.Count > 0)
+            {
+                DataGridViewRow row = dgv.SelectedRows[0];
+                if (row != null)
+                {
+                    Id = ushort.Parse(row.Cells[0].Value.ToString());
+                }
+            }
+            return Id;
+        }
+
+        static public DataGridViewRow GetSelRow(DataGridView dgv)
+        {
+            if (dgv != null && dgv.SelectedRows.Count > 0)
+            {
+                DataGridViewRow row = dgv.SelectedRows[0];
+                return row;
+            }
+            return null;
+        }
+        
+        // Получить максимальный ID из таблицы
+        static public ushort GetNextID(DataGridView dgv)
+        {
+            ushort newID = 0;
+            foreach (DataGridViewRow item in dgv.Rows)
+            {
+                if (item.IsNewRow)
+                    continue;
+
+                if (item.Cells[0].Value == DBNull.Value)
+                    continue;
+
+                ushort id = Convert.ToUInt16(item.Cells[0].Value);
+                if (id > newID)
+                    newID = id;
+            }
+            return ++newID;
+        }
+        #endregion
+
+
+        #region SET
+
+        static public void SetValues(DataTable dt, uint Id, ColumnValue[] cv)
         {
             DataRow row = dt.Rows.Find(Id);
             if (row != null)
@@ -704,63 +834,75 @@ namespace WinSimpleIDriver
                 row[column] = value;
         }
 
-
-
-        static public string GetTitleFromName(DataGridView dgv, string name)
+        // Добавление ссылки на родительский элемент
+        static public void SetParentInRow(DataGridView dgv, ComboBox cb, int colParentTitle)
         {
-            return dgv.Columns[name].HeaderText;
-        }
-
-        static public string GetNameFromTitle(DataGridView dgv, string title)
-        {
-            foreach (DataGridViewColumn col in dgv.Columns)
+            string text = cb.Text;
+            if (String.IsNullOrWhiteSpace(text) == false)
             {
-                if (col.HeaderText == title)
-                    return col.Name;
+                var row = dgv.CurrentRow;
+                if (row != null)
+                    row.Cells[colParentTitle].Value = text;
             }
-            return "";
         }
 
-        static public DataTable GetEmptyDataTableForTags(DataGridView dgv, string name)
+        // Расставить количества элементов
+        static public void SetCountForUsed(DataGridView dgvSource, DataGridView dgvTag, int colTitle, int colCount, int colUsed)
         {
-            DataTable table = new DataTable(name);
+            Dictionary<string, int> dic = GetDicForUsed(dgvTag, colUsed);
 
-            for (int i = 0; i < dgv.ColumnCount; ++i)
+            foreach (DataGridViewRow item in dgvSource.Rows)
             {
-                table.Columns.Add(new DataColumn(dgv.Columns[i].Name));
-                dgv.Columns[i].DataPropertyName = dgv.Columns[i].Name;
+                var itemTitle = item.Cells[colTitle].Value;
+                if (itemTitle == null)
+                    continue;
+
+                int count = 0;
+                if (dic.ContainsKey(itemTitle.ToString()))
+                    count = dic[itemTitle.ToString()];
+
+                if (item.Cells[colCount].Value == null || count != (int)item.Cells[colCount].Value)
+                    item.Cells[colCount].Value = count;
+
             }
-            table.Columns[0].DataType = typeof(int);
-
-            return table;
         }
 
+        #endregion
 
-        static public void LinkDatatTable(DataTable dt, BindingSource bind, DataGridView dgv)
+
+        #region Show
+
+        // Показать строку в таблице
+        static public void ShowRow(DataGridView dgv, DataGridViewRow row)
         {
-
-            // v2
-            bind.DataSource = dt;
-            dgv.AutoGenerateColumns = false;
-            dgv.DataSource = bind;
-            dgv.Refresh();
-
+            row.Visible = true; // показываем столбец даже если он скрыт
+            row.Selected = true;
+            dgv.FirstDisplayedScrollingRowIndex = row.Index;
         }
+        static public void ShowRow(DataGridView dgv, int Id = 0, string title = "")
+        {
+            if (Id > 0)
+            {
+                ShowRow(dgv, GetRowByID(dgv, Id));
+            }
+            else if (title != "")
+            {
+                ShowRow(dgv, GetRowByTitle(dgv, title));
+            }
+        }
+        #endregion
 
-        // ================================================================================
 
+        #region Table Filter
         static public void TableFilter(string FilterText, DataGridView dgv, int[] cells, PairFilterCol[] pairs)
         {
             foreach (DataGridViewRow row in dgv.Rows)
             {
                 if (row.IsNewRow)
                     continue;
-                row.Visible = ( String.IsNullOrWhiteSpace(FilterText) || CellsContainsFilterA(row, cells, FilterText)) && CellsContainsFilterB(row, pairs);
+                row.Visible = (String.IsNullOrWhiteSpace(FilterText) || CellsContainsFilterA(row, cells, FilterText)) && CellsContainsFilterB(row, pairs);
             }
         }
-
-        
-
         static public bool CellsContainsFilterB(DataGridViewRow row, PairFilterCol[] pairs)
         {
             bool result = true;
@@ -770,22 +912,6 @@ namespace WinSimpleIDriver
             }
             return result;
         }
-
-        static public ushort GetSelIdFromTable(object senderDGV)
-        {
-            ushort Id = 0;
-            DataGridView dgv = senderDGV as DataGridView;
-            if (dgv != null && dgv.SelectedRows.Count > 0)
-            {
-                DataGridViewRow row = dgv.SelectedRows[0];
-                if (row != null)
-                {
-                    Id = ushort.Parse(row.Cells[0].Value.ToString());
-                }
-            }
-            return Id;
-        }
-
         // Несколько фильтров для одной ячейки
         static public bool CellContainsFilters(DataGridViewRow row, int indexCell, string[] filter)
         {
@@ -815,8 +941,6 @@ namespace WinSimpleIDriver
                 return false;
             return (row.Cells[indexCell].Value == null) ? false : row.Cells[indexCell].Value.ToString().Contains(filter);
         }
-
-
         // Замена для нескольких ячеек
         static public int ReplaceFilter(DataGridViewRow row, int[] indexCells, string ValueFrom, string ValueTo)
         {
@@ -844,44 +968,21 @@ namespace WinSimpleIDriver
             return 1;
         }
 
-        // Получить значение из выбранной строки
-        static public string GetValueFromCurrentRow(DataGridView dgv, int col)
+
+
+        #endregion
+
+        static public void LinkDatatTable(DataTable dt, BindingSource bind, DataGridView dgv)
         {
-            var row = dgv.CurrentRow;
-            if (row == null)
-                return "";
 
-            if (row.IsNewRow)
-                return "";
+            // v2
+            bind.DataSource = dt;
+            dgv.AutoGenerateColumns = false;
+            dgv.DataSource = bind;
+            dgv.Refresh();
 
-            var value = row.Cells[col].Value;
-            if (value == null)
-                return "";
-
-            return value.ToString();
         }
-
-        // ==============================================================================
-
-        // Получить максимальный ID из таблицы
-        static public ushort GetMaxID(DataGridView dgv)
-        {
-            ushort newID = 0;
-            foreach (DataGridViewRow item in dgv.Rows)
-            {
-                if (item.IsNewRow)
-                    continue;
-
-                if (item.Cells[0].Value == DBNull.Value)
-                    continue;
-
-                ushort id = Convert.ToUInt16(item.Cells[0].Value);
-                if (id > newID)
-                    newID = id;
-            }
-            return ++newID;
-        }
-
+      
         // Копировать строку таблицы
         static public DataGridViewRow CloneRowWithValues(DataGridViewRow row)
         {
@@ -892,51 +993,30 @@ namespace WinSimpleIDriver
             }
             return clonedRow;
         }
+        // Копия текущей строки
+        static public void CopyDGVRow(DataGridView dgv2, int colTitle)
+        {
+            var row = GetSelRow(dgv2);
+            if (row != null)
+            {
+                var newRow = CloneRowWithValues(row);
+                var nextID = GetNextID(dgv2);
+                newRow.Cells[0].Value = nextID;
+                newRow.Cells[colTitle].Value = $"{row.Cells[colTitle].Value}_ID{nextID}";
+                dgv2.Rows.Add(newRow);
+            }
+        }
 
         // При появлении новой строки таблицы
         static public void ForNewRow(DataGridView dgv)
         {
-            var newID = DTLib.GetMaxID(dgv);
+            var newID = DTLib.GetNextID(dgv);
             var row = dgv.CurrentRow;
             if (row != null)
                 row.Cells[0].Value = newID;
         }
 
-        // Добавление ссылки на родительский элемент
-        static public void SetParentInRow(DataGridView dgv, ComboBox cb, int colParentTitle)
-        {
-            string text = cb.Text;
-            if (String.IsNullOrWhiteSpace(text) == false)
-            {
-                var row = dgv.CurrentRow;
-                if (row != null)
-                    row.Cells[colParentTitle].Value = text;
-            }
-        }
-
-        // =============================================================================================
-
-        // Расставить количества элементов
-        static public void SetCountForUsed(DataGridView dgvSource, DataGridView dgvTag, int colTitle, int colCount, int colUsed)
-        {
-            Dictionary<string, int> dic = GetDicForUsed(dgvTag, colUsed);
-
-            foreach (DataGridViewRow item in dgvSource.Rows)
-            {
-                var itemTitle = item.Cells[colTitle].Value;
-                if (itemTitle == null)
-                    continue;
-
-                int count = 0;
-                if (dic.ContainsKey(itemTitle.ToString()))
-                    count = dic[itemTitle.ToString()];
-
-                if (item.Cells[colCount].Value == null || count != (int)item.Cells[colCount].Value)
-                    item.Cells[colCount].Value = count;
-
-            }
-        }
-
+        
         // Получить словарь с количеством повторений
         static public Dictionary<string, int> GetDicForUsed(DataGridView dgv, int indexCol)
         {
@@ -959,51 +1039,13 @@ namespace WinSimpleIDriver
             return dic;
         }
 
-        // Показать строку в таблице
-        static public void ShowRow(DataGridView dgv, DataGridViewRow row)
-        {
-            row.Visible = true; // показываем столбец даже если он скрыт
-            row.Selected = true;
-            dgv.FirstDisplayedScrollingRowIndex = row.Index;
-        }
-        static public void ShowRow(DataGridView dgv, int Id = 0, string title = "")
-        {
-            if (Id > 0)
-            {
-                ShowRow(dgv, GetRowByID(dgv, Id));
-            }
-            else if (title != "")
-            {
-                ShowRow(dgv, GetRowByTitle(dgv, title));
-            }
-        }
 
-        // Получить строку по ID
-        static public DataGridViewRow GetRowByID(DataGridView dgv, int Id)
-        {
-            foreach (DataGridViewRow item in dgv.Rows)
-            {
-                if (item.IsNewRow)
-                    continue;
-                if (item.Cells[0].Value.ToString() == Id.ToString())
-                    return item;
-            }
-            return dgv.Rows[dgv.Rows.Count - 1];
-        }
+        #endregion
 
-        // Получить строку по Названию (колонка после ID)
-        static public DataGridViewRow GetRowByTitle(DataGridView dgv, string title)
-        {
-            foreach (DataGridViewRow item in dgv.Rows)
-            {
-                if (item.IsNewRow)
-                    continue;
-                if (item.Cells[1].Value.ToString() == title)
-                    return item;
-            }
-            return dgv.Rows[dgv.Rows.Count - 1];
-        }
+    }
 
+    static class FormLib
+    {
         // Добавление в текста в Combobox
         static public void SaveTextComboBox(ComboBox comboBox, string text = "")
         {
@@ -1019,9 +1061,8 @@ namespace WinSimpleIDriver
             }
         }
 
-
-
-
-
     }
+
+
+
 }

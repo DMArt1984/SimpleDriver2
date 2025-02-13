@@ -441,7 +441,7 @@ namespace WinSimpleIDriver
 
         private void buttonGroupFilter_Click(object sender, EventArgs e)
         {
-            DTLib.SaveTextComboBox(comboBoxGroupFilterSource);
+            FormLib.SaveTextComboBox(comboBoxGroupFilterSource);
             DTLib.dtGroup.TextFilter();
         }
 
@@ -581,10 +581,10 @@ namespace WinSimpleIDriver
 
         private void buttonTagFilter_Click(object sender, EventArgs e)
         {
-            DTLib.SaveTextComboBox(comboBoxTagFilterSource);
-            DTLib.SaveTextComboBox(comboBoxTagFilterGroup);
-            DTLib.SaveTextComboBox(comboBoxTagFilterBlock);
-            DTLib.SaveTextComboBox(comboBoxTagFilterPage);
+            FormLib.SaveTextComboBox(comboBoxTagFilterSource);
+            FormLib.SaveTextComboBox(comboBoxTagFilterGroup);
+            FormLib.SaveTextComboBox(comboBoxTagFilterBlock);
+            FormLib.SaveTextComboBox(comboBoxTagFilterPage);
             DTLib.dtTag.TextFilter();
         }
 
@@ -675,7 +675,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewInclude_SelectionChanged(object sender, EventArgs e)
         {
-            DTLib.SaveTextComboBox(comboBoxIncludeChildFilterParent);
+            FormLib.SaveTextComboBox(comboBoxIncludeChildFilterParent);
             SetComboBoxIncludeChildFilterInclude();
         }
 
@@ -712,7 +712,7 @@ namespace WinSimpleIDriver
 
         private void buttonChangeFilter_Click(object sender, EventArgs e)
         {
-            DTLib.SaveTextComboBox(comboBoxIncludeChildFilterParent);
+            FormLib.SaveTextComboBox(comboBoxIncludeChildFilterParent);
             DTLib.dtIncludeChild.IncludeChildFilter();
         }
 
@@ -783,7 +783,7 @@ namespace WinSimpleIDriver
         #endregion
         private void dataGridViewStructure_SelectionChanged(object sender, EventArgs e)
         {
-            DTLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
+            FormLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
             SetComboBoxTargetFilterStructure();
         }
 
@@ -821,7 +821,7 @@ namespace WinSimpleIDriver
 
         private void buttonTargetFilter_Click(object sender, EventArgs e)
         {
-            DTLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
+            FormLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
             DTLib.dtTarget.StructureTargetFilter();
         }
 
@@ -1281,15 +1281,12 @@ namespace WinSimpleIDriver
             DTLib.dtTag.UpdateDGVTagSourceLink();
         }
 
+        // ===============================================================================================================
+
         private void buttonSourceCopy_Click(object sender, EventArgs e)
         {
-
+            DTLib.dtSource.CopyDGVRow();
         }
-
-
-
-
-        // ===============================================================================================================
 
 
 
