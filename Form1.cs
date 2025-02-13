@@ -366,7 +366,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewSource_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-
+            DrawTreeSGT();
         }
 
         private void dataGridViewSource_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -470,7 +470,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewGroup_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-
+            DrawTreeSGT();
         }
 
         private void dataGridViewGroup_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -625,6 +625,7 @@ namespace WinSimpleIDriver
             {
                 DTLib.dtTag.UpdateDGVTagSourceLink();
             }
+            DrawTreeSGT();
         }
 
         private void dataGridViewTag_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -1213,6 +1214,8 @@ namespace WinSimpleIDriver
                     break;
 
             }
+
+            //DrawTreeSGT();
         }
         #endregion
 
