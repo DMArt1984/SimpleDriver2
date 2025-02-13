@@ -107,6 +107,7 @@
     <Compile Include="DML\JsonControl.cs" />
     <Compile Include="DML\Log\LoggerConsole.cs" />
     <Compile Include="DML\Log\LogHelper.cs" />
+    <Compile Include="FormLib.cs" />
     <Compile Include="myTree.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

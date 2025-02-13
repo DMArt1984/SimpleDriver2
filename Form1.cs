@@ -53,6 +53,39 @@ namespace WinSimpleIDriver
             LogForm.rowLong = AddRowLongLogDGV;
             LogForm.rowShort = AddRowShortLogDGV;
 
+            // Form: Source
+            FormLib.SourceForm.dgv = dataGridViewSource;
+            FormLib.SourceForm.cbEditor = checkBoxSourceEditor;
+            FormLib.SourceForm.cbDesc = checkBoxSourceDesc;
+            FormLib.SourceForm.cbRuntime = checkBoxSourceRuntime;
+            FormLib.SourceForm.cbStatistic = checkBoxSourceStatistic;
+            FormLib.SourceForm.tbFilter = textBoxSourceFilter;
+
+            // Form: Group
+            FormLib.GroupForm.dgv = dataGridViewGroup;
+            FormLib.GroupForm.cbEditor = checkBoxGroupEditor;
+            FormLib.GroupForm.cbDesc = checkBoxGroupDesc;
+            FormLib.GroupForm.cbRuntime = checkBoxGroupRuntime;
+            FormLib.GroupForm.cbStatistic = checkBoxGroupStatistic;
+            FormLib.GroupForm.cbGroupSource = checkBoxGroupSource;
+            FormLib.GroupForm.tbFilter = textBoxGroupFilter;
+            FormLib.GroupForm.coFilterSource = comboBoxGroupFilterSource;
+
+            // Form: Group
+            FormLib.TagForm.dgv = dataGridViewTag;
+            FormLib.TagForm.cbEditor = checkBoxTagEditor;
+            FormLib.TagForm.cbDesc = checkBoxTagDesc;
+            FormLib.TagForm.cbRuntime = checkBoxTagRuntime;
+            FormLib.TagForm.cbStatistic = checkBoxTagStatistic;
+            FormLib.TagForm.cbBP = checkBoxTagBP;
+            FormLib.TagForm.cbSG = checkBoxTagSG;
+            FormLib.TagForm.tbFilter = textBoxTagFilter;
+            FormLib.TagForm.coFilterSource = comboBoxTagFilterSource;
+            FormLib.TagForm.coFilterGroup = comboBoxTagFilterGroup;
+            FormLib.TagForm.coFilterBlock = comboBoxTagFilterBlock;
+            FormLib.TagForm.coFilterPage = comboBoxTagFilterPage;
+
+
             // Установка номеров колонок
             DataTableLib.SetDGVColumns(dataGridViewSource, dataGridViewGroup, dataGridViewTag,
                                         dataGridViewInclude, dataGridViewChange,
@@ -78,14 +111,16 @@ namespace WinSimpleIDriver
             bool check = ToolStripMenuItemViewTree.Checked;
             splitContainerTreeMain.Panel1Collapsed = !check;
 
+            
+
             // Источники
-            CheckSourceColumns();
+            FormLib.SourceForm.CheckColumns();
 
             // Группы
-            CheckGroupColumns();
+            FormLib.GroupForm.CheckColumns();
 
             // Теги
-            CheckTagColumns();
+            FormLib.TagForm.CheckColumns();
 
             #endregion
 
@@ -102,6 +137,8 @@ namespace WinSimpleIDriver
             dtTags = DataTableLib.GetEmptyDataTableForTags(dataGridViewTag, "Tags");
 
             SetLeftLabelMessage1();
+
+            
 
             //MessageBox.Show(Settings.x);
         }
@@ -253,71 +290,31 @@ namespace WinSimpleIDriver
 
         // ================================================================================================================
 
-        private void SaveTextComboBox(ComboBox comboBox, string text = "")
-        {
-            if (text == "")
-                text = comboBox.Text;
-
-            if (String.IsNullOrWhiteSpace(text) == false)
-            {
-                if (comboBox.Items.Contains(text) == false)
-                {
-                    comboBox.Items.Add(text);
-                }
-            }
-        }
+        
 
         // ================================================================================================================
 
         #region Source
 
-        #region Sourse.DGV.Columns
-        private void CheckSourceColumns()
-        {
-            bool checkE = checkBoxSourceEditor.Checked;
-            dataGridViewSource.Columns["sourceID"].Visible = checkE;
-            dataGridViewSource.Columns["sourceAutoRestart"].Visible = checkE;
-            dataGridViewSource.Columns["sourceDriver"].Visible = checkE;
-            dataGridViewSource.Columns["sourceAddress"].Visible = checkE;
-            dataGridViewSource.RowHeadersVisible = checkE;
-            dataGridViewSource.ReadOnly = !checkE;
-
-            bool checkD = checkBoxSourceDesc.Checked;
-            dataGridViewSource.Columns["sourceDesc"].Visible = checkD;
-
-            bool checkR = checkBoxSourceRuntime.Checked;
-            dataGridViewSource.Columns["sourceCalc"].Visible = checkR;
-            dataGridViewSource.Columns["sourceStatus"].Visible = checkR;
-            dataGridViewSource.Columns["sourceMessage"].Visible = checkR;
-
-            bool checkS = checkBoxSourceStatistic.Checked;
-            dataGridViewSource.Columns["sourceTags"].Visible = checkS;
-            dataGridViewSource.Columns["sourceStatistic"].Visible = checkS;
-
-        }
-
-
-        #endregion
-
         #region Source.Event
         private void checkBoxSourceEditor_CheckedChanged(object sender, EventArgs e)
         {
-            CheckSourceColumns();
+            FormLib.SourceForm.CheckColumns();
         }
 
         private void checkBoxSourceRuntime_CheckedChanged(object sender, EventArgs e)
         {
-            CheckSourceColumns();
+            FormLib.SourceForm.CheckColumns();
         }
 
         private void checkBoxSourceDesc_CheckedChanged(object sender, EventArgs e)
         {
-            CheckSourceColumns();
+            FormLib.SourceForm.CheckColumns();
         }
 
         private void checkBoxSourceStatistic_CheckedChanged(object sender, EventArgs e)
         {
-            CheckSourceColumns();
+            FormLib.SourceForm.CheckColumns();
         }
         #endregion
 
@@ -327,21 +324,17 @@ namespace WinSimpleIDriver
         private void textBoxSourceFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxSourceFilter.Text))
-                SourceFilter();
+                FormLib.SourceForm.TextFilter();
         }
 
         private void buttonSourceFilter_Click(object sender, EventArgs e)
         {
-            SourceFilter();
+            FormLib.SourceForm.TextFilter();
         }
 
         #endregion
 
-        private void SourceFilter()
-        {
-            DataTableLib.TableFilter(textBoxSourceFilter.Text, dataGridViewSource, 
-                DataTableLib.GetColumnIndexFilterSource(), DataTableLib.GetPairFilterSource());
-        }
+        
 
         #endregion
 
@@ -386,59 +379,31 @@ namespace WinSimpleIDriver
 
         #region Group
 
-        #region Group.DGV.Columns
-
-        private void CheckGroupColumns()
-        {
-            bool checkE = checkBoxGroupEditor.Checked;
-            dataGridViewGroup.Columns["groupID"].Visible = checkE;
-            dataGridViewGroup.Columns["groupPeriod"].Visible = checkE;
-            dataGridViewGroup.RowHeadersVisible = checkE;
-            dataGridViewGroup.ReadOnly = !checkE;
-
-            bool checkD = checkBoxGroupDesc.Checked;
-            dataGridViewGroup.Columns["groupDesc"].Visible = checkD;
-
-            bool checkR = checkBoxGroupRuntime.Checked;
-            dataGridViewGroup.Columns["groupCalc"].Visible = checkR;
-            dataGridViewGroup.Columns["groupStatus"].Visible = checkR;
-
-            bool checkST = checkBoxGroupStatistic.Checked;
-            dataGridViewGroup.Columns["groupTags"].Visible = checkST;
-            dataGridViewGroup.Columns["groupStatistic"].Visible = checkST;
-
-            bool checkSource = checkBoxGroupSource.Checked;
-            dataGridViewGroup.Columns["groupSource"].Visible = checkSource;
-        }
-
-
-        #endregion
-
         #region Group.Event
 
         private void checkBoxGroupEditor_CheckedChanged(object sender, EventArgs e)
         {
-            CheckGroupColumns();
+            FormLib.GroupForm.CheckColumns();
         }
 
         private void checkBoxGroupDesc_CheckedChanged(object sender, EventArgs e)
         {
-            CheckGroupColumns();
+            FormLib.GroupForm.CheckColumns();
         }
 
         private void checkBoxGroupStatistic_CheckedChanged(object sender, EventArgs e)
         {
-            CheckGroupColumns();
+            FormLib.GroupForm.CheckColumns();
         }
 
         private void checkBoxGroupRuntime_CheckedChanged(object sender, EventArgs e)
         {
-            CheckGroupColumns();
+            FormLib.GroupForm.CheckColumns();
         }
 
         private void checkBoxGroupSource_CheckedChanged(object sender, EventArgs e)
         {
-            CheckGroupColumns();
+            FormLib.GroupForm.CheckColumns();
         }
         #endregion
 
@@ -448,14 +413,13 @@ namespace WinSimpleIDriver
 
         private void comboBoxGroupFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //SaveTextComboBox(comboBoxGroupFilterSource);
-            GroupFilter();
+            FormLib.GroupForm.TextFilter();
         }
 
         private void comboBoxGroupFilterSource_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxGroupFilterSource.Text))
-                GroupFilter();
+                FormLib.GroupForm.TextFilter();
         }
         
         #endregion
@@ -464,22 +428,17 @@ namespace WinSimpleIDriver
         private void textBoxGroupFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxGroupFilter.Text))
-                GroupFilter();
+                FormLib.GroupForm.TextFilter();
         }
         #endregion
 
         private void buttonGroupFilter_Click(object sender, EventArgs e)
         {
-            SaveTextComboBox(comboBoxGroupFilterSource);
-            GroupFilter();
+            FormLib.SaveTextComboBox(comboBoxGroupFilterSource);
+            FormLib.GroupForm.TextFilter();
         }
 
-        private void GroupFilter()
-        {
-            string text = comboBoxGroupFilterSource.Text;
-            DataTableLib.TableFilter(textBoxGroupFilter.Text, dataGridViewGroup, 
-                DataTableLib.GetColumnIndexFilterGroup(), DataTableLib.GetPairFilterGroup(text));
-        }
+        
 
         #endregion
 
@@ -523,40 +482,7 @@ namespace WinSimpleIDriver
 
         #region Tag
 
-        #region Tag.DGV.Columns
-
-        private void CheckTagColumns()
-        {
-            bool checkE = checkBoxTagEditor.Checked;
-            dataGridViewTag.Columns["tagID"].Visible = checkE;
-            dataGridViewTag.Columns["tagAddress"].Visible = checkE;
-            dataGridViewTag.Columns["tagCommand"].Visible = checkE;
-            dataGridViewTag.Columns["tagWriteValue"].Visible = checkE;
-            dataGridViewTag.Columns["tagWriteTag"].Visible = checkE;
-            dataGridViewTag.RowHeadersVisible = checkE;
-            dataGridViewTag.ReadOnly = !checkE;
-
-            bool checkD = checkBoxTagDesc.Checked;
-            dataGridViewTag.Columns["tagDesc"].Visible = checkD;
-            
-
-            bool checkR = checkBoxTagRuntime.Checked;
-            dataGridViewTag.Columns["tagCalc"].Visible = checkR;
-            dataGridViewTag.Columns["tagValue"].Visible = checkR;
-            dataGridViewTag.Columns["tagStatus"].Visible = checkR;
-            dataGridViewTag.Columns["tagMessage"].Visible = checkR;
-
-            bool checkS = checkBoxTagStatistic.Checked;
-            dataGridViewTag.Columns["tagStatistic"].Visible = checkS;
-
-            bool checkBP = checkBoxTagBP.Checked;
-            dataGridViewTag.Columns["tagBlock"].Visible = checkBP;
-            dataGridViewTag.Columns["tagPage"].Visible = checkBP;
-
-            bool checkSG = checkBoxTagSG.Checked;
-            dataGridViewTag.Columns["tagSource"].Visible = checkSG;
-            dataGridViewTag.Columns["tagGroup"].Visible = checkSG;
-        }
+        
 
 
         #endregion
@@ -564,32 +490,32 @@ namespace WinSimpleIDriver
         #region Tag.Event
         private void checkBoxTagEditor_CheckedChanged(object sender, EventArgs e)
         {
-            CheckTagColumns();
+            FormLib.TagForm.CheckColumns();
         }
 
         private void checkBoxTagRuntime_CheckedChanged(object sender, EventArgs e)
         {
-            CheckTagColumns();
+            FormLib.TagForm.CheckColumns();
         }
 
         private void checkBoxTagDesc_CheckedChanged(object sender, EventArgs e)
         {
-            CheckTagColumns();
+            FormLib.TagForm.CheckColumns();
         }
 
         private void checkBoxTagStatistic_CheckedChanged(object sender, EventArgs e)
         {
-            CheckTagColumns();
+            FormLib.TagForm.CheckColumns();
         }
 
         private void checkBoxTagBP_CheckedChanged(object sender, EventArgs e)
         {
-            CheckTagColumns();
+            FormLib.TagForm.CheckColumns();
         }
 
         private void checkBoxTagSG_CheckedChanged(object sender, EventArgs e)
         {
-            CheckTagColumns();
+            FormLib.TagForm.CheckColumns();
         }
         #endregion
 
@@ -599,46 +525,46 @@ namespace WinSimpleIDriver
 
         private void comboBoxTagFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TagFilter();
+            FormLib.TagForm.TextFilter();
         }
 
         private void comboBoxTagFilterSource_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxTagFilterSource.Text))
-                TagFilter();
+                FormLib.TagForm.TextFilter();
         }
 
         private void comboBoxTagFilterGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TagFilter();
+            FormLib.TagForm.TextFilter();
         }
 
         private void comboBoxTagFilterGroup_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxTagFilterGroup.Text))
-                TagFilter();
+                FormLib.TagForm.TextFilter();
         }
 
         private void comboBoxTagFilterBlock_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TagFilter();
+            FormLib.TagForm.TextFilter();
         }
 
         private void comboBoxTagFilterBlock_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxTagFilterBlock.Text))
-                TagFilter();
+                FormLib.TagForm.TextFilter();
         }
 
         private void comboBoxTagFilterPage_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TagFilter();
+            FormLib.TagForm.TextFilter();
         }
 
         private void comboBoxTagFilterPage_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxTagFilterPage.Text))
-                TagFilter();
+                FormLib.TagForm.TextFilter();
         }
 
         #endregion
@@ -647,29 +573,20 @@ namespace WinSimpleIDriver
         private void textBoxTagFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxTagFilter.Text))
-                TagFilter();
+                FormLib.TagForm.TextFilter();
         }
         #endregion
 
         private void buttonTagFilter_Click(object sender, EventArgs e)
         {
-            SaveTextComboBox(comboBoxTagFilterSource);
-            SaveTextComboBox(comboBoxTagFilterGroup);
-            SaveTextComboBox(comboBoxTagFilterBlock);
-            SaveTextComboBox(comboBoxTagFilterPage);
-            TagFilter();
+            FormLib.SaveTextComboBox(comboBoxTagFilterSource);
+            FormLib.SaveTextComboBox(comboBoxTagFilterGroup);
+            FormLib.SaveTextComboBox(comboBoxTagFilterBlock);
+            FormLib.SaveTextComboBox(comboBoxTagFilterPage);
+            FormLib.TagForm.TextFilter();
         }
 
-        private void TagFilter()
-        {
-            string text1 = comboBoxTagFilterSource.Text;
-            string text2 = comboBoxTagFilterGroup.Text;
-            string text3 = comboBoxTagFilterBlock.Text;
-            string text4 = comboBoxTagFilterPage.Text;
-
-            DataTableLib.TableFilter(textBoxTagFilter.Text, dataGridViewTag,
-                DataTableLib.GetColumnIndexFilterTag(), DataTableLib.GetPairFilterTag(text1, text2, text3, text4));
-        }
+        
 
         #endregion
 
@@ -747,7 +664,6 @@ namespace WinSimpleIDriver
 
         #endregion
 
-        #endregion
 
         // ================================================================================================================
 
@@ -791,7 +707,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewInclude_SelectionChanged(object sender, EventArgs e)
         {
-            SaveTextComboBox(comboBoxChangeFilterInclude);
+            FormLib.SaveTextComboBox(comboBoxChangeFilterInclude);
             SetComboBoxChangeFilterInclude();
         }
 
@@ -828,7 +744,7 @@ namespace WinSimpleIDriver
 
         private void buttonChangeFilter_Click(object sender, EventArgs e)
         {
-            SaveTextComboBox(comboBoxChangeFilterInclude);
+            FormLib.SaveTextComboBox(comboBoxChangeFilterInclude);
             ChangeFilter();
         }
 
@@ -909,7 +825,7 @@ namespace WinSimpleIDriver
         #endregion
         private void dataGridViewStructure_SelectionChanged(object sender, EventArgs e)
         {
-            SaveTextComboBox(comboBoxTargetFilterSource);
+            FormLib.SaveTextComboBox(comboBoxTargetFilterSource);
             SetComboBoxTargetFilterStructure();
         }
 
@@ -953,7 +869,7 @@ namespace WinSimpleIDriver
 
         private void buttonTargetFilter_Click(object sender, EventArgs e)
         {
-            SaveTextComboBox(comboBoxTargetFilterSource);
+            FormLib.SaveTextComboBox(comboBoxTargetFilterSource);
             TargetFilter();
         }
 
