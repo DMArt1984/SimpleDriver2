@@ -108,8 +108,10 @@ namespace WinSimpleIDriver
             DTLib.dtSource.LinkColumns(dataGridViewSource);
             DTLib.dtGroup.LinkColumns(dataGridViewGroup);
             DTLib.dtTag.LinkColumns(dataGridViewTag);
-            DTLib.dtInclude.LinkColumns(dataGridViewInclude, dataGridViewIncludeChild);
-            DTLib.dtStructure.LinkColumns(dataGridViewStructure, dataGridViewStructureTarget);
+            DTLib.dtStructure.LinkColumns(dataGridViewStructure);
+            DTLib.dtTarget.LinkColumns(dataGridViewStructureTarget);
+            DTLib.dtInclude.LinkColumns(dataGridViewInclude);
+            DTLib.dtIncludeChild.LinkColumns(dataGridViewIncludeChild);
 
 
             #region Table Enum
@@ -732,7 +734,7 @@ namespace WinSimpleIDriver
 
         private void SetComboBoxIncludeChildFilterInclude()
         {
-            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DTLib.GetValueFromCurrentRow(dataGridViewInclude, DTLib.dtInclude.includeCol.Prefix));
+            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DTLib.GetValueFromCurrentRow(dataGridViewInclude, DTLib.dtInclude.col.Prefix));
             comboBoxIncludeChildFilterParent.Text = text;
             FormLib.IncludeChildForm.IncludeChildFilter();
         }
@@ -743,7 +745,7 @@ namespace WinSimpleIDriver
         {
             DTLib.ForNewRow(dataGridViewIncludeChild); // new ID
 
-            DTLib.SetParentInRow(dataGridViewIncludeChild, comboBoxIncludeChildFilterParent, DTLib.dtInclude.changeCol.Prefix); // filter
+            DTLib.SetParentInRow(dataGridViewIncludeChild, comboBoxIncludeChildFilterParent, DTLib.dtIncludeChild.col.Prefix); // filter
 
             //string text = comboBoxChangeFilterInclude.Text;
             //if (String.IsNullOrWhiteSpace(text) == false)
@@ -803,7 +805,7 @@ namespace WinSimpleIDriver
 
         private void SetComboBoxTargetFilterStructure()
         {
-            string text = (splitContainerStructure.Panel1Collapsed) ? "" : (DTLib.GetValueFromCurrentRow(dataGridViewStructure, DTLib.dtStructure.structureCol.Title));
+            string text = (splitContainerStructure.Panel1Collapsed) ? "" : (DTLib.GetValueFromCurrentRow(dataGridViewStructure, DTLib.dtStructure.col.Title));
             comboBoxStructureTargetFilterParent.Text = text;
             FormLib.StructureTargetForm.StructureTargetFilter();
         }
@@ -849,7 +851,7 @@ namespace WinSimpleIDriver
         {
             DTLib.ForNewRow(dataGridViewStructureTarget); // new ID
 
-            DTLib.SetParentInRow(dataGridViewStructureTarget, comboBoxStructureTargetFilterParent, DTLib.dtStructure.targetCol.Structure); // filter
+            DTLib.SetParentInRow(dataGridViewStructureTarget, comboBoxStructureTargetFilterParent, DTLib.dtTarget.col.Structure); // filter
 
             // filter
             //string text = comboBoxTargetFilterSource.Text;
@@ -989,9 +991,9 @@ namespace WinSimpleIDriver
         private void DrawTreeSGT()
         {
             // Получить списки для дерева
-            var collectionSource = MyTree.SetTreeCollection(dataGridViewSource, DTLib.dtSource.sourcesCol.Title);
-            var collectionGroup = MyTree.SetTreeCollection(dataGridViewGroup, DTLib.dtGroup.groupsCol.Title, DTLib.dtGroup.groupsCol.Source);
-            var collectionTag = MyTree.SetTreeCollection(dataGridViewTag, DTLib.dtTag.tagsCol.Title, DTLib.dtTag.tagsCol.Group);
+            var collectionSource = MyTree.SetTreeCollection(dataGridViewSource, DTLib.dtSource.col.Title);
+            var collectionGroup = MyTree.SetTreeCollection(dataGridViewGroup, DTLib.dtGroup.col.Title, DTLib.dtGroup.col.Source);
+            var collectionTag = MyTree.SetTreeCollection(dataGridViewTag, DTLib.dtTag.col.Title, DTLib.dtTag.col.Group);
 
             // Источники
             treeSGT.Nodes.Clear();
@@ -1050,7 +1052,7 @@ namespace WinSimpleIDriver
             List<string> blocks = new List<string>();
             foreach (DataGridViewRow row in dataGridViewTag.Rows)
             {
-                var block = row.Cells[DTLib.dtTag.tagsCol.Block].Value;
+                var block = row.Cells[DTLib.dtTag.col.Block].Value;
                 if (block == null)
                     continue;
 
@@ -1108,8 +1110,8 @@ namespace WinSimpleIDriver
         private void DrawTreeStructure()
         {
             // Получить списки для дерева
-            var collectionStructure = MyTree.SetTreeCollection(dataGridViewStructure, DTLib.dtStructure.structureCol.Title);
-            var collectionTarget = MyTree.SetTreeCollection(dataGridViewStructureTarget, DTLib.dtStructure.targetCol.Tag, DTLib.dtStructure.targetCol.Structure);
+            var collectionStructure = MyTree.SetTreeCollection(dataGridViewStructure, DTLib.dtStructure.col.Title);
+            var collectionTarget = MyTree.SetTreeCollection(dataGridViewStructureTarget, DTLib.dtTarget.col.Tag, DTLib.dtTarget.col.Structure);
 
             // Структуры
             treeStructure.Nodes.Clear();
@@ -1149,8 +1151,8 @@ namespace WinSimpleIDriver
         private void DrawTreeInclude()
         {
             // Получить списки для дерева
-            var collectionInclude = MyTree.SetTreeCollection(dataGridViewInclude, DTLib.dtInclude.includeCol.Prefix);
-            var collectionChange = MyTree.SetTreeCollection(dataGridViewIncludeChild, DTLib.dtInclude.changeCol.ChangeFrom, DTLib.dtInclude.changeCol.Prefix);
+            var collectionInclude = MyTree.SetTreeCollection(dataGridViewInclude, DTLib.dtInclude.col.Prefix);
+            var collectionChange = MyTree.SetTreeCollection(dataGridViewIncludeChild, DTLib.dtIncludeChild.col.ChangeFrom, DTLib.dtIncludeChild.col.Prefix);
 
             // Классы
             treeInclude.Nodes.Clear();
@@ -1200,7 +1202,7 @@ namespace WinSimpleIDriver
             switch (tabName)
             {
                 case "tabPageSource":
-                    DTLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DTLib.dtSource.sourcesCol.Title, DTLib.dtSource.sourcesCol.CountTags, DTLib.dtTag.tagsCol.Source);
+                    DTLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DTLib.dtSource.col.Title, DTLib.dtSource.col.CountTags, DTLib.dtTag.col.Source);
                     break;
 
             }

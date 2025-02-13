@@ -41,12 +41,12 @@ namespace WinSimpleIDriver
 
         static public class dtSource
         {
-            static public DGVSourcesCol sourcesCol = new DGVSourcesCol(); // Номера колонок в DGV
+            static public DGVSourcesCol col = new DGVSourcesCol(); // Номера колонок в DGV
 
             // Определение номеров колонок
             static public void LinkColumns(DataGridView sources)
             {
-                sourcesCol = new DGVSourcesCol
+                col = new DGVSourcesCol
                 {
                     Calc = sources.Columns["sourceCalc"].Index,
                     Title = sources.Columns["sourceTitle"].Index,
@@ -60,14 +60,14 @@ namespace WinSimpleIDriver
             }
 
             // Источники. Номера колонок для фильтра в массив
-            static public int[] GetColumnIndexFilterSource()
+            static public int[] GetColumnIndexFilter()
             {
                 return new int[]
                 {
-                sourcesCol.Title, sourcesCol.Driver, sourcesCol.Address, sourcesCol.Desc, sourcesCol.Status, sourcesCol.Message
+                col.Title, col.Driver, col.Address, col.Desc, col.Status, col.Message
                 };
             }
-            static public PairFilterCol[] GetPairFilterSource()
+            static public PairFilterCol[] GetPairFilter()
             {
                 return new PairFilterCol[] { };
             }
@@ -79,12 +79,12 @@ namespace WinSimpleIDriver
 
         static public class dtGroup
         {
-            static public DGVGroupsCol groupsCol = new DGVGroupsCol(); // Номера колонок в DGV
+            static public DGVGroupsCol col = new DGVGroupsCol(); // Номера колонок в DGV
 
             // Определение номеров колонок
             static public void LinkColumns(DataGridView groups)
             {
-                groupsCol = new DGVGroupsCol
+                col = new DGVGroupsCol
                 {
                     Calc = groups.Columns["groupCalc"].Index,
                     Title = groups.Columns["groupTitle"].Index,
@@ -95,18 +95,18 @@ namespace WinSimpleIDriver
             }
 
             // Группы. Номера колонок для фильтра в массив
-            static public int[] GetColumnIndexFilterGroup()
+            static public int[] GetColumnIndexFilter()
             {
                 return new int[]
                 {
-                groupsCol.Title, groupsCol.Desc, groupsCol.Status
+                col.Title, col.Desc, col.Status
                 };
             }
-            static public PairFilterCol[] GetPairFilterGroup(string text)
+            static public PairFilterCol[] GetPairFilter(string text)
             {
                 return new PairFilterCol[]
                 {
-                new PairFilterCol { col = groupsCol.Source, filter = text }
+                new PairFilterCol { col = col.Source, filter = text }
                 };
             }
 
@@ -118,12 +118,12 @@ namespace WinSimpleIDriver
 
         static public class dtTag
         {
-            static public DGVTagsCol tagsCol = new DGVTagsCol(); // Номера колонок в DGV
+            static public DGVTagsCol col = new DGVTagsCol(); // Номера колонок в DGV
 
             // Определение номеров колонок
             static public void LinkColumns(DataGridView tags)
             {
-                tagsCol = new DGVTagsCol
+                col = new DGVTagsCol
                 {
                     Calc = tags.Columns["tagCalc"].Index,
                     Title = tags.Columns["tagTitle"].Index,
@@ -142,26 +142,124 @@ namespace WinSimpleIDriver
             }
 
             // Теги. Номера колонок для фильтра в массив
-            static public int[] GetColumnIndexFilterTag()
+            static public int[] GetColumnIndexFilter()
             {
                 return new int[]
                 {
-                tagsCol.Title, tagsCol.Value, tagsCol.DataType, tagsCol.Address, tagsCol.Desc, tagsCol.Status, tagsCol.Message
+                col.Title, col.Value, col.DataType, col.Address, col.Desc, col.Status, col.Message
                 };
             }
-            static public PairFilterCol[] GetPairFilterTag(string textSource, string textGroup, string textBlock, string textPage)
+            static public PairFilterCol[] GetPairFilter(string textSource, string textGroup, string textBlock, string textPage)
             {
                 return new PairFilterCol[]
                 {
-                new PairFilterCol { col = tagsCol.Source, filter = textSource },
-                new PairFilterCol { col = tagsCol.Group, filter = textGroup },
-                new PairFilterCol { col = tagsCol.Block, filter = textBlock },
-                new PairFilterCol { col = tagsCol.Page, filter = textPage }
+                new PairFilterCol { col = col.Source, filter = textSource },
+                new PairFilterCol { col = col.Group, filter = textGroup },
+                new PairFilterCol { col = col.Block, filter = textBlock },
+                new PairFilterCol { col = col.Page, filter = textPage }
                 };
             }
+
+            // ---------
+            static public void SetTagValue(DataTable dt, uint Id, dynamic value)
+            {
+                DataRow rowTag = dt.Rows.Find(Id);
+                if (rowTag != null)
+                    rowTag[dtTag.col.Value] = value;
+            }
+
+            static public void SetTagValue(DataRow rowTag, dynamic value)
+            {
+                if (rowTag != null)
+                    rowTag[dtTag.col.Value] = value;
+            }
+
+
+            #region Tags.AddRow
+
+            static public DataRow AddRowForTags(DataTable dt, DataGridView dgv,
+                uint Id, string title,
+                string value,
+                eDataType dataType, string address,
+                string sourceTitle, string groupTitle,
+                string getWriteCell,
+                bool off,
+                long code,
+                string status,
+                string comment,
+                string description,
+                string block)
+            {
+                DataRow row = dt.NewRow();
+
+                //row[GetTitleFromName(dgv, "tagID")] = Id; // 
+                //row[GetTitleFromName(dgv, "tagName")] = title; // 
+                //row[GetTitleFromName(dgv, "tagValue")] = value; //
+                //row[GetTitleFromName(dgv, "tagDataType")] = dataType; // 
+                //row[GetTitleFromName(dgv, "tagAddress")] = address; // 
+                //row[GetTitleFromName(dgv, "tagSource")] = sourceTitle; // 
+                //row[GetTitleFromName(dgv, "tagGroup")] = groupTitle; // 
+                //row[GetTitleFromName(dgv, "tagWrite")] = getWriteCell; // 
+                //row[GetTitleFromName(dgv, "tagOff")] = off; // 
+                //row[GetTitleFromName(dgv, "tagCode")] = code; // 
+                //row[GetTitleFromName(dgv, "tagStatus")] = status; // 
+                //row[GetTitleFromName(dgv, "tagComment")] = comment; // 
+                //row[GetTitleFromName(dgv, "tagDescription")] = description; // 
+                //row[GetTitleFromName(dgv, "tagBlock")] = block; // 
+
+                row["tagID"] = Id; // 
+                row["tagName"] = title; // 
+                row["tagValue"] = value; //
+                row["tagDataType"] = dataType; // 
+                row["tagAddress"] = address; // 
+                row["tagSource"] = sourceTitle; // 
+                row["tagGroup"] = groupTitle; // 
+                row["tagWrite"] = getWriteCell; // 
+                row["tagOff"] = off; // 
+                row["tagCode"] = code; // 
+                row["tagStatus"] = status; // 
+                row["tagComment"] = comment; // 
+                row["tagDescription"] = description; // 
+                row["tagBlock"] = block; // 
+
+                dt.Rows.Add(row);
+                return row;
+            }
+
+            static public DataRow AddRowForEditTags(DataTable dt, DataGridView dgv,
+                uint Id, string title,
+                string sourceTitle, string groupTitle,
+                string dataType, string address,
+                string description,
+                bool off,
+                bool isCommand,
+                string writeTitle, string constValue,
+                string block)
+            {
+                DataRow row = dt.NewRow();
+
+                row["tagId"] = Id; // 
+                row["tagTitle"] = title; // 
+                row["tagSource"] = sourceTitle; // 
+                row["tagGroup"] = groupTitle; // 
+                row["tagTypeData"] = dataType; //
+                row["tagAddress"] = address; //
+                row["tagDescription"] = description; // 
+                row["tagOff"] = off; // 
+                row["tagCommand"] = isCommand; //
+                row["tagWrite"] = writeTitle; // 
+                row["tagConst"] = constValue; // 
+                row["tagBlock"] = block; // 
+
+                dt.Rows.Add(row);
+                return row;
+            }
+
+            #endregion
+
         }
 
-        
+
 
         #endregion
 
@@ -169,13 +267,12 @@ namespace WinSimpleIDriver
 
         static public class dtStructure
         {
-            static public DGVStructureCol structureCol = new DGVStructureCol(); // Номера колонок в DGV
-            static public DGVTargetCol targetCol = new DGVTargetCol(); // Номера колонок в DGV
-
+            static public DGVStructureCol col = new DGVStructureCol(); // Номера колонок в DGV
+            
             // Определение номеров колонок
-            static public void LinkColumns(DataGridView structures, DataGridView targets)
+            static public void LinkColumns(DataGridView structures)
             {
-                structureCol = new DGVStructureCol
+                col = new DGVStructureCol
                 {
                     Title = structures.Columns["structureTitle"].Index,
                     Connector = structures.Columns["structureConnector"].Index,
@@ -184,7 +281,32 @@ namespace WinSimpleIDriver
                     Group = structures.Columns["structureGroup"].Index
                 };
 
-                targetCol = new DGVTargetCol
+            }
+
+            // Структуры. Номера колонок для фильтра в массив
+            static public int[] GetColumnIndexFilter()
+            {
+                return new int[]
+                {
+                col.Title, col.Template, col.TagSource, col.Group, col.Connector
+                };
+            }
+            static public PairFilterCol[] GetPairFilter()
+            {
+                return new PairFilterCol[] { };
+            }
+
+            
+        }
+
+        static public class dtTarget
+        {
+            static public DGVTargetCol col = new DGVTargetCol(); // Номера колонок в DGV
+
+            // Определение номеров колонок
+            static public void LinkColumns(DataGridView targets)
+            {
+                col = new DGVTargetCol
                 {
                     Structure = targets.Columns["targetStructure"].Index,
                     Address = targets.Columns["targetAddress"].Index,
@@ -194,34 +316,22 @@ namespace WinSimpleIDriver
 
             }
 
-            // Структуры. Номера колонок для фильтра в массив
-            static public int[] GetColumnIndexFilterStructure()
-            {
-                return new int[]
-                {
-                structureCol.Title, structureCol.Template, structureCol.TagSource, structureCol.Group, structureCol.Connector
-                };
-            }
-            static public PairFilterCol[] GetPairFilterStructure()
-            {
-                return new PairFilterCol[] { };
-            }
-
             // Цели. Номера колонок для фильтра в массив
-            static public int[] GetColumnIndexFilterTarget()
+            static public int[] GetColumnIndexFilter()
             {
                 return new int[]
                 {
-                targetCol.Tag, targetCol.Desc, targetCol.Address
+                col.Tag, col.Desc, col.Address
                 };
             }
-            static public PairFilterCol[] GetPairFilterTarget(string textStructure)
+            static public PairFilterCol[] GetPairFilter(string textStructure)
             {
                 return new PairFilterCol[]
                 {
-                new PairFilterCol { col = targetCol.Structure, filter = textStructure }
+                new PairFilterCol { col = col.Structure, filter = textStructure }
                 };
             }
+
         }
 
         #endregion
@@ -230,19 +340,42 @@ namespace WinSimpleIDriver
 
         static public class dtInclude
         {
-            static public DGVIncludeCol includeCol = new DGVIncludeCol(); // Номера колонок в DGV
-            static public DGVChangeCol changeCol = new DGVChangeCol(); // Номера колонок в DGV
-
+            static public DGVIncludeCol col = new DGVIncludeCol(); // Номера колонок в DGV
+            
             // Определение номеров колонок
-            static public void LinkColumns(DataGridView includes, DataGridView changes)
+            static public void LinkColumns(DataGridView includes)
             {
-                includeCol = new DGVIncludeCol
+                col = new DGVIncludeCol
                 {
                     Prefix = includes.Columns["includePrefix"].Index,
                     FileName = includes.Columns["includeFileName"].Index
                 };
+            }
 
-                changeCol = new DGVChangeCol
+            // Классы. Номера колонок для фильтра в массив
+            static public int[] GetColumnIndexFilter()
+            {
+                return new int[]
+                {
+                col.Prefix, col.FileName
+                };
+            }
+            static public PairFilterCol[] GetPairFilter()
+            {
+                return new PairFilterCol[] { };
+            }
+
+            
+        }
+
+        static public class dtIncludeChild
+        {
+            static public DGVChangeCol col = new DGVChangeCol(); // Номера колонок в DGV
+
+            // Определение номеров колонок
+            static public void LinkColumns(DataGridView changes)
+            {
+                col = new DGVChangeCol
                 {
                     Prefix = changes.Columns["changePrefix"].Index,
                     ChangeFrom = changes.Columns["changeFrom"].Index,
@@ -250,32 +383,19 @@ namespace WinSimpleIDriver
                 };
             }
 
-            // Классы. Номера колонок для фильтра в массив
-            static public int[] GetColumnIndexFilterInclude()
-            {
-                return new int[]
-                {
-                includeCol.Prefix, includeCol.FileName
-                };
-            }
-            static public PairFilterCol[] GetPairFilterInclude()
-            {
-                return new PairFilterCol[] { };
-            }
-
             // Замены. Номера колонок для фильтра в массив
-            static public int[] GetColumnIndexFilterIncludeChild()
+            static public int[] GetColumnIndexFilter()
             {
                 return new int[]
                 {
-                changeCol.Prefix, changeCol.ChangeFrom, changeCol.ChangeTo
+                col.Prefix, col.ChangeFrom, col.ChangeTo
                 };
             }
-            static public PairFilterCol[] GetPairFilterIncludeChild(string text)
+            static public PairFilterCol[] GetPairFilter(string text)
             {
                 return new PairFilterCol[]
                 {
-                new PairFilterCol { col = changeCol.Prefix, filter = text }
+                new PairFilterCol { col = col.Prefix, filter = text }
                 };
             }
         }
@@ -308,19 +428,7 @@ namespace WinSimpleIDriver
             return rowTag;
         }
 
-        //
-        static public void SetTagValue(DataTable dt, uint Id, dynamic value)
-        {
-            DataRow rowTag = dt.Rows.Find(Id);
-            if (rowTag != null)
-                rowTag[dtTag.tagsCol.Value] = value;
-        }
-
-        static public void SetTagValue(DataRow rowTag, dynamic value)
-        {
-            if (rowTag != null)
-                rowTag[dtTag.tagsCol.Value] = value;
-        }
+        
 
         
 
@@ -391,88 +499,6 @@ namespace WinSimpleIDriver
             dgv.Refresh();
 
         }
-
-        #region Tags
-
-        static public DataRow AddRowForTags(DataTable dt, DataGridView dgv,
-            uint Id, string title,
-            string value,
-            eDataType dataType, string address,
-            string sourceTitle, string groupTitle,
-            string getWriteCell,
-            bool off,
-            long code,
-            string status,
-            string comment,
-            string description,
-            string block)
-        {
-            DataRow row = dt.NewRow();
-
-            //row[GetTitleFromName(dgv, "tagID")] = Id; // 
-            //row[GetTitleFromName(dgv, "tagName")] = title; // 
-            //row[GetTitleFromName(dgv, "tagValue")] = value; //
-            //row[GetTitleFromName(dgv, "tagDataType")] = dataType; // 
-            //row[GetTitleFromName(dgv, "tagAddress")] = address; // 
-            //row[GetTitleFromName(dgv, "tagSource")] = sourceTitle; // 
-            //row[GetTitleFromName(dgv, "tagGroup")] = groupTitle; // 
-            //row[GetTitleFromName(dgv, "tagWrite")] = getWriteCell; // 
-            //row[GetTitleFromName(dgv, "tagOff")] = off; // 
-            //row[GetTitleFromName(dgv, "tagCode")] = code; // 
-            //row[GetTitleFromName(dgv, "tagStatus")] = status; // 
-            //row[GetTitleFromName(dgv, "tagComment")] = comment; // 
-            //row[GetTitleFromName(dgv, "tagDescription")] = description; // 
-            //row[GetTitleFromName(dgv, "tagBlock")] = block; // 
-
-            row["tagID"] = Id; // 
-            row["tagName"] = title; // 
-            row["tagValue"] = value; //
-            row["tagDataType"] = dataType; // 
-            row["tagAddress"] = address; // 
-            row["tagSource"] = sourceTitle; // 
-            row["tagGroup"] = groupTitle; // 
-            row["tagWrite"] = getWriteCell; // 
-            row["tagOff"] = off; // 
-            row["tagCode"] = code; // 
-            row["tagStatus"] = status; // 
-            row["tagComment"] = comment; // 
-            row["tagDescription"] = description; // 
-            row["tagBlock"] = block; // 
-
-            dt.Rows.Add(row);
-            return row;
-        }
-
-        static public DataRow AddRowForEditTags(DataTable dt, DataGridView dgv,
-            uint Id, string title,
-            string sourceTitle, string groupTitle,
-            string dataType, string address,
-            string description,
-            bool off,
-            bool isCommand,
-            string writeTitle, string constValue,
-            string block)
-        {
-            DataRow row = dt.NewRow();
-
-            row["tagId"] = Id; // 
-            row["tagTitle"] = title; // 
-            row["tagSource"] = sourceTitle; // 
-            row["tagGroup"] = groupTitle; // 
-            row["tagTypeData"] = dataType; //
-            row["tagAddress"] = address; //
-            row["tagDescription"] = description; // 
-            row["tagOff"] = off; // 
-            row["tagCommand"] = isCommand; //
-            row["tagWrite"] = writeTitle; // 
-            row["tagConst"] = constValue; // 
-            row["tagBlock"] = block; // 
-
-            dt.Rows.Add(row);
-            return row;
-        }
-
-        #endregion
 
         // ================================================================================
 

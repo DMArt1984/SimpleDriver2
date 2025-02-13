@@ -69,7 +69,7 @@ namespace WinSimpleIDriver
             static public void TextFilter()
             {
                 DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtSource.GetColumnIndexFilterSource(), DTLib.dtSource.GetPairFilterSource());
+                    DTLib.dtSource.GetColumnIndexFilter(), DTLib.dtSource.GetPairFilter());
             }
             #endregion
 
@@ -118,7 +118,7 @@ namespace WinSimpleIDriver
             {
                 string text = coFilterSource.Text;
                 DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtGroup.GetColumnIndexFilterGroup(), DTLib.dtGroup.GetPairFilterGroup(text));
+                    DTLib.dtGroup.GetColumnIndexFilter(), DTLib.dtGroup.GetPairFilter(text));
             }
             #endregion
 
@@ -184,7 +184,7 @@ namespace WinSimpleIDriver
                 string text4 = coFilterPage.Text;
 
                 DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtTag.GetColumnIndexFilterTag(), DTLib.dtTag.GetPairFilterTag(text1, text2, text3, text4));
+                    DTLib.dtTag.GetColumnIndexFilter(), DTLib.dtTag.GetPairFilter(text1, text2, text3, text4));
             }
             #endregion
 
@@ -192,7 +192,7 @@ namespace WinSimpleIDriver
             static public void UpdateDGVTagSourceLink()
             {
                 // Получить списки для...
-                var collectionGroup = MyTree.SetTreeCollection(GroupForm.dgv, DTLib.dtGroup.groupsCol.Title, DTLib.dtGroup.groupsCol.Source);
+                var collectionGroup = MyTree.SetTreeCollection(GroupForm.dgv, DTLib.dtGroup.col.Title, DTLib.dtGroup.col.Source);
 
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
@@ -201,7 +201,7 @@ namespace WinSimpleIDriver
 
                     string sourceTitle = "";
 
-                    var group = row.Cells[DTLib.dtTag.tagsCol.Group].Value;
+                    var group = row.Cells[DTLib.dtTag.col.Group].Value;
                     if (group != null)
                     {
                         string groupTitle = group.ToString();
@@ -215,7 +215,7 @@ namespace WinSimpleIDriver
                         }
                     }
 
-                    row.Cells[DTLib.dtTag.tagsCol.Source].Value = sourceTitle;
+                    row.Cells[DTLib.dtTag.col.Source].Value = sourceTitle;
                 }
 
             }
@@ -232,7 +232,7 @@ namespace WinSimpleIDriver
             static public void StructureFilter()
             {
                 DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtStructure.GetColumnIndexFilterStructure(), DTLib.dtStructure.GetPairFilterStructure());
+                    DTLib.dtStructure.GetColumnIndexFilter(), DTLib.dtStructure.GetPairFilter());
             }
             #endregion
 
@@ -251,7 +251,7 @@ namespace WinSimpleIDriver
                 string text = coFilterParent.Text;
 
                 DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtStructure.GetColumnIndexFilterTarget(), DTLib.dtStructure.GetPairFilterTarget(text));
+                    DTLib.dtTarget.GetColumnIndexFilter(), DTLib.dtTarget.GetPairFilter(text));
             }
             #endregion
 
@@ -267,7 +267,7 @@ namespace WinSimpleIDriver
             static public void IncludeFilter()
             {
                 DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtInclude.GetColumnIndexFilterInclude(), DTLib.dtInclude.GetPairFilterInclude());
+                    DTLib.dtInclude.GetColumnIndexFilter(), DTLib.dtInclude.GetPairFilter());
             }
             #endregion
         }
@@ -285,7 +285,7 @@ namespace WinSimpleIDriver
                 string text = coFilterParent.Text;
 
                 DTLib.TableFilter(tbFilter.Text, dgv,
-                    DTLib.dtInclude.GetColumnIndexFilterIncludeChild(), DTLib.dtInclude.GetPairFilterIncludeChild(text));
+                    DTLib.dtIncludeChild.GetColumnIndexFilter(), DTLib.dtIncludeChild.GetPairFilter(text));
             }
             #endregion
 
