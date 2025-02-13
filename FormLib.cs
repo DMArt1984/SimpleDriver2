@@ -185,12 +185,111 @@ namespace WinSimpleIDriver
             }
             #endregion
 
+            // Обновить связи тегов к источникам от групп
+            static public void UpdateDGVTagSourceLink()
+            {
+                // Получить списки для...
+                var collectionGroup = MyTree.SetTreeCollection(GroupForm.dgv, DataTableLib.groupsCol.Title, DataTableLib.groupsCol.Source);
 
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (row.IsNewRow)
+                        continue;
 
+                    string sourceTitle = "";
+
+                    var group = row.Cells[DataTableLib.tagsCol.Group].Value;
+                    if (group != null)
+                    {
+                        string groupTitle = group.ToString();
+                        if (String.IsNullOrWhiteSpace(groupTitle) == false)
+                        {
+                            var groupItem = collectionGroup.FirstOrDefault(x => x.Title == groupTitle);
+                            if (groupItem.Id > 0)
+                            {
+                                sourceTitle = (String.IsNullOrWhiteSpace(groupItem.Link)) ? "" : groupItem.Link;
+                            }
+                        }
+                    }
+
+                    row.Cells[DataTableLib.tagsCol.Source].Value = sourceTitle;
+                }
+
+            }
+
+        }
+
+        static public class StructureForm
+        {
+            static public DataGridView dgv;
+
+            static public TextBox tbFilter;
+
+            #region Filter
+            static public void StructureFilter()
+            {
+                DataTableLib.TableFilter(tbFilter.Text, dgv,
+                    DataTableLib.GetColumnIndexFilterStructure(), DataTableLib.GetPairFilterStructure());
+            }
+            #endregion
+
+        }
+
+        static public class StructureTargetForm
+        {
+            static public DataGridView dgv;
+
+            static public TextBox tbFilter;
+            static public ComboBox coFilterParent;
+
+            #region Filter
+            static public void StructureTargetFilter()
+            {
+                string text = coFilterParent.Text;
+
+                DataTableLib.TableFilter(tbFilter.Text, dgv,
+                    DataTableLib.GetColumnIndexFilterTarget(), DataTableLib.GetPairFilterTarget(text));
+            }
+            #endregion
+
+        }
+
+        static public class IncludeForm
+        {
+            static public DataGridView dgv;
+
+            static public TextBox tbFilter;
+
+            #region Filter
+            static public void IncludeFilter()
+            {
+                DataTableLib.TableFilter(tbFilter.Text, dgv,
+                    DataTableLib.GetColumnIndexFilterInclude(), DataTableLib.GetPairFilterInclude());
+            }
+            #endregion
+        }
+
+        static public class IncludeChildForm
+        {
+            static public DataGridView dgv;
+
+            static public TextBox tbFilter;
+            static public ComboBox coFilterParent;
+
+            #region Filter
+            static public void IncludeChildFilter()
+            {
+                string text = coFilterParent.Text;
+
+                DataTableLib.TableFilter(tbFilter.Text, dgv,
+                    DataTableLib.GetColumnIndexFilterIncludeChild(), DataTableLib.GetPairFilterIncludeChild(text));
+            }
+            #endregion
 
 
         }
 
+        
 
     }
 }

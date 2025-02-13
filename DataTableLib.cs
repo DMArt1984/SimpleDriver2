@@ -233,14 +233,14 @@ namespace WinSimpleIDriver
         }
 
         // Замены. Номера колонок для фильтра в массив
-        static public int[] GetColumnIndexFilterChange()
+        static public int[] GetColumnIndexFilterIncludeChild()
         {
             return new int[]
             {
                 changeCol.Prefix, changeCol.ChangeFrom, changeCol.ChangeTo
             };
         }
-        static public PairFilterCol[] GetPairFilterChange(string text)
+        static public PairFilterCol[] GetPairFilterIncludeChild(string text)
         {
             return new PairFilterCol[]
             {
