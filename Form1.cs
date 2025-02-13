@@ -323,6 +323,18 @@ namespace WinSimpleIDriver
         {
             DTLib.dtSource.CheckColumns();
         }
+        private void buttonSourceCopy_Click(object sender, EventArgs e)
+        {
+            DTLib.dtSource.CopyDGVRow();
+        }
+        private void buttonSourceDel_Click(object sender, EventArgs e)
+        {
+            DTLib.dtSource.DelDGVRow();
+        }
+        private void buttonSourceHelp_Click(object sender, EventArgs e)
+        {
+            DTLib.dtSource.Help();
+        }
         #endregion
 
         #region Source.Filter
@@ -519,6 +531,10 @@ namespace WinSimpleIDriver
         {
             DTLib.dtTag.CheckColumns();
         }
+        private void buttonTagHelp_Click(object sender, EventArgs e)
+        {
+            DTLib.dtTag.Help();
+        }
         #endregion
 
         #region Tag.Filter
@@ -605,7 +621,10 @@ namespace WinSimpleIDriver
 
         private void dataGridViewTag_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-
+            if (dataGridViewTag.CurrentCell.ColumnIndex == DTLib.dtTag.col.Group)
+            {
+                DTLib.dtTag.UpdateDGVTagSourceLink();
+            }
         }
 
         private void dataGridViewTag_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -1189,6 +1208,10 @@ namespace WinSimpleIDriver
                     DTLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DTLib.dtSource.col.Title, DTLib.dtSource.col.CountTags, DTLib.dtTag.col.Source);
                     break;
 
+                case "tabPageTag":
+                    DTLib.dtTag.UpdateDGVTagSourceLink();
+                    break;
+
             }
         }
         #endregion
@@ -1281,12 +1304,25 @@ namespace WinSimpleIDriver
             DTLib.dtTag.UpdateDGVTagSourceLink();
         }
 
+        private void buttonTagCopy_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonGroupCopy_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
+
+
+
         // ===============================================================================================================
 
-        private void buttonSourceCopy_Click(object sender, EventArgs e)
-        {
-            DTLib.dtSource.CopyDGVRow();
-        }
+
 
 
 

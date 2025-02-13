@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using WinSimpleIDriver.Connector;
 using WinSimpleIDriver.Connector.SGT;
 
 namespace WinSimpleIDriver
@@ -117,9 +117,39 @@ namespace WinSimpleIDriver
                 return new PairFilterCol[] { };
             }
 
+            // Копировать стороку
             static public void CopyDGVRow()
             {
                 DTLib.CopyDGVRow(dgv, col.Title);
+            }
+
+            // Удалить строку
+            static public void DelDGVRow()
+            {
+                DTLib.DelDGVRow(dgv);
+            }
+
+            // Справка
+            static public void Help()
+            {
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+
+                var row = dgv.CurrentRow;
+                if (row == null)
+                    return;
+
+                string typeName = row.Cells[col.Driver].Value?.ToString();
+                if (typeName == null)
+                    return;
+
+                eDriverType est = (eDriverType)Enum.Parse(typeof(eDriverType), typeName);
+
+                dic = Source.HelpDicSource(est);
+
+                FormHelp help = new FormHelp();
+                help.Text = "Справка по драйверу " + typeName;
+                help.dic = dic;
+                help.Show();
             }
 
         }
@@ -367,6 +397,41 @@ namespace WinSimpleIDriver
                     rowTag[dtTag.col.Value] = value;
             }
 
+            // Справка
+            static public void Help()
+            {
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+
+                var row = dgv.CurrentRow;
+                if (row == null)
+                    return;
+
+                string sourceTitle = (row.Cells[col.Source].Value != null) ? row.Cells[col.Source].Value.ToString() : null;
+                if (sourceTitle == null)
+                    return;
+
+                string driverTitle = null;
+                foreach (DataGridViewRow item in dtSource.dgv.Rows)
+                {
+                    if (item.Cells[dtSource.col.Title].Value != null && item.Cells[dtSource.col.Title].Value.ToString() == sourceTitle)
+                    {
+                        driverTitle = item.Cells[dtSource.col.Driver].Value.ToString();
+                        break;
+                    }
+                }
+
+                if (driverTitle == null)
+                    return;
+
+                eDriverType est = (eDriverType)Enum.Parse(typeof(eDriverType), driverTitle);
+
+                dic = Source.HelpDicTag(est);
+
+                FormHelp help = new FormHelp();
+                help.Text = "Справка по тегам " + driverTitle;
+                help.dic = dic;
+                help.Show();
+            }
 
             #region Tags.AddRow
 
@@ -994,16 +1059,26 @@ namespace WinSimpleIDriver
             return clonedRow;
         }
         // Копия текущей строки
-        static public void CopyDGVRow(DataGridView dgv2, int colTitle)
+        static public void CopyDGVRow(DataGridView dgv, int colTitle)
         {
-            var row = GetSelRow(dgv2);
+            var row = GetSelRow(dgv);
             if (row != null)
             {
                 var newRow = CloneRowWithValues(row);
-                var nextID = GetNextID(dgv2);
+                var nextID = GetNextID(dgv);
                 newRow.Cells[0].Value = nextID;
                 newRow.Cells[colTitle].Value = $"{row.Cells[colTitle].Value}_ID{nextID}";
-                dgv2.Rows.Add(newRow);
+                dgv.Rows.Add(newRow);
+            }
+        }
+
+        // Удаление текущей строки
+        static public void DelDGVRow(DataGridView dgv)
+        {
+            var row = GetSelRow(dgv);
+            if (row != null && row.IsNewRow == false)
+            {
+                dgv.Rows.Remove(row);
             }
         }
 
