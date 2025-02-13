@@ -93,14 +93,14 @@ namespace WinSimpleIDriver
                 dgv = sources;
                 col = new DGVSourcesCol
                 {
-                    Calc = sources.Columns["sourceCalc"].Index,
-                    Title = sources.Columns["sourceTitle"].Index,
-                    Driver = sources.Columns["sourceDriver"].Index,
-                    Address = sources.Columns["sourceAddress"].Index,
-                    Desc = sources.Columns["sourceDesc"].Index,
-                    Status = sources.Columns["sourceStatus"].Index,
-                    Message = sources.Columns["sourceMessage"].Index,
-                    CountTags = sources.Columns["sourceTags"].Index
+                    Calc = dgv.Columns["sourceCalc"].Index,
+                    Title = dgv.Columns["sourceTitle"].Index,
+                    Driver = dgv.Columns["sourceDriver"].Index,
+                    Address = dgv.Columns["sourceAddress"].Index,
+                    Desc = dgv.Columns["sourceDesc"].Index,
+                    Status = dgv.Columns["sourceStatus"].Index,
+                    Message = dgv.Columns["sourceMessage"].Index,
+                    CountTags = dgv.Columns["sourceTags"].Index
                 };
             }
 
@@ -180,11 +180,11 @@ namespace WinSimpleIDriver
                 dgv = groups;
                 col = new DGVGroupsCol
                 {
-                    Calc = groups.Columns["groupCalc"].Index,
-                    Title = groups.Columns["groupTitle"].Index,
-                    Source = groups.Columns["groupSource"].Index,
-                    Desc = groups.Columns["groupDesc"].Index,
-                    Status = groups.Columns["groupStatus"].Index
+                    Calc = dgv.Columns["groupCalc"].Index,
+                    Title = dgv.Columns["groupTitle"].Index,
+                    Source = dgv.Columns["groupSource"].Index,
+                    Desc = dgv.Columns["groupDesc"].Index,
+                    Status = dgv.Columns["groupStatus"].Index
                 };
             }
 
@@ -314,18 +314,18 @@ namespace WinSimpleIDriver
                 dgv = tags;
                 col = new DGVTagsCol
                 {
-                    Calc = tags.Columns["tagCalc"].Index,
-                    Title = tags.Columns["tagTitle"].Index,
-                    Value = tags.Columns["tagValue"].Index,
-                    DataType = tags.Columns["tagDataType"].Index,
-                    Address = tags.Columns["tagAddress"].Index,
-                    Desc = tags.Columns["tagDesc"].Index,
-                    Status = tags.Columns["tagStatus"].Index,
-                    Message = tags.Columns["tagMessage"].Index,
-                    Source = tags.Columns["tagSource"].Index,
-                    Group = tags.Columns["tagGroup"].Index,
-                    Block = tags.Columns["tagBlock"].Index,
-                    Page = tags.Columns["tagPage"].Index
+                    Calc = dgv.Columns["tagCalc"].Index,
+                    Title = dgv.Columns["tagTitle"].Index,
+                    Value = dgv.Columns["tagValue"].Index,
+                    DataType = dgv.Columns["tagDataType"].Index,
+                    Address = dgv.Columns["tagAddress"].Index,
+                    Desc = dgv.Columns["tagDesc"].Index,
+                    Status = dgv.Columns["tagStatus"].Index,
+                    Message = dgv.Columns["tagMessage"].Index,
+                    Source = dgv.Columns["tagSource"].Index,
+                    Group = dgv.Columns["tagGroup"].Index,
+                    Block = dgv.Columns["tagBlock"].Index,
+                    Page = dgv.Columns["tagPage"].Index
                 };
 
             }
@@ -475,11 +475,11 @@ namespace WinSimpleIDriver
                 dgv = structures;
                 col = new DGVStructureCol
                 {
-                    Title = structures.Columns["structureTitle"].Index,
-                    Connector = structures.Columns["structureConnector"].Index,
-                    TagSource = structures.Columns["structureTagSource"].Index,
-                    Template = structures.Columns["structureTemplate"].Index,
-                    Group = structures.Columns["structureGroup"].Index
+                    Title = dgv.Columns["structureTitle"].Index,
+                    Connector = dgv.Columns["structureConnector"].Index,
+                    TagSource = dgv.Columns["structureTagSource"].Index,
+                    Template = dgv.Columns["structureTemplate"].Index,
+                    Group = dgv.Columns["structureGroup"].Index
                 };
 
             }
@@ -526,10 +526,10 @@ namespace WinSimpleIDriver
                 dgv = targets;
                 col = new DGVTargetCol
                 {
-                    Structure = targets.Columns["targetStructure"].Index,
-                    Address = targets.Columns["targetAddress"].Index,
-                    Tag = targets.Columns["targetTitle"].Index,
-                    Desc = targets.Columns["targetDesc"].Index
+                    Structure = dgv.Columns["targetStructure"].Index,
+                    Address = dgv.Columns["targetAddress"].Index,
+                    Tag = dgv.Columns["targetTitle"].Index,
+                    Desc = dgv.Columns["targetDesc"].Index
                 };
 
             }
@@ -578,8 +578,8 @@ namespace WinSimpleIDriver
                 dgv = includes;
                 col = new DGVIncludeCol
                 {
-                    Prefix = includes.Columns["includePrefix"].Index,
-                    FileName = includes.Columns["includeFileName"].Index
+                    Prefix = dgv.Columns["includePrefix"].Index,
+                    FileName = dgv.Columns["includeFileName"].Index
                 };
             }
 
@@ -624,9 +624,9 @@ namespace WinSimpleIDriver
                 dgv = changes;
                 col = new DGVChangeCol
                 {
-                    Prefix = changes.Columns["changePrefix"].Index,
-                    ChangeFrom = changes.Columns["changeFrom"].Index,
-                    ChangeTo = changes.Columns["changeTo"].Index
+                    Prefix = dgv.Columns["changePrefix"].Index,
+                    ChangeFrom = dgv.Columns["changeFrom"].Index,
+                    ChangeTo = dgv.Columns["changeTo"].Index
                 };
             }
 
