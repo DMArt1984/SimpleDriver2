@@ -105,9 +105,12 @@ namespace WinSimpleIDriver
 
 
             // Установка номеров колонок
-            DataTableLib.SetDGVColumns(dataGridViewSource, dataGridViewGroup, dataGridViewTag,
-                                        dataGridViewInclude, dataGridViewIncludeChild,
-                                        dataGridViewStructure, dataGridViewStructureTarget);
+            DTLib.dtSource.LinkColumns(dataGridViewSource);
+            DTLib.dtGroup.LinkColumns(dataGridViewGroup);
+            DTLib.dtTag.LinkColumns(dataGridViewTag);
+            DTLib.dtInclude.LinkColumns(dataGridViewInclude, dataGridViewIncludeChild);
+            DTLib.dtStructure.LinkColumns(dataGridViewStructure, dataGridViewStructureTarget);
+
 
             #region Table Enum
             // Устройства
@@ -152,7 +155,7 @@ namespace WinSimpleIDriver
             FormClear();
 
             // DataTables
-            dtTags = DataTableLib.GetEmptyDataTableForTags(dataGridViewTag, "Tags");
+            dtTags = DTLib.GetEmptyDataTableForTags(dataGridViewTag, "Tags");
 
             SetLeftLabelMessage1();
 
@@ -380,7 +383,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewSource_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DataTableLib.ForNewRow(dataGridViewSource);
+            DTLib.ForNewRow(dataGridViewSource);
         }
 
         private void dataGridViewSource_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -484,7 +487,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewGroup_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DataTableLib.ForNewRow(dataGridViewGroup);
+            DTLib.ForNewRow(dataGridViewGroup);
         }
 
         private void dataGridViewGroup_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -631,7 +634,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewTag_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DataTableLib.ForNewRow(dataGridViewTag);
+            DTLib.ForNewRow(dataGridViewTag);
         }
 
         private void dataGridViewTag_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -661,7 +664,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewInclude_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DataTableLib.ForNewRow(dataGridViewInclude); // new ID
+            DTLib.ForNewRow(dataGridViewInclude); // new ID
         }
         #endregion
 
@@ -729,7 +732,7 @@ namespace WinSimpleIDriver
 
         private void SetComboBoxIncludeChildFilterInclude()
         {
-            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewInclude, DataTableLib.includeCol.Prefix));
+            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DTLib.GetValueFromCurrentRow(dataGridViewInclude, DTLib.dtInclude.includeCol.Prefix));
             comboBoxIncludeChildFilterParent.Text = text;
             FormLib.IncludeChildForm.IncludeChildFilter();
         }
@@ -738,9 +741,9 @@ namespace WinSimpleIDriver
 
         private void dataGridViewIncludeChild_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DataTableLib.ForNewRow(dataGridViewIncludeChild); // new ID
+            DTLib.ForNewRow(dataGridViewIncludeChild); // new ID
 
-            DataTableLib.SetParentInRow(dataGridViewIncludeChild, comboBoxIncludeChildFilterParent, DataTableLib.changeCol.Prefix); // filter
+            DTLib.SetParentInRow(dataGridViewIncludeChild, comboBoxIncludeChildFilterParent, DTLib.dtInclude.changeCol.Prefix); // filter
 
             //string text = comboBoxChangeFilterInclude.Text;
             //if (String.IsNullOrWhiteSpace(text) == false)
@@ -772,7 +775,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewStructure_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DataTableLib.ForNewRow(dataGridViewStructure);
+            DTLib.ForNewRow(dataGridViewStructure);
         }
         #endregion
 
@@ -800,7 +803,7 @@ namespace WinSimpleIDriver
 
         private void SetComboBoxTargetFilterStructure()
         {
-            string text = (splitContainerStructure.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewStructure, DataTableLib.structureCol.Title));
+            string text = (splitContainerStructure.Panel1Collapsed) ? "" : (DTLib.GetValueFromCurrentRow(dataGridViewStructure, DTLib.dtStructure.structureCol.Title));
             comboBoxStructureTargetFilterParent.Text = text;
             FormLib.StructureTargetForm.StructureTargetFilter();
         }
@@ -844,9 +847,9 @@ namespace WinSimpleIDriver
 
         private void dataGridViewTarget_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DataTableLib.ForNewRow(dataGridViewStructureTarget); // new ID
+            DTLib.ForNewRow(dataGridViewStructureTarget); // new ID
 
-            DataTableLib.SetParentInRow(dataGridViewStructureTarget, comboBoxStructureTargetFilterParent, DataTableLib.targetCol.Structure); // filter
+            DTLib.SetParentInRow(dataGridViewStructureTarget, comboBoxStructureTargetFilterParent, DTLib.dtStructure.targetCol.Structure); // filter
 
             // filter
             //string text = comboBoxTargetFilterSource.Text;
@@ -986,9 +989,9 @@ namespace WinSimpleIDriver
         private void DrawTreeSGT()
         {
             // Получить списки для дерева
-            var collectionSource = MyTree.SetTreeCollection(dataGridViewSource, DataTableLib.sourcesCol.Title);
-            var collectionGroup = MyTree.SetTreeCollection(dataGridViewGroup, DataTableLib.groupsCol.Title, DataTableLib.groupsCol.Source);
-            var collectionTag = MyTree.SetTreeCollection(dataGridViewTag, DataTableLib.tagsCol.Title, DataTableLib.tagsCol.Group);
+            var collectionSource = MyTree.SetTreeCollection(dataGridViewSource, DTLib.dtSource.sourcesCol.Title);
+            var collectionGroup = MyTree.SetTreeCollection(dataGridViewGroup, DTLib.dtGroup.groupsCol.Title, DTLib.dtGroup.groupsCol.Source);
+            var collectionTag = MyTree.SetTreeCollection(dataGridViewTag, DTLib.dtTag.tagsCol.Title, DTLib.dtTag.tagsCol.Group);
 
             // Источники
             treeSGT.Nodes.Clear();
@@ -1047,7 +1050,7 @@ namespace WinSimpleIDriver
             List<string> blocks = new List<string>();
             foreach (DataGridViewRow row in dataGridViewTag.Rows)
             {
-                var block = row.Cells[DataTableLib.tagsCol.Block].Value;
+                var block = row.Cells[DTLib.dtTag.tagsCol.Block].Value;
                 if (block == null)
                     continue;
 
@@ -1105,8 +1108,8 @@ namespace WinSimpleIDriver
         private void DrawTreeStructure()
         {
             // Получить списки для дерева
-            var collectionStructure = MyTree.SetTreeCollection(dataGridViewStructure, DataTableLib.structureCol.Title);
-            var collectionTarget = MyTree.SetTreeCollection(dataGridViewStructureTarget, DataTableLib.targetCol.Tag, DataTableLib.targetCol.Structure);
+            var collectionStructure = MyTree.SetTreeCollection(dataGridViewStructure, DTLib.dtStructure.structureCol.Title);
+            var collectionTarget = MyTree.SetTreeCollection(dataGridViewStructureTarget, DTLib.dtStructure.targetCol.Tag, DTLib.dtStructure.targetCol.Structure);
 
             // Структуры
             treeStructure.Nodes.Clear();
@@ -1146,8 +1149,8 @@ namespace WinSimpleIDriver
         private void DrawTreeInclude()
         {
             // Получить списки для дерева
-            var collectionInclude = MyTree.SetTreeCollection(dataGridViewInclude, DataTableLib.includeCol.Prefix);
-            var collectionChange = MyTree.SetTreeCollection(dataGridViewIncludeChild, DataTableLib.changeCol.ChangeFrom, DataTableLib.changeCol.Prefix);
+            var collectionInclude = MyTree.SetTreeCollection(dataGridViewInclude, DTLib.dtInclude.includeCol.Prefix);
+            var collectionChange = MyTree.SetTreeCollection(dataGridViewIncludeChild, DTLib.dtInclude.changeCol.ChangeFrom, DTLib.dtInclude.changeCol.Prefix);
 
             // Классы
             treeInclude.Nodes.Clear();
@@ -1197,7 +1200,7 @@ namespace WinSimpleIDriver
             switch (tabName)
             {
                 case "tabPageSource":
-                    DataTableLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DataTableLib.sourcesCol.Title, DataTableLib.sourcesCol.CountTags, DataTableLib.tagsCol.Source);
+                    DTLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DTLib.dtSource.sourcesCol.Title, DTLib.dtSource.sourcesCol.CountTags, DTLib.dtTag.tagsCol.Source);
                     break;
 
             }
@@ -1226,17 +1229,17 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.sourceItem:
                     tabControlProject.SelectTab(tabPageSource);
-                    DataTableLib.ShowRow(dataGridViewSource, Id, title);
+                    DTLib.ShowRow(dataGridViewSource, Id, title);
                     break;
 
                 case TreeProjCategory.groupItem:
                     tabControlProject.SelectTab(tabPageGroup);
-                    DataTableLib.ShowRow(dataGridViewGroup, Id, title);
+                    DTLib.ShowRow(dataGridViewGroup, Id, title);
                     break;
 
                 case TreeProjCategory.tagItem:
                     tabControlProject.SelectTab(tabPageTag);
-                    DataTableLib.ShowRow(dataGridViewTag, Id, title);
+                    DTLib.ShowRow(dataGridViewTag, Id, title);
                     break;
 
 
@@ -1246,12 +1249,12 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.structureItem:
                     tabControlProject.SelectTab(tabPageStructure);
-                    DataTableLib.ShowRow(dataGridViewStructure, Id, title);
+                    DTLib.ShowRow(dataGridViewStructure, Id, title);
                     break;
 
                 case TreeProjCategory.targetItem:
                     tabControlProject.SelectTab(tabPageStructure);
-                    DataTableLib.ShowRow(dataGridViewStructureTarget, Id, title);
+                    DTLib.ShowRow(dataGridViewStructureTarget, Id, title);
                     break;
 
 
@@ -1261,12 +1264,12 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.includeItem :
                     tabControlProject.SelectTab(tabPageInclude);
-                    DataTableLib.ShowRow(dataGridViewInclude, Id, title);
+                    DTLib.ShowRow(dataGridViewInclude, Id, title);
                     break;
 
                 case TreeProjCategory.changeItem:
                     tabControlProject.SelectTab(tabPageInclude);
-                    DataTableLib.ShowRow(dataGridViewIncludeChild, Id, title);
+                    DTLib.ShowRow(dataGridViewIncludeChild, Id, title);
                     break;
             }
         }
@@ -1292,7 +1295,12 @@ namespace WinSimpleIDriver
             FormLib.TagForm.UpdateDGVTagSourceLink();
         }
 
-        
+        private void buttonSourceCopy_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
 
 
         // ===============================================================================================================

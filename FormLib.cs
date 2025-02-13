@@ -9,6 +9,9 @@ namespace WinSimpleIDriver
 {
     static class FormLib
     {
+
+
+
         // Добавление в текста в Combobox
         static public void SaveTextComboBox(ComboBox comboBox, string text = "")
         {
@@ -65,8 +68,8 @@ namespace WinSimpleIDriver
             #region Filter
             static public void TextFilter()
             {
-                DataTableLib.TableFilter(tbFilter.Text, dgv,
-                    DataTableLib.GetColumnIndexFilterSource(), DataTableLib.GetPairFilterSource());
+                DTLib.TableFilter(tbFilter.Text, dgv,
+                    DTLib.dtSource.GetColumnIndexFilterSource(), DTLib.dtSource.GetPairFilterSource());
             }
             #endregion
 
@@ -114,8 +117,8 @@ namespace WinSimpleIDriver
             static public void TextFilter()
             {
                 string text = coFilterSource.Text;
-                DataTableLib.TableFilter(tbFilter.Text, dgv,
-                    DataTableLib.GetColumnIndexFilterGroup(), DataTableLib.GetPairFilterGroup(text));
+                DTLib.TableFilter(tbFilter.Text, dgv,
+                    DTLib.dtGroup.GetColumnIndexFilterGroup(), DTLib.dtGroup.GetPairFilterGroup(text));
             }
             #endregion
 
@@ -180,8 +183,8 @@ namespace WinSimpleIDriver
                 string text3 = coFilterBlock.Text;
                 string text4 = coFilterPage.Text;
 
-                DataTableLib.TableFilter(tbFilter.Text, dgv,
-                    DataTableLib.GetColumnIndexFilterTag(), DataTableLib.GetPairFilterTag(text1, text2, text3, text4));
+                DTLib.TableFilter(tbFilter.Text, dgv,
+                    DTLib.dtTag.GetColumnIndexFilterTag(), DTLib.dtTag.GetPairFilterTag(text1, text2, text3, text4));
             }
             #endregion
 
@@ -189,7 +192,7 @@ namespace WinSimpleIDriver
             static public void UpdateDGVTagSourceLink()
             {
                 // Получить списки для...
-                var collectionGroup = MyTree.SetTreeCollection(GroupForm.dgv, DataTableLib.groupsCol.Title, DataTableLib.groupsCol.Source);
+                var collectionGroup = MyTree.SetTreeCollection(GroupForm.dgv, DTLib.dtGroup.groupsCol.Title, DTLib.dtGroup.groupsCol.Source);
 
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
@@ -198,7 +201,7 @@ namespace WinSimpleIDriver
 
                     string sourceTitle = "";
 
-                    var group = row.Cells[DataTableLib.tagsCol.Group].Value;
+                    var group = row.Cells[DTLib.dtTag.tagsCol.Group].Value;
                     if (group != null)
                     {
                         string groupTitle = group.ToString();
@@ -212,7 +215,7 @@ namespace WinSimpleIDriver
                         }
                     }
 
-                    row.Cells[DataTableLib.tagsCol.Source].Value = sourceTitle;
+                    row.Cells[DTLib.dtTag.tagsCol.Source].Value = sourceTitle;
                 }
 
             }
@@ -228,8 +231,8 @@ namespace WinSimpleIDriver
             #region Filter
             static public void StructureFilter()
             {
-                DataTableLib.TableFilter(tbFilter.Text, dgv,
-                    DataTableLib.GetColumnIndexFilterStructure(), DataTableLib.GetPairFilterStructure());
+                DTLib.TableFilter(tbFilter.Text, dgv,
+                    DTLib.dtStructure.GetColumnIndexFilterStructure(), DTLib.dtStructure.GetPairFilterStructure());
             }
             #endregion
 
@@ -247,8 +250,8 @@ namespace WinSimpleIDriver
             {
                 string text = coFilterParent.Text;
 
-                DataTableLib.TableFilter(tbFilter.Text, dgv,
-                    DataTableLib.GetColumnIndexFilterTarget(), DataTableLib.GetPairFilterTarget(text));
+                DTLib.TableFilter(tbFilter.Text, dgv,
+                    DTLib.dtStructure.GetColumnIndexFilterTarget(), DTLib.dtStructure.GetPairFilterTarget(text));
             }
             #endregion
 
@@ -263,8 +266,8 @@ namespace WinSimpleIDriver
             #region Filter
             static public void IncludeFilter()
             {
-                DataTableLib.TableFilter(tbFilter.Text, dgv,
-                    DataTableLib.GetColumnIndexFilterInclude(), DataTableLib.GetPairFilterInclude());
+                DTLib.TableFilter(tbFilter.Text, dgv,
+                    DTLib.dtInclude.GetColumnIndexFilterInclude(), DTLib.dtInclude.GetPairFilterInclude());
             }
             #endregion
         }
@@ -281,8 +284,8 @@ namespace WinSimpleIDriver
             {
                 string text = coFilterParent.Text;
 
-                DataTableLib.TableFilter(tbFilter.Text, dgv,
-                    DataTableLib.GetColumnIndexFilterIncludeChild(), DataTableLib.GetPairFilterIncludeChild(text));
+                DTLib.TableFilter(tbFilter.Text, dgv,
+                    DTLib.dtInclude.GetColumnIndexFilterIncludeChild(), DTLib.dtInclude.GetPairFilterIncludeChild(text));
             }
             #endregion
 

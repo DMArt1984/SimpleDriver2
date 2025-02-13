@@ -18,17 +18,8 @@ namespace WinSimpleIDriver
         public string Link; // Ссылка на уровень выше
     }
 
-    class DataTableLib
+    static class DTLib
     {
-        // Номера колонок в DGV
-        static public DGVSourcesCol sourcesCol = new DGVSourcesCol();
-        static public DGVGroupsCol groupsCol = new DGVGroupsCol();
-        static public DGVTagsCol tagsCol = new DGVTagsCol();
-        static public DGVStructureCol structureCol = new DGVStructureCol();
-        static public DGVTargetCol targetCol = new DGVTargetCol();
-        static public DGVIncludeCol includeCol = new DGVIncludeCol();
-        static public DGVChangeCol changeCol = new DGVChangeCol();
-
         public struct ColumnValue
         {
             public int column;
@@ -46,206 +37,247 @@ namespace WinSimpleIDriver
             public string filter;
         }
 
-        // Определение номеров колонок
-        static public void SetDGVColumns(DataGridView sources, DataGridView groups, DataGridView tags, 
-                                            DataGridView includes, DataGridView changes,
-                                            DataGridView structures, DataGridView targets)
-        {
-            sourcesCol = new DGVSourcesCol 
-            {
-                Calc = sources.Columns["sourceCalc"].Index,
-                Title = sources.Columns["sourceTitle"].Index,
-                Driver = sources.Columns["sourceDriver"].Index,
-                Address = sources.Columns["sourceAddress"].Index,
-                Desc = sources.Columns["sourceDesc"].Index,
-                Status = sources.Columns["sourceStatus"].Index,
-                Message = sources.Columns["sourceMessage"].Index,
-                CountTags = sources.Columns["sourceTags"].Index
-            };
-
-            groupsCol = new DGVGroupsCol
-            {
-                Calc = groups.Columns["groupCalc"].Index,
-                Title = groups.Columns["groupTitle"].Index,
-                Source = groups.Columns["groupSource"].Index,
-                Desc = groups.Columns["groupDesc"].Index,
-                Status = groups.Columns["groupStatus"].Index
-            };
-
-            tagsCol = new DGVTagsCol
-            {
-                Calc = tags.Columns["tagCalc"].Index,
-                Title = tags.Columns["tagTitle"].Index,
-                Value = tags.Columns["tagValue"].Index,
-                DataType = tags.Columns["tagDataType"].Index,
-                Address = tags.Columns["tagAddress"].Index,
-                Desc = tags.Columns["tagDesc"].Index,
-                Status = tags.Columns["tagStatus"].Index,
-                Message = tags.Columns["tagMessage"].Index,
-                Source = tags.Columns["tagSource"].Index,
-                Group = tags.Columns["tagGroup"].Index,
-                Block = tags.Columns["tagBlock"].Index,
-                Page = tags.Columns["tagPage"].Index
-            };
-
-            // ---
-
-            structureCol = new DGVStructureCol
-            {
-                 Title = structures.Columns["structureTitle"].Index,
-                 Connector = structures.Columns["structureConnector"].Index,
-                 TagSource = structures.Columns["structureTagSource"].Index,
-                 Template = structures.Columns["structureTemplate"].Index,
-                 Group = structures.Columns["structureGroup"].Index
-            };
-
-            targetCol = new DGVTargetCol
-            {
-                 Structure = targets.Columns["targetStructure"].Index,
-                 Address = targets.Columns["targetAddress"].Index,
-                 Tag = targets.Columns["targetTitle"].Index,
-                 Desc = targets.Columns["targetDesc"].Index
-            };
-
-            // ---
-
-            includeCol = new DGVIncludeCol
-            {
-                Prefix = includes.Columns["includePrefix"].Index,
-                FileName = includes.Columns["includeFileName"].Index
-            };
-
-            changeCol = new DGVChangeCol
-            {
-                Prefix = changes.Columns["changePrefix"].Index,
-                ChangeFrom = changes.Columns["changeFrom"].Index,
-                ChangeTo = changes.Columns["changeTo"].Index
-            };
-
-        }
-
         #region Source
 
-        // Источники. Номера колонок для фильтра в массив
-        static public int[] GetColumnIndexFilterSource()
+        static public class dtSource
         {
-            return new int[]
+            static public DGVSourcesCol sourcesCol = new DGVSourcesCol(); // Номера колонок в DGV
+
+            // Определение номеров колонок
+            static public void LinkColumns(DataGridView sources)
             {
+                sourcesCol = new DGVSourcesCol
+                {
+                    Calc = sources.Columns["sourceCalc"].Index,
+                    Title = sources.Columns["sourceTitle"].Index,
+                    Driver = sources.Columns["sourceDriver"].Index,
+                    Address = sources.Columns["sourceAddress"].Index,
+                    Desc = sources.Columns["sourceDesc"].Index,
+                    Status = sources.Columns["sourceStatus"].Index,
+                    Message = sources.Columns["sourceMessage"].Index,
+                    CountTags = sources.Columns["sourceTags"].Index
+                };
+            }
+
+            // Источники. Номера колонок для фильтра в массив
+            static public int[] GetColumnIndexFilterSource()
+            {
+                return new int[]
+                {
                 sourcesCol.Title, sourcesCol.Driver, sourcesCol.Address, sourcesCol.Desc, sourcesCol.Status, sourcesCol.Message
-            };
-        }
-        static public PairFilterCol[] GetPairFilterSource()
-        {
-            return new PairFilterCol[] { };
+                };
+            }
+            static public PairFilterCol[] GetPairFilterSource()
+            {
+                return new PairFilterCol[] { };
+            }
         }
 
         #endregion
 
         #region Group
 
-        // Группы. Номера колонок для фильтра в массив
-        static public int[] GetColumnIndexFilterGroup()
+        static public class dtGroup
         {
-            return new int[]
+            static public DGVGroupsCol groupsCol = new DGVGroupsCol(); // Номера колонок в DGV
+
+            // Определение номеров колонок
+            static public void LinkColumns(DataGridView groups)
             {
+                groupsCol = new DGVGroupsCol
+                {
+                    Calc = groups.Columns["groupCalc"].Index,
+                    Title = groups.Columns["groupTitle"].Index,
+                    Source = groups.Columns["groupSource"].Index,
+                    Desc = groups.Columns["groupDesc"].Index,
+                    Status = groups.Columns["groupStatus"].Index
+                };
+            }
+
+            // Группы. Номера колонок для фильтра в массив
+            static public int[] GetColumnIndexFilterGroup()
+            {
+                return new int[]
+                {
                 groupsCol.Title, groupsCol.Desc, groupsCol.Status
-            };
-        }
-        static public PairFilterCol[] GetPairFilterGroup(string text)
-        {
-            return new PairFilterCol[] 
-            { 
+                };
+            }
+            static public PairFilterCol[] GetPairFilterGroup(string text)
+            {
+                return new PairFilterCol[]
+                {
                 new PairFilterCol { col = groupsCol.Source, filter = text }
-            };
+                };
+            }
+
         }
 
         #endregion
 
         #region Tag
 
-        // Теги. Номера колонок для фильтра в массив
-        static public int[] GetColumnIndexFilterTag()
+        static public class dtTag
         {
-            return new int[]
+            static public DGVTagsCol tagsCol = new DGVTagsCol(); // Номера колонок в DGV
+
+            // Определение номеров колонок
+            static public void LinkColumns(DataGridView tags)
             {
+                tagsCol = new DGVTagsCol
+                {
+                    Calc = tags.Columns["tagCalc"].Index,
+                    Title = tags.Columns["tagTitle"].Index,
+                    Value = tags.Columns["tagValue"].Index,
+                    DataType = tags.Columns["tagDataType"].Index,
+                    Address = tags.Columns["tagAddress"].Index,
+                    Desc = tags.Columns["tagDesc"].Index,
+                    Status = tags.Columns["tagStatus"].Index,
+                    Message = tags.Columns["tagMessage"].Index,
+                    Source = tags.Columns["tagSource"].Index,
+                    Group = tags.Columns["tagGroup"].Index,
+                    Block = tags.Columns["tagBlock"].Index,
+                    Page = tags.Columns["tagPage"].Index
+                };
+
+            }
+
+            // Теги. Номера колонок для фильтра в массив
+            static public int[] GetColumnIndexFilterTag()
+            {
+                return new int[]
+                {
                 tagsCol.Title, tagsCol.Value, tagsCol.DataType, tagsCol.Address, tagsCol.Desc, tagsCol.Status, tagsCol.Message
-            };
-        }
-        static public PairFilterCol[] GetPairFilterTag(string textSource, string textGroup, string textBlock, string textPage)
-        {
-            return new PairFilterCol[]
+                };
+            }
+            static public PairFilterCol[] GetPairFilterTag(string textSource, string textGroup, string textBlock, string textPage)
             {
+                return new PairFilterCol[]
+                {
                 new PairFilterCol { col = tagsCol.Source, filter = textSource },
                 new PairFilterCol { col = tagsCol.Group, filter = textGroup },
                 new PairFilterCol { col = tagsCol.Block, filter = textBlock },
                 new PairFilterCol { col = tagsCol.Page, filter = textPage }
-            };
+                };
+            }
         }
+
+        
 
         #endregion
 
         #region Structure and Target
 
-        // Структуры. Номера колонок для фильтра в массив
-        static public int[] GetColumnIndexFilterStructure()
+        static public class dtStructure
         {
-            return new int[]
-            {
-                structureCol.Title, structureCol.Template, structureCol.TagSource, structureCol.Group, structureCol.Connector
-            };
-        }
-        static public PairFilterCol[] GetPairFilterStructure()
-        {
-            return new PairFilterCol[] { };
-        }
+            static public DGVStructureCol structureCol = new DGVStructureCol(); // Номера колонок в DGV
+            static public DGVTargetCol targetCol = new DGVTargetCol(); // Номера колонок в DGV
 
-        // Цели. Номера колонок для фильтра в массив
-        static public int[] GetColumnIndexFilterTarget()
-        {
-            return new int[]
+            // Определение номеров колонок
+            static public void LinkColumns(DataGridView structures, DataGridView targets)
             {
+                structureCol = new DGVStructureCol
+                {
+                    Title = structures.Columns["structureTitle"].Index,
+                    Connector = structures.Columns["structureConnector"].Index,
+                    TagSource = structures.Columns["structureTagSource"].Index,
+                    Template = structures.Columns["structureTemplate"].Index,
+                    Group = structures.Columns["structureGroup"].Index
+                };
+
+                targetCol = new DGVTargetCol
+                {
+                    Structure = targets.Columns["targetStructure"].Index,
+                    Address = targets.Columns["targetAddress"].Index,
+                    Tag = targets.Columns["targetTitle"].Index,
+                    Desc = targets.Columns["targetDesc"].Index
+                };
+
+            }
+
+            // Структуры. Номера колонок для фильтра в массив
+            static public int[] GetColumnIndexFilterStructure()
+            {
+                return new int[]
+                {
+                structureCol.Title, structureCol.Template, structureCol.TagSource, structureCol.Group, structureCol.Connector
+                };
+            }
+            static public PairFilterCol[] GetPairFilterStructure()
+            {
+                return new PairFilterCol[] { };
+            }
+
+            // Цели. Номера колонок для фильтра в массив
+            static public int[] GetColumnIndexFilterTarget()
+            {
+                return new int[]
+                {
                 targetCol.Tag, targetCol.Desc, targetCol.Address
-            };
-        }
-        static public PairFilterCol[] GetPairFilterTarget(string textStructure)
-        {
-            return new PairFilterCol[]
+                };
+            }
+            static public PairFilterCol[] GetPairFilterTarget(string textStructure)
             {
+                return new PairFilterCol[]
+                {
                 new PairFilterCol { col = targetCol.Structure, filter = textStructure }
-            };
+                };
+            }
         }
 
         #endregion
 
         #region Include and Change
 
-        // Классы. Номера колонок для фильтра в массив
-        static public int[] GetColumnIndexFilterInclude()
+        static public class dtInclude
         {
-            return new int[]
-            {
-                includeCol.Prefix, includeCol.FileName
-            };
-        }
-        static public PairFilterCol[] GetPairFilterInclude()
-        {
-            return new PairFilterCol[] { };
-        }
+            static public DGVIncludeCol includeCol = new DGVIncludeCol(); // Номера колонок в DGV
+            static public DGVChangeCol changeCol = new DGVChangeCol(); // Номера колонок в DGV
 
-        // Замены. Номера колонок для фильтра в массив
-        static public int[] GetColumnIndexFilterIncludeChild()
-        {
-            return new int[]
+            // Определение номеров колонок
+            static public void LinkColumns(DataGridView includes, DataGridView changes)
             {
+                includeCol = new DGVIncludeCol
+                {
+                    Prefix = includes.Columns["includePrefix"].Index,
+                    FileName = includes.Columns["includeFileName"].Index
+                };
+
+                changeCol = new DGVChangeCol
+                {
+                    Prefix = changes.Columns["changePrefix"].Index,
+                    ChangeFrom = changes.Columns["changeFrom"].Index,
+                    ChangeTo = changes.Columns["changeTo"].Index
+                };
+            }
+
+            // Классы. Номера колонок для фильтра в массив
+            static public int[] GetColumnIndexFilterInclude()
+            {
+                return new int[]
+                {
+                includeCol.Prefix, includeCol.FileName
+                };
+            }
+            static public PairFilterCol[] GetPairFilterInclude()
+            {
+                return new PairFilterCol[] { };
+            }
+
+            // Замены. Номера колонок для фильтра в массив
+            static public int[] GetColumnIndexFilterIncludeChild()
+            {
+                return new int[]
+                {
                 changeCol.Prefix, changeCol.ChangeFrom, changeCol.ChangeTo
-            };
-        }
-        static public PairFilterCol[] GetPairFilterIncludeChild(string text)
-        {
-            return new PairFilterCol[]
+                };
+            }
+            static public PairFilterCol[] GetPairFilterIncludeChild(string text)
             {
+                return new PairFilterCol[]
+                {
                 new PairFilterCol { col = changeCol.Prefix, filter = text }
-            };
+                };
+            }
         }
 
         #endregion
@@ -281,13 +313,13 @@ namespace WinSimpleIDriver
         {
             DataRow rowTag = dt.Rows.Find(Id);
             if (rowTag != null)
-                rowTag[tagsCol.Value] = value;
+                rowTag[dtTag.tagsCol.Value] = value;
         }
 
         static public void SetTagValue(DataRow rowTag, dynamic value)
         {
             if (rowTag != null)
-                rowTag[tagsCol.Value] = value;
+                rowTag[dtTag.tagsCol.Value] = value;
         }
 
         
@@ -591,7 +623,7 @@ namespace WinSimpleIDriver
         // При появлении новой строки таблицы
         static public void ForNewRow(DataGridView dgv)
         {
-            var newID = DataTableLib.GetMaxID(dgv);
+            var newID = DTLib.GetMaxID(dgv);
             var row = dgv.CurrentRow;
             if (row != null)
                 row.Cells[0].Value = newID;
