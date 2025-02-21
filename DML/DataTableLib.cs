@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinSimpleIDriver;
 using WinSimpleIDriver.Connector;
 using WinSimpleIDriver.Connector.SGT;
 
-namespace WinSimpleIDriver
+namespace DML
 {
     
     public struct TableIdentity
@@ -18,7 +19,7 @@ namespace WinSimpleIDriver
         public string Link; // Ссылка на уровень выше
     }
 
-    static class DTLib
+    static class DataTableLib
     {
         public struct ColumnValue
         {
@@ -120,13 +121,13 @@ namespace WinSimpleIDriver
             // Копировать стороку
             static public void CopyDGVRow()
             {
-                DTLib.CopyDGVRow(dgv, col.Title);
+                DataTableLib.CopyDGVRow(dgv, col.Title);
             }
 
             // Удалить строку
             static public void DelDGVRow()
             {
-                DTLib.DelDGVRow(dgv);
+                DataTableLib.DelDGVRow(dgv);
             }
 
             // Справка
@@ -1085,7 +1086,7 @@ namespace WinSimpleIDriver
         // При появлении новой строки таблицы
         static public void ForNewRow(DataGridView dgv)
         {
-            var newID = DTLib.GetNextID(dgv);
+            var newID = DataTableLib.GetNextID(dgv);
             var row = dgv.CurrentRow;
             if (row != null)
                 row.Cells[0].Value = newID;
@@ -1118,26 +1119,5 @@ namespace WinSimpleIDriver
         #endregion
 
     }
-
-    static class FormLib
-    {
-        // Добавление в текста в Combobox
-        static public void SaveTextComboBox(ComboBox comboBox, string text = "")
-        {
-            if (text == "")
-                text = comboBox.Text;
-
-            if (String.IsNullOrWhiteSpace(text) == false)
-            {
-                if (comboBox.Items.Contains(text) == false)
-                {
-                    comboBox.Items.Add(text);
-                }
-            }
-        }
-
-    }
-
-
 
 }

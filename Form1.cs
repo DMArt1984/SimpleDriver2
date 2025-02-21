@@ -55,57 +55,57 @@ namespace WinSimpleIDriver
 
 
             // Form: Source
-            DTLib.dtSource.LinkColumns(dataGridViewSource);
-            DTLib.dtSource.cbEditor = checkBoxSourceEditor;
-            DTLib.dtSource.cbDesc = checkBoxSourceDesc;
-            DTLib.dtSource.cbRuntime = checkBoxSourceRuntime;
-            DTLib.dtSource.cbStatistic = checkBoxSourceStatistic;
-            DTLib.dtSource.tbFilter = textBoxSourceFilter;
-            DTLib.dtSource.CheckColumns();
+            DataTableLib.dtSource.LinkColumns(dataGridViewSource);
+            DataTableLib.dtSource.cbEditor = checkBoxSourceEditor;
+            DataTableLib.dtSource.cbDesc = checkBoxSourceDesc;
+            DataTableLib.dtSource.cbRuntime = checkBoxSourceRuntime;
+            DataTableLib.dtSource.cbStatistic = checkBoxSourceStatistic;
+            DataTableLib.dtSource.tbFilter = textBoxSourceFilter;
+            DataTableLib.dtSource.CheckColumns();
 
             // Form: Group
-            DTLib.dtGroup.LinkColumns(dataGridViewGroup);
-            DTLib.dtGroup.cbEditor = checkBoxGroupEditor;
-            DTLib.dtGroup.cbDesc = checkBoxGroupDesc;
-            DTLib.dtGroup.cbRuntime = checkBoxGroupRuntime;
-            DTLib.dtGroup.cbStatistic = checkBoxGroupStatistic;
-            DTLib.dtGroup.cbGroupSource = checkBoxGroupSource;
-            DTLib.dtGroup.tbFilter = textBoxGroupFilter;
-            DTLib.dtGroup.coFilterSource = comboBoxGroupFilterSource;
-            DTLib.dtGroup.CheckColumns();
+            DataTableLib.dtGroup.LinkColumns(dataGridViewGroup);
+            DataTableLib.dtGroup.cbEditor = checkBoxGroupEditor;
+            DataTableLib.dtGroup.cbDesc = checkBoxGroupDesc;
+            DataTableLib.dtGroup.cbRuntime = checkBoxGroupRuntime;
+            DataTableLib.dtGroup.cbStatistic = checkBoxGroupStatistic;
+            DataTableLib.dtGroup.cbGroupSource = checkBoxGroupSource;
+            DataTableLib.dtGroup.tbFilter = textBoxGroupFilter;
+            DataTableLib.dtGroup.coFilterSource = comboBoxGroupFilterSource;
+            DataTableLib.dtGroup.CheckColumns();
 
             // Form: Tag
-            DTLib.dtTag.LinkColumns(dataGridViewTag);
-            DTLib.dtTag.cbEditor = checkBoxTagEditor;
-            DTLib.dtTag.cbDesc = checkBoxTagDesc;
-            DTLib.dtTag.cbRuntime = checkBoxTagRuntime;
-            DTLib.dtTag.cbStatistic = checkBoxTagStatistic;
-            DTLib.dtTag.cbBP = checkBoxTagBP;
-            DTLib.dtTag.cbSG = checkBoxTagSG;
-            DTLib.dtTag.tbFilter = textBoxTagFilter;
-            DTLib.dtTag.coFilterSource = comboBoxTagFilterSource;
-            DTLib.dtTag.coFilterGroup = comboBoxTagFilterGroup;
-            DTLib.dtTag.coFilterBlock = comboBoxTagFilterBlock;
-            DTLib.dtTag.coFilterPage = comboBoxTagFilterPage;
-            DTLib.dtTag.CheckColumns();
+            DataTableLib.dtTag.LinkColumns(dataGridViewTag);
+            DataTableLib.dtTag.cbEditor = checkBoxTagEditor;
+            DataTableLib.dtTag.cbDesc = checkBoxTagDesc;
+            DataTableLib.dtTag.cbRuntime = checkBoxTagRuntime;
+            DataTableLib.dtTag.cbStatistic = checkBoxTagStatistic;
+            DataTableLib.dtTag.cbBP = checkBoxTagBP;
+            DataTableLib.dtTag.cbSG = checkBoxTagSG;
+            DataTableLib.dtTag.tbFilter = textBoxTagFilter;
+            DataTableLib.dtTag.coFilterSource = comboBoxTagFilterSource;
+            DataTableLib.dtTag.coFilterGroup = comboBoxTagFilterGroup;
+            DataTableLib.dtTag.coFilterBlock = comboBoxTagFilterBlock;
+            DataTableLib.dtTag.coFilterPage = comboBoxTagFilterPage;
+            DataTableLib.dtTag.CheckColumns();
 
             // Form: Structure
-            DTLib.dtStructure.LinkColumns(dataGridViewStructure);
-            DTLib.dtStructure.tbFilter = textBoxStructureFilter;
+            DataTableLib.dtStructure.LinkColumns(dataGridViewStructure);
+            DataTableLib.dtStructure.tbFilter = textBoxStructureFilter;
 
             // Form: StructureTargetForm
-            DTLib.dtTarget.LinkColumns(dataGridViewStructureTarget);
-            DTLib.dtTarget.tbFilter = textBoxStructureTargetFilter;
-            DTLib.dtTarget.coFilterParent = comboBoxStructureTargetFilterParent;
+            DataTableLib.dtTarget.LinkColumns(dataGridViewStructureTarget);
+            DataTableLib.dtTarget.tbFilter = textBoxStructureTargetFilter;
+            DataTableLib.dtTarget.coFilterParent = comboBoxStructureTargetFilterParent;
 
             // Form: Include
-            DTLib.dtInclude.LinkColumns(dataGridViewInclude);
-            DTLib.dtInclude.tbFilter = textBoxIncludeFilter;
+            DataTableLib.dtInclude.LinkColumns(dataGridViewInclude);
+            DataTableLib.dtInclude.tbFilter = textBoxIncludeFilter;
 
             // Form: IncludeChild
-            DTLib.dtIncludeChild.LinkColumns(dataGridViewIncludeChild);
-            DTLib.dtIncludeChild.tbFilter = textBoxIncludeChildFilter;
-            DTLib.dtIncludeChild.coFilterParent = comboBoxIncludeChildFilterParent;
+            DataTableLib.dtIncludeChild.LinkColumns(dataGridViewIncludeChild);
+            DataTableLib.dtIncludeChild.tbFilter = textBoxIncludeChildFilter;
+            DataTableLib.dtIncludeChild.coFilterParent = comboBoxIncludeChildFilterParent;
 
 
 
@@ -141,7 +141,7 @@ namespace WinSimpleIDriver
             FormClear();
 
             // DataTables
-            dtTags = DTLib.GetEmptyDataTableForTags(dataGridViewTag, "Tags");
+            dtTags = DataTableLib.GetEmptyDataTableForTags(dataGridViewTag, "Tags");
 
             SetLeftLabelMessage1();
 
@@ -306,34 +306,34 @@ namespace WinSimpleIDriver
         #region Source.Event
         private void checkBoxSourceEditor_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtSource.CheckColumns();
+            DataTableLib.dtSource.CheckColumns();
         }
 
         private void checkBoxSourceRuntime_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtSource.CheckColumns();
+            DataTableLib.dtSource.CheckColumns();
         }
 
         private void checkBoxSourceDesc_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtSource.CheckColumns();
+            DataTableLib.dtSource.CheckColumns();
         }
 
         private void checkBoxSourceStatistic_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtSource.CheckColumns();
+            DataTableLib.dtSource.CheckColumns();
         }
         private void buttonSourceCopy_Click(object sender, EventArgs e)
         {
-            DTLib.dtSource.CopyDGVRow();
+            DataTableLib.dtSource.CopyDGVRow();
         }
         private void buttonSourceDel_Click(object sender, EventArgs e)
         {
-            DTLib.dtSource.DelDGVRow();
+            DataTableLib.dtSource.DelDGVRow();
         }
         private void buttonSourceHelp_Click(object sender, EventArgs e)
         {
-            DTLib.dtSource.Help();
+            DataTableLib.dtSource.Help();
         }
         #endregion
 
@@ -343,12 +343,12 @@ namespace WinSimpleIDriver
         private void textBoxSourceFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxSourceFilter.Text))
-                DTLib.dtSource.TextFilter();
+                DataTableLib.dtSource.TextFilter();
         }
 
         private void buttonSourceFilter_Click(object sender, EventArgs e)
         {
-            DTLib.dtSource.TextFilter();
+            DataTableLib.dtSource.TextFilter();
         }
 
         #endregion
@@ -381,7 +381,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewSource_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DTLib.ForNewRow(dataGridViewSource);
+            DataTableLib.ForNewRow(dataGridViewSource);
         }
 
         private void dataGridViewSource_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -402,27 +402,27 @@ namespace WinSimpleIDriver
 
         private void checkBoxGroupEditor_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtGroup.CheckColumns();
+            DataTableLib.dtGroup.CheckColumns();
         }
 
         private void checkBoxGroupDesc_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtGroup.CheckColumns();
+            DataTableLib.dtGroup.CheckColumns();
         }
 
         private void checkBoxGroupStatistic_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtGroup.CheckColumns();
+            DataTableLib.dtGroup.CheckColumns();
         }
 
         private void checkBoxGroupRuntime_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtGroup.CheckColumns();
+            DataTableLib.dtGroup.CheckColumns();
         }
 
         private void checkBoxGroupSource_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtGroup.CheckColumns();
+            DataTableLib.dtGroup.CheckColumns();
         }
         #endregion
 
@@ -432,13 +432,13 @@ namespace WinSimpleIDriver
 
         private void comboBoxGroupFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DTLib.dtGroup.TextFilter();
+            DataTableLib.dtGroup.TextFilter();
         }
 
         private void comboBoxGroupFilterSource_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxGroupFilterSource.Text))
-                DTLib.dtGroup.TextFilter();
+                DataTableLib.dtGroup.TextFilter();
         }
         
         #endregion
@@ -447,14 +447,14 @@ namespace WinSimpleIDriver
         private void textBoxGroupFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxGroupFilter.Text))
-                DTLib.dtGroup.TextFilter();
+                DataTableLib.dtGroup.TextFilter();
         }
         #endregion
 
         private void buttonGroupFilter_Click(object sender, EventArgs e)
         {
             FormLib.SaveTextComboBox(comboBoxGroupFilterSource);
-            DTLib.dtGroup.TextFilter();
+            DataTableLib.dtGroup.TextFilter();
         }
 
         
@@ -485,7 +485,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewGroup_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DTLib.ForNewRow(dataGridViewGroup);
+            DataTableLib.ForNewRow(dataGridViewGroup);
         }
 
         private void dataGridViewGroup_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -504,36 +504,36 @@ namespace WinSimpleIDriver
         #region Tag.Event
         private void checkBoxTagEditor_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtTag.CheckColumns();
+            DataTableLib.dtTag.CheckColumns();
         }
 
         private void checkBoxTagRuntime_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtTag.CheckColumns();
+            DataTableLib.dtTag.CheckColumns();
         }
 
         private void checkBoxTagDesc_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtTag.CheckColumns();
+            DataTableLib.dtTag.CheckColumns();
         }
 
         private void checkBoxTagStatistic_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtTag.CheckColumns();
+            DataTableLib.dtTag.CheckColumns();
         }
 
         private void checkBoxTagBP_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtTag.CheckColumns();
+            DataTableLib.dtTag.CheckColumns();
         }
 
         private void checkBoxTagSG_CheckedChanged(object sender, EventArgs e)
         {
-            DTLib.dtTag.CheckColumns();
+            DataTableLib.dtTag.CheckColumns();
         }
         private void buttonTagHelp_Click(object sender, EventArgs e)
         {
-            DTLib.dtTag.Help();
+            DataTableLib.dtTag.Help();
         }
         #endregion
 
@@ -543,46 +543,46 @@ namespace WinSimpleIDriver
 
         private void comboBoxTagFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DTLib.dtTag.TextFilter();
+            DataTableLib.dtTag.TextFilter();
         }
 
         private void comboBoxTagFilterSource_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxTagFilterSource.Text))
-                DTLib.dtTag.TextFilter();
+                DataTableLib.dtTag.TextFilter();
         }
 
         private void comboBoxTagFilterGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DTLib.dtTag.TextFilter();
+            DataTableLib.dtTag.TextFilter();
         }
 
         private void comboBoxTagFilterGroup_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxTagFilterGroup.Text))
-                DTLib.dtTag.TextFilter();
+                DataTableLib.dtTag.TextFilter();
         }
 
         private void comboBoxTagFilterBlock_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DTLib.dtTag.TextFilter();
+            DataTableLib.dtTag.TextFilter();
         }
 
         private void comboBoxTagFilterBlock_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxTagFilterBlock.Text))
-                DTLib.dtTag.TextFilter();
+                DataTableLib.dtTag.TextFilter();
         }
 
         private void comboBoxTagFilterPage_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DTLib.dtTag.TextFilter();
+            DataTableLib.dtTag.TextFilter();
         }
 
         private void comboBoxTagFilterPage_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxTagFilterPage.Text))
-                DTLib.dtTag.TextFilter();
+                DataTableLib.dtTag.TextFilter();
         }
 
         #endregion
@@ -591,7 +591,7 @@ namespace WinSimpleIDriver
         private void textBoxTagFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxTagFilter.Text))
-                DTLib.dtTag.TextFilter();
+                DataTableLib.dtTag.TextFilter();
         }
         #endregion
 
@@ -601,7 +601,7 @@ namespace WinSimpleIDriver
             FormLib.SaveTextComboBox(comboBoxTagFilterGroup);
             FormLib.SaveTextComboBox(comboBoxTagFilterBlock);
             FormLib.SaveTextComboBox(comboBoxTagFilterPage);
-            DTLib.dtTag.TextFilter();
+            DataTableLib.dtTag.TextFilter();
         }
 
         
@@ -621,9 +621,9 @@ namespace WinSimpleIDriver
 
         private void dataGridViewTag_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (dataGridViewTag.CurrentCell.ColumnIndex == DTLib.dtTag.col.Group)
+            if (dataGridViewTag.CurrentCell.ColumnIndex == DataTableLib.dtTag.col.Group)
             {
-                DTLib.dtTag.UpdateDGVTagSourceLink();
+                DataTableLib.dtTag.UpdateDGVTagSourceLink();
             }
             DrawTreeSGT();
         }
@@ -640,7 +640,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewTag_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DTLib.ForNewRow(dataGridViewTag);
+            DataTableLib.ForNewRow(dataGridViewTag);
         }
 
         private void dataGridViewTag_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -670,7 +670,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewInclude_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DTLib.ForNewRow(dataGridViewInclude); // new ID
+            DataTableLib.ForNewRow(dataGridViewInclude); // new ID
         }
         #endregion
 
@@ -681,11 +681,11 @@ namespace WinSimpleIDriver
         private void textBoxIncludeFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxIncludeFilter.Text))
-                DTLib.dtInclude.IncludeFilter();
+                DataTableLib.dtInclude.IncludeFilter();
         }
         private void buttonIncludeFilter_Click(object sender, EventArgs e)
         {
-            DTLib.dtInclude.IncludeFilter();
+            DataTableLib.dtInclude.IncludeFilter();
         }
         
 
@@ -713,12 +713,12 @@ namespace WinSimpleIDriver
         #region IncludeChild.ComboFilter.Event
         private void comboBoxChangeFilterInclude_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DTLib.dtIncludeChild.IncludeChildFilter();
+            DataTableLib.dtIncludeChild.IncludeChildFilter();
         }
         private void comboBoxChangeFilterInclude_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxIncludeChildFilterParent.Text))
-                DTLib.dtIncludeChild.IncludeChildFilter();
+                DataTableLib.dtIncludeChild.IncludeChildFilter();
         }
         #endregion
 
@@ -727,29 +727,29 @@ namespace WinSimpleIDriver
         private void textBoxChangeFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxIncludeChildFilter.Text))
-                DTLib.dtIncludeChild.IncludeChildFilter();
+                DataTableLib.dtIncludeChild.IncludeChildFilter();
         }
 
         private void buttonChangeFilter_Click(object sender, EventArgs e)
         {
             FormLib.SaveTextComboBox(comboBoxIncludeChildFilterParent);
-            DTLib.dtIncludeChild.IncludeChildFilter();
+            DataTableLib.dtIncludeChild.IncludeChildFilter();
         }
 
         private void SetComboBoxIncludeChildFilterInclude()
         {
-            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DTLib.GetValueFromCurrentRow(dataGridViewInclude, DTLib.dtInclude.col.Prefix));
+            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewInclude, DataTableLib.dtInclude.col.Prefix));
             comboBoxIncludeChildFilterParent.Text = text;
-            DTLib.dtIncludeChild.IncludeChildFilter();
+            DataTableLib.dtIncludeChild.IncludeChildFilter();
         }
 
         
 
         private void dataGridViewIncludeChild_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DTLib.ForNewRow(dataGridViewIncludeChild); // new ID
+            DataTableLib.ForNewRow(dataGridViewIncludeChild); // new ID
 
-            DTLib.SetParentInRow(dataGridViewIncludeChild, comboBoxIncludeChildFilterParent, DTLib.dtIncludeChild.col.Prefix); // filter
+            DataTableLib.SetParentInRow(dataGridViewIncludeChild, comboBoxIncludeChildFilterParent, DataTableLib.dtIncludeChild.col.Prefix); // filter
 
             //string text = comboBoxChangeFilterInclude.Text;
             //if (String.IsNullOrWhiteSpace(text) == false)
@@ -781,7 +781,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewStructure_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DTLib.ForNewRow(dataGridViewStructure);
+            DataTableLib.ForNewRow(dataGridViewStructure);
         }
         #endregion
 
@@ -791,11 +791,11 @@ namespace WinSimpleIDriver
         private void textBoxStructureFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxStructureFilter.Text))
-                DTLib.dtStructure.StructureFilter();
+                DataTableLib.dtStructure.StructureFilter();
         }
         private void buttonStructureFilter_Click(object sender, EventArgs e)
         {
-            DTLib.dtStructure.StructureFilter();
+            DataTableLib.dtStructure.StructureFilter();
         }
 
         
@@ -809,9 +809,9 @@ namespace WinSimpleIDriver
 
         private void SetComboBoxTargetFilterStructure()
         {
-            string text = (splitContainerStructure.Panel1Collapsed) ? "" : (DTLib.GetValueFromCurrentRow(dataGridViewStructure, DTLib.dtStructure.col.Title));
+            string text = (splitContainerStructure.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewStructure, DataTableLib.dtStructure.col.Title));
             comboBoxStructureTargetFilterParent.Text = text;
-            DTLib.dtTarget.StructureTargetFilter();
+            DataTableLib.dtTarget.StructureTargetFilter();
         }
 
         
@@ -831,31 +831,31 @@ namespace WinSimpleIDriver
         #region StructureTarget.ComboFilter.Event
         private void comboBoxTargetFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DTLib.dtTarget.StructureTargetFilter();
+            DataTableLib.dtTarget.StructureTargetFilter();
         }
         private void comboBoxTargetFilterSource_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxStructureTargetFilterParent.Text))
-                DTLib.dtTarget.StructureTargetFilter();
+                DataTableLib.dtTarget.StructureTargetFilter();
         }
 
         private void buttonTargetFilter_Click(object sender, EventArgs e)
         {
             FormLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
-            DTLib.dtTarget.StructureTargetFilter();
+            DataTableLib.dtTarget.StructureTargetFilter();
         }
 
         private void textBoxTargetFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxStructureTargetFilter.Text))
-                DTLib.dtTarget.StructureTargetFilter();
+                DataTableLib.dtTarget.StructureTargetFilter();
         }
 
         private void dataGridViewTarget_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            DTLib.ForNewRow(dataGridViewStructureTarget); // new ID
+            DataTableLib.ForNewRow(dataGridViewStructureTarget); // new ID
 
-            DTLib.SetParentInRow(dataGridViewStructureTarget, comboBoxStructureTargetFilterParent, DTLib.dtTarget.col.Structure); // filter
+            DataTableLib.SetParentInRow(dataGridViewStructureTarget, comboBoxStructureTargetFilterParent, DataTableLib.dtTarget.col.Structure); // filter
 
             // filter
             //string text = comboBoxTargetFilterSource.Text;
@@ -995,9 +995,9 @@ namespace WinSimpleIDriver
         private void DrawTreeSGT()
         {
             // Получить списки для дерева
-            var collectionSource = MyTree.SetTreeCollection(dataGridViewSource, DTLib.dtSource.col.Title);
-            var collectionGroup = MyTree.SetTreeCollection(dataGridViewGroup, DTLib.dtGroup.col.Title, DTLib.dtGroup.col.Source);
-            var collectionTag = MyTree.SetTreeCollection(dataGridViewTag, DTLib.dtTag.col.Title, DTLib.dtTag.col.Group);
+            var collectionSource = MyTree.SetTreeCollection(dataGridViewSource, DataTableLib.dtSource.col.Title);
+            var collectionGroup = MyTree.SetTreeCollection(dataGridViewGroup, DataTableLib.dtGroup.col.Title, DataTableLib.dtGroup.col.Source);
+            var collectionTag = MyTree.SetTreeCollection(dataGridViewTag, DataTableLib.dtTag.col.Title, DataTableLib.dtTag.col.Group);
 
             // Источники
             treeSGT.Nodes.Clear();
@@ -1056,7 +1056,7 @@ namespace WinSimpleIDriver
             List<string> blocks = new List<string>();
             foreach (DataGridViewRow row in dataGridViewTag.Rows)
             {
-                var block = row.Cells[DTLib.dtTag.col.Block].Value;
+                var block = row.Cells[DataTableLib.dtTag.col.Block].Value;
                 if (block == null)
                     continue;
 
@@ -1114,8 +1114,8 @@ namespace WinSimpleIDriver
         private void DrawTreeStructure()
         {
             // Получить списки для дерева
-            var collectionStructure = MyTree.SetTreeCollection(dataGridViewStructure, DTLib.dtStructure.col.Title);
-            var collectionTarget = MyTree.SetTreeCollection(dataGridViewStructureTarget, DTLib.dtTarget.col.Tag, DTLib.dtTarget.col.Structure);
+            var collectionStructure = MyTree.SetTreeCollection(dataGridViewStructure, DataTableLib.dtStructure.col.Title);
+            var collectionTarget = MyTree.SetTreeCollection(dataGridViewStructureTarget, DataTableLib.dtTarget.col.Tag, DataTableLib.dtTarget.col.Structure);
 
             // Структуры
             treeStructure.Nodes.Clear();
@@ -1155,8 +1155,8 @@ namespace WinSimpleIDriver
         private void DrawTreeInclude()
         {
             // Получить списки для дерева
-            var collectionInclude = MyTree.SetTreeCollection(dataGridViewInclude, DTLib.dtInclude.col.Prefix);
-            var collectionChange = MyTree.SetTreeCollection(dataGridViewIncludeChild, DTLib.dtIncludeChild.col.ChangeFrom, DTLib.dtIncludeChild.col.Prefix);
+            var collectionInclude = MyTree.SetTreeCollection(dataGridViewInclude, DataTableLib.dtInclude.col.Prefix);
+            var collectionChange = MyTree.SetTreeCollection(dataGridViewIncludeChild, DataTableLib.dtIncludeChild.col.ChangeFrom, DataTableLib.dtIncludeChild.col.Prefix);
 
             // Классы
             treeInclude.Nodes.Clear();
@@ -1206,11 +1206,11 @@ namespace WinSimpleIDriver
             switch (tabName)
             {
                 case "tabPageSource":
-                    DTLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DTLib.dtSource.col.Title, DTLib.dtSource.col.CountTags, DTLib.dtTag.col.Source);
+                    DataTableLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DataTableLib.dtSource.col.Title, DataTableLib.dtSource.col.CountTags, DataTableLib.dtTag.col.Source);
                     break;
 
                 case "tabPageTag":
-                    DTLib.dtTag.UpdateDGVTagSourceLink();
+                    DataTableLib.dtTag.UpdateDGVTagSourceLink();
                     break;
 
             }
@@ -1241,17 +1241,17 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.sourceItem:
                     tabControlProject.SelectTab(tabPageSource);
-                    DTLib.ShowRow(dataGridViewSource, Id, title);
+                    DataTableLib.ShowRow(dataGridViewSource, Id, title);
                     break;
 
                 case TreeProjCategory.groupItem:
                     tabControlProject.SelectTab(tabPageGroup);
-                    DTLib.ShowRow(dataGridViewGroup, Id, title);
+                    DataTableLib.ShowRow(dataGridViewGroup, Id, title);
                     break;
 
                 case TreeProjCategory.tagItem:
                     tabControlProject.SelectTab(tabPageTag);
-                    DTLib.ShowRow(dataGridViewTag, Id, title);
+                    DataTableLib.ShowRow(dataGridViewTag, Id, title);
                     break;
 
 
@@ -1261,12 +1261,12 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.structureItem:
                     tabControlProject.SelectTab(tabPageStructure);
-                    DTLib.ShowRow(dataGridViewStructure, Id, title);
+                    DataTableLib.ShowRow(dataGridViewStructure, Id, title);
                     break;
 
                 case TreeProjCategory.targetItem:
                     tabControlProject.SelectTab(tabPageStructure);
-                    DTLib.ShowRow(dataGridViewStructureTarget, Id, title);
+                    DataTableLib.ShowRow(dataGridViewStructureTarget, Id, title);
                     break;
 
 
@@ -1276,12 +1276,12 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.includeItem :
                     tabControlProject.SelectTab(tabPageInclude);
-                    DTLib.ShowRow(dataGridViewInclude, Id, title);
+                    DataTableLib.ShowRow(dataGridViewInclude, Id, title);
                     break;
 
                 case TreeProjCategory.changeItem:
                     tabControlProject.SelectTab(tabPageInclude);
-                    DTLib.ShowRow(dataGridViewIncludeChild, Id, title);
+                    DataTableLib.ShowRow(dataGridViewIncludeChild, Id, title);
                     break;
             }
         }
@@ -1304,7 +1304,7 @@ namespace WinSimpleIDriver
 
         private void testTagSourceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DTLib.dtTag.UpdateDGVTagSourceLink();
+            DataTableLib.dtTag.UpdateDGVTagSourceLink();
         }
 
         private void buttonTagCopy_Click(object sender, EventArgs e)
