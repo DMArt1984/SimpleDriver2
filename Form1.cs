@@ -55,7 +55,6 @@ namespace WinSimpleIDriver
 
 
             // Form: Source
-            EditorControl.dgvSource = dataGridViewSource;
             DataTableLib.dtSource.LinkColumns(dataGridViewSource);
             DataTableLib.dtSource.cbEditor = checkBoxSourceEditor;
             DataTableLib.dtSource.cbDesc = checkBoxSourceDesc;
@@ -65,7 +64,6 @@ namespace WinSimpleIDriver
             DataTableLib.dtSource.CheckColumns();
 
             // Form: Group
-            EditorControl.dgvGroup = dataGridViewGroup;
             DataTableLib.dtGroup.LinkColumns(dataGridViewGroup);
             DataTableLib.dtGroup.cbEditor = checkBoxGroupEditor;
             DataTableLib.dtGroup.cbDesc = checkBoxGroupDesc;
@@ -77,7 +75,6 @@ namespace WinSimpleIDriver
             DataTableLib.dtGroup.CheckColumns();
 
             // Form: Tag
-            EditorControl.dgvTag = dataGridViewTag;
             DataTableLib.dtTag.LinkColumns(dataGridViewTag);
             DataTableLib.dtTag.cbEditor = checkBoxTagEditor;
             DataTableLib.dtTag.cbDesc = checkBoxTagDesc;
@@ -305,7 +302,7 @@ namespace WinSimpleIDriver
             string fileName = "";
             string input = FileControl.LoadFromFile(ref fileName, out string path, true); // чтение из файла...
             if (String.IsNullOrWhiteSpace(input))
-                return "";
+                return null;
 
             // получение JSON данных
             dynamic output = JsonControl.Deserialize_Json_Data(input);
@@ -313,10 +310,23 @@ namespace WinSimpleIDriver
             // распаковка проекта
             EditorControl.ParseData(output);
 
-            return "";
+            // Рисование на форме
+            BuildForForm();
+
+            return null;
         }
 
-        
+        // Рисование на форме
+        private void BuildForForm()
+        {
+            DataTableLib.dtSource.DrawTable(EditorControl.sources);
+            DataTableLib.dtGroup.DrawTable(EditorControl.groups);
+            //...
+
+            DrawTreeSGT();
+
+        }
+
 
         #endregion
 

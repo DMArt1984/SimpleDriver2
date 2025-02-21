@@ -53,6 +53,36 @@ namespace DML
 
             static public TextBox tbFilter;
 
+            #region DGV.Add
+            static public void DrawTable(List<SourceEditor> sources)
+            {
+                // Таблица источников
+                dgv.Rows.Clear();
+                foreach (var item in sources)
+                {
+                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                    row.Cells[0].Value = item.Id;
+                    row.Cells[3].Value = !item.off;
+                    row.Cells[4].Value = item.reconnect; // автоматическое переподключение
+
+                    row.Cells[col.Title].Value = item.title;
+                    row.Cells[col.Driver].Value = item.driver.ToString();
+                    row.Cells[col.Address].Value = item.address;
+                    row.Cells[col.Desc].Value = item.description;
+                    row.Cells[col.CountTags].Value = EditorControl.tags.Count(x => x.sourceTitle == item.title);
+
+                    //row.Cells[0].Value = item.auto; // автоматический опрос при старте программы
+
+                    row.Cells[col.Calc].Value = false;
+                    row.Cells[col.Status].Value = "";
+                    row.Cells[col.Message].Value = "";
+
+                    // -
+                    dgv.Rows.Add(row);
+                }
+            }
+            #endregion
+
             #region DGV.Columns
             static public void CheckColumns()
             {
@@ -174,6 +204,32 @@ namespace DML
             static public TextBox tbFilter;
             static public ComboBox coFilterSource;
 
+            #region DGV.Add
+            static public void DrawTable(List<GroupEditor> groups)
+            {
+                // Таблица групп
+                dgv.Rows.Clear();
+                foreach (var item in groups)
+                {
+                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                    row.Cells[0].Value = item.Id;
+                    row.Cells[3].Value = !item.off;
+                    row.Cells[5].Value = item.updateRate.ToString();
+
+                    row.Cells[col.Title].Value = item.title;
+                    row.Cells[col.Source].Value = item.sourceTitle;
+                    row.Cells[col.Desc].Value = item.description;
+                    //row.Cells[colGroupTags].Value = EditorControl.tags.Count(x => x.groupTitle == item.title);
+                    //row.Cells[colGroupSources].Value = EditorControl.sources.Count(x => x.groupTitle == item.title);
+
+                    row.Cells[col.Status].Value = "";
+
+                    // -
+                    dgv.Rows.Add(row);
+                }
+            }
+            #endregion
+
             #region DGV.Columns
             static public void CheckColumns()
             {
@@ -263,6 +319,20 @@ namespace DML
             static public ComboBox coFilterGroup;
             static public ComboBox coFilterBlock;
             static public ComboBox coFilterPage;
+
+            #region DGV.Add
+            static public void DrawTable(List<TagEditor> tags)
+            {
+                // Таблица групп
+                dgv.Rows.Clear();
+                foreach (var item in tags)
+                {
+
+                    // -
+                    //dgv.Rows.Add(row);
+                }
+            }
+            #endregion
 
             #region DGV.Columns
             static public void CheckColumns()

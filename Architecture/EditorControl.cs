@@ -12,9 +12,6 @@ namespace WinSimpleIDriver
 {
     static class EditorControl
     {
-        static public DataGridView dgvSource;
-        static public DataGridView dgvGroup;
-        static public DataGridView dgvTag;
 
         static public List<SourceEditor> sources;
         static public List<TagEditor> tags;
