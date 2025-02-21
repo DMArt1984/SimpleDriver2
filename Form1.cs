@@ -212,6 +212,7 @@ namespace WinSimpleIDriver
         // ================================================================================================================
 
         #region Menu.File.Event
+
         private void ToolStripMenuItemViewTree_Click(object sender, EventArgs e)
         {
             bool check = !ToolStripMenuItemViewTree.Checked;
@@ -245,6 +246,7 @@ namespace WinSimpleIDriver
         private void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Открыть проект");
+            OpenProject();
 
         }
 
@@ -293,11 +295,20 @@ namespace WinSimpleIDriver
             this.Close();
         }
 
+        // Открыть проект (распаковка настроек из файла)
+        private string OpenProject()
+        {
+            // Загрузка проекта JSON
+            string fileName = "";
+            string input = FileControl.LoadFromFile(ref fileName, out string path, true); // чтение из файла...
+            return "";
+        }
+
         #endregion
 
         // ================================================================================================================
 
-        
+
 
         // ================================================================================================================
 
@@ -885,6 +896,10 @@ namespace WinSimpleIDriver
         #region Tree
 
         #region Tree.Event
+        private void tabFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WriteTabFilter();
+        }
         // Двойное нажатие на ветку из дерева
         private void treeViewProject_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -1199,6 +1214,58 @@ namespace WinSimpleIDriver
             }
         }
 
+        // Установить значения из дерева в соответствующие поля фильтра
+        private void WriteTabFilter()
+        {
+            var selNode = treeViewProject.SelectedNode;
+
+            if (selNode.Tag == null)
+                return;
+
+            var tpt = (selNode.Tag as TreeProjTag);
+            string text = tpt.text; // selNode.Text;
+
+            // Категория из дерева
+            switch (tpt.category)
+            {
+                case TreeProjCategory.sources:
+                    break;
+
+                case TreeProjCategory.sourceItem:
+                    comboBoxGroupFilterSource.Text = text;
+                    comboBoxTagFilterSource.Text = text;
+                    DataTableLib.dtGroup.TextFilter();
+                    DataTableLib.dtTag.TextFilter();
+                    break;
+
+                case TreeProjCategory.groupItem:
+                    comboBoxTagFilterGroup.Text = text;
+                    DataTableLib.dtTag.TextFilter();
+                    break;
+
+                case TreeProjCategory.tagItem:
+                    break;
+
+                case TreeProjCategory.blockItem:
+                    comboBoxTagFilterBlock.Text = text;
+                    DataTableLib.dtTag.TextFilter();
+                    break;
+
+                case TreeProjCategory.structures:
+                    break;
+
+                case TreeProjCategory.targetItem:
+                    break;
+
+                case TreeProjCategory.includes:
+                    break;
+
+                case TreeProjCategory.includeItem:
+                    break;
+
+            }
+
+        }
 
         #endregion
 
@@ -1335,73 +1402,7 @@ namespace WinSimpleIDriver
 
         }
 
-        private void tabFilterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            WriteTabFilter();
-        }
-
-        // Установить значения из дерева в соответствующие поля фильтра
-        private void WriteTabFilter()
-        {
-            var selNode = treeViewProject.SelectedNode;
-
-            if (selNode.Tag == null)
-                return;
-
-            var tpt = (selNode.Tag as TreeProjTag);
-            string text = tpt.text; // selNode.Text;
-
-            // Категория из дерева
-            switch (tpt.category)
-            {
-                case TreeProjCategory.sources:
-                    break;
-
-                case TreeProjCategory.sourceItem:
-                    comboBoxGroupFilterSource.Text = text;
-                    comboBoxTagFilterSource.Text = text;
-                    DataTableLib.dtGroup.TextFilter();
-                    DataTableLib.dtTag.TextFilter();
-                    break;
-
-                case TreeProjCategory.groupItem:
-                    comboBoxTagFilterGroup.Text = text;
-                    DataTableLib.dtTag.TextFilter();
-                    break;
-
-                case TreeProjCategory.tagItem:
-                    break;
-
-                case TreeProjCategory.blockItem:
-                    comboBoxTagFilterBlock.Text = text;
-                    DataTableLib.dtTag.TextFilter();
-                    break;
-
-                case TreeProjCategory.structures:
-                    break;
-
-                case TreeProjCategory.targetItem:
-                    break;
-
-                case TreeProjCategory.includes:
-                    break;
-
-                case TreeProjCategory.includeItem:
-                    break;
-
-            }
-
-        }
-
-
-
-
-
-
-
-        // ===============================================================================================================
-
-
+       
 
 
 
