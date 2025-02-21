@@ -27,7 +27,7 @@ public static class FileControl
         fileName = Path.GetFileName(fullFileName);
         path = Path.GetDirectoryName(fullFileName) ?? string.Empty;
 
-        return ReadFileContent(fullFileName);
+        return ReadFileContent(fullFileName, Encoding.Default);
     }
 
     // Записать JSON-файл
@@ -44,7 +44,7 @@ public static class FileControl
         fileName = Path.GetFileName(fullFileName);
         path = Path.GetDirectoryName(fullFileName) ?? string.Empty;
 
-        WriteFileContent(fullFileName, json);
+        WriteFileContent(fullFileName, json, Encoding.Default);
     }
 
     // Прочитать XML-файл
@@ -54,7 +54,7 @@ public static class FileControl
         if (string.IsNullOrEmpty(fullFileName) || !File.Exists(fullFileName))
             return null;
 
-        return ReadFileContent(fullFileName);
+        return ReadFileContent(fullFileName, Encoding.UTF8);
     }
 
     // Image из файла в String (Base64)
@@ -84,11 +84,11 @@ public static class FileControl
             Path.IsPathRooted(fileName) ? fileName : Path.Combine(Application.StartupPath, fileName);
     }
 
-    private static string ReadFileContent(string filePath)
+    private static string ReadFileContent(string filePath, Encoding enc)
     {
         try
         {
-            return File.ReadAllText(filePath, Encoding.UTF8);
+            return File.ReadAllText(filePath, enc);
         }
         catch (Exception ex)
         {
@@ -98,11 +98,11 @@ public static class FileControl
         }
     }
 
-    private static void WriteFileContent(string filePath, string content)
+    private static void WriteFileContent(string filePath, string content, Encoding enc)
     {
         try
         {
-            File.WriteAllText(filePath, content, Encoding.UTF8);
+            File.WriteAllText(filePath, content, enc);
         }
         catch (Exception ex)
         {

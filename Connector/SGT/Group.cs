@@ -339,7 +339,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
     public class GroupEditor // Редактирование
     {
-        public ushort Id; // Уникальный идентификатор (0 - нет Id)
+        public int Id; // Уникальный идентификатор (0 - нет Id)
         public string title; // Название
         public bool off; // Отключение
         public uint updateRate; // Период опроса (мсек)

@@ -55,6 +55,7 @@ namespace WinSimpleIDriver
 
 
             // Form: Source
+            EditorControl.dgvSource = dataGridViewSource;
             DataTableLib.dtSource.LinkColumns(dataGridViewSource);
             DataTableLib.dtSource.cbEditor = checkBoxSourceEditor;
             DataTableLib.dtSource.cbDesc = checkBoxSourceDesc;
@@ -301,8 +302,19 @@ namespace WinSimpleIDriver
             // Загрузка проекта JSON
             string fileName = "";
             string input = FileControl.LoadFromFile(ref fileName, out string path, true); // чтение из файла...
+            if (String.IsNullOrWhiteSpace(input))
+                return "";
+
+            // получение JSON данных
+            dynamic output = JsonControl.Deserialize_Json_Data(input);
+
+            // распаковка проекта
+            EditorControl.ParseData(output);
+
             return "";
         }
+
+        
 
         #endregion
 

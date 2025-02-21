@@ -77,6 +77,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Architecture\EditorControl.cs" />
     <Compile Include="Connector\Driver\AppDevice.cs" />
     <Compile Include="Connector\Driver\AppUDP.cs" />
     <Compile Include="Connector\Driver\Component\ModbusRTUmaster.cs" />

@@ -1589,11 +1589,11 @@ namespace WinSimpleIDriver.Connector.SGT
 
     public class TagEditor // Редактирование
     {
-        public ushort Id; // Уникальный идентификатор (0 - нет Id)
+        public int Id; // Уникальный идентификатор (0 - нет Id)
         public string title; // Название
         public eDataType dataType;
-        public ushort sourceId; // ID драйвера
-        public ushort groupId; // ID группы
+        public int sourceId; // ID драйвера
+        public int groupId; // ID группы
         public string sourceTitle; // Название драйвера
         public string groupTitle; // Название группы
         public string address; // адрес

@@ -1080,8 +1080,8 @@ namespace WinSimpleIDriver.Connector.SGT
 
     public class SourceEditor // Редактирование
     {
-        public ushort Id; // Уникальный идентификатор (0 - нет Id)
-        public ushort groupId; // ID группы (0 - нет Id)
+        public int Id; // Уникальный идентификатор (0 - нет Id)
+        public int groupId; // ID группы (0 - нет Id)
         public string groupTitle; // Название группы
         public eDriverType driver; // Тип драйвера
         public string title; // Название драйвера
