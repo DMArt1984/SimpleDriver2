@@ -65,6 +65,7 @@ namespace WinSimpleIDriver
             DataTableLib.dtSource.CheckColumns();
 
             // Form: Group
+            EditorControl.dgvGroup = dataGridViewGroup;
             DataTableLib.dtGroup.LinkColumns(dataGridViewGroup);
             DataTableLib.dtGroup.cbEditor = checkBoxGroupEditor;
             DataTableLib.dtGroup.cbDesc = checkBoxGroupDesc;
@@ -76,6 +77,7 @@ namespace WinSimpleIDriver
             DataTableLib.dtGroup.CheckColumns();
 
             // Form: Tag
+            EditorControl.dgvTag = dataGridViewTag;
             DataTableLib.dtTag.LinkColumns(dataGridViewTag);
             DataTableLib.dtTag.cbEditor = checkBoxTagEditor;
             DataTableLib.dtTag.cbDesc = checkBoxTagDesc;

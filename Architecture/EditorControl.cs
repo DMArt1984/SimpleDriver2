@@ -13,6 +13,8 @@ namespace WinSimpleIDriver
     static class EditorControl
     {
         static public DataGridView dgvSource;
+        static public DataGridView dgvGroup;
+        static public DataGridView dgvTag;
 
         static public List<SourceEditor> sources;
         static public List<TagEditor> tags;
@@ -69,7 +71,7 @@ namespace WinSimpleIDriver
                 }
             }
 
-            // Установить ID для объектов
+            // Установить ID и Title для объектов
             CalcIdAndTitle(); 
 
         }
@@ -203,38 +205,28 @@ namespace WinSimpleIDriver
         // Установить ID и Title для объектов
         static void CalcIdAndTitle()
         {
-            // Перебор тегов
-            for (var i = 0; i < tags.Count; i++)
+            var sourceDict = sources.ToDictionary(x => x.Id);
+            var groupDict = groups.ToDictionary(x => x.Id);
+
+            foreach (var tag in tags)
             {
-                // источник данных
-                SourceEditor source = sources.FirstOrDefault(x => x.Id == tags[i].sourceId || x.title == tags[i].sourceTitle);
-                if (source != null)
+                if (sourceDict.TryGetValue(tag.sourceId, out var source))
                 {
-                    tags[i].sourceTitle = source.title;
-                    tags[i].sourceId = source.Id;
+                    tag.sourceTitle = source.title;
+                    tag.sourceId = source.Id;
                 }
-
-                // группа
-                GroupEditor group = groups.FirstOrDefault(x => x.Id == tags[i].groupId || x.title == tags[i].groupTitle);
-                if (group != null)
+                if (groupDict.TryGetValue(tag.groupId, out var group))
                 {
-                    tags[i].groupTitle = group.title;
-                    tags[i].groupId = group.Id;
+                    tag.groupTitle = group.title;
+                    tag.groupId = group.Id;
                 }
-
             }
 
-            // Перебор источников
-            for (var i = 0; i < sources.Count; i++)
+            foreach (var source in sources)
             {
-                if (sources[i].groupId == 0 && String.IsNullOrWhiteSpace(sources[i].groupTitle) == false)
+                if (source.groupId == 0 && !string.IsNullOrWhiteSpace(source.groupTitle) && groupDict.TryGetValue(source.groupId, out var group))
                 {
-                    GroupEditor group = groups.FirstOrDefault(x => x.title == sources[i].groupTitle);
-                    if (group != null)
-                    {
-                        sources[i].groupId = group.Id;
-                    }
-
+                    source.groupId = group.Id;
                 }
             }
         }
