@@ -626,6 +626,7 @@ namespace WinSimpleIDriver
                 DataTableLib.dtTag.UpdateDGVTagSourceLink();
             }
             DrawTreeSGT();
+            DrawTreeBlock();
         }
 
         private void dataGridViewTag_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -911,16 +912,19 @@ namespace WinSimpleIDriver
 
             // Контекстное меню в зависимости от категории
             contextMenuStripTreeProj.Items[0].Visible = false;
+            contextMenuStripTreeProj.Items[1].Visible = false;
             switch (tpt.category)
             {
                 case TreeProjCategory.sourceItem:
                 case TreeProjCategory.groupItem:
                 case TreeProjCategory.tagItem:
+                case TreeProjCategory.blockItem:
                 case TreeProjCategory.structureItem:
                 case TreeProjCategory.targetItem:
                 case TreeProjCategory.includeItem:
                 case TreeProjCategory.changeItem:
                     contextMenuStripTreeProj.Items[0].Visible = true;
+                    contextMenuStripTreeProj.Items[1].Visible = true;
                     break;
 
             }
@@ -973,6 +977,9 @@ namespace WinSimpleIDriver
                 case TreeProjCategory.tagItem:
                     break;
 
+                case TreeProjCategory.blockItem:
+                    break;
+
                 case TreeProjCategory.structures:
                     break;
 
@@ -1011,7 +1018,7 @@ namespace WinSimpleIDriver
             foreach (var itemSource in collectionSource)
             {
                 TreeNode tnSource = new TreeNode($"{itemSource.Title}");
-                tnSource.Tag = new TreeProjTag(TreeProjCategory.sourceItem, itemSource.Id);
+                tnSource.Tag = new TreeProjTag(TreeProjCategory.sourceItem, itemSource.Id, itemSource.Title);
                 tnSource.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
                 tnSource.ImageIndex = 0;
 
@@ -1022,7 +1029,7 @@ namespace WinSimpleIDriver
                         continue;
 
                     TreeNode tnGroup = new TreeNode($"{itemGroup.Title}");
-                    tnGroup.Tag = new TreeProjTag(TreeProjCategory.groupItem, itemGroup.Id);
+                    tnGroup.Tag = new TreeProjTag(TreeProjCategory.groupItem, itemGroup.Id, itemGroup.Title);
                     tnGroup.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
                     tnGroup.ImageIndex = 0;
 
@@ -1033,7 +1040,7 @@ namespace WinSimpleIDriver
                             continue;
 
                         TreeNode tnTag = new TreeNode($"{itemTag.Title}");
-                        tnTag.Tag = new TreeProjTag(TreeProjCategory.tagItem, itemTag.Id);
+                        tnTag.Tag = new TreeProjTag(TreeProjCategory.tagItem, itemTag.Id, itemTag.Title);
                         tnTag.NodeFont = new Font(this.Font.FontFamily, 8, FontStyle.Regular);
                         tnTag.ImageIndex = 0;
 
@@ -1094,7 +1101,8 @@ namespace WinSimpleIDriver
                     {
                         TreeNode next = new TreeNode(item);
                         next.Name = item;
-                        next.Tag = new TreeProjTag(TreeProjCategory.blockItem, 0);
+                        next.ToolTipText = pathBlock;
+                        next.Tag = new TreeProjTag(TreeProjCategory.blockItem, 0, pathBlock);
                         next.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
                         tn.Nodes.Add(next);
                         tn = next;
@@ -1200,6 +1208,12 @@ namespace WinSimpleIDriver
         #region TAB
 
         #region TAB.Event
+        private void toolStripMenuItemCopy_Click(object sender, EventArgs e)
+        {
+            var selNode = treeViewProject.SelectedNode;
+            string text = selNode.Text;
+            Clipboard.SetText(text);
+        }
         private void tabControl1_Selected(object sender, TabControlEventArgs e)
         {
             string tabName = tabControlProject.TabPages[tabControlProject.SelectedIndex].Name;
@@ -1252,6 +1266,10 @@ namespace WinSimpleIDriver
                 case TreeProjCategory.tagItem:
                     tabControlProject.SelectTab(tabPageTag);
                     DataTableLib.ShowRow(dataGridViewTag, Id, title);
+                    break;
+
+                case TreeProjCategory.blockItem:
+                    tabControlProject.SelectTab(tabPageTag);
                     break;
 
 
@@ -1314,6 +1332,64 @@ namespace WinSimpleIDriver
 
         private void buttonGroupCopy_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void tabFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WriteTabFilter();
+        }
+
+        // Установить значения из дерева в соответствующие поля фильтра
+        private void WriteTabFilter()
+        {
+            var selNode = treeViewProject.SelectedNode;
+
+            if (selNode.Tag == null)
+                return;
+
+            var tpt = (selNode.Tag as TreeProjTag);
+            string text = tpt.text; // selNode.Text;
+
+            // Категория из дерева
+            switch (tpt.category)
+            {
+                case TreeProjCategory.sources:
+                    break;
+
+                case TreeProjCategory.sourceItem:
+                    comboBoxGroupFilterSource.Text = text;
+                    comboBoxTagFilterSource.Text = text;
+                    DataTableLib.dtGroup.TextFilter();
+                    DataTableLib.dtTag.TextFilter();
+                    break;
+
+                case TreeProjCategory.groupItem:
+                    comboBoxTagFilterGroup.Text = text;
+                    DataTableLib.dtTag.TextFilter();
+                    break;
+
+                case TreeProjCategory.tagItem:
+                    break;
+
+                case TreeProjCategory.blockItem:
+                    comboBoxTagFilterBlock.Text = text;
+                    DataTableLib.dtTag.TextFilter();
+                    break;
+
+                case TreeProjCategory.structures:
+                    break;
+
+                case TreeProjCategory.targetItem:
+                    break;
+
+                case TreeProjCategory.includes:
+                    break;
+
+                case TreeProjCategory.includeItem:
+                    break;
+
+            }
 
         }
 

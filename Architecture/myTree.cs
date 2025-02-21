@@ -28,10 +28,13 @@ namespace WinSimpleIDriver
     {
         public TreeProjCategory category;
         public ushort Id;
-        public TreeProjTag(TreeProjCategory category, ushort Id)
+        public string text = "";
+
+        public TreeProjTag(TreeProjCategory category, ushort Id, string text = "")
         {
             this.category = category;
             this.Id = Id;
+            this.text = text;
         }
     }
 
