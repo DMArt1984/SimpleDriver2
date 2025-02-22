@@ -14,6 +14,7 @@ using WinSimpleIDriver.Connector.SGT;
 using DML.Log;
 using DML;
 using System.IO;
+using WinSimpleIDriver.Editor;
 
 namespace WinSimpleIDriver
 {
@@ -1424,12 +1425,12 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.structureItem:
                     tabControlProject.SelectTab(tabPageStructure);
-                    //DataTableLib.ShowRow(dataGridViewStructure, Id, title);
+                    DataTableLib.ShowRow(dataGridViewStructure, Id, title, DataTableLib.dtStructure.col.Title);
                     break;
 
                 case TreeProjCategory.targetItem:
                     tabControlProject.SelectTab(tabPageStructure);
-                    //DataTableLib.ShowRow(dataGridViewStructureTarget, Id, title);
+                    DataTableLib.ShowRow(dataGridViewStructureTarget, Id, title, DataTableLib.dtTarget.col.Tag); // ?
                     break;
 
 
@@ -1439,12 +1440,12 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.includeItem :
                     tabControlProject.SelectTab(tabPageInclude);
-                    //DataTableLib.ShowRow(dataGridViewInclude, Id, title);
+                    DataTableLib.ShowRow(dataGridViewInclude, Id, title, DataTableLib.dtInclude.col.Prefix); // ?
                     break;
 
                 case TreeProjCategory.changeItem:
                     tabControlProject.SelectTab(tabPageInclude);
-                    //DataTableLib.ShowRow(dataGridViewIncludeChild, Id, title);
+                    DataTableLib.ShowRow(dataGridViewIncludeChild, Id, title, DataTableLib.dtIncludeChild.col.ChangeFrom); // ?
                     break;
             }
         }
@@ -1480,6 +1481,17 @@ namespace WinSimpleIDriver
 
         }
 
-        
+
+        // Открыть форму дизайна
+        private void ToolStripMenuItemDesign_Click(object sender, EventArgs e)
+        {
+            var design = new FormDesign
+            {
+            };
+
+            design.Show();
+        }
+
+
     }
 }
