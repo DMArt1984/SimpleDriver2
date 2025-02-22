@@ -1,6 +1,8 @@
 ﻿using DML.Log;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -8,12 +10,15 @@ public static class FileControl
 {
     static int ver = 100; // версия
 
+    private static readonly string RecentFilesPath = Path.Combine(Application.StartupPath, "files.txt");
+    private static readonly int MaxRecentFiles = 10; // Храним до 10 последних файлов
+
     // Прочитать JSON-файл
     public static string LoadFromFile(ref string fileName, out string path, bool select = false, bool showNotFound = true, string filter = @"JSON-файл (*.json)|*.json")
     {
         path = string.Empty;
 
-        string fullFileName = select ? SelectFileDialog(filter) : GetFullFilePath(fileName);
+        string fullFileName = (select || string.IsNullOrEmpty(fileName)) ? SelectFileDialog(filter) : GetFullFilePath(fileName);
         if (string.IsNullOrEmpty(fullFileName))
             return null; // Пользователь нажал "Отмена" или путь некорректный
 
@@ -73,6 +78,50 @@ public static class FileControl
         {
             LogHelper.Log($"Ошибка чтения файла {fullFileName}", ex);
             return null;
+        }
+    }
+
+    // ========================================================================
+
+    // Добавить файл в список последних открытых
+    public static void AddToRecentFiles(string filePath)
+    {
+        if (string.IsNullOrWhiteSpace(filePath)) return;
+
+        List<string> files = LoadRecentFiles();
+
+        // Удаляем старую запись, если файл уже был в списке
+        files.Remove(filePath);
+        files.Insert(0, filePath); // Добавляем в начало списка
+
+        // Ограничиваем количество записей
+        if (files.Count > MaxRecentFiles)
+            files = files.Take(MaxRecentFiles).ToList();
+
+        // Сохраняем обновленный список
+        try
+        {
+            File.WriteAllLines(RecentFilesPath, files);
+        }
+        catch (Exception ex)
+        {
+            LogHelper.Log("Ошибка сохранения списка последних файлов", ex);
+        }
+    }
+
+    // Загрузить список последних файлов
+    public static List<string> LoadRecentFiles()
+    {
+        if (!File.Exists(RecentFilesPath)) return new List<string>();
+
+        try
+        {
+            return File.ReadAllLines(RecentFilesPath).Where(File.Exists).ToList();
+        }
+        catch (Exception ex)
+        {
+            LogHelper.Log("Ошибка загрузки списка последних файлов", ex);
+            return new List<string>();
         }
     }
 

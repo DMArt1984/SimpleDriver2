@@ -13,6 +13,7 @@ using WinSimpleIDriver.Connector;
 using WinSimpleIDriver.Connector.SGT;
 using DML.Log;
 using DML;
+using System.IO;
 
 namespace WinSimpleIDriver
 {
@@ -48,6 +49,9 @@ namespace WinSimpleIDriver
 
             // трей
             notifyIcon1.Visible = Settings.tray;
+
+            // Последние файлы
+            UpdateRecentFilesMenu();
 
             // Log DGV
             LogForm.rowLong = AddRowLongLogDGV;
@@ -246,8 +250,8 @@ namespace WinSimpleIDriver
         private void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Открыть проект");
-            OpenProject();
-
+            OpenProject(true);
+            //...
         }
 
         private void ToolStripMenuItemSave_Click(object sender, EventArgs e)
@@ -296,13 +300,17 @@ namespace WinSimpleIDriver
         }
 
         // Открыть проект (распаковка настроек из файла)
-        private string OpenProject()
+        private string OpenProject(bool select = true, string fileName = "")
         {
             // Загрузка проекта JSON
-            string fileName = "";
-            string input = FileControl.LoadFromFile(ref fileName, out string path, true); // чтение из файла...
+            string input = FileControl.LoadFromFile(ref fileName, out string path, select); // чтение из файла...
             if (String.IsNullOrWhiteSpace(input))
                 return null;
+
+            // Последние файлы
+            string fullFileName = Path.Combine(path, fileName);
+            FileControl.AddToRecentFiles(fullFileName); // Сохранение файла в истории
+            UpdateRecentFilesMenu(); // Обновление меню
 
             // получение JSON данных
             dynamic output = JsonControl.Deserialize_Json_Data(input);
@@ -327,6 +335,52 @@ namespace WinSimpleIDriver
 
         }
 
+        // ---
+
+        #region Last open files
+
+        // Заполняем меню "Последние файлы"
+        private void UpdateRecentFilesMenu()
+        {
+            ToolStripMenuItemLastFiles.DropDownItems.Clear();
+
+            List<string> recentFiles = FileControl.LoadRecentFiles();
+
+            if (recentFiles.Count == 0)
+            {
+                ToolStripMenuItemLastFiles.DropDownItems.Add("Нет недавних файлов").Enabled = false;
+                return;
+            }
+
+            foreach (string file in recentFiles)
+            {
+                ToolStripMenuItem item = new ToolStripMenuItem(file);
+                item.Click += (sender, e) => OpenProjectFromRecent(file);
+                ToolStripMenuItemLastFiles.DropDownItems.Add(item);
+            }
+        }
+
+        // Открыть проект из списка последних файлов
+        private void OpenProjectFromRecent(string filePath)
+        {
+            OpenProject(false, filePath);
+
+            //if (!File.Exists(filePath))
+            //{
+            //    MessageBox.Show($"Файл {filePath} не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
+
+            //string fileName = Path.GetFileName(filePath);
+            //string input = FileControl.LoadFromFile(ref fileName, out string path, false); // Открываем без выбора
+            //if (input == null) return;
+
+            //// Последние файлы
+            //FileControl.AddToRecentFiles(filePath); // Добавляем в историю
+            //UpdateRecentFilesMenu(); // Обновляем меню
+        }
+
+        #endregion
 
         #endregion
 
