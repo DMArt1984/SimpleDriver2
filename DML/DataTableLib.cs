@@ -313,6 +313,8 @@ namespace DML
             static public CheckBox cbStatistic;
             static public CheckBox cbBP;
             static public CheckBox cbSG;
+            static public CheckBox cbSave;
+            static public CheckBox cbAddress;
 
             static public TextBox tbFilter;
             static public ComboBox coFilterSource;
@@ -339,10 +341,7 @@ namespace DML
             {
                 bool checkE = cbEditor.Checked;
                 dgv.Columns["tagID"].Visible = checkE;
-                dgv.Columns["tagAddress"].Visible = checkE;
                 dgv.Columns["tagCommand"].Visible = checkE;
-                dgv.Columns["tagWriteValue"].Visible = checkE;
-                dgv.Columns["tagWriteTag"].Visible = checkE;
                 dgv.RowHeadersVisible = checkE;
                 dgv.ReadOnly = !checkE;
 
@@ -365,6 +364,14 @@ namespace DML
                 bool checkSG = cbSG.Checked;
                 dgv.Columns["tagSource"].Visible = checkSG;
                 dgv.Columns["tagGroup"].Visible = checkSG;
+
+                bool checkSave = cbSave.Checked;
+                dgv.Columns["tagWriteValue"].Visible = checkSave;
+                dgv.Columns["tagWriteTag"].Visible = checkSave;
+
+                bool checkAddress = cbAddress.Checked;
+                dgv.Columns["tagAddress"].Visible = checkAddress;
+
             }
             #endregion
 

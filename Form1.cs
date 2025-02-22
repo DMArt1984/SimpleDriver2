@@ -86,6 +86,8 @@ namespace WinSimpleIDriver
             DataTableLib.dtTag.cbStatistic = checkBoxTagStatistic;
             DataTableLib.dtTag.cbBP = checkBoxTagBP;
             DataTableLib.dtTag.cbSG = checkBoxTagSG;
+            DataTableLib.dtTag.cbSave = checkBoxTagSave;
+            DataTableLib.dtTag.cbAddress = checkBoxTagAddress;
             DataTableLib.dtTag.tbFilter = textBoxTagFilter;
             DataTableLib.dtTag.coFilterSource = comboBoxTagFilterSource;
             DataTableLib.dtTag.coFilterGroup = comboBoxTagFilterGroup;
@@ -607,6 +609,14 @@ namespace WinSimpleIDriver
         }
 
         private void checkBoxTagSG_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.CheckColumns();
+        }
+        private void checkBoxTagSave_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.CheckColumns();
+        }
+        private void checkBoxTagAddress_CheckedChanged(object sender, EventArgs e)
         {
             DataTableLib.dtTag.CheckColumns();
         }
@@ -1470,9 +1480,6 @@ namespace WinSimpleIDriver
 
         }
 
-       
-
-
-
+        
     }
 }

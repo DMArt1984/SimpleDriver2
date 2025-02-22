@@ -36,13 +36,13 @@ namespace WinSimpleIDriver
             System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Классы");
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -138,24 +138,6 @@ namespace WinSimpleIDriver
             this.buttonTagDel = new System.Windows.Forms.Button();
             this.buttonTagCopy = new System.Windows.Forms.Button();
             this.dataGridViewTag = new System.Windows.Forms.DataGridView();
-            this.tagID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagCalc = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.tagTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagON = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.tagValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagGroup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagDataType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.tagAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagCommand = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.tagWriteValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagWriteTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagBlock = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagPage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagMessage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageStructure = new System.Windows.Forms.TabPage();
             this.splitContainerStructure = new System.Windows.Forms.SplitContainer();
             this.label1 = new System.Windows.Forms.Label();
@@ -210,6 +192,26 @@ namespace WinSimpleIDriver
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.ToolStripMenuItemLastFiles = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBoxTagSave = new System.Windows.Forms.CheckBox();
+            this.checkBoxTagAddress = new System.Windows.Forms.CheckBox();
+            this.tagID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagCalc = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.tagTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagON = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.tagValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagGroup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagDataType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.tagAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagCommand = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.tagWriteValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagWriteTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagBlock = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagPage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagMessage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagStatistic = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTreeMain)).BeginInit();
@@ -802,11 +804,11 @@ namespace WinSimpleIDriver
             this.tabPageGroup.Controls.Add(this.buttonGroupDel);
             this.tabPageGroup.Controls.Add(this.buttonGroupCopy);
             this.tabPageGroup.Controls.Add(this.dataGridViewGroup);
-            this.tabPageGroup.Location = new System.Drawing.Point(4, 22);
+            this.tabPageGroup.Location = new System.Drawing.Point(4, 26);
             this.tabPageGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageGroup.Name = "tabPageGroup";
             this.tabPageGroup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPageGroup.Size = new System.Drawing.Size(1122, 412);
+            this.tabPageGroup.Size = new System.Drawing.Size(1122, 408);
             this.tabPageGroup.TabIndex = 1;
             this.tabPageGroup.Text = "Группы опроса";
             this.tabPageGroup.UseVisualStyleBackColor = true;
@@ -959,7 +961,7 @@ namespace WinSimpleIDriver
             this.dataGridViewGroup.MultiSelect = false;
             this.dataGridViewGroup.Name = "dataGridViewGroup";
             this.dataGridViewGroup.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewGroup.Size = new System.Drawing.Size(1109, 341);
+            this.dataGridViewGroup.Size = new System.Drawing.Size(1109, 337);
             this.dataGridViewGroup.TabIndex = 9;
             this.dataGridViewGroup.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewGroup_CellBeginEdit);
             this.dataGridViewGroup.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewGroup_CellEndEdit);
@@ -1046,6 +1048,8 @@ namespace WinSimpleIDriver
             // 
             // tabPageTag
             // 
+            this.tabPageTag.Controls.Add(this.checkBoxTagAddress);
+            this.tabPageTag.Controls.Add(this.checkBoxTagSave);
             this.tabPageTag.Controls.Add(this.buttonTagFilter);
             this.tabPageTag.Controls.Add(this.checkBoxTagSG);
             this.tabPageTag.Controls.Add(this.checkBoxTagBP);
@@ -1063,10 +1067,10 @@ namespace WinSimpleIDriver
             this.tabPageTag.Controls.Add(this.buttonTagDel);
             this.tabPageTag.Controls.Add(this.buttonTagCopy);
             this.tabPageTag.Controls.Add(this.dataGridViewTag);
-            this.tabPageTag.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTag.Location = new System.Drawing.Point(4, 26);
             this.tabPageTag.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageTag.Name = "tabPageTag";
-            this.tabPageTag.Size = new System.Drawing.Size(1122, 412);
+            this.tabPageTag.Size = new System.Drawing.Size(1122, 408);
             this.tabPageTag.TabIndex = 2;
             this.tabPageTag.Text = "Теги";
             this.tabPageTag.UseVisualStyleBackColor = true;
@@ -1074,7 +1078,7 @@ namespace WinSimpleIDriver
             // buttonTagFilter
             // 
             this.buttonTagFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonTagFilter.Location = new System.Drawing.Point(1044, 38);
+            this.buttonTagFilter.Location = new System.Drawing.Point(1044, 65);
             this.buttonTagFilter.Name = "buttonTagFilter";
             this.buttonTagFilter.Size = new System.Drawing.Size(72, 24);
             this.buttonTagFilter.TabIndex = 25;
@@ -1087,7 +1091,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagSG.AutoSize = true;
             this.checkBoxTagSG.Checked = true;
             this.checkBoxTagSG.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxTagSG.Location = new System.Drawing.Point(841, 10);
+            this.checkBoxTagSG.Location = new System.Drawing.Point(494, 38);
             this.checkBoxTagSG.Name = "checkBoxTagSG";
             this.checkBoxTagSG.Size = new System.Drawing.Size(130, 21);
             this.checkBoxTagSG.TabIndex = 24;
@@ -1098,7 +1102,7 @@ namespace WinSimpleIDriver
             // checkBoxTagBP
             // 
             this.checkBoxTagBP.AutoSize = true;
-            this.checkBoxTagBP.Location = new System.Drawing.Point(616, 10);
+            this.checkBoxTagBP.Location = new System.Drawing.Point(269, 38);
             this.checkBoxTagBP.Name = "checkBoxTagBP";
             this.checkBoxTagBP.Size = new System.Drawing.Size(119, 21);
             this.checkBoxTagBP.TabIndex = 23;
@@ -1109,7 +1113,7 @@ namespace WinSimpleIDriver
             // comboBoxTagFilterPage
             // 
             this.comboBoxTagFilterPage.FormattingEnabled = true;
-            this.comboBoxTagFilterPage.Location = new System.Drawing.Point(460, 37);
+            this.comboBoxTagFilterPage.Location = new System.Drawing.Point(460, 64);
             this.comboBoxTagFilterPage.Name = "comboBoxTagFilterPage";
             this.comboBoxTagFilterPage.Size = new System.Drawing.Size(145, 25);
             this.comboBoxTagFilterPage.Sorted = true;
@@ -1120,7 +1124,7 @@ namespace WinSimpleIDriver
             // comboBoxTagFilterBlock
             // 
             this.comboBoxTagFilterBlock.FormattingEnabled = true;
-            this.comboBoxTagFilterBlock.Location = new System.Drawing.Point(309, 37);
+            this.comboBoxTagFilterBlock.Location = new System.Drawing.Point(309, 64);
             this.comboBoxTagFilterBlock.Name = "comboBoxTagFilterBlock";
             this.comboBoxTagFilterBlock.Size = new System.Drawing.Size(145, 25);
             this.comboBoxTagFilterBlock.Sorted = true;
@@ -1131,7 +1135,7 @@ namespace WinSimpleIDriver
             // comboBoxTagFilterGroup
             // 
             this.comboBoxTagFilterGroup.FormattingEnabled = true;
-            this.comboBoxTagFilterGroup.Location = new System.Drawing.Point(158, 37);
+            this.comboBoxTagFilterGroup.Location = new System.Drawing.Point(158, 64);
             this.comboBoxTagFilterGroup.Name = "comboBoxTagFilterGroup";
             this.comboBoxTagFilterGroup.Size = new System.Drawing.Size(145, 25);
             this.comboBoxTagFilterGroup.Sorted = true;
@@ -1142,7 +1146,7 @@ namespace WinSimpleIDriver
             // comboBoxTagFilterSource
             // 
             this.comboBoxTagFilterSource.FormattingEnabled = true;
-            this.comboBoxTagFilterSource.Location = new System.Drawing.Point(7, 37);
+            this.comboBoxTagFilterSource.Location = new System.Drawing.Point(7, 64);
             this.comboBoxTagFilterSource.Name = "comboBoxTagFilterSource";
             this.comboBoxTagFilterSource.Size = new System.Drawing.Size(145, 25);
             this.comboBoxTagFilterSource.Sorted = true;
@@ -1164,7 +1168,7 @@ namespace WinSimpleIDriver
             // checkBoxTagStatistic
             // 
             this.checkBoxTagStatistic.AutoSize = true;
-            this.checkBoxTagStatistic.Location = new System.Drawing.Point(740, 10);
+            this.checkBoxTagStatistic.Location = new System.Drawing.Point(393, 38);
             this.checkBoxTagStatistic.Name = "checkBoxTagStatistic";
             this.checkBoxTagStatistic.Size = new System.Drawing.Size(95, 21);
             this.checkBoxTagStatistic.TabIndex = 17;
@@ -1177,7 +1181,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagDesc.AutoSize = true;
             this.checkBoxTagDesc.Checked = true;
             this.checkBoxTagDesc.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxTagDesc.Location = new System.Drawing.Point(524, 10);
+            this.checkBoxTagDesc.Location = new System.Drawing.Point(177, 38);
             this.checkBoxTagDesc.Name = "checkBoxTagDesc";
             this.checkBoxTagDesc.Size = new System.Drawing.Size(89, 21);
             this.checkBoxTagDesc.TabIndex = 16;
@@ -1188,7 +1192,7 @@ namespace WinSimpleIDriver
             // checkBoxTagRuntime
             // 
             this.checkBoxTagRuntime.AutoSize = true;
-            this.checkBoxTagRuntime.Location = new System.Drawing.Point(442, 10);
+            this.checkBoxTagRuntime.Location = new System.Drawing.Point(95, 38);
             this.checkBoxTagRuntime.Name = "checkBoxTagRuntime";
             this.checkBoxTagRuntime.Size = new System.Drawing.Size(75, 21);
             this.checkBoxTagRuntime.TabIndex = 15;
@@ -1201,7 +1205,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagEditor.AutoSize = true;
             this.checkBoxTagEditor.Checked = true;
             this.checkBoxTagEditor.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxTagEditor.Location = new System.Drawing.Point(354, 10);
+            this.checkBoxTagEditor.Location = new System.Drawing.Point(7, 38);
             this.checkBoxTagEditor.Name = "checkBoxTagEditor";
             this.checkBoxTagEditor.Size = new System.Drawing.Size(84, 21);
             this.checkBoxTagEditor.TabIndex = 14;
@@ -1213,7 +1217,7 @@ namespace WinSimpleIDriver
             // 
             this.textBoxTagFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxTagFilter.Location = new System.Drawing.Point(611, 39);
+            this.textBoxTagFilter.Location = new System.Drawing.Point(611, 66);
             this.textBoxTagFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxTagFilter.Name = "textBoxTagFilter";
             this.textBoxTagFilter.Size = new System.Drawing.Size(427, 22);
@@ -1277,12 +1281,12 @@ namespace WinSimpleIDriver
             this.tagStatus,
             this.tagMessage,
             this.tagStatistic});
-            this.dataGridViewTag.Location = new System.Drawing.Point(7, 67);
+            this.dataGridViewTag.Location = new System.Drawing.Point(7, 95);
             this.dataGridViewTag.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridViewTag.MultiSelect = false;
             this.dataGridViewTag.Name = "dataGridViewTag";
             this.dataGridViewTag.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewTag.Size = new System.Drawing.Size(1109, 339);
+            this.dataGridViewTag.Size = new System.Drawing.Size(1109, 307);
             this.dataGridViewTag.TabIndex = 9;
             this.dataGridViewTag.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewTag_CellBeginEdit);
             this.dataGridViewTag.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTag_CellEndEdit);
@@ -1291,145 +1295,12 @@ namespace WinSimpleIDriver
             this.dataGridViewTag.SelectionChanged += new System.EventHandler(this.dataGridViewTag_SelectionChanged);
             this.dataGridViewTag.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewTag_UserAddedRow);
             // 
-            // tagID
-            // 
-            this.tagID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.tagID.DefaultCellStyle = dataGridViewCellStyle3;
-            this.tagID.HeaderText = "ID";
-            this.tagID.Name = "tagID";
-            this.tagID.ReadOnly = true;
-            this.tagID.Width = 45;
-            // 
-            // tagCalc
-            // 
-            this.tagCalc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.tagCalc.HeaderText = "Р";
-            this.tagCalc.Name = "tagCalc";
-            this.tagCalc.ReadOnly = true;
-            this.tagCalc.Width = 21;
-            // 
-            // tagTitle
-            // 
-            this.tagTitle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tagTitle.HeaderText = "Название";
-            this.tagTitle.Name = "tagTitle";
-            // 
-            // tagON
-            // 
-            this.tagON.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.tagON.HeaderText = "ВКЛ";
-            this.tagON.Name = "tagON";
-            this.tagON.Width = 37;
-            // 
-            // tagValue
-            // 
-            this.tagValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tagValue.HeaderText = "Значение";
-            this.tagValue.Name = "tagValue";
-            this.tagValue.ReadOnly = true;
-            // 
-            // tagSource
-            // 
-            this.tagSource.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tagSource.HeaderText = "Источник";
-            this.tagSource.Name = "tagSource";
-            this.tagSource.ReadOnly = true;
-            // 
-            // tagGroup
-            // 
-            this.tagGroup.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tagGroup.HeaderText = "Группа";
-            this.tagGroup.Name = "tagGroup";
-            this.tagGroup.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.tagGroup.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // tagDataType
-            // 
-            this.tagDataType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tagDataType.HeaderText = "Тип данных";
-            this.tagDataType.Name = "tagDataType";
-            // 
-            // tagAddress
-            // 
-            this.tagAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tagAddress.HeaderText = "Адрес";
-            this.tagAddress.Name = "tagAddress";
-            this.tagAddress.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.tagAddress.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // tagCommand
-            // 
-            this.tagCommand.HeaderText = "Команда";
-            this.tagCommand.Name = "tagCommand";
-            // 
-            // tagWriteValue
-            // 
-            this.tagWriteValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tagWriteValue.HeaderText = "Значение записи";
-            this.tagWriteValue.Name = "tagWriteValue";
-            this.tagWriteValue.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.tagWriteValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // tagWriteTag
-            // 
-            this.tagWriteTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tagWriteTag.HeaderText = "Тег записи";
-            this.tagWriteTag.Name = "tagWriteTag";
-            this.tagWriteTag.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.tagWriteTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // tagDesc
-            // 
-            this.tagDesc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tagDesc.HeaderText = "Описание";
-            this.tagDesc.Name = "tagDesc";
-            // 
-            // tagBlock
-            // 
-            this.tagBlock.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.tagBlock.HeaderText = "Блок";
-            this.tagBlock.Name = "tagBlock";
-            this.tagBlock.Width = 60;
-            // 
-            // tagPage
-            // 
-            this.tagPage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.tagPage.HeaderText = "Страница";
-            this.tagPage.Name = "tagPage";
-            this.tagPage.Width = 93;
-            // 
-            // tagStatus
-            // 
-            this.tagStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.tagStatus.HeaderText = "Статус";
-            this.tagStatus.Name = "tagStatus";
-            this.tagStatus.ReadOnly = true;
-            this.tagStatus.Width = 74;
-            // 
-            // tagMessage
-            // 
-            this.tagMessage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tagMessage.HeaderText = "Сообщение";
-            this.tagMessage.Name = "tagMessage";
-            this.tagMessage.ReadOnly = true;
-            // 
-            // tagStatistic
-            // 
-            this.tagStatistic.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.tagStatistic.HeaderText = "Статистика";
-            this.tagStatistic.Name = "tagStatistic";
-            this.tagStatistic.ReadOnly = true;
-            this.tagStatistic.Width = 101;
-            // 
             // tabPageStructure
             // 
             this.tabPageStructure.Controls.Add(this.splitContainerStructure);
-            this.tabPageStructure.Location = new System.Drawing.Point(4, 22);
+            this.tabPageStructure.Location = new System.Drawing.Point(4, 26);
             this.tabPageStructure.Name = "tabPageStructure";
-            this.tabPageStructure.Size = new System.Drawing.Size(1122, 412);
+            this.tabPageStructure.Size = new System.Drawing.Size(1122, 408);
             this.tabPageStructure.TabIndex = 5;
             this.tabPageStructure.Text = "Структуры";
             this.tabPageStructure.UseVisualStyleBackColor = true;
@@ -1459,8 +1330,8 @@ namespace WinSimpleIDriver
             this.splitContainerStructure.Panel2.Controls.Add(this.buttonStructureTargetFilter);
             this.splitContainerStructure.Panel2.Controls.Add(this.dataGridViewStructureTarget);
             this.splitContainerStructure.Panel2.Controls.Add(this.textBoxStructureTargetFilter);
-            this.splitContainerStructure.Size = new System.Drawing.Size(1116, 366);
-            this.splitContainerStructure.SplitterDistance = 164;
+            this.splitContainerStructure.Size = new System.Drawing.Size(1116, 362);
+            this.splitContainerStructure.SplitterDistance = 163;
             this.splitContainerStructure.TabIndex = 0;
             // 
             // label1
@@ -1526,7 +1397,7 @@ namespace WinSimpleIDriver
             this.dataGridViewStructure.MultiSelect = false;
             this.dataGridViewStructure.Name = "dataGridViewStructure";
             this.dataGridViewStructure.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewStructure.Size = new System.Drawing.Size(1108, 126);
+            this.dataGridViewStructure.Size = new System.Drawing.Size(1108, 125);
             this.dataGridViewStructure.TabIndex = 10;
             this.dataGridViewStructure.SelectionChanged += new System.EventHandler(this.dataGridViewStructure_SelectionChanged);
             this.dataGridViewStructure.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewStructure_UserAddedRow);
@@ -1647,7 +1518,7 @@ namespace WinSimpleIDriver
             this.dataGridViewStructureTarget.MultiSelect = false;
             this.dataGridViewStructureTarget.Name = "dataGridViewStructureTarget";
             this.dataGridViewStructureTarget.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewStructureTarget.Size = new System.Drawing.Size(1108, 163);
+            this.dataGridViewStructureTarget.Size = new System.Drawing.Size(1108, 160);
             this.dataGridViewStructureTarget.TabIndex = 11;
             this.dataGridViewStructureTarget.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewTarget_UserAddedRow);
             // 
@@ -2003,6 +1874,160 @@ namespace WinSimpleIDriver
             this.ToolStripMenuItemLastFiles.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemLastFiles.Text = "Последние";
             // 
+            // checkBoxTagSave
+            // 
+            this.checkBoxTagSave.AutoSize = true;
+            this.checkBoxTagSave.Location = new System.Drawing.Point(630, 38);
+            this.checkBoxTagSave.Name = "checkBoxTagSave";
+            this.checkBoxTagSave.Size = new System.Drawing.Size(70, 21);
+            this.checkBoxTagSave.TabIndex = 26;
+            this.checkBoxTagSave.Text = "Запись";
+            this.checkBoxTagSave.UseVisualStyleBackColor = true;
+            this.checkBoxTagSave.CheckedChanged += new System.EventHandler(this.checkBoxTagSave_CheckedChanged);
+            // 
+            // checkBoxTagAddress
+            // 
+            this.checkBoxTagAddress.AutoSize = true;
+            this.checkBoxTagAddress.Location = new System.Drawing.Point(706, 38);
+            this.checkBoxTagAddress.Name = "checkBoxTagAddress";
+            this.checkBoxTagAddress.Size = new System.Drawing.Size(67, 21);
+            this.checkBoxTagAddress.TabIndex = 27;
+            this.checkBoxTagAddress.Text = "Адрес";
+            this.checkBoxTagAddress.UseVisualStyleBackColor = true;
+            this.checkBoxTagAddress.CheckedChanged += new System.EventHandler(this.checkBoxTagAddress_CheckedChanged);
+            // 
+            // tagID
+            // 
+            this.tagID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = null;
+            this.tagID.DefaultCellStyle = dataGridViewCellStyle3;
+            this.tagID.HeaderText = "ID";
+            this.tagID.Name = "tagID";
+            this.tagID.ReadOnly = true;
+            this.tagID.Width = 45;
+            // 
+            // tagCalc
+            // 
+            this.tagCalc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.tagCalc.HeaderText = "Р";
+            this.tagCalc.Name = "tagCalc";
+            this.tagCalc.ReadOnly = true;
+            this.tagCalc.Width = 21;
+            // 
+            // tagTitle
+            // 
+            this.tagTitle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagTitle.HeaderText = "Название";
+            this.tagTitle.Name = "tagTitle";
+            // 
+            // tagON
+            // 
+            this.tagON.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.tagON.HeaderText = "ВКЛ";
+            this.tagON.Name = "tagON";
+            this.tagON.Width = 37;
+            // 
+            // tagValue
+            // 
+            this.tagValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagValue.HeaderText = "Значение";
+            this.tagValue.Name = "tagValue";
+            this.tagValue.ReadOnly = true;
+            // 
+            // tagSource
+            // 
+            this.tagSource.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagSource.HeaderText = "Источник";
+            this.tagSource.Name = "tagSource";
+            this.tagSource.ReadOnly = true;
+            // 
+            // tagGroup
+            // 
+            this.tagGroup.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagGroup.HeaderText = "Группа";
+            this.tagGroup.Name = "tagGroup";
+            this.tagGroup.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.tagGroup.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tagDataType
+            // 
+            this.tagDataType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagDataType.HeaderText = "Тип данных";
+            this.tagDataType.Name = "tagDataType";
+            // 
+            // tagAddress
+            // 
+            this.tagAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagAddress.HeaderText = "Адрес";
+            this.tagAddress.Name = "tagAddress";
+            this.tagAddress.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.tagAddress.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tagCommand
+            // 
+            this.tagCommand.HeaderText = "Команда";
+            this.tagCommand.Name = "tagCommand";
+            // 
+            // tagWriteValue
+            // 
+            this.tagWriteValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagWriteValue.HeaderText = "Значение записи";
+            this.tagWriteValue.Name = "tagWriteValue";
+            this.tagWriteValue.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.tagWriteValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tagWriteTag
+            // 
+            this.tagWriteTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagWriteTag.HeaderText = "Тег записи";
+            this.tagWriteTag.Name = "tagWriteTag";
+            this.tagWriteTag.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.tagWriteTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tagDesc
+            // 
+            this.tagDesc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagDesc.HeaderText = "Описание";
+            this.tagDesc.Name = "tagDesc";
+            // 
+            // tagBlock
+            // 
+            this.tagBlock.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagBlock.HeaderText = "Блок";
+            this.tagBlock.Name = "tagBlock";
+            // 
+            // tagPage
+            // 
+            this.tagPage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.tagPage.HeaderText = "Страница";
+            this.tagPage.Name = "tagPage";
+            this.tagPage.Width = 93;
+            // 
+            // tagStatus
+            // 
+            this.tagStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.tagStatus.HeaderText = "Статус";
+            this.tagStatus.Name = "tagStatus";
+            this.tagStatus.ReadOnly = true;
+            this.tagStatus.Width = 74;
+            // 
+            // tagMessage
+            // 
+            this.tagMessage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tagMessage.HeaderText = "Сообщение";
+            this.tagMessage.Name = "tagMessage";
+            this.tagMessage.ReadOnly = true;
+            // 
+            // tagStatistic
+            // 
+            this.tagStatistic.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.tagStatistic.HeaderText = "Статистика";
+            this.tagStatistic.Name = "tagStatistic";
+            this.tagStatistic.ReadOnly = true;
+            this.tagStatistic.Width = 101;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -2181,24 +2206,6 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.DataGridViewTextBoxColumn groupStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn groupTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn groupStatistic;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagID;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn tagCalc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagTitle;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn tagON;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagValue;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagSource;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagGroup;
-        private System.Windows.Forms.DataGridViewComboBoxColumn tagDataType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagAddress;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn tagCommand;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagWriteValue;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagWriteTag;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagDesc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagBlock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagPage;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagMessage;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagStatistic;
         private System.Windows.Forms.DataGridViewTextBoxColumn structureID;
         private System.Windows.Forms.DataGridViewTextBoxColumn structureTitle;
         private System.Windows.Forms.DataGridViewCheckBoxColumn structureOn;
@@ -2234,6 +2241,26 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.ToolStripMenuItem tabFilterToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemLastFiles;
+        private System.Windows.Forms.CheckBox checkBoxTagSave;
+        private System.Windows.Forms.CheckBox checkBoxTagAddress;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagID;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn tagCalc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagTitle;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn tagON;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagSource;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagGroup;
+        private System.Windows.Forms.DataGridViewComboBoxColumn tagDataType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagAddress;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn tagCommand;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagWriteValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagWriteTag;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagDesc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagBlock;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagPage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagMessage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagStatistic;
     }
 }
 
