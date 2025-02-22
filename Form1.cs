@@ -247,11 +247,10 @@ namespace WinSimpleIDriver
             FormClear();
         }
 
-        private void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
+        private async void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Открыть проект");
-            OpenProject(true);
-            //...
+            await OpenProjectAsync(true);
         }
 
         private void ToolStripMenuItemSave_Click(object sender, EventArgs e)
@@ -300,28 +299,33 @@ namespace WinSimpleIDriver
         }
 
         // Открыть проект (распаковка настроек из файла)
-        private string OpenProject(bool select = true, string fileName = "")
+        private async Task OpenProjectAsync(bool select = true, string fileName = "")
         {
+            SetLeftLabelMessage1("Открытие проекта...");
+
             // Загрузка проекта JSON
             string input = FileControl.LoadFromFile(ref fileName, out string path, select); // чтение из файла...
             if (String.IsNullOrWhiteSpace(input))
-                return null;
+                return;
 
             // Последние файлы
             string fullFileName = Path.Combine(path, fileName);
             FileControl.AddToRecentFiles(fullFileName); // Сохранение файла в истории
-            UpdateRecentFilesMenu(); // Обновление меню
 
-            // получение JSON данных
-            dynamic output = JsonControl.Deserialize_Json_Data(input);
+            await Task.Run(() =>
+            {
+                // получение JSON данных
+                dynamic output = JsonControl.Deserialize_Json_Data(input);
 
-            // распаковка проекта
-            EditorControl.ParseData(output);
+                // распаковка проекта
+                EditorControl.ParseData(output);
+            });
 
-            // Рисование на форме
+            // Обновление UI (обновление меню и формы)
+            UpdateRecentFilesMenu();
             BuildForForm();
 
-            return null;
+            SetLeftLabelMessage1("Проект открыт!");
         }
 
         // Рисование на форме
@@ -361,23 +365,9 @@ namespace WinSimpleIDriver
         }
 
         // Открыть проект из списка последних файлов
-        private void OpenProjectFromRecent(string filePath)
+        private async void OpenProjectFromRecent(string filePath)
         {
-            OpenProject(false, filePath);
-
-            //if (!File.Exists(filePath))
-            //{
-            //    MessageBox.Show($"Файл {filePath} не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return;
-            //}
-
-            //string fileName = Path.GetFileName(filePath);
-            //string input = FileControl.LoadFromFile(ref fileName, out string path, false); // Открываем без выбора
-            //if (input == null) return;
-
-            //// Последние файлы
-            //FileControl.AddToRecentFiles(filePath); // Добавляем в историю
-            //UpdateRecentFilesMenu(); // Обновляем меню
+            await OpenProjectAsync(false, filePath);
         }
 
         #endregion
