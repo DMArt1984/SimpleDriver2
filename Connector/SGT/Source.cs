@@ -987,7 +987,7 @@ namespace WinSimpleIDriver.Connector.SGT
         }
 
         // Получение параметров источника
-        static public void ParseItemSource(dynamic item, int forId, out string title, out eDriverType driver, out string connection, out string groupTitle, out bool off, out string description, out dynamic tags, out bool auto, out bool reopen)
+        static public void ParseItemSource(dynamic item, uint forId, out string title, out eDriverType driver, out string connection, out string groupTitle, out bool off, out string description, out dynamic tags, out bool auto, out bool reopen)
         {
             title = JsonControl.GetString(item, "Title", $"Source #{forId}");
             driver = JsonControl.GetTypeEnum<eDriverType>(item, "Driver", eDriverType.None);
@@ -1080,8 +1080,8 @@ namespace WinSimpleIDriver.Connector.SGT
 
     public class SourceEditor // Редактирование
     {
-        public int Id; // Уникальный идентификатор (0 - нет Id)
-        public int groupId; // ID группы (0 - нет Id)
+        public uint Id; // Уникальный идентификатор (0 - нет Id)
+        public uint groupId; // ID группы (0 - нет Id)
         public string groupTitle; // Название группы
         public eDriverType driver; // Тип драйвера
         public string title; // Название драйвера

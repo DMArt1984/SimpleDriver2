@@ -1400,17 +1400,17 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.sourceItem:
                     tabControlProject.SelectTab(tabPageSource);
-                    DataTableLib.ShowRow(dataGridViewSource, Id, title);
+                    DataTableLib.ShowRow(dataGridViewSource, Id, title, DataTableLib.dtSource.col.Title);
                     break;
 
                 case TreeProjCategory.groupItem:
                     tabControlProject.SelectTab(tabPageGroup);
-                    DataTableLib.ShowRow(dataGridViewGroup, Id, title);
+                    DataTableLib.ShowRow(dataGridViewGroup, Id, title, DataTableLib.dtGroup.col.Title);
                     break;
 
                 case TreeProjCategory.tagItem:
                     tabControlProject.SelectTab(tabPageTag);
-                    DataTableLib.ShowRow(dataGridViewTag, Id, title);
+                    DataTableLib.ShowRow(dataGridViewTag, Id, title, DataTableLib.dtTag.col.Title);
                     break;
 
                 case TreeProjCategory.blockItem:
@@ -1424,12 +1424,12 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.structureItem:
                     tabControlProject.SelectTab(tabPageStructure);
-                    DataTableLib.ShowRow(dataGridViewStructure, Id, title);
+                    //DataTableLib.ShowRow(dataGridViewStructure, Id, title);
                     break;
 
                 case TreeProjCategory.targetItem:
                     tabControlProject.SelectTab(tabPageStructure);
-                    DataTableLib.ShowRow(dataGridViewStructureTarget, Id, title);
+                    //DataTableLib.ShowRow(dataGridViewStructureTarget, Id, title);
                     break;
 
 
@@ -1439,12 +1439,12 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.includeItem :
                     tabControlProject.SelectTab(tabPageInclude);
-                    DataTableLib.ShowRow(dataGridViewInclude, Id, title);
+                    //DataTableLib.ShowRow(dataGridViewInclude, Id, title);
                     break;
 
                 case TreeProjCategory.changeItem:
                     tabControlProject.SelectTab(tabPageInclude);
-                    DataTableLib.ShowRow(dataGridViewIncludeChild, Id, title);
+                    //DataTableLib.ShowRow(dataGridViewIncludeChild, Id, title);
                     break;
             }
         }

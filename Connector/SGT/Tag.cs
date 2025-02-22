@@ -748,7 +748,7 @@ namespace WinSimpleIDriver.Connector.SGT
         // -----------------------------------------------------------------------------------------------------
 
         // Получение параметров тега
-        static public void ParseItemTag(dynamic item, int forId, out string title, out string source, out eDataType dataType, out bool off, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand)
+        static public void ParseItemTag(dynamic item, uint forId, out string title, out string source, out eDataType dataType, out bool off, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand)
         {
             title = JsonControl.GetString(item, "Title", $"Tag #{forId}");
             source = JsonControl.GetString(item, "Source");
@@ -1589,11 +1589,11 @@ namespace WinSimpleIDriver.Connector.SGT
 
     public class TagEditor // Редактирование
     {
-        public int Id; // Уникальный идентификатор (0 - нет Id)
+        public uint Id; // Уникальный идентификатор (0 - нет Id)
         public string title; // Название
         public eDataType dataType;
-        public int sourceId; // ID драйвера
-        public int groupId; // ID группы
+        public uint sourceId; // ID драйвера
+        public uint groupId; // ID группы
         public string sourceTitle; // Название драйвера
         public string groupTitle; // Название группы
         public string address; // адрес

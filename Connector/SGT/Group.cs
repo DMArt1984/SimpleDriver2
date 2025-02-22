@@ -326,7 +326,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
 
         // Получение параметров группы
-        static public void ParseItemGroup(dynamic item, int forindex, out string title, out uint updateRate, out bool off, out string description, out string sourceTitle, out dynamic tags)
+        static public void ParseItemGroup(dynamic item, uint forindex, out string title, out uint updateRate, out bool off, out string description, out string sourceTitle, out dynamic tags)
         {
             title = JsonControl.GetString(item, "Title", $"Group #{forindex}");
             updateRate = (uint)JsonControl.GetInt(item, "UpdateRate");
@@ -339,7 +339,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
     public class GroupEditor // Редактирование
     {
-        public int Id; // Уникальный идентификатор (0 - нет Id)
+        public uint Id; // Уникальный идентификатор (0 - нет Id)
         public string title; // Название
         public bool off; // Отключение
         public uint updateRate; // Период опроса (мсек)

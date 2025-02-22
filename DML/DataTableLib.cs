@@ -38,6 +38,8 @@ namespace DML
             public string filter;
         }
 
+        
+
         #region Source
 
         static public class dtSource
@@ -160,26 +162,29 @@ namespace DML
                 DataTableLib.DelDGVRow(dgv);
             }
 
-            // Справка
-            static public void Help()
+            // Открыть справку по драйверу
+            public static void Help()
             {
-                Dictionary<string, string> dic = new Dictionary<string, string>();
-
-                var row = dgv.CurrentRow;
-                if (row == null)
+                if (dgv == null || dgv.CurrentRow == null || col.Driver < 0 || col.Driver >= dgv.ColumnCount)
                     return;
 
-                string typeName = row.Cells[col.Driver].Value?.ToString();
-                if (typeName == null)
+                string typeName = dgv.CurrentRow.Cells[col.Driver].Value?.ToString();
+                if (string.IsNullOrWhiteSpace(typeName))
                     return;
 
-                eDriverType est = (eDriverType)Enum.Parse(typeof(eDriverType), typeName);
+                if (!Enum.TryParse(typeName, out eDriverType est))
+                    return; // Если строка не соответствует enum, просто выходим
 
-                dic = Source.HelpDicSource(est);
+                var dic = Source.HelpDicSource(est);
+                if (dic == null || dic.Count == 0)
+                    return; // Не открываем форму, если нет данных
 
-                FormHelp help = new FormHelp();
-                help.Text = "Справка по драйверу " + typeName;
-                help.dic = dic;
+                var help = new FormHelp
+                {
+                    Text = $"Справка по драйверу {typeName}",
+                    dic = dic
+                };
+
                 help.Show();
             }
 
@@ -389,36 +394,40 @@ namespace DML
             #endregion
 
             // Обновить связи тегов к источникам от групп
-            static public void UpdateDGVTagSourceLink()
+            public static void UpdateDGVTagSourceLink()
             {
-                // Получить списки для...
-                var collectionGroup = MyTree.SetTreeCollection(dtGroup.dgv, dtGroup.col.Title, dtGroup.col.Source);
+                if (dgv == null || dtGroup.dgv == null)
+                    return;
+
+                if (col.Group < 0 || col.Source < 0 || dtGroup.col.Title < 0 || dtGroup.col.Source < 0)
+                    return;
+
+                // Создаем безопасный словарь с проверкой null
+                var groupCollection = MyTree.SetTreeCollection(dtGroup.dgv, dtGroup.col.Title, dtGroup.col.Source);
+                if (groupCollection == null || !groupCollection.Any())
+                    return;
+
+                var groupDict = groupCollection
+                    .Where(g => !string.IsNullOrWhiteSpace(g.Title))
+                    .ToDictionary(g => g.Title, g => g.Link);
 
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
                     if (row.IsNewRow)
                         continue;
 
-                    string sourceTitle = "";
-
-                    var group = row.Cells[col.Group].Value;
-                    if (group != null)
+                    var groupTitle = row.Cells[col.Group].Value?.ToString();
+                    if (string.IsNullOrWhiteSpace(groupTitle)) // Проверяем на null и пустоту
                     {
-                        string groupTitle = group.ToString();
-                        if (String.IsNullOrWhiteSpace(groupTitle) == false)
-                        {
-                            var groupItem = collectionGroup.FirstOrDefault(x => x.Title == groupTitle);
-                            if (groupItem.Id > 0)
-                            {
-                                sourceTitle = (String.IsNullOrWhiteSpace(groupItem.Link)) ? "" : groupItem.Link;
-                            }
-                        }
+                        row.Cells[col.Source].Value = "";
+                        continue;
                     }
 
-                    row.Cells[col.Source].Value = sourceTitle;
+                    row.Cells[col.Source].Value = groupDict.TryGetValue(groupTitle, out string sourceTitle) ? sourceTitle : "";
                 }
-
             }
+
+
 
             // Определение номеров колонок
             static public void LinkColumns(DataGridView tags)
@@ -475,39 +484,41 @@ namespace DML
                     rowTag[dtTag.col.Value] = value;
             }
 
-            // Справка
-            static public void Help()
+            // Открыть справку по тегам
+            public static void Help()
             {
-                Dictionary<string, string> dic = new Dictionary<string, string>();
-
-                var row = dgv.CurrentRow;
-                if (row == null)
+                if (dgv == null || dgv.CurrentRow == null || dtSource.dgv == null)
                     return;
 
-                string sourceTitle = (row.Cells[col.Source].Value != null) ? row.Cells[col.Source].Value.ToString() : null;
-                if (sourceTitle == null)
+                if (col.Source < 0 || col.Source >= dgv.ColumnCount ||
+                    dtSource.col.Title < 0 || dtSource.col.Driver < 0)
                     return;
 
-                string driverTitle = null;
-                foreach (DataGridViewRow item in dtSource.dgv.Rows)
+                string sourceTitle = dgv.CurrentRow.Cells[col.Source].Value?.ToString();
+                if (string.IsNullOrWhiteSpace(sourceTitle))
+                    return;
+
+                var sourceRow = dtSource.dgv.Rows
+                    .Cast<DataGridViewRow>()
+                    .FirstOrDefault(item => item.Cells[dtSource.col.Title].Value?.ToString() == sourceTitle);
+
+                string driverTitle = sourceRow?.Cells[dtSource.col.Driver].Value?.ToString();
+                if (string.IsNullOrWhiteSpace(driverTitle))
+                    return;
+
+                if (!Enum.TryParse(driverTitle, out eDriverType est))
+                    return; // Если строка не соответствует enum, просто выходим
+
+                var dic = Source.HelpDicTag(est);
+                if (dic == null || dic.Count == 0)
+                    return; // Не создаем окно, если данных нет
+
+                var help = new FormHelp
                 {
-                    if (item.Cells[dtSource.col.Title].Value != null && item.Cells[dtSource.col.Title].Value.ToString() == sourceTitle)
-                    {
-                        driverTitle = item.Cells[dtSource.col.Driver].Value.ToString();
-                        break;
-                    }
-                }
+                    Text = $"Справка по тегам {driverTitle}",
+                    dic = dic
+                };
 
-                if (driverTitle == null)
-                    return;
-
-                eDriverType est = (eDriverType)Enum.Parse(typeof(eDriverType), driverTitle);
-
-                dic = Source.HelpDicTag(est);
-
-                FormHelp help = new FormHelp();
-                help.Text = "Справка по тегам " + driverTitle;
-                help.dic = dic;
                 help.Show();
             }
 
@@ -818,195 +829,200 @@ namespace DML
         }
         #endregion
 
-        // Получить DGV строку
-        static public DataGridViewRow GetRowDGV(DataGridView dgv, DataRow row)
+        // Получить строку DataGridView по DataRow
+        public static DataGridViewRow GetRowDGV(DataGridView dgv, DataRow row)
         {
-            var Id = Convert.ToString(row[0]);
+            if (row == null || row.ItemArray.Length == 0) return null;
+            return GetRowDGV(dgv, row[0]);
+        }
+
+        // Получить строку DataGridView по ID (объединение двух методов)
+        public static DataGridViewRow GetRowDGV(DataGridView dgv, object id)
+        {
+            if (dgv == null || id == null) return null;
             return dgv.Rows
-                        .Cast<DataGridViewRow>()
-                        .Where(r => r.Cells[0].Value.ToString() == Id)
-                        .First();
-        }
-        // Получить DGV строку
-        static public DataGridViewRow GetRowDGV(DataGridView dgv, ushort Id)
-        {
-            var _Id = Convert.ToString(Id);
-            return dgv.Rows
-                       .Cast<DataGridViewRow>()
-                       .Where(r => r.Cells[0].Value.ToString() == _Id)
-                       .First();
+                      .Cast<DataGridViewRow>()
+                      .FirstOrDefault(r => r.Cells[0].Value != null && r.Cells[0].Value.Equals(id));
         }
 
-        // Получить DT строку
-        static public DataRow GetDTRow(DataTable dt, uint Id)
+        // Получить строку DataTable по ID
+        public static DataRow GetDTRow(DataTable dt, uint id)
         {
-            DataRow rowTag = dt.Rows.Find(Id);
-            return rowTag;
+            return dt?.Rows.Find(id);
         }
 
-        // Получить значение из выбранной строки
-        static public string GetValueFromCurrentRow(DataGridView dgv, int col)
+        // Получить значение из текущей строки DataGridView
+        public static string GetValueFromCurrentRow(DataGridView dgv, int col)
         {
-            var row = dgv.CurrentRow;
-            if (row == null)
-                return "";
+            if (dgv?.CurrentRow?.Cells[col]?.Value == null || dgv.CurrentRow.IsNewRow)
+                return string.Empty;
 
-            if (row.IsNewRow)
-                return "";
-
-            var value = row.Cells[col].Value;
-            if (value == null)
-                return "";
-
-            return value.ToString();
+            return dgv.CurrentRow.Cells[col].Value.ToString();
         }
 
-        // Получить пустую таблицу DataTable
-        static public DataTable GetEmptyDataTableForTags(DataGridView dgv, string name)
+        // Получить пустую DataTable с колонками из DataGridView
+        public static DataTable GetEmptyDataTableForTags(DataGridView dgv, string name)
         {
+            if (dgv == null || dgv.ColumnCount == 0)
+                throw new ArgumentException("DataGridView пуст или не инициализирован.", nameof(dgv));
+
             DataTable table = new DataTable(name);
 
-            for (int i = 0; i < dgv.ColumnCount; ++i)
+            foreach (DataGridViewColumn column in dgv.Columns)
             {
-                table.Columns.Add(new DataColumn(dgv.Columns[i].Name));
-                dgv.Columns[i].DataPropertyName = dgv.Columns[i].Name;
+                var dataColumn = new DataColumn(column.Name)
+                {
+                    DataType = column.ValueType ?? typeof(string) // Используем тип столбца из DGV или `string`
+                };
+                table.Columns.Add(dataColumn);
+
+                // Устанавливаем `DataPropertyName` только если он отличается
+                if (column.DataPropertyName != column.Name)
+                    column.DataPropertyName = column.Name;
             }
-            table.Columns[0].DataType = typeof(int);
 
             return table;
         }
-        
-        
+
+
         // Получить строку по ID
-        static public DataGridViewRow GetRowByID(DataGridView dgv, int Id)
+        public static DataGridViewRow GetRowByID(DataGridView dgv, int id)
         {
-            foreach (DataGridViewRow item in dgv.Rows)
-            {
-                if (item.IsNewRow)
-                    continue;
-                if (item.Cells[0].Value.ToString() == Id.ToString())
-                    return item;
-            }
-            return dgv.Rows[dgv.Rows.Count - 1];
+            if (dgv == null || dgv.RowCount == 0) return null;
+
+            return dgv.Rows
+                      .Cast<DataGridViewRow>()
+                      .FirstOrDefault(row => !row.IsNewRow &&
+                                             row.Cells[0].Value is int cellValue &&
+                                             cellValue == id);
         }
 
-        // Получить строку по Названию (колонка после ID)
-        static public DataGridViewRow GetRowByTitle(DataGridView dgv, string title)
+        // Получить строку DataGridView по названию (колонка после ID)
+        public static DataGridViewRow GetRowByTitle(DataGridView dgv, string title, int indexTitle)
         {
-            foreach (DataGridViewRow item in dgv.Rows)
-            {
-                if (item.IsNewRow)
-                    continue;
-                if (item.Cells[1].Value.ToString() == title)
-                    return item;
-            }
-            return dgv.Rows[dgv.Rows.Count - 1];
+            if (dgv == null || dgv.RowCount == 0 || string.IsNullOrWhiteSpace(title))
+                return null;
+
+            return dgv.Rows
+                      .Cast<DataGridViewRow>()
+                      .FirstOrDefault(row => !row.IsNewRow &&
+                                             row.Cells[indexTitle].Value is string cellValue &&
+                                             cellValue.Equals(title, StringComparison.OrdinalIgnoreCase));
         }
 
-        // ID
-        static public ushort GetSelIdFromTable(object senderDGV)
+        // Получить ID из выделенной строки DataGridView
+        public static uint GetSelIdFromTable(object senderDGV)
         {
-            ushort Id = 0;
-            DataGridView dgv = senderDGV as DataGridView;
-            if (dgv != null && dgv.SelectedRows.Count > 0)
+            if (senderDGV is DataGridView dgv && dgv.SelectedRows.Count > 0)
             {
-                DataGridViewRow row = dgv.SelectedRows[0];
-                if (row != null)
-                {
-                    Id = ushort.Parse(row.Cells[0].Value.ToString());
-                }
+                var value = dgv.SelectedRows[0].Cells[0].Value;
+                return value is uint id ? id : Convert.ToUInt32(value ?? 0);
             }
-            return Id;
+            return 0;
         }
 
-        static public DataGridViewRow GetSelRow(DataGridView dgv)
+        // Получить выбранную строку DataGridView
+        public static DataGridViewRow GetSelRow(DataGridView dgv)
         {
-            if (dgv != null && dgv.SelectedRows.Count > 0)
-            {
-                DataGridViewRow row = dgv.SelectedRows[0];
-                return row;
-            }
-            return null;
+            return dgv?.SelectedRows.Count > 0 ? dgv.SelectedRows[0] : null;
         }
-        
-        // Получить максимальный ID из таблицы
-        static public ushort GetNextID(DataGridView dgv)
+
+        // Получить следующий доступный ID из DataGridView
+        public static uint GetNextID(DataGridView dgv)
         {
-            ushort newID = 0;
-            foreach (DataGridViewRow item in dgv.Rows)
-            {
-                if (item.IsNewRow)
-                    continue;
+            if (dgv == null || dgv.RowCount == 0) return 1; // Если таблица пуста, начинаем с 1
 
-                if (item.Cells[0].Value == DBNull.Value)
-                    continue;
+            var maxId = dgv.Rows
+                           .Cast<DataGridViewRow>()
+                           .Where(row => !row.IsNewRow && row.Cells[0].Value is uint)
+                           .Select(row => (uint)row.Cells[0].Value)
+                           .DefaultIfEmpty((uint)0) // Указываем явный тип `uint`
+                           .Max();
 
-                ushort id = Convert.ToUInt16(item.Cells[0].Value);
-                if (id > newID)
-                    newID = id;
-            }
-            return ++newID;
+            return (uint)(maxId + 1);
         }
         #endregion
 
 
         #region SET
 
-        static public void SetValues(DataTable dt, uint Id, ColumnValue[] cv)
+        // Устанавливает значения в строку DataTable по ID
+        public static void SetValues(DataTable dt, uint Id, ColumnValue[] cv)
         {
+            if (dt?.Rows == null || cv == null || cv.Length == 0) return;
+
             DataRow row = dt.Rows.Find(Id);
-            if (row != null)
+            row?.BeginEdit();
+
+            foreach (var item in cv)
             {
-                foreach (var item in cv)
-                {
+                if (row?.Table.Columns.Count > item.column) // Проверка, чтобы избежать выхода за границы массива
                     row[item.column] = item.value;
-                }
             }
+
+            row?.EndEdit();
         }
 
-        static public void SetValue(DataTable dt, uint Id, int column, dynamic value)
+        // Устанавливает значение в строку DataTable по ID
+        public static void SetValue(DataTable dt, uint Id, int column, dynamic value)
         {
+            if (dt?.Rows == null || column < 0 || column >= dt.Columns.Count) return;
+
             DataRow row = dt.Rows.Find(Id);
-            if (row != null)
-                row[column] = value;
+            if (row == null) return;
+
+            row.BeginEdit();
+            row[column] = value;
+            row.EndEdit();
         }
 
-        static public void SetValue(DataRow row, int column, dynamic value)
+        // Устанавливает значение в строку DataRow по индексу столбца
+        public static void SetValue(DataRow row, int column, dynamic value)
         {
-            if (row != null)
-                row[column] = value;
+            if (row == null || column < 0 || column >= row.Table.Columns.Count) return;
+
+            row.BeginEdit();
+            row[column] = value;
+            row.EndEdit();
         }
 
-        // Добавление ссылки на родительский элемент
-        static public void SetParentInRow(DataGridView dgv, ComboBox cb, int colParentTitle)
+        // Добавление ссылки на родительский элемент в DataGridView
+        public static void SetParentInRow(DataGridView dgv, ComboBox cb, int colParentTitle)
         {
-            string text = cb.Text;
-            if (String.IsNullOrWhiteSpace(text) == false)
-            {
-                var row = dgv.CurrentRow;
-                if (row != null)
-                    row.Cells[colParentTitle].Value = text;
-            }
+            if (dgv == null || cb == null || dgv.RowCount == 0 || string.IsNullOrWhiteSpace(cb.Text))
+                return;
+
+            var row = dgv.CurrentRow;
+            if (row == null || colParentTitle < 0 || colParentTitle >= dgv.ColumnCount)
+                return;
+
+            row.Cells[colParentTitle].Value = cb.Text;
         }
 
         // Расставить количества элементов
-        static public void SetCountForUsed(DataGridView dgvSource, DataGridView dgvTag, int colTitle, int colCount, int colUsed)
+        public static void SetCountForUsed(DataGridView dgvSource, DataGridView dgvTag, int colTitle, int colCount, int colUsed)
         {
-            Dictionary<string, int> dic = GetDicForUsed(dgvTag, colUsed);
+            if (dgvSource == null || dgvTag == null || dgvSource.RowCount == 0 || dgvTag.RowCount == 0)
+                return;
+
+            if (colTitle < 0 || colTitle >= dgvSource.ColumnCount || colCount < 0 || colCount >= dgvSource.ColumnCount)
+                return;
+
+            var dic = GetDicForUsed(dgvTag, colUsed);
 
             foreach (DataGridViewRow item in dgvSource.Rows)
             {
-                var itemTitle = item.Cells[colTitle].Value;
-                if (itemTitle == null)
+                var itemTitle = item.Cells[colTitle].Value?.ToString();
+                if (string.IsNullOrWhiteSpace(itemTitle))
                     continue;
 
-                int count = 0;
-                if (dic.ContainsKey(itemTitle.ToString()))
-                    count = dic[itemTitle.ToString()];
+                dic.TryGetValue(itemTitle, out int count); // Оптимальный способ извлечения из `Dictionary`
 
-                if (item.Cells[colCount].Value == null || count != (int)item.Cells[colCount].Value)
+                var currentValue = item.Cells[colCount].Value as int?;
+                if (currentValue == null || currentValue != count)
+                {
                     item.Cells[colCount].Value = count;
-
+                }
             }
         }
 
@@ -1022,15 +1038,15 @@ namespace DML
             row.Selected = true;
             dgv.FirstDisplayedScrollingRowIndex = row.Index;
         }
-        static public void ShowRow(DataGridView dgv, int Id = 0, string title = "")
+        static public void ShowRow(DataGridView dgv, int Id, string title, int indexTitle)
         {
             if (Id > 0)
             {
                 ShowRow(dgv, GetRowByID(dgv, Id));
             }
-            else if (title != "")
+            else if (title != "" && indexTitle > 0)
             {
-                ShowRow(dgv, GetRowByTitle(dgv, title));
+                ShowRow(dgv, GetRowByTitle(dgv, title, indexTitle));
             }
         }
         #endregion
@@ -1084,6 +1100,7 @@ namespace DML
                 return false;
             return (row.Cells[indexCell].Value == null) ? false : row.Cells[indexCell].Value.ToString().Contains(filter);
         }
+
         // Замена для нескольких ячеек
         static public int ReplaceFilter(DataGridViewRow row, int[] indexCells, string ValueFrom, string ValueTo)
         {
@@ -1115,39 +1132,59 @@ namespace DML
 
         #endregion
 
-        static public void LinkDatatTable(DataTable dt, BindingSource bind, DataGridView dgv)
+        // Привязка DataTable к DataGridView через BindingSource
+        public static void LinkDatatTable(DataTable dt, BindingSource bind, DataGridView dgv)
         {
+            if (dt == null || bind == null || dgv == null)
+                return;
 
-            // v2
             bind.DataSource = dt;
-            dgv.AutoGenerateColumns = false;
             dgv.DataSource = bind;
-            dgv.Refresh();
+            dgv.AutoGenerateColumns = false;
 
+            if (dgv.InvokeRequired)
+                dgv.Invoke(new MethodInvoker(dgv.Refresh));
+            else
+                dgv.Refresh();
         }
-      
-        // Копировать строку таблицы
-        static public DataGridViewRow CloneRowWithValues(DataGridViewRow row)
+
+        // Клонировать строку DataGridView с копированием значений
+        public static DataGridViewRow CloneRowWithValues(DataGridViewRow row)
         {
-            DataGridViewRow clonedRow = (DataGridViewRow)row.Clone();
-            for (Int32 index = 0; index < row.Cells.Count; index++)
+            if (row == null)
+                return null;
+
+            var clonedRow = (DataGridViewRow)row.Clone();
+
+            for (int i = 0; i < Math.Min(row.Cells.Count, clonedRow.Cells.Count); i++)
             {
-                clonedRow.Cells[index].Value = row.Cells[index].Value;
+                clonedRow.Cells[i].Value = row.Cells[i].Value;
             }
+
             return clonedRow;
         }
-        // Копия текущей строки
-        static public void CopyDGVRow(DataGridView dgv, int colTitle)
+
+        // Копирует выбранную строку в DataGridView с новым ID
+        public static void CopyDGVRow(DataGridView dgv, int colTitle)
         {
+            if (dgv == null || dgv.RowCount == 0 || colTitle < 0 || colTitle >= dgv.ColumnCount)
+                return;
+
             var row = GetSelRow(dgv);
-            if (row != null)
-            {
-                var newRow = CloneRowWithValues(row);
-                var nextID = GetNextID(dgv);
-                newRow.Cells[0].Value = nextID;
-                newRow.Cells[colTitle].Value = $"{row.Cells[colTitle].Value}_ID{nextID}";
-                dgv.Rows.Add(newRow);
-            }
+            if (row == null)
+                return;
+
+            var newRow = CloneRowWithValues(row);
+            if (newRow == null)
+                return;
+
+            var nextID = GetNextID(dgv);
+            newRow.Cells[0].Value = nextID;
+
+            var titleValue = row.Cells[colTitle].Value?.ToString();
+            newRow.Cells[colTitle].Value = string.IsNullOrWhiteSpace(titleValue) ? $"ID{nextID}" : $"{titleValue}_ID{nextID}";
+
+            dgv.Rows.Add(newRow);
         }
 
         // Удаление текущей строки
@@ -1169,29 +1206,51 @@ namespace DML
                 row.Cells[0].Value = newID;
         }
 
-        
-        // Получить словарь с количеством повторений
-        static public Dictionary<string, int> GetDicForUsed(DataGridView dgv, int indexCol)
+
+        // Получить словарь с количеством повторений значений в указанной колонке DataGridView
+        public static Dictionary<string, int> GetDicForUsed(DataGridView dgv, int indexCol)
         {
-            Dictionary<string, int> dic = new Dictionary<string, int>();
+            if (dgv == null || dgv.RowCount == 0 || indexCol < 0 || indexCol >= dgv.ColumnCount)
+                return new Dictionary<string, int>();
+
+            var dic = new Dictionary<string, int>();
+
             foreach (DataGridViewRow item in dgv.Rows)
             {
-                var objName = item.Cells[indexCol].Value;
-                if (objName == null)
-                    continue;
-                string name = objName.ToString();
-                if (dic.ContainsKey(name))
+                if (item.IsNewRow) continue; // Пропускаем новую строку
+
+                var cellValue = item.Cells[indexCol].Value;
+                if (cellValue == null || cellValue == DBNull.Value) continue;
+
+                string name = cellValue.ToString();
+                if (dic.TryGetValue(name, out int count))
                 {
-                    dic[name]++;
+                    dic[name] = count + 1;
                 }
                 else
                 {
-                    dic.Add(name, 1);
+                    dic[name] = 1;
                 }
             }
+
             return dic;
         }
 
+
+
+
+        #endregion
+
+        #region GPT
+
+        // 🔹 Проверяет, выполняется ли код в UI-потоке
+        private static void EnsureUIThread(Control control, Action action)
+        {
+            if (control.InvokeRequired)
+                control.Invoke(action);
+            else
+                action();
+        }
 
         #endregion
 

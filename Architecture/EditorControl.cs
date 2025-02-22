@@ -17,10 +17,10 @@ namespace WinSimpleIDriver
         static public List<TagEditor> tags;
         static public List<GroupEditor> groups;
 
-        static int sourceId = 0;
-        static int groupId = 0;
-        static int tagId = 0;
-        static int blockUnnamedId = 0;
+        static uint sourceId = 0;
+        static uint groupId = 0;
+        static uint tagId = 0;
+        static uint blockUnnamedId = 0;
 
         // Очистка данных
         static public void Clear()
@@ -169,7 +169,7 @@ namespace WinSimpleIDriver
         }
 
         // Распаковка тегов
-        static void ParseTags(dynamic data, int sourceId = 0, int groupId = 0, string block = null)
+        static void ParseTags(dynamic data, uint sourceId = 0, uint groupId = 0, string block = null)
         {
             if (data != null)
             {
