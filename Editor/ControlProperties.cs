@@ -11,6 +11,7 @@ namespace WinSimpleIDriver.Editor
 
         public ControlProperties(Control ctrl)
         {
+            this.Title = ctrl.Name;
             this.control = ctrl;
             this.X = ctrl.Left;
             this.Y = ctrl.Top;
@@ -19,6 +20,9 @@ namespace WinSimpleIDriver.Editor
             this.Text = ctrl.Text;
             this.FontSize = ctrl.Font.Size;
         }
+
+        [Category("Общие"), DisplayName("Имя")]
+        public string Title { get; set; }
 
         [Category("Позиция"), DisplayName("X (по горизонтали)")]
         public int X { get; set; }
@@ -48,6 +52,7 @@ namespace WinSimpleIDriver.Editor
         // Применить изменения
         public void ApplyChanges()
         {
+            control.Name = this.Title;
             control.Left = this.X;
             control.Top = this.Y;
             control.Width = this.Width;

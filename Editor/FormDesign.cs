@@ -14,6 +14,7 @@ namespace WinSimpleIDriver.Editor
         private Point offset;
         private PictureBox backgroundPictureBox = new PictureBox();
 
+        private uint controlID = 0; // Идентификатор элемента
         public FormDesign()
         {
             InitializeComponent();
@@ -101,11 +102,12 @@ namespace WinSimpleIDriver.Editor
 
         private void addLabelToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string title = $"Label{++controlID}";
             Label lbl = new Label
             {
-                Name = "Press1A",
-                Text = "P",
-                Width = 20,
+                Name = title,
+                Text = title,
+                Width = 200,
                 Height = 25,
                 Left = 100,
                 Top = 100,
@@ -125,14 +127,15 @@ namespace WinSimpleIDriver.Editor
 
         private void addOutputboxToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string title = $"TextBox{++controlID}";
             TextBox txt = new TextBox
             {
-                Name = "Press1B",
-                Width = 60,
+                Name = title,
+                Text = title,
+                Width = 200,
                 Height = 25,
-                Left = 150,
-                Top = 100,
-                Text = "{SupplyLinePressure}"
+                Left = 100,
+                Top = 100
             };
 
             txt.MouseDown += Form_MouseDown;
