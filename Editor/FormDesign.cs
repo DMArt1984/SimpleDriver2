@@ -42,6 +42,10 @@ namespace WinSimpleIDriver.Editor
             this.MouseUp += Form_MouseUp;
         }
 
+        #region Events
+
+        #region Events.Mouse
+
         private void Form_MouseDown(object sender, MouseEventArgs e)
         {
             if (sender is Control ctrl && ctrl != this && ctrl != backgroundPictureBox)
@@ -78,7 +82,9 @@ namespace WinSimpleIDriver.Editor
                 selectedControl = null;
             }
         }
+        #endregion
 
+        #region Events.Menu
         private void loadBacgroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -111,6 +117,7 @@ namespace WinSimpleIDriver.Editor
             lbl.MouseMove += Form_MouseMove;
             lbl.MouseUp += Form_MouseUp;
             lbl.MouseDoubleClick += Element_DoubleClick; // Открывает окно редактирования
+            lbl.LocationChanged += Element_LocationChanged; // Динамичское обновление PropertyGrid
 
             this.Controls.Add(lbl);
             lbl.BringToFront();
@@ -132,18 +139,10 @@ namespace WinSimpleIDriver.Editor
             txt.MouseMove += Form_MouseMove;
             txt.MouseUp += Form_MouseUp;
             txt.MouseDoubleClick += Element_DoubleClick; // Открывает окно редактирования
+            txt.LocationChanged += Element_LocationChanged; // Динамичское обновление PropertyGrid
 
             this.Controls.Add(txt);
             txt.BringToFront();
-        }
-
-        private void Element_DoubleClick(object sender, EventArgs e)
-        {
-            if (sender is Control ctrl)
-            {
-                FormDesignProp propForm = new FormDesignProp(ctrl);
-                propForm.Show(this);
-            }
         }
 
         private void saveJsonToolStripMenuItem_Click(object sender, EventArgs e)
@@ -158,5 +157,53 @@ namespace WinSimpleIDriver.Editor
             File.WriteAllText("config.json", json);
             MessageBox.Show("JSON сохранен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        #endregion
+
+        // Открыть окно свойств
+        private void Element_DoubleClick(object sender, EventArgs e)
+        {
+            // v1
+            //if (sender is Control ctrl)
+            //{
+            //    FormDesignProp propForm = new FormDesignProp(ctrl);
+            //    propForm.Show(this);
+            //}
+
+            // v2
+            if (sender is Control ctrl)
+            {
+                if (openedPropertyForm == null || openedPropertyForm.IsDisposed)
+                {
+                    openedPropertyForm = new FormDesignProp(ctrl);
+                    openedPropertyForm.Show();
+                }
+                else
+                {
+                    openedPropertyForm.UpdateProperties(ctrl);
+                    openedPropertyForm.BringToFront();
+                }
+            }
+        }
+
+        // Открываем PropertyForm
+        private FormDesignProp openedPropertyForm;
+
+        // Обновляем свойства в окне PropertyGrid
+        private void Element_LocationChanged(object sender, EventArgs e)
+        {
+            if (sender is Control ctrl)
+            {
+                if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
+                {
+                    openedPropertyForm.UpdateProperties(ctrl);
+                }
+            }
+        }
+
+        #endregion
+
+
+
+
     }
 }
