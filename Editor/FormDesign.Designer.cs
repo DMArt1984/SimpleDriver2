@@ -30,10 +30,11 @@ namespace WinSimpleIDriver.Editor
         private void InitializeComponent()
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.loadBacgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addLabelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addOutputboxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveJsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadBacgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addPictureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,12 +44,20 @@ namespace WinSimpleIDriver.Editor
             this.loadBacgroundToolStripMenuItem,
             this.addLabelToolStripMenuItem,
             this.addOutputboxToolStripMenuItem,
+            this.addPictureToolStripMenuItem,
             this.saveJsonToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // loadBacgroundToolStripMenuItem
+            // 
+            this.loadBacgroundToolStripMenuItem.Name = "loadBacgroundToolStripMenuItem";
+            this.loadBacgroundToolStripMenuItem.Size = new System.Drawing.Size(103, 20);
+            this.loadBacgroundToolStripMenuItem.Text = "load bacground";
+            this.loadBacgroundToolStripMenuItem.Click += new System.EventHandler(this.loadBacgroundToolStripMenuItem_Click);
             // 
             // addLabelToolStripMenuItem
             // 
@@ -71,12 +80,12 @@ namespace WinSimpleIDriver.Editor
             this.saveJsonToolStripMenuItem.Text = "save json";
             this.saveJsonToolStripMenuItem.Click += new System.EventHandler(this.saveJsonToolStripMenuItem_Click);
             // 
-            // loadBacgroundToolStripMenuItem
+            // addPictureToolStripMenuItem
             // 
-            this.loadBacgroundToolStripMenuItem.Name = "loadBacgroundToolStripMenuItem";
-            this.loadBacgroundToolStripMenuItem.Size = new System.Drawing.Size(103, 20);
-            this.loadBacgroundToolStripMenuItem.Text = "load bacground";
-            this.loadBacgroundToolStripMenuItem.Click += new System.EventHandler(this.loadBacgroundToolStripMenuItem_Click);
+            this.addPictureToolStripMenuItem.Name = "addPictureToolStripMenuItem";
+            this.addPictureToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+            this.addPictureToolStripMenuItem.Text = "add picture";
+            this.addPictureToolStripMenuItem.Click += new System.EventHandler(this.addPictureToolStripMenuItem_Click);
             // 
             // FormDesign
             // 
@@ -102,5 +111,6 @@ namespace WinSimpleIDriver.Editor
         private System.Windows.Forms.ToolStripMenuItem addLabelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addOutputboxToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveJsonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addPictureToolStripMenuItem;
     }
 }

@@ -29,6 +29,8 @@ namespace WinSimpleIDriver.Editor
             propertyGrid1.Dock = DockStyle.Fill;
             propertyGrid1.SelectedObject = controlProperties; // targetControl;
             //this.Controls.Add(propertyGrid1);
+
+            buttonLoadImage.Visible = control is PictureBox; // Кнопка показывается только для PictureBox
         }
 
         private void FormDesignProp_Load(object sender, EventArgs e)
@@ -48,6 +50,27 @@ namespace WinSimpleIDriver.Editor
             propertyGrid1.SelectedObject = controlProperties;
             propertyGrid1.Refresh(); // Обновляем PropertyGrid
         }
+
+        private void buttonLoadImage_Click(object sender, EventArgs e)
+        {
+            if (targetControl is PictureBox pictureBox)
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                {
+                    Filter = "Изображения|*.jpg;*.png;*.bmp",
+                    Title = "Выберите изображение"
+                };
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    pictureBox.Image = Image.FromFile(openFileDialog.FileName);
+                    pictureBox.Tag = openFileDialog.FileName; // Сохраняем путь
+                    controlProperties.ImagePath = openFileDialog.FileName;
+                    propertyGrid1.Refresh();
+                }
+            }
+        }
+
 
     }
 }

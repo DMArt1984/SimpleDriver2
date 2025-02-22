@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 
@@ -100,6 +101,7 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
+        #region Events.Menu.Add
         private void addLabelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string title = $"Label{++controlID}";
@@ -147,6 +149,31 @@ namespace WinSimpleIDriver.Editor
             this.Controls.Add(txt);
             txt.BringToFront();
         }
+
+        private void addPictureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBox pictureBox = new PictureBox
+            {
+                Name = "Picture" + (this.Controls.OfType<PictureBox>().Count() + 1),
+                Width = 100,
+                Height = 100,
+                Left = 200,
+                Top = menuStrip1.Height + 100,
+                BorderStyle = BorderStyle.FixedSingle,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.LightGray // Цвет фона для наглядности
+            };
+
+            pictureBox.MouseDown += Form_MouseDown;
+            pictureBox.MouseMove += Form_MouseMove;
+            pictureBox.MouseUp += Form_MouseUp;
+            pictureBox.MouseDoubleClick += Element_DoubleClick;
+            pictureBox.LocationChanged += Element_LocationChanged; // Обновление PropertyGrid
+
+            this.Controls.Add(pictureBox);
+            pictureBox.BringToFront();
+        }
+        #endregion
 
         private void saveJsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -203,10 +230,11 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
+
+
+
         #endregion
 
-
-
-
+        
     }
 }

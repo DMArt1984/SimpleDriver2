@@ -19,6 +19,11 @@ namespace WinSimpleIDriver.Editor
             this.Height = ctrl.Height;
             this.Text = ctrl.Text;
             this.FontSize = ctrl.Font.Size;
+
+            if (ctrl is PictureBox pictureBox)
+            {
+                this.ImagePath = pictureBox.Tag as string;
+            }
         }
 
         [Category("Общие"), DisplayName("Имя")]
@@ -42,6 +47,9 @@ namespace WinSimpleIDriver.Editor
         [Category("Шрифт"), DisplayName("Размер шрифта")]
         public float FontSize { get; set; }
 
+        [Category("Изображение"), DisplayName("Файл изображения"), Browsable(true)]
+        public string ImagePath { get; set; }
+
         // Скрываем ненужные свойства
         [Browsable(false)]
         public Color BackColor { get; set; }
@@ -59,6 +67,14 @@ namespace WinSimpleIDriver.Editor
             control.Height = this.Height;
             control.Text = this.Text;
             control.Font = new Font(control.Font.FontFamily, this.FontSize);
+
+            if (control is PictureBox pictureBox && !string.IsNullOrEmpty(ImagePath))
+            {
+                pictureBox.Image = Image.FromFile(ImagePath);
+                pictureBox.Tag = ImagePath;
+            }
+
+
         }
     }
 }
