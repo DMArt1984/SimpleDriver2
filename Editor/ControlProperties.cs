@@ -8,11 +8,14 @@ namespace WinSimpleIDriver.Editor
     class ControlProperties
     {
         private Control control;
+        private Form mainForm;
 
         public ControlProperties(Control ctrl)
         {
-            this.Title = ctrl.Name;
             this.control = ctrl;
+            this.mainForm = ctrl.FindForm();
+
+            this.Title = ctrl.Name;
             this.X = ctrl.Left;
             this.Y = ctrl.Top;
             this.Width = ctrl.Width;
@@ -49,6 +52,21 @@ namespace WinSimpleIDriver.Editor
 
         [Category("Изображение"), DisplayName("Файл изображения"), Browsable(true)]
         public string ImagePath { get; set; }
+
+        [Category("Слой"), DisplayName("Z-Индекс (порядок наложения)")]
+        public int ZIndex
+        {
+            get => mainForm.Controls.GetChildIndex(control);
+            set
+            {
+                if (value >= 0 && value < mainForm.Controls.Count)
+                {
+                    mainForm.Controls.SetChildIndex(control, value);
+                }
+            }
+        }
+
+
 
         // Скрываем ненужные свойства
         [Browsable(false)]
