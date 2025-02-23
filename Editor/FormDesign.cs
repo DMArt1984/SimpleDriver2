@@ -12,8 +12,13 @@ namespace WinSimpleIDriver.Editor
     {
         private List<ElementData> elements = new List<ElementData>();
         private Control selectedControl;
+        private Control clipboardControl; // Для копирования элементов
         private Point offset;
         private PictureBox backgroundPictureBox = new PictureBox();
+
+        private FormDesignProp openedPropertyForm; // Открываем PropertyForm
+
+        private bool mouseMove = false;
 
         private uint controlID = 0; // Идентификатор элемента
         public FormDesign()
@@ -39,6 +44,8 @@ namespace WinSimpleIDriver.Editor
 
         private void FormDesign_Load(object sender, EventArgs e)
         {
+            SetStatus();
+
             this.MouseMove += Form_MouseMove;
             this.MouseDown += Form_MouseDown;
             this.MouseUp += Form_MouseUp;
@@ -46,6 +53,7 @@ namespace WinSimpleIDriver.Editor
 
         #region Events
 
+        
         #region Events.Mouse
 
         private void Form_MouseDown(object sender, MouseEventArgs e)
@@ -53,13 +61,15 @@ namespace WinSimpleIDriver.Editor
             if (sender is Control ctrl && ctrl != this && ctrl != backgroundPictureBox)
             {
                 selectedControl = ctrl;
+                mouseMove = true;
                 offset = new Point(e.X, e.Y);
+                SetStatus(ctrl);
             }
         }
 
         private void Form_MouseMove(object sender, MouseEventArgs e)
         {
-            if (selectedControl != null)
+            if (selectedControl != null && mouseMove)
             {
                 selectedControl.Left = e.X + selectedControl.Left - offset.X;
                 selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
@@ -68,21 +78,26 @@ namespace WinSimpleIDriver.Editor
 
         private void Form_MouseUp(object sender, MouseEventArgs e)
         {
-            if (selectedControl != null)
-            {
-                elements.Add(new ElementData
-                {
-                    Name = selectedControl.Name,
-                    Type = selectedControl.GetType().Name,
-                    X = selectedControl.Left,
-                    Y = selectedControl.Top,
-                    Height = selectedControl.Height,
-                    Width = selectedControl.Width,
-                    Text = selectedControl.Text,
-                    FontSize = selectedControl.Font.Size
-                });
-                selectedControl = null;
-            }
+            mouseMove = false;
+            //selectedControl = null;
+            //SetStatus();
+
+            // ---
+            //if (selectedControl != null)
+            //{
+            //    elements.Add(new ElementData
+            //    {
+            //        Name = selectedControl.Name,
+            //        Type = selectedControl.GetType().Name,
+            //        X = selectedControl.Left,
+            //        Y = selectedControl.Top,
+            //        Height = selectedControl.Height,
+            //        Width = selectedControl.Width,
+            //        Text = selectedControl.Text,
+            //        FontSize = selectedControl.Font.Size
+            //    });
+            //    selectedControl = null;
+            //}
         }
         #endregion
 
@@ -102,7 +117,7 @@ namespace WinSimpleIDriver.Editor
         }
 
         #region Events.Menu.Add
-        private void addLabelToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ToolStripMenuItemAddControlLabel_Click(object sender, EventArgs e)
         {
             string title = $"Label{++controlID}";
             Label lbl = new Label
@@ -127,7 +142,7 @@ namespace WinSimpleIDriver.Editor
             lbl.BringToFront();
         }
 
-        private void addOutputboxToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ToolStripMenuItemAddControlOutput_Click(object sender, EventArgs e)
         {
             string title = $"TextBox{++controlID}";
             TextBox txt = new TextBox
@@ -150,7 +165,7 @@ namespace WinSimpleIDriver.Editor
             txt.BringToFront();
         }
 
-        private void addPictureToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ToolStripMenuItemAddControlPicture_Click(object sender, EventArgs e)
         {
             PictureBox pictureBox = new PictureBox
             {
@@ -172,9 +187,9 @@ namespace WinSimpleIDriver.Editor
 
             this.Controls.Add(pictureBox);
             pictureBox.BringToFront();
-        }
-        #endregion
 
+        }
+                #endregion
         private void saveJsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var jsonData = new
@@ -215,8 +230,7 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
-        // Открываем PropertyForm
-        private FormDesignProp openedPropertyForm;
+        
 
         // Обновляем свойства в окне PropertyGrid
         private void Element_LocationChanged(object sender, EventArgs e)
@@ -235,6 +249,120 @@ namespace WinSimpleIDriver.Editor
 
         #endregion
 
-        
+        #region Copy and Delete
+
+        // Копировать элемент в буфер
+        public void CopyElement()
+        {
+            if (selectedControl != null)
+            {
+                clipboardControl = selectedControl; // Сохраняем копируемый элемент
+                SetStatus(selectedControl);
+            }
+        }
+        // Вставить элемент из буфера
+        public void PasteElement()
+        {
+            if (clipboardControl != null)
+            {
+                Control newControl = CloneControl(clipboardControl);
+                this.Controls.Add(newControl);
+                newControl.BringToFront();
+                selectedControl = newControl;
+                SetStatus(selectedControl);
+            }
+        }
+        // Клонирование элемента
+        private Control CloneControl(Control original)
+        {
+            Control clone = null;
+
+            if (original is Label lbl)
+            {
+                clone = new Label
+                {
+                    Text = lbl.Text,
+                    Size = lbl.Size,
+                    Location = new Point(lbl.Left + 10, lbl.Top + 10),
+                    Font = lbl.Font,
+                    BackColor = lbl.BackColor
+                };
+            }
+            else if (original is TextBox txt)
+            {
+                clone = new TextBox
+                {
+                    Text = txt.Text,
+                    Size = txt.Size,
+                    Location = new Point(txt.Left + 10, txt.Top + 10),
+                    Font = txt.Font
+                };
+            }
+            else if (original is PictureBox pic)
+            {
+                clone = new PictureBox
+                {
+                    Size = pic.Size,
+                    Location = new Point(pic.Left + 10, pic.Top + 10),
+                    Image = pic.Image,
+                    SizeMode = pic.SizeMode,
+                    BorderStyle = pic.BorderStyle
+                };
+            }
+
+            clone.Name = $"{original.Name}_copy";
+
+            if (clone != null)
+            {
+                clone.MouseDown += Form_MouseDown;
+                clone.MouseMove += Form_MouseMove;
+                clone.MouseUp += Form_MouseUp;
+                clone.MouseDoubleClick += Element_DoubleClick;
+            }
+
+            return clone;
+        }
+
+        // Удалить текущий элемент
+        public void Delete()
+        {
+            if (selectedControl != null)
+            {
+                this.Controls.Remove(selectedControl);
+                selectedControl.Dispose();
+                selectedControl = null;
+                SetStatus();
+            }
+        }
+
+        #endregion
+
+        #region FormStatus
+
+        // Текущий элемент
+        private void SetStatus(Control ctrl)
+        {
+            string controlTypeName = ctrl.GetType().Name;
+            SetStatus(controlTypeName, ctrl.Name);
+        }
+        private void SetStatus(string valueType = "", string valueTitle = "")
+        {
+            toolStripStatusLabelType.Text = valueType;
+            toolStripStatusLabelTitle.Text = valueTitle;
+        }
+
+
+        #endregion
+
+        private void ToolStripMenuItemCommandCopy_Click(object sender, EventArgs e)
+        {
+            CopyElement();
+            PasteElement();
+        }
+
+        private void ToolStripMenuItemCommandDelete_Click(object sender, EventArgs e)
+        {
+            Delete();
+        }
     }
 }

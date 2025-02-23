@@ -22,7 +22,7 @@ namespace WinSimpleIDriver.Editor
             this.targetControl = control;
             this.controlProperties = new ControlProperties(control);
 
-            this.Text = "Редактир свойств";
+            SetFormTitle(control);
             //this.Size = new System.Drawing.Size(300, 400);
             this.StartPosition = FormStartPosition.CenterScreen;
 
@@ -33,6 +33,15 @@ namespace WinSimpleIDriver.Editor
             buttonLoadImage.Visible = control is PictureBox; // Кнопка показывается только для PictureBox
         }
 
+        private void SetFormTitle(Control ctrl)
+        {
+            this.Text = $"{ctrl.Name} свойства";
+        }
+        private void SetFormTitle(string title)
+        {
+            this.Text = $"{title} свойства";
+        }
+
         private void FormDesignProp_Load(object sender, EventArgs e)
         {
 
@@ -41,6 +50,7 @@ namespace WinSimpleIDriver.Editor
         private void buttonApply_Click(object sender, EventArgs e)
         {
             controlProperties.ApplyChanges();
+            SetFormTitle(controlProperties.Title);
         }
 
         public void UpdateProperties(Control control)
@@ -48,6 +58,8 @@ namespace WinSimpleIDriver.Editor
             this.targetControl = control;
             this.controlProperties = new ControlProperties(control);
             propertyGrid1.SelectedObject = controlProperties;
+            buttonLoadImage.Visible = control is PictureBox; // Кнопка показывается только для PictureBox
+            SetFormTitle(controlProperties.Title);
             propertyGrid1.Refresh(); // Обновляем PropertyGrid
         }
 
