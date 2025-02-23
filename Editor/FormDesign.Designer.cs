@@ -31,7 +31,6 @@ namespace WinSimpleIDriver.Editor
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.loadBacgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveJsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelType = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelTitle = new System.Windows.Forms.ToolStripStatusLabel();
@@ -42,6 +41,9 @@ namespace WinSimpleIDriver.Editor
             this.командыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemCommandCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemCommandDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveJsonToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -49,10 +51,10 @@ namespace WinSimpleIDriver.Editor
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.файлToolStripMenuItem,
             this.loadBacgroundToolStripMenuItem,
             this.ToolStripMenuItemAddControl,
-            this.командыToolStripMenuItem,
-            this.saveJsonToolStripMenuItem});
+            this.командыToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(659, 24);
@@ -65,13 +67,6 @@ namespace WinSimpleIDriver.Editor
             this.loadBacgroundToolStripMenuItem.Size = new System.Drawing.Size(103, 20);
             this.loadBacgroundToolStripMenuItem.Text = "load bacground";
             this.loadBacgroundToolStripMenuItem.Click += new System.EventHandler(this.loadBacgroundToolStripMenuItem_Click);
-            // 
-            // saveJsonToolStripMenuItem
-            // 
-            this.saveJsonToolStripMenuItem.Name = "saveJsonToolStripMenuItem";
-            this.saveJsonToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
-            this.saveJsonToolStripMenuItem.Text = "save json";
-            this.saveJsonToolStripMenuItem.Click += new System.EventHandler(this.saveJsonToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -151,6 +146,29 @@ namespace WinSimpleIDriver.Editor
             this.ToolStripMenuItemCommandDelete.Text = "Удалить";
             this.ToolStripMenuItemCommandDelete.Click += new System.EventHandler(this.ToolStripMenuItemCommandDelete_Click);
             // 
+            // файлToolStripMenuItem
+            // 
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openToolStripMenuItem,
+            this.saveJsonToolStripMenuItem1});
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Text = "open json";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // saveJsonToolStripMenuItem1
+            // 
+            this.saveJsonToolStripMenuItem1.Name = "saveJsonToolStripMenuItem1";
+            this.saveJsonToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.saveJsonToolStripMenuItem1.Text = "save json";
+            this.saveJsonToolStripMenuItem1.Click += new System.EventHandler(this.saveJsonToolStripMenuItem1_Click);
+            // 
             // FormDesign
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -175,7 +193,6 @@ namespace WinSimpleIDriver.Editor
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem loadBacgroundToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveJsonToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelType;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelTitle;
@@ -186,5 +203,8 @@ namespace WinSimpleIDriver.Editor
         private System.Windows.Forms.ToolStripMenuItem командыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCommandCopy;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCommandDelete;
+        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveJsonToolStripMenuItem1;
     }
 }

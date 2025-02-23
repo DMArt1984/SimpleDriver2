@@ -44,6 +44,7 @@ namespace WinSimpleIDriver.Editor
 
         private void FormDesign_Load(object sender, EventArgs e)
         {
+            //LoadJson(); // Автоматическая загрузка
             SetStatus();
 
             this.MouseMove += Form_MouseMove;
@@ -132,11 +133,12 @@ namespace WinSimpleIDriver.Editor
                 BackColor = Color.Transparent // Прозрачный фон
             };
 
-            lbl.MouseDown += Form_MouseDown;
-            lbl.MouseMove += Form_MouseMove;
-            lbl.MouseUp += Form_MouseUp;
-            lbl.MouseDoubleClick += Element_DoubleClick; // Открывает окно редактирования
-            lbl.LocationChanged += Element_LocationChanged; // Динамичское обновление PropertyGrid
+            AttachControlEvents(lbl);
+            //lbl.MouseDown += Form_MouseDown;
+            //lbl.MouseMove += Form_MouseMove;
+            //lbl.MouseUp += Form_MouseUp;
+            //lbl.MouseDoubleClick += Element_DoubleClick; // Открывает окно редактирования
+            //lbl.LocationChanged += Element_LocationChanged; // Динамичское обновление PropertyGrid
 
             this.Controls.Add(lbl);
             lbl.BringToFront();
@@ -155,11 +157,12 @@ namespace WinSimpleIDriver.Editor
                 Top = 100
             };
 
-            txt.MouseDown += Form_MouseDown;
-            txt.MouseMove += Form_MouseMove;
-            txt.MouseUp += Form_MouseUp;
-            txt.MouseDoubleClick += Element_DoubleClick; // Открывает окно редактирования
-            txt.LocationChanged += Element_LocationChanged; // Динамичское обновление PropertyGrid
+            AttachControlEvents(txt);
+            //txt.MouseDown += Form_MouseDown;
+            //txt.MouseMove += Form_MouseMove;
+            //txt.MouseUp += Form_MouseUp;
+            //txt.MouseDoubleClick += Element_DoubleClick; // Открывает окно редактирования
+            //txt.LocationChanged += Element_LocationChanged; // Динамичское обновление PropertyGrid
 
             this.Controls.Add(txt);
             txt.BringToFront();
@@ -179,29 +182,41 @@ namespace WinSimpleIDriver.Editor
                 BackColor = Color.LightGray // Цвет фона для наглядности
             };
 
-            pictureBox.MouseDown += Form_MouseDown;
-            pictureBox.MouseMove += Form_MouseMove;
-            pictureBox.MouseUp += Form_MouseUp;
-            pictureBox.MouseDoubleClick += Element_DoubleClick;
-            pictureBox.LocationChanged += Element_LocationChanged; // Обновление PropertyGrid
+            AttachControlEvents(pictureBox);
+            //pictureBox.MouseDown += Form_MouseDown;
+            //pictureBox.MouseMove += Form_MouseMove;
+            //pictureBox.MouseUp += Form_MouseUp;
+            //pictureBox.MouseDoubleClick += Element_DoubleClick;
+            //pictureBox.LocationChanged += Element_LocationChanged; // Обновление PropertyGrid
 
             this.Controls.Add(pictureBox);
             pictureBox.BringToFront();
 
         }
-                #endregion
-        private void saveJsonToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var jsonData = new
-            {
-                Desc = "SupplyLinePressure",
-                Elements = elements
-            };
+        #endregion
 
-            string json = JsonConvert.SerializeObject(jsonData, Formatting.Indented);
-            File.WriteAllText("config.json", json);
-            MessageBox.Show("JSON сохранен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        private void ToolStripMenuItemCommandCopy_Click(object sender, EventArgs e)
+        {
+            CopyElement();
+            PasteElement();
         }
+
+        private void ToolStripMenuItemCommandDelete_Click(object sender, EventArgs e)
+        {
+            Delete();
+        }
+
+        #region File
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadJson();
+        }
+        private void saveJsonToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveJson();
+        }
+        #endregion
+
         #endregion
 
         // Открыть окно свойств
@@ -354,15 +369,101 @@ namespace WinSimpleIDriver.Editor
 
         #endregion
 
-        private void ToolStripMenuItemCommandCopy_Click(object sender, EventArgs e)
+        private void AttachControlEvents(Control control)
         {
-            CopyElement();
-            PasteElement();
+            control.MouseDown += Form_MouseDown;
+            control.MouseMove += Form_MouseMove;
+            control.MouseUp += Form_MouseUp;
+            control.MouseDoubleClick += Element_DoubleClick;
+            control.LocationChanged += Element_LocationChanged;
         }
 
-        private void ToolStripMenuItemCommandDelete_Click(object sender, EventArgs e)
+        #region File
+
+        private void LoadJson()
         {
-            Delete();
+            if (!File.Exists("config.json")) return; // Если файла нет, выходим
+
+            var jsonData = JsonConvert.DeserializeObject<Dictionary<string, List<ElementData>>>(File.ReadAllText("config.json"));
+
+            if (jsonData.ContainsKey("Main"))
+            {
+                var allowedTypes = new HashSet<string> { "Label", "TextBox", "PictureBox" };
+
+                foreach (var el in jsonData["Main"].Where(e => allowedTypes.Contains(e.Type)))
+                {
+                    Control ctrl = CreateControlFromElement(el);
+                    this.Controls.Add(ctrl);
+                    AttachControlEvents(ctrl);
+                    this.Controls.SetChildIndex(ctrl, el.ZIndex); // Восстанавливаем ZIndex
+                }
+            }
         }
+
+        private void SaveJson()
+        {
+            var allowedTypes = new HashSet<Type> { typeof(Label), typeof(TextBox), typeof(PictureBox) };
+
+            var jsonData = new
+            {
+                Main = this.Controls.OfType<Control>()
+                    .Where(c => allowedTypes.Contains(c.GetType()) && c != backgroundPictureBox && !(c is MenuStrip))
+                    .Select(c => new ElementData
+                    {
+                        Name = c.Name,
+                        Type = c.GetType().Name,
+                        X = c.Left,
+                        Y = c.Top,
+                        Width = c.Width,
+                        Height = c.Height,
+                        Text = c.Text,
+                        FontSize = c.Font.Size,
+                        ZIndex = this.Controls.GetChildIndex(c), // Сохраняем порядок слоев
+                ImagePath = c is PictureBox pic ? pic.Tag as string : null // Путь к изображению
+            }).ToList()
+            };
+
+            File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, Formatting.Indented));
+            MessageBox.Show("Настройки сохранены!", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private Control CreateControlFromElement(ElementData el)
+        {
+            Control control = null;
+
+            if (el.Type == "Label")
+                control = new Label { Text = el.Text };
+            else if (el.Type == "TextBox")
+                control = new TextBox { Text = el.Text };
+            else if (el.Type == "PictureBox")
+            {
+                PictureBox pic = new PictureBox
+                {
+                    BorderStyle = BorderStyle.FixedSingle,
+                    SizeMode = PictureBoxSizeMode.Zoom
+                };
+                if (!string.IsNullOrEmpty(el.ImagePath) && File.Exists(el.ImagePath))
+                {
+                    pic.Image = Image.FromFile(el.ImagePath);
+                    pic.Tag = el.ImagePath;
+                }
+                control = pic;
+            }
+
+            if (control != null)
+            {
+                control.Name = el.Name;
+                control.Left = el.X;
+                control.Top = el.Y;
+                control.Width = el.Width;
+                control.Height = el.Height;
+                control.Font = new Font("Arial", el.FontSize);
+            }
+
+            return control;
+        }
+
+        #endregion
+
     }
 }
