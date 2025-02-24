@@ -327,19 +327,31 @@ namespace WinSimpleIDriver.Editor
         {
             if (!File.Exists("config.json")) return;
 
-            var jsonData = JsonConvert.DeserializeObject<Dictionary<string, List<ElementData>>>(File.ReadAllText("config.json"));
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore // Игнорируем отсутствующие поля
+            };
+
+            var jsonData = JsonConvert.DeserializeObject<Dictionary<string, List<ElementData>>>(File.ReadAllText("config.json"), settings);
 
             if (jsonData.ContainsKey("Main"))
             {
-                // Удаляем только элементы, которые соответствуют eElementType (не удаляем системные элементы)
                 this.Controls.OfType<Control>()
-                    .Where(c => GetElementType(c) != eElementType.None) // Удаляем только распознанные элементы
-                    .ToList()
-                    .ForEach(c => { this.Controls.Remove(c); c.Dispose(); });
+                    .Where(c => GetElementType(c) != eElementType.None)
+                    .ToList().ForEach(c => { this.Controls.Remove(c); c.Dispose(); });
 
-                // Загружаем новые элементы
                 foreach (var el in jsonData["Main"])
                 {
+                    // Проверка на null перед загрузкой
+                    el.Text = el.Text ?? "";
+                    el.Size = el.Size > 0 ? el.Size : 12.0f;
+                    el.Min = el.Min > 0 ? el.Min : 0;
+                    el.Max = el.Max > 0 ? el.Max : 100;
+                    el.Value = el.Value ?? "";
+                    el.ListName = el.ListName ?? "";
+                    el.ToolTip = el.ToolTip ?? "";
+                    el.TagTitle = el.TagTitle ?? "";
+
                     Control ctrl = CreateControlFromElement(el);
                     if (ctrl != null)
                     {
@@ -353,37 +365,49 @@ namespace WinSimpleIDriver.Editor
 
 
 
+
         private void SaveJson()
         {
             var jsonData = new
             {
                 Main = this.Controls.OfType<Control>()
-                    .Where(c => c != backgroundPictureBox && !(c is MenuStrip) && !(c is StatusStrip)) // Исключаем StatusStrip
-                    .Select(c =>
+                    .Where(c => c != backgroundPictureBox && !(c is MenuStrip))
+                    .Select(c => new ElementData
                     {
-                        eElementType type = GetElementType(c);
-                        if (type == eElementType.None) return null; // Пропускаем элементы без типа
-
-                return new ElementData
-                        {
-                            Name = c.Name,
-                            ElementType = type,
-                            X = c.Left,
-                            Y = c.Top,
-                            Width = c.Width,
-                            Height = c.Height,
-                            Text = c.Text,
-                            Size = c.Font.Size,
-                            ZIndex = this.Controls.GetChildIndex(c),
-                            ImagePath = c is PictureBox pic ? pic.Tag as string : null
-                        };
-                    })
-                    .Where(el => el != null) // Убираем null элементы
-                    .ToList()
+                        Name = c.Name,
+                        ElementType = GetElementType(c),
+                        X = c.Left,
+                        Y = c.Top,
+                        Relative = false,
+                        Width = c.Width,
+                        Height = c.Height,
+                        Text = c.Text,
+                        Format = null,
+                        Size = c.Font?.Size ?? 12.0f,
+                        Color = null,
+                        ZIndex = this.Controls.GetChildIndex(c),
+                        ImagePath = c is PictureBox pic ? pic.Tag as string : null,
+                        ImagesName = null,
+                        Command = null,
+                        Visible = null,
+                        Min = 0,
+                        Max = 0,
+                        Value = null,
+                        ListName = null,
+                        ToolTip = null,
+                        TagTitle = null
+                    }).ToList()
             };
 
-            File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, Formatting.Indented));
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore // Убираем null-поля
+            };
+
+            File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, settings));
         }
+
 
 
 
