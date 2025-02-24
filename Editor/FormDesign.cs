@@ -22,9 +22,9 @@ namespace WinSimpleIDriver.Editor
         private FormDesignProp openedPropertyForm; // Открываем PropertyForm
 
         //private HashSet<string> allowedTypes = new HashSet<string> { "Label", "TextBox", "PictureBox" };
-        private HashSet<Type> allowedTypes = new HashSet<Type> { typeof(Label), typeof(TextBox), typeof(PictureBox) };
+        //private HashSet<Type> allowedTypes = new HashSet<Type> { typeof(Label), typeof(TextBox), typeof(PictureBox) };
 
-        private bool mouseMove = false;
+        //private bool mouseMove = false;
 
         private uint controlID = 0; // Идентификатор элемента
         public FormDesign()
@@ -159,8 +159,6 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
-
-
         private void Form_MouseUp(object sender, MouseEventArgs e)
         {
             isResizing = false;
@@ -183,27 +181,13 @@ namespace WinSimpleIDriver.Editor
 
         #endregion
 
-        #region Events.Menu
-        
-
-        #region Events.Menu.Add
-        private void ToolStripMenuItemAddControlLabel_Click(object sender, EventArgs e)
-        {
-            AddElement(eElementType.Label);
-        }
-
-        private void ToolStripMenuItemAddControlOutput_Click(object sender, EventArgs e)
-        {
-            AddElement(eElementType.InputBox);
-        }
-
-        private void ToolStripMenuItemAddControlPicture_Click(object sender, EventArgs e)
-        {
-            AddElement(eElementType.PictureBox);
-
-        }
         #endregion
 
+        // =====================================================================================
+
+        #region Copy and Delete
+
+        #region Events
         private void ToolStripMenuItemCommandCopy_Click(object sender, EventArgs e)
         {
             CopyElement();
@@ -215,65 +199,7 @@ namespace WinSimpleIDriver.Editor
             Delete();
         }
 
-        #region File
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LoadJson();
-        }
-        private void saveJsonToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            SaveJson();
-        }
         #endregion
-
-        #endregion
-
-        // Открыть окно свойств
-        private void Element_DoubleClick(object sender, EventArgs e)
-        {
-            // v1
-            //if (sender is Control ctrl)
-            //{
-            //    FormDesignProp propForm = new FormDesignProp(ctrl);
-            //    propForm.Show(this);
-            //}
-
-            // v2
-            if (sender is Control ctrl)
-            {
-                if (openedPropertyForm == null || openedPropertyForm.IsDisposed)
-                {
-                    openedPropertyForm = new FormDesignProp(ctrl);
-                    openedPropertyForm.Show();
-                }
-                else
-                {
-                    openedPropertyForm.UpdateProperties(ctrl);
-                    openedPropertyForm.BringToFront();
-                }
-            }
-        }
-
-        
-
-        // Обновляем свойства в окне PropertyGrid
-        private void Element_LocationChanged(object sender, EventArgs e)
-        {
-            if (sender is Control ctrl)
-            {
-                if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
-                {
-                    openedPropertyForm.UpdateProperties(ctrl);
-                }
-            }
-        }
-
-
-
-
-        #endregion
-
-        #region Copy and Delete
 
         // Копировать элемент в буфер
         public void CopyElement()
@@ -361,22 +287,6 @@ namespace WinSimpleIDriver.Editor
 
         #endregion
 
-        #region FormStatus
-
-        // Текущий элемент
-        private void SetStatus(Control ctrl)
-        {
-            string controlTypeName = ctrl.GetType().Name;
-            SetStatus(controlTypeName, ctrl.Name);
-        }
-        private void SetStatus(string valueType = "", string valueTitle = "")
-        {
-            toolStripStatusLabelType.Text = valueType;
-            toolStripStatusLabelTitle.Text = valueTitle;
-        }
-
-
-        #endregion
 
         private void AttachControlEvents(Control control)
         {
@@ -387,7 +297,22 @@ namespace WinSimpleIDriver.Editor
             control.LocationChanged += Element_LocationChanged;
         }
 
+        // ===================================================================================
+
         #region File
+
+        #region Events
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadJson();
+        }
+        private void saveJsonToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveJson();
+        }
+
+        #endregion
 
         private void LoadJson()
         {
@@ -428,9 +353,6 @@ namespace WinSimpleIDriver.Editor
                 }
             }
         }
-
-
-
 
         private void SaveJson()
         {
@@ -473,9 +395,6 @@ namespace WinSimpleIDriver.Editor
 
             File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, settings));
         }
-
-
-
 
         private eElementType GetElementType(Control c)
         {
@@ -567,7 +486,145 @@ namespace WinSimpleIDriver.Editor
 
         #endregion
 
-        // ==================================================================
+        // ===================================================================================
+
+        #region FormStatus
+
+        // Текущий элемент
+        private void SetStatus(Control ctrl)
+        {
+            string controlTypeName = ctrl.GetType().Name;
+            SetStatus(controlTypeName, ctrl.Name);
+        }
+        private void SetStatus(string valueType = "", string valueTitle = "")
+        {
+            toolStripStatusLabelType.Text = valueType;
+            toolStripStatusLabelTitle.Text = valueTitle;
+        }
+
+
+        #endregion
+
+        // ===================================================================================
+
+        #region Form background image
+
+        #region Events
+        private void ToolStripMenuItemBackgroundImage_Click(object sender, EventArgs e)
+        {
+            LoadBackgroundImage();
+        }
+
+        private void ToolStripMenuItemRemoveBackImage_Click(object sender, EventArgs e)
+        {
+            RemoveBackgroundImage();
+        }
+        #endregion
+
+        /// <summary>
+        /// Загружает фоновое изображение напрямую в `BackgroundImage`.
+        /// </summary>
+        private void LoadBackgroundImage()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Изображения|*.jpg;*.png;*.bmp",
+                Title = "Выберите фоновое изображение"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    // Удаляем предыдущее изображение, если оно было
+                    if (this.BackgroundImage != null)
+                    {
+                        this.BackgroundImage.Dispose();
+                        this.BackgroundImage = null;
+                    }
+
+                    // Загружаем новое изображение как фон формы
+                    this.BackgroundImage = Image.FromFile(openFileDialog.FileName);
+                    this.BackgroundImageLayout = ImageLayout.None; // Растягиваем на всю форму
+
+                    // 🔹 Принудительное обновление формы и рамки
+                    Invalidate();
+                    Update();
+                    UpdateSelectionFrame();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Удаляет фоновое изображение.
+        /// </summary>
+        private void RemoveBackgroundImage()
+        {
+            if (this.BackgroundImage != null)
+            {
+                this.BackgroundImage.Dispose(); // Освобождаем память
+                this.BackgroundImage = null; // Убираем изображение
+
+                // 🔹 Обновляем отображение, чтобы вернуть прозрачный фон
+                Invalidate();
+                UpdateSelectionFrame();
+            }
+        }
+
+        #endregion
+
+        // ===================================================================================
+
+        #region Elements
+
+        #region Select/Deselect
+        /// <summary>
+        /// Обновляет рамку при выборе элемента.
+        /// </summary>
+        private void SelectElement(Control ctrl)
+        {
+            selectedControl = ctrl;
+            Invalidate(); // Перерисовываем рамку
+        }
+
+        /// <summary>
+        /// Убирает рамку при клике на форму.
+        /// </summary>
+        private void DeselectElement()
+        {
+            selectedControl = null;
+            Invalidate(); // Убираем рамку
+        }
+
+        /// <summary>
+        /// Обновляет рамку при изменении размера или перемещении элемента.
+        /// </summary>
+        private void UpdateSelectionFrame()
+        {
+            if (selectedControl != null)
+            {
+                Invalidate();
+            }
+        }
+        #endregion
+
+        #region Resize and Move
+        private Cursor GetResizeCursor(ResizeDirection direction)
+        {
+            switch (direction)
+            {
+                case ResizeDirection.Right:
+                    return Cursors.SizeWE;
+                case ResizeDirection.Bottom:
+                    return Cursors.SizeNS;
+                default:
+                    return Cursors.Default;
+            }
+        }
 
         private ResizeDirection GetResizeDirection(Control ctrl, Point mousePosition)
         {
@@ -583,22 +640,43 @@ namespace WinSimpleIDriver.Editor
         }
 
 
+        #endregion
 
-        private Cursor GetResizeCursor(ResizeDirection direction)
+        #endregion
+
+        // =============================================================================
+
+        #region ADD NEW Element
+
+        #region Events
+        private void ToolStripMenuItemAddControlLabel_Click(object sender, EventArgs e)
         {
-            switch (direction)
-            {
-                case ResizeDirection.Right:
-                    return Cursors.SizeWE;
-                case ResizeDirection.Bottom:
-                    return Cursors.SizeNS;
-                default:
-                    return Cursors.Default;
-            }
+            AddElement(eElementType.Label);
         }
 
+        private void ToolStripMenuItemAddControlOutput_Click(object sender, EventArgs e)
+        {
+            AddElement(eElementType.InputBox);
+        }
 
-        // ==================================================================
+        private void ToolStripMenuItemAddControlPicture_Click(object sender, EventArgs e)
+        {
+            AddElement(eElementType.PictureBox);
+
+        }
+
+        private void ToolStripMenuItemAddControlOutput_Click_1(object sender, EventArgs e)
+        {
+            AddElement(eElementType.OutputBox);
+        }
+
+        private void ToolStripMenuItemAddControlRectangle_Click(object sender, EventArgs e)
+        {
+            AddElement(eElementType.Rectangle);
+        }
+        #endregion
+
+        #region My Elements
 
         // Добавление Label
         public void AddLabel()
@@ -699,6 +777,8 @@ namespace WinSimpleIDriver.Editor
             progress.BringToFront();
         }
 
+        #endregion
+
         public void AddElement(eElementType type)
         {
             switch (type)
@@ -725,113 +805,47 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
-        private void ToolStripMenuItemAddControlOutput_Click_1(object sender, EventArgs e)
-        {
-            AddElement(eElementType.OutputBox);
-        }
-
-        private void ToolStripMenuItemAddControlRectangle_Click(object sender, EventArgs e)
-        {
-            AddElement(eElementType.Rectangle);
-        }
-
-        private void ToolStripMenuItemBackgroundImage_Click(object sender, EventArgs e)
-        {
-            LoadBackgroundImage();
-        }
-
-        private void ToolStripMenuItemRemoveBackImage_Click(object sender, EventArgs e)
-        {
-            RemoveBackgroundImage();
-        }
-
-        /// <summary>
-        /// Загружает фоновое изображение напрямую в `BackgroundImage`.
-        /// </summary>
-        private void LoadBackgroundImage()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Filter = "Изображения|*.jpg;*.png;*.bmp",
-                Title = "Выберите фоновое изображение"
-            };
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    // Удаляем предыдущее изображение, если оно было
-                    if (this.BackgroundImage != null)
-                    {
-                        this.BackgroundImage.Dispose();
-                        this.BackgroundImage = null;
-                    }
-
-                    // Загружаем новое изображение как фон формы
-                    this.BackgroundImage = Image.FromFile(openFileDialog.FileName);
-                    this.BackgroundImageLayout = ImageLayout.None; // Растягиваем на всю форму
-
-                    // 🔹 Принудительное обновление формы и рамки
-                    Invalidate();
-                    Update();
-                    UpdateSelectionFrame();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Удаляет фоновое изображение.
-        /// </summary>
-        private void RemoveBackgroundImage()
-        {
-            if (this.BackgroundImage != null)
-            {
-                this.BackgroundImage.Dispose(); // Освобождаем память
-                this.BackgroundImage = null; // Убираем изображение
-
-                // 🔹 Обновляем отображение, чтобы вернуть прозрачный фон
-                Invalidate();
-                UpdateSelectionFrame();
-            }
-        }
-        
-
-        #region Обработка событий элементов
-
-        /// <summary>
-        /// Обновляет рамку при выборе элемента.
-        /// </summary>
-        private void SelectElement(Control ctrl)
-        {
-            selectedControl = ctrl;
-            Invalidate(); // Перерисовываем рамку
-        }
-
-        /// <summary>
-        /// Убирает рамку при клике на форму.
-        /// </summary>
-        private void DeselectElement()
-        {
-            selectedControl = null;
-            Invalidate(); // Убираем рамку
-        }
-
-        /// <summary>
-        /// Обновляет рамку при изменении размера или перемещении элемента.
-        /// </summary>
-        private void UpdateSelectionFrame()
-        {
-            if (selectedControl != null)
-            {
-                Invalidate();
-            }
-        }
-
         #endregion
+
+        // =============================================================================
+
+        // Открыть окно свойств
+        private void Element_DoubleClick(object sender, EventArgs e)
+        {
+            // v1
+            //if (sender is Control ctrl)
+            //{
+            //    FormDesignProp propForm = new FormDesignProp(ctrl);
+            //    propForm.Show(this);
+            //}
+
+            // v2
+            if (sender is Control ctrl)
+            {
+                if (openedPropertyForm == null || openedPropertyForm.IsDisposed)
+                {
+                    openedPropertyForm = new FormDesignProp(ctrl);
+                    openedPropertyForm.Show();
+                }
+                else
+                {
+                    openedPropertyForm.UpdateProperties(ctrl);
+                    openedPropertyForm.BringToFront();
+                }
+            }
+        }
+
+        // Обновляем свойства в окне PropertyGrid
+        private void Element_LocationChanged(object sender, EventArgs e)
+        {
+            if (sender is Control ctrl)
+            {
+                if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
+                {
+                    openedPropertyForm.UpdateProperties(ctrl);
+                }
+            }
+        }
 
 
     }
