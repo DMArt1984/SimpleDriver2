@@ -100,6 +100,9 @@ namespace WinSimpleIDriver.Editor
                 }
 
                 showSelection = true;
+
+                SetStatus(ctrl);
+
                 Invalidate(); // Перерисовываем форму
             }
             else
