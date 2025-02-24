@@ -348,13 +348,22 @@ namespace WinSimpleIDriver.Editor
 
         private void ToolStripMenuItemZindexBack_Click(object sender, EventArgs e)
         {
+            if (selectedControl == null) return; // Проверяем, есть ли выбранный элемент
 
+            // Перемещаем элемент позади всех
+            this.Controls.SetChildIndex(selectedControl, this.Controls.Count - 1);
         }
 
         private void ToolStripMenuItemZindexFront_Click(object sender, EventArgs e)
         {
+            if (selectedControl == null) return; // Проверяем, есть ли выбранный элемент
 
+            // Перемещаем элемент впереди всех
+            this.Controls.SetChildIndex(selectedControl, 0);
         }
+
+
+
     }
 
 
