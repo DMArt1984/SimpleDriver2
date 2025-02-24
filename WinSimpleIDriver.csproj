@@ -113,6 +113,7 @@
     <Compile Include="Editor\FormDesignProp.Designer.cs">
       <DependentUpon>FormDesignProp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Editor\ImagePathEditor.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 using System.Windows.Forms;
 
 namespace WinSimpleIDriver.Editor
@@ -60,7 +61,27 @@ namespace WinSimpleIDriver.Editor
         public string Color { get; set; }
 
         [Category("Изображение"), DisplayName("Файл изображения"), Browsable(true)]
-        public string ImagePath { get; set; }
+        [Editor(typeof(ImagePathEditor), typeof(UITypeEditor))]
+        public string ImagePath
+        {
+            get => control is PictureBox pictureBox ? pictureBox.Tag as string : null;
+            set
+            {
+                if (control is PictureBox pictureBox)
+                {
+                    if (!string.IsNullOrEmpty(value) && System.IO.File.Exists(value))
+                    {
+                        pictureBox.Image = Image.FromFile(value);
+                        pictureBox.Tag = value;
+                    }
+                    else
+                    {
+                        pictureBox.Image = null;
+                        pictureBox.Tag = null;
+                    }
+                }
+            }
+        }
 
         [Category("Изображение"), DisplayName("Список изображений")]
         public string[] ImagesName { get; set; }
