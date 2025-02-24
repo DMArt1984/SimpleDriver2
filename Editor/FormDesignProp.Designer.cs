@@ -52,7 +52,6 @@ namespace WinSimpleIDriver.Editor
             this.buttonApply.TabIndex = 1;
             this.buttonApply.Text = "Применить";
             this.buttonApply.UseVisualStyleBackColor = true;
-            this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
             // 
             // FormDesignProp
             // 

@@ -14,7 +14,6 @@ namespace WinSimpleIDriver.Editor
 {
     public enum eElementType
     {
-        None = 0,
         Label = 1, // Label
         OutputBox = 2, // TextBox
         InputBox = 3, // TextBox
@@ -36,6 +35,8 @@ namespace WinSimpleIDriver.Editor
         ImageList,
         ProgressBar
     }
+
+
 
     /// <summary>
     /// Данные элемента, хранимые в JSON-файле.
@@ -75,6 +76,7 @@ namespace WinSimpleIDriver.Editor
         public string TagTitle { get; set; } // Тег для записи значения
 
         public ElementDataJson() { }
+
     }
 
     /// <summary>
@@ -82,127 +84,33 @@ namespace WinSimpleIDriver.Editor
     /// </summary>
     public class ElementDataApp
     {
-        public string Name { get; set; }
         public eElementType ElementType { get; set; }
         public Control Control { get; set; }
 
-        public int X
-        {
-            get => Control?.Left ?? 0;
-            set { if (Control != null) Control.Left = value; }
-        }
-
-        public int Y
-        {
-            get => Control?.Top ?? 0;
-            set { if (Control != null) Control.Top = value; }
-        }
-
-        public int Width
-        {
-            get => Control?.Width ?? 0;
-            set { if (Control != null) Control.Width = value; }
-        }
-
-        public int Height
-        {
-            get => Control?.Height ?? 0;
-            set { if (Control != null) Control.Height = value; }
-        }
-
-
         public bool Relative { get; set; }
-        public string Text { get; set; }
-        public float Size { get; set; }
-        public string Color { get; set; }
+
         public int ZIndex { get; set; }
         public string ImagePath { get; set; }
 
-        // Конструктор, который принимает 3 аргумента
-        public ElementDataApp(string name, eElementType elementType, Control control)
+        public static Dictionary<eElementType, eUsedFormClass> GetClassFromType()
         {
-            Name = name;
-            ElementType = elementType;
-            Control = control;
-        }
-
-        public ElementDataApp(ElementDataJson data)
-        {
-            this.Name = data.Name;
-            this.ElementType = data.ElementType;
-            this.X = data.X;
-            this.Y = data.Y;
-            this.Relative = data.Relative;
-            this.Width = data.Width;
-            this.Height = data.Height;
-            this.Text = data.Text;
-            this.Size = data.Size;
-            this.Color = data.Color;
-            this.ZIndex = data.ZIndex;
-            this.ImagePath = data.ImagePath;
-
-            this.Control = CreateControl();
-            if (this.Control != null)
+            return new Dictionary<eElementType, eUsedFormClass>
             {
-                this.Control.Name = this.Name;
-                this.Control.Left = this.X;
-                this.Control.Top = this.Y;
-                this.Control.Width = this.Width;
-                this.Control.Height = this.Height;
-
-                if (this.Control is Label || this.Control is TextBox)
-                    this.Control.Font = new Font("Arial", this.Size);
-
-                if (this.Control is PictureBox pic && !string.IsNullOrEmpty(this.ImagePath) && File.Exists(this.ImagePath))
-                {
-                    pic.Image = Image.FromFile(this.ImagePath);
-                    pic.Tag = this.ImagePath;
-                }
-            }
-        }
-
-        // Метод для получения данных в формате JSON
-        public ElementDataJson ToJsonData()
-        {
-            return new ElementDataJson
-            {
-                Name = this.Name,
-                ElementType = this.ElementType,
-                X = this.X,
-                Y = this.Y,
-                Width = this.Width,
-                Height = this.Height,
-                Text = Control?.Text,
-                Size = Control?.Font.Size ?? 12.0f
+                { eElementType.Label, eUsedFormClass.Label },
+                { eElementType.OutputBox, eUsedFormClass.TextBox },
+                { eElementType.InputBox, eUsedFormClass.TextBox },
+                { eElementType.IOBox, eUsedFormClass.TextBox },
+                { eElementType.IOPop, eUsedFormClass.TextBox },
+                { eElementType.Button, eUsedFormClass.Button },
+                { eElementType.PictureBox, eUsedFormClass.PictureBox },
+                { eElementType.ImageList, eUsedFormClass.ImageList },
+                { eElementType.Rectangle, eUsedFormClass.PictureBox },
+                { eElementType.Progress, eUsedFormClass.ProgressBar }
             };
         }
 
-        private Control CreateControl()
-        {
-            switch (this.ElementType)
-            {
-                case eElementType.Label:
-                    return new Label { Text = this.Text };
-                case eElementType.OutputBox:
-                case eElementType.InputBox:
-                case eElementType.IOBox:
-                case eElementType.IOPop:
-                    return new TextBox { Text = this.Text, ReadOnly = (this.ElementType == eElementType.OutputBox) };
-                case eElementType.Button:
-                    return new Button { Text = this.Text };
-                case eElementType.PictureBox:
-                case eElementType.Rectangle:
-                    return new PictureBox
-                    {
-                        BorderStyle = BorderStyle.FixedSingle,
-                        SizeMode = PictureBoxSizeMode.Zoom
-                    };
-                case eElementType.Progress:
-                    return new ProgressBar();
-                default:
-                    return null;
-            }
-        }
+
+
     }
 
 

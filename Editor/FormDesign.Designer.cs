@@ -100,13 +100,13 @@ namespace WinSimpleIDriver.Editor
             // ToolStripMenuItemBackgroundImage
             // 
             this.ToolStripMenuItemBackgroundImage.Name = "ToolStripMenuItemBackgroundImage";
-            this.ToolStripMenuItemBackgroundImage.Size = new System.Drawing.Size(161, 22);
+            this.ToolStripMenuItemBackgroundImage.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemBackgroundImage.Text = "Рисунок";
             // 
             // ToolStripMenuItemRemoveBackImage
             // 
             this.ToolStripMenuItemRemoveBackImage.Name = "ToolStripMenuItemRemoveBackImage";
-            this.ToolStripMenuItemRemoveBackImage.Size = new System.Drawing.Size(161, 22);
+            this.ToolStripMenuItemRemoveBackImage.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemRemoveBackImage.Text = "Убрать рисунок";
             // 
             // ToolStripMenuItemAddControl
