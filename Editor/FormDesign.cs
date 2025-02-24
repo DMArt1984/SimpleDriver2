@@ -10,7 +10,7 @@ namespace WinSimpleIDriver.Editor
 {
     public partial class FormDesign : Form
     {
-        private List<ElementData> elements = new List<ElementData>();
+        private List<ElementDataApp> elements = new List<ElementDataApp>(); // Список элементов приложения
         private Control selectedControl;
         private Control clipboardControl; // Для копирования элементов
         private Point offset;
@@ -38,8 +38,10 @@ namespace WinSimpleIDriver.Editor
 
         private void InitializeBackgroundImage()
         {
+            this.BackgroundImage = new Bitmap(this.ClientSize.Width, this.ClientSize.Height);
             this.BackgroundImageLayout = ImageLayout.None;
         }
+
 
         private void FormDesign_Load(object sender, EventArgs e)
         {
@@ -188,19 +190,17 @@ namespace WinSimpleIDriver.Editor
 
             var settings = new JsonSerializerSettings
             {
-                NullValueHandling = NullValueHandling.Ignore // Игнорируем отсутствующие поля
+                NullValueHandling = NullValueHandling.Ignore
             };
 
-            var jsonData = JsonConvert.DeserializeObject<Dictionary<string, List<ElementData>>>(File.ReadAllText("config.json"), settings);
+            var jsonData = JsonConvert.DeserializeObject<Dictionary<string, List<ElementDataJson>>>(File.ReadAllText("config.json"), settings);
 
             if (jsonData.ContainsKey("Main"))
             {
-                // 🔹 Получаем список допустимых типов
                 var allowedUsedClasses = new HashSet<string>(Enum.GetNames(typeof(eUsedFormClass)));
 
-                // 🔹 Удаляем только элементы, которые есть в eUsedFormClass
                 var controlsToRemove = this.Controls.OfType<Control>()
-                    .Where(c => allowedUsedClasses.Contains(c.GetType().Name)) // Проверяем по имени типа
+                    .Where(c => allowedUsedClasses.Contains(c.GetType().Name))
                     .ToList();
 
                 foreach (var ctrl in controlsToRemove)
@@ -209,84 +209,48 @@ namespace WinSimpleIDriver.Editor
                     ctrl.Dispose();
                 }
 
-                // 🔹 Получаем список допустимых элементов из eElementType
                 var allowedElementTypes = new HashSet<eElementType>((eElementType[])Enum.GetValues(typeof(eElementType)));
+
+                elements.Clear();
 
                 foreach (var el in jsonData["Main"])
                 {
-                    // 🔹 Проверяем, есть ли элемент в eElementType
                     if (allowedElementTypes.Contains(el.ElementType))
                     {
-                        // Проверка на null перед загрузкой
-                        el.Text = el.Text ?? "";
-                        el.Size = el.Size > 0 ? el.Size : 12.0f;
-                        el.Min = el.Min > 0 ? el.Min : 0;
-                        el.Max = el.Max > 0 ? el.Max : 100;
-                        el.Value = el.Value ?? "";
-                        el.ListName = el.ListName ?? "";
-                        el.ToolTip = el.ToolTip ?? "";
-                        el.TagTitle = el.TagTitle ?? "";
-
                         Control ctrl = CreateControlFromElement(el);
                         if (ctrl != null)
                         {
                             this.Controls.Add(ctrl);
                             AttachControlEvents(ctrl);
                             this.Controls.SetChildIndex(ctrl, el.ZIndex);
+
+                            elements.Add(new ElementDataApp(el.Name, el.ElementType, ctrl));
                         }
                     }
                 }
             }
         }
 
-
         private void SaveJson()
         {
-            // 🔹 Получаем список допустимых типов из eElementType
             var allowedElementTypes = new HashSet<eElementType>((eElementType[])Enum.GetValues(typeof(eElementType)));
 
             var jsonData = new
             {
-                Main = this.Controls.OfType<Control>().ToList()
-                    .Where(c => !(c is MenuStrip) && !(c is ToolStrip) && !(c is StatusStrip)) // Исключаем системные элементы
-                    .Where(c => allowedElementTypes.Contains(GetElementType(c))) // 🔹 Фильтруем по eElementType
-                    .Select(c => new ElementData
-                    {
-                        Name = c.Name,
-                        ElementType = GetElementType(c),
-                        X = c.Left,
-                        Y = c.Top,
-                        Relative = false,
-                        Width = c.Width,
-                        Height = c.Height,
-                        Text = c.Text,
-                        Format = null,
-                        Size = c.Font?.Size ?? 12.0f,
-                        Color = null,
-                        ZIndex = this.Controls.GetChildIndex(c),
-                        ImagePath = c is PictureBox pic ? pic.Tag as string : null,
-                        ImagesName = null,
-                        Command = null,
-                        Visible = null,
-                        Min = 0,
-                        Max = 0,
-                        Value = null,
-                        ListName = null,
-                        ToolTip = null,
-                        TagTitle = null
-                    }).ToList()
+                Main = elements
+                    .Where(e => allowedElementTypes.Contains(e.ElementType))
+                    .Select(e => e.ToJsonData())
+                    .ToList()
             };
 
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
-                NullValueHandling = NullValueHandling.Ignore // Убираем null-поля
+                NullValueHandling = NullValueHandling.Ignore
             };
 
             File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, settings));
         }
-
-
         private eElementType GetElementType(Control c)
         {
             if (c is Label) return eElementType.Label;
@@ -302,14 +266,10 @@ namespace WinSimpleIDriver.Editor
             }
             if (c is ProgressBar) return eElementType.Progress;
 
-            return eElementType.None; // Если элемент не распознан, он теперь не попадет в JSON
+            return eElementType.None;
         }
 
-
-
-
-
-        private Control CreateControlFromElement(ElementData el)
+        private Control CreateControlFromElement(ElementDataJson el)
         {
             Control control = null;
 
@@ -318,7 +278,6 @@ namespace WinSimpleIDriver.Editor
                 case eElementType.Label:
                     control = new Label { Text = el.Text };
                     break;
-
                 case eElementType.OutputBox:
                 case eElementType.InputBox:
                 case eElementType.IOBox:
@@ -327,11 +286,9 @@ namespace WinSimpleIDriver.Editor
                     if (el.ElementType == eElementType.OutputBox)
                         ((TextBox)control).ReadOnly = true;
                     break;
-
                 case eElementType.Button:
                     control = new Button { Text = el.Text };
                     break;
-
                 case eElementType.PictureBox:
                 case eElementType.Rectangle:
                     control = new PictureBox
@@ -340,7 +297,6 @@ namespace WinSimpleIDriver.Editor
                         SizeMode = PictureBoxSizeMode.Zoom
                     };
                     break;
-
                 case eElementType.Progress:
                     control = new ProgressBar();
                     break;
@@ -354,13 +310,8 @@ namespace WinSimpleIDriver.Editor
                 control.Width = el.Width;
                 control.Height = el.Height;
 
-                // Применяем шрифт только для Label и TextBox
                 if (control is Label || control is TextBox)
                 {
-                    if (el.Size <= 0)
-                    {
-                        el.Size = 12.0f; // Гарантия, что размер шрифта всегда больше 0
-                    }
                     control.Font = new Font("Arial", el.Size);
                 }
 
@@ -373,7 +324,6 @@ namespace WinSimpleIDriver.Editor
 
             return control;
         }
-
 
         #endregion
 
@@ -427,15 +377,33 @@ namespace WinSimpleIDriver.Editor
             {
                 try
                 {
-                    // Загружаем новое изображение
-                    Image newImage = Image.FromFile(openFileDialog.FileName);
+                    // Освобождаем память от предыдущего изображения
+                    this.BackgroundImage?.Dispose();
+                    this.BackgroundImage = null;
 
-                    // Устанавливаем новое изображение
-                    this.BackgroundImage = newImage;
+                    // Загружаем изображение безопасно (создаем копию)
+                    using (var img = Image.FromFile(openFileDialog.FileName))
+                    {
+                        this.BackgroundImage = new Bitmap(img);
+                    }
                     this.BackgroundImageLayout = ImageLayout.None;
 
-                    // Перерисовываем только фон, не всю форму!
-                    Invalidate();
+                    // 🔹 Отправляем фон назад
+                    this.SendToBack();
+
+                    // 🔹 Обновляем порядок элементов
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        ctrl.BringToFront();
+                    }
+
+                    // 🔹 Принудительная перерисовка формы и элементов
+                    this.Invalidate();
+                    this.Update();
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        ctrl.Refresh();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -536,10 +504,6 @@ namespace WinSimpleIDriver.Editor
 
             if (selectedControl != null)
             {
-                // После перемещения/изменения размера снова показываем рамку
-                Invalidate();
-                Update();
-
                 // Обновляем PropertyGrid
                 if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
                 {
@@ -547,9 +511,6 @@ namespace WinSimpleIDriver.Editor
                 }
             }
         }
-
-
-
 
         #endregion
 
