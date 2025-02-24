@@ -21,7 +21,7 @@ namespace WinSimpleIDriver.Editor
             this.Width = ctrl.Width;
             this.Height = ctrl.Height;
             this.Text = ctrl.Text;
-            this.FontSize = ctrl.Font.Size;
+            this.Size = ctrl.Font.Size;
 
             if (ctrl is PictureBox pictureBox)
             {
@@ -38,6 +38,9 @@ namespace WinSimpleIDriver.Editor
         [Category("Позиция"), DisplayName("Y (по вертикали)")]
         public int Y { get; set; }
 
+        [Category("Позиция"), DisplayName("Относительная позиция")]
+        public bool Relative { get; set; }
+
         [Category("Размер"), DisplayName("Ширина")]
         public int Width { get; set; }
 
@@ -47,11 +50,20 @@ namespace WinSimpleIDriver.Editor
         [Category("Текст"), DisplayName("Текст элемента")]
         public string Text { get; set; }
 
+        [Category("Формат"), DisplayName("Формат отображения")]
+        public string Format { get; set; }
+
         [Category("Шрифт"), DisplayName("Размер шрифта")]
-        public float FontSize { get; set; }
+        public float Size { get; set; } // Обновлено с FontSize на Size
+
+        [Category("Цвет"), DisplayName("Цвет элемента")]
+        public string Color { get; set; }
 
         [Category("Изображение"), DisplayName("Файл изображения"), Browsable(true)]
         public string ImagePath { get; set; }
+
+        [Category("Изображение"), DisplayName("Список изображений")]
+        public string[] ImagesName { get; set; }
 
         [Category("Слой"), DisplayName("Z-Индекс (порядок наложения)")]
         public int ZIndex
@@ -66,7 +78,29 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
+        [Category("Команды"), DisplayName("Команда")]
+        public string Command { get; set; }
 
+        [Category("Отображение"), DisplayName("Видимость")]
+        public string Visible { get; set; }
+
+        [Category("Диапазон"), DisplayName("Минимальное значение")]
+        public int Min { get; set; }
+
+        [Category("Диапазон"), DisplayName("Максимальное значение")]
+        public int Max { get; set; }
+
+        [Category("Значение"), DisplayName("Текущее значение")]
+        public string Value { get; set; }
+
+        [Category("Список"), DisplayName("Имя списка")]
+        public string ListName { get; set; }
+
+        [Category("Описание"), DisplayName("Подсказка")]
+        public string ToolTip { get; set; }
+
+        [Category("Тег"), DisplayName("Название тега")]
+        public string TagTitle { get; set; }
 
         // Скрываем ненужные свойства
         [Browsable(false)]
@@ -84,15 +118,13 @@ namespace WinSimpleIDriver.Editor
             control.Width = this.Width;
             control.Height = this.Height;
             control.Text = this.Text;
-            control.Font = new Font(control.Font.FontFamily, this.FontSize);
+            control.Font = new Font(control.Font.FontFamily, this.Size);
 
             if (control is PictureBox pictureBox && !string.IsNullOrEmpty(ImagePath))
             {
                 pictureBox.Image = Image.FromFile(ImagePath);
                 pictureBox.Tag = ImagePath;
             }
-
-
         }
     }
 }
