@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 using System.Windows.Forms;
 
 namespace WinSimpleIDriver.Editor
@@ -96,6 +97,7 @@ namespace WinSimpleIDriver.Editor
         }
 
         [Category("Изображение"), DisplayName("Путь к изображению"), Browsable(true)]
+        [Editor(typeof(ImagePathEditor), typeof(UITypeEditor))]
         public string ImagePath
         {
             get => element.ImagePath;
@@ -117,6 +119,8 @@ namespace WinSimpleIDriver.Editor
                 }
             }
         }
+
+
     }
 }
 

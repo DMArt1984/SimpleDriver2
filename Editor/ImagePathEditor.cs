@@ -10,7 +10,7 @@ namespace WinSimpleIDriver.Editor
     {
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
-            return UITypeEditorEditStyle.Modal; // Открываем модальное окно
+            return UITypeEditorEditStyle.Modal; // Открываем модальное окно выбора файла
         }
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
