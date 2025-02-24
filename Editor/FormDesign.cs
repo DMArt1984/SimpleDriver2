@@ -195,7 +195,31 @@ namespace WinSimpleIDriver.Editor
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                backgroundPictureBox.Image = Image.FromFile(openFileDialog.FileName);
+                if (backgroundPictureBox == null || !this.Controls.Contains(backgroundPictureBox))
+                {
+                    backgroundPictureBox = new PictureBox
+                    {
+                        Dock = DockStyle.Fill, // Фон теперь всегда на всю форму
+                        SizeMode = PictureBoxSizeMode.StretchImage
+                    };
+                    this.Controls.Add(backgroundPictureBox);
+                    backgroundPictureBox.SendToBack();
+                }
+
+                try
+                {
+                    backgroundPictureBox.Image = Image.FromFile(openFileDialog.FileName);
+                    backgroundPictureBox.Invalidate(); // Перерисовываем фон
+                    backgroundPictureBox.Update();
+                    backgroundPictureBox.Refresh();
+                    this.Invalidate(); // Обновляем всю форму
+                    this.Update();
+                    this.Refresh();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
