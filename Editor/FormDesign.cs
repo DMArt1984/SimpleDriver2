@@ -123,77 +123,17 @@ namespace WinSimpleIDriver.Editor
         #region Events.Menu.Add
         private void ToolStripMenuItemAddControlLabel_Click(object sender, EventArgs e)
         {
-            string title = $"Label{++controlID}";
-            Label lbl = new Label
-            {
-                Name = title,
-                Text = title,
-                Width = 200,
-                Height = 25,
-                Left = 100,
-                Top = 100,
-                Font = new Font("Arial", 12),
-                BackColor = Color.Transparent // Прозрачный фон
-            };
-
-            AttachControlEvents(lbl);
-            //lbl.MouseDown += Form_MouseDown;
-            //lbl.MouseMove += Form_MouseMove;
-            //lbl.MouseUp += Form_MouseUp;
-            //lbl.MouseDoubleClick += Element_DoubleClick; // Открывает окно редактирования
-            //lbl.LocationChanged += Element_LocationChanged; // Динамичское обновление PropertyGrid
-
-            this.Controls.Add(lbl);
-            lbl.BringToFront();
+            AddElement(eElementType.Label);
         }
 
         private void ToolStripMenuItemAddControlOutput_Click(object sender, EventArgs e)
         {
-            string title = $"TextBox{++controlID}";
-            TextBox txt = new TextBox
-            {
-                Name = title,
-                Text = title,
-                Width = 200,
-                Height = 25,
-                Left = 100,
-                Top = 100
-            };
-
-            AttachControlEvents(txt);
-            //txt.MouseDown += Form_MouseDown;
-            //txt.MouseMove += Form_MouseMove;
-            //txt.MouseUp += Form_MouseUp;
-            //txt.MouseDoubleClick += Element_DoubleClick; // Открывает окно редактирования
-            //txt.LocationChanged += Element_LocationChanged; // Динамичское обновление PropertyGrid
-
-            this.Controls.Add(txt);
-            txt.BringToFront();
+            AddElement(eElementType.InputBox);
         }
 
         private void ToolStripMenuItemAddControlPicture_Click(object sender, EventArgs e)
         {
-            PictureBox pictureBox = new PictureBox
-            {
-                Name = "Picture" + (this.Controls.OfType<PictureBox>().Count() + 1),
-                Width = 100,
-                Height = 100,
-                Left = 200,
-                Top = menuStrip1.Height + 100,
-                BorderStyle = BorderStyle.FixedSingle,
-                SizeMode = PictureBoxSizeMode.Zoom,
-                BackColor = Color.LightGray // Цвет фона для наглядности
-            };
-
-            AttachControlEvents(pictureBox);
-            //pictureBox.MouseDown += Form_MouseDown;
-            //pictureBox.MouseMove += Form_MouseMove;
-            //pictureBox.MouseUp += Form_MouseUp;
-            //pictureBox.MouseDoubleClick += Element_DoubleClick;
-            //pictureBox.LocationChanged += Element_LocationChanged; // Обновление PropertyGrid
-
-            this.Controls.Add(pictureBox);
-            pictureBox.BringToFront();
+            AddElement(eElementType.PictureBox);
 
         }
         #endregion
@@ -433,7 +373,7 @@ namespace WinSimpleIDriver.Editor
                             Width = c.Width,
                             Height = c.Height,
                             Text = c.Text,
-                            FontSize = c.Font.Size,
+                            Size = c.Font.Size,
                             ZIndex = this.Controls.GetChildIndex(c),
                             ImagePath = c is PictureBox pic ? pic.Tag as string : null
                         };
@@ -513,7 +453,16 @@ namespace WinSimpleIDriver.Editor
                 control.Top = el.Y;
                 control.Width = el.Width;
                 control.Height = el.Height;
-                control.Font = new Font("Arial", el.FontSize);
+
+                // Применяем шрифт только для Label и TextBox
+                if (control is Label || control is TextBox)
+                {
+                    if (el.Size <= 0)
+                    {
+                        el.Size = 12.0f; // Гарантия, что размер шрифта всегда больше 0
+                    }
+                    control.Font = new Font("Arial", el.Size);
+                }
 
                 if (control is PictureBox pic && !string.IsNullOrEmpty(el.ImagePath) && File.Exists(el.ImagePath))
                 {
@@ -527,6 +476,133 @@ namespace WinSimpleIDriver.Editor
 
 
         #endregion
+
+        // ==================================================================
+
+        // Добавление Label
+        public void AddLabel()
+        {
+            string title = $"Label{++controlID}";
+            Label lbl = new Label
+            {
+                Name = title,
+                Text = title,
+                Width = 200,
+                Height = 25,
+                Left = 100,
+                Top = 100,
+                Font = new Font("Arial", 12),
+                BackColor = Color.Transparent
+            };
+
+            AttachControlEvents(lbl);
+            this.Controls.Add(lbl);
+            lbl.BringToFront();
+        }
+
+        // Добавление TextBox
+        public void AddTextBox(eElementType type)
+        {
+            string title = $"{type}{++controlID}";
+            TextBox txt = new TextBox
+            {
+                Name = title,
+                Text = title,
+                Width = 200,
+                Height = 25,
+                Left = 100,
+                Top = 100,
+                ReadOnly = (type == eElementType.OutputBox) // OutputBox только для чтения
+            };
+
+            AttachControlEvents(txt);
+            this.Controls.Add(txt);
+            txt.BringToFront();
+        }
+
+        // Добавление Button
+        public void AddButton()
+        {
+            string title = $"Button{++controlID}";
+            Button btn = new Button
+            {
+                Name = title,
+                Text = "Кнопка",
+                Width = 100,
+                Height = 30,
+                Left = 100,
+                Top = 100
+            };
+
+            AttachControlEvents(btn);
+            this.Controls.Add(btn);
+            btn.BringToFront();
+        }
+
+        // Добавление PictureBox
+        public void AddPictureBox()
+        {
+            string title = $"PictureBox{++controlID}";
+            PictureBox pic = new PictureBox
+            {
+                Name = title,
+                Width = 100,
+                Height = 100,
+                Left = 100,
+                Top = 100,
+                BorderStyle = BorderStyle.FixedSingle,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.LightGray
+            };
+
+            AttachControlEvents(pic);
+            this.Controls.Add(pic);
+            pic.BringToFront();
+        }
+
+        // Добавление ProgressBar
+        public void AddProgressBar()
+        {
+            string title = $"Progress{++controlID}";
+            ProgressBar progress = new ProgressBar
+            {
+                Name = title,
+                Width = 200,
+                Height = 25,
+                Left = 100,
+                Top = 100
+            };
+
+            AttachControlEvents(progress);
+            this.Controls.Add(progress);
+            progress.BringToFront();
+        }
+
+        public void AddElement(eElementType type)
+        {
+            switch (type)
+            {
+                case eElementType.Label:
+                    AddLabel();
+                    break;
+                case eElementType.OutputBox:
+                case eElementType.InputBox:
+                case eElementType.IOBox:
+                case eElementType.IOPop:
+                    AddTextBox(type);
+                    break;
+                case eElementType.Button:
+                    AddButton();
+                    break;
+                case eElementType.PictureBox:
+                case eElementType.Rectangle:
+                    AddPictureBox();
+                    break;
+                case eElementType.Progress:
+                    AddProgressBar();
+                    break;
+            }
+        }
 
     }
 }
