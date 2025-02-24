@@ -24,6 +24,16 @@ namespace WinSimpleIDriver.Editor
         Progress = 30, // ProgressBar
     }
 
+    public enum eUsedFormClass
+    {
+        Label,
+        TextBox,
+        Button,
+        PictureBox,
+        ImageList,
+        ProgressBar
+    }
+
     public class ElementData
     {
         public string Name { get; set; }

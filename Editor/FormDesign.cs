@@ -17,7 +17,6 @@ namespace WinSimpleIDriver.Editor
         private bool isResizing = false; // Флаг изменения размера
         private Point lastMousePosition; // Последняя позиция мыши
         private ResizeDirection resizeDirection = ResizeDirection.None; // Направление изменения
-        private PictureBox backgroundPictureBox = new PictureBox();
 
         private FormDesignProp openedPropertyForm; // Открываем PropertyForm
 
@@ -39,17 +38,7 @@ namespace WinSimpleIDriver.Editor
 
         private void InitializeBackgroundImage()
         {
-            // v1
-            //backgroundPictureBox.Dock = DockStyle.Fill;
-            //backgroundPictureBox.SizeMode = PictureBoxSizeMode.Normal; // PictureBoxSizeMode.StretchImage;
-
-            // v2
-            backgroundPictureBox.Location = new Point(0, menuStrip1.Height);
-            backgroundPictureBox.Size = new Size(this.ClientSize.Width, this.ClientSize.Height - menuStrip1.Height);
-            backgroundPictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-
-            this.Controls.Add(backgroundPictureBox);
-            backgroundPictureBox.SendToBack();
+            this.BackgroundImageLayout = ImageLayout.None;
         }
 
         private void FormDesign_Load(object sender, EventArgs e)
@@ -66,17 +55,7 @@ namespace WinSimpleIDriver.Editor
         {
             base.OnPaint(e);
 
-            if (selectedControl != null)
-            {
-                using (Pen pen = new Pen(Color.Blue, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash })
-                {
-                    Rectangle rect = new Rectangle(
-                        selectedControl.Left - 2, selectedControl.Top - 2,
-                        selectedControl.Width + 4, selectedControl.Height + 4
-                    );
-                    e.Graphics.DrawRectangle(pen, rect);
-                }
-            }
+            
         }
 
 
@@ -216,39 +195,61 @@ namespace WinSimpleIDriver.Editor
 
             if (jsonData.ContainsKey("Main"))
             {
-                this.Controls.OfType<Control>()
-                    .Where(c => GetElementType(c) != eElementType.None)
-                    .ToList().ForEach(c => { this.Controls.Remove(c); c.Dispose(); });
+                // 🔹 Получаем список допустимых типов
+                var allowedUsedClasses = new HashSet<string>(Enum.GetNames(typeof(eUsedFormClass)));
+
+                // 🔹 Удаляем только элементы, которые есть в eUsedFormClass
+                var controlsToRemove = this.Controls.OfType<Control>()
+                    .Where(c => allowedUsedClasses.Contains(c.GetType().Name)) // Проверяем по имени типа
+                    .ToList();
+
+                foreach (var ctrl in controlsToRemove)
+                {
+                    this.Controls.Remove(ctrl);
+                    ctrl.Dispose();
+                }
+
+                // 🔹 Получаем список допустимых элементов из eElementType
+                var allowedElementTypes = new HashSet<eElementType>((eElementType[])Enum.GetValues(typeof(eElementType)));
 
                 foreach (var el in jsonData["Main"])
                 {
-                    // Проверка на null перед загрузкой
-                    el.Text = el.Text ?? "";
-                    el.Size = el.Size > 0 ? el.Size : 12.0f;
-                    el.Min = el.Min > 0 ? el.Min : 0;
-                    el.Max = el.Max > 0 ? el.Max : 100;
-                    el.Value = el.Value ?? "";
-                    el.ListName = el.ListName ?? "";
-                    el.ToolTip = el.ToolTip ?? "";
-                    el.TagTitle = el.TagTitle ?? "";
-
-                    Control ctrl = CreateControlFromElement(el);
-                    if (ctrl != null)
+                    // 🔹 Проверяем, есть ли элемент в eElementType
+                    if (allowedElementTypes.Contains(el.ElementType))
                     {
-                        this.Controls.Add(ctrl);
-                        AttachControlEvents(ctrl);
-                        this.Controls.SetChildIndex(ctrl, el.ZIndex);
+                        // Проверка на null перед загрузкой
+                        el.Text = el.Text ?? "";
+                        el.Size = el.Size > 0 ? el.Size : 12.0f;
+                        el.Min = el.Min > 0 ? el.Min : 0;
+                        el.Max = el.Max > 0 ? el.Max : 100;
+                        el.Value = el.Value ?? "";
+                        el.ListName = el.ListName ?? "";
+                        el.ToolTip = el.ToolTip ?? "";
+                        el.TagTitle = el.TagTitle ?? "";
+
+                        Control ctrl = CreateControlFromElement(el);
+                        if (ctrl != null)
+                        {
+                            this.Controls.Add(ctrl);
+                            AttachControlEvents(ctrl);
+                            this.Controls.SetChildIndex(ctrl, el.ZIndex);
+                        }
                     }
                 }
             }
         }
 
+
         private void SaveJson()
         {
+            // 🔹 Получаем список допустимых типов из eElementType
+            var allowedElementTypes = new HashSet<eElementType>((eElementType[])Enum.GetValues(typeof(eElementType)));
+
             var jsonData = new
             {
-                Main = this.Controls.OfType<Control>()
-                    .Where(c => c != backgroundPictureBox && !(c is MenuStrip))
+                Main = this.Controls.OfType<Control>().ToList()
+                    .Where(c => !(c is MenuStrip) && !(c is ToolStrip) && !(c is StatusStrip)) // Исключаем системные элементы
+                    .Where(c => allowedElementTypes.Contains(GetElementType(c))) // 🔹 Фильтруем по eElementType
                     .Select(c => new ElementData
                     {
                         Name = c.Name,
@@ -284,6 +285,7 @@ namespace WinSimpleIDriver.Editor
 
             File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, settings));
         }
+
 
         private eElementType GetElementType(Control c)
         {
@@ -425,21 +427,15 @@ namespace WinSimpleIDriver.Editor
             {
                 try
                 {
-                    // Удаляем предыдущее изображение, если оно было
-                    if (this.BackgroundImage != null)
-                    {
-                        this.BackgroundImage.Dispose();
-                        this.BackgroundImage = null;
-                    }
+                    // Загружаем новое изображение
+                    Image newImage = Image.FromFile(openFileDialog.FileName);
 
-                    // Загружаем новое изображение как фон формы
-                    this.BackgroundImage = Image.FromFile(openFileDialog.FileName);
-                    this.BackgroundImageLayout = ImageLayout.None; // Растягиваем на всю форму
+                    // Устанавливаем новое изображение
+                    this.BackgroundImage = newImage;
+                    this.BackgroundImageLayout = ImageLayout.None;
 
-                    // 🔹 Принудительное обновление формы и рамки
+                    // Перерисовываем только фон, не всю форму!
                     Invalidate();
-                    Update();
-                    UpdateSelectionFrame();
                 }
                 catch (Exception ex)
                 {
@@ -447,6 +443,8 @@ namespace WinSimpleIDriver.Editor
                 }
             }
         }
+
+
 
         /// <summary>
         /// Удаляет фоновое изображение.
@@ -460,7 +458,6 @@ namespace WinSimpleIDriver.Editor
 
                 // 🔹 Обновляем отображение, чтобы вернуть прозрачный фон
                 Invalidate();
-                UpdateSelectionFrame();
             }
         }
 
@@ -474,7 +471,7 @@ namespace WinSimpleIDriver.Editor
 
         private void Form_MouseDown(object sender, MouseEventArgs e)
         {
-            if (sender is Control ctrl && ctrl != this && ctrl != backgroundPictureBox)
+            if (sender is Control ctrl && ctrl != this)
             {
                 SelectElement(ctrl); // Выбираем элемент и рисуем рамку
                 resizeDirection = GetResizeDirection(ctrl, e.Location);
@@ -502,11 +499,7 @@ namespace WinSimpleIDriver.Editor
         {
             if (selectedControl != null)
             {
-                // Сохраняем старую область для обновления
-                Rectangle oldBounds = new Rectangle(
-                    selectedControl.Left - 2, selectedControl.Top - 2,
-                    selectedControl.Width + 4, selectedControl.Height + 4
-                );
+                
 
                 if (isResizing)
                 {
@@ -531,20 +524,10 @@ namespace WinSimpleIDriver.Editor
                     selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
                 }
 
-                // Создаем новую область для обновления
-                Rectangle newBounds = new Rectangle(
-                    selectedControl.Left - 2, selectedControl.Top - 2,
-                    selectedControl.Width + 4, selectedControl.Height + 4
-                );
-
-                // Перерисовываем только измененные области
-                Invalidate(oldBounds);
-                Invalidate(newBounds);
-
-                // Устанавливаем корректный курсор
                 selectedControl.Cursor = GetResizeCursor(GetResizeDirection(selectedControl, e.Location));
             }
         }
+
 
         private void Form_MouseUp(object sender, MouseEventArgs e)
         {
@@ -553,8 +536,9 @@ namespace WinSimpleIDriver.Editor
 
             if (selectedControl != null)
             {
+                // После перемещения/изменения размера снова показываем рамку
                 Invalidate();
-                Update(); // Принудительное обновление формы
+                Update();
 
                 // Обновляем PropertyGrid
                 if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
@@ -563,6 +547,7 @@ namespace WinSimpleIDriver.Editor
                 }
             }
         }
+
 
 
 
@@ -584,19 +569,9 @@ namespace WinSimpleIDriver.Editor
         private void DeselectElement()
         {
             selectedControl = null;
-            Invalidate(); // Убираем рамку
         }
 
-        /// <summary>
-        /// Обновляет рамку при изменении размера или перемещении элемента.
-        /// </summary>
-        private void UpdateSelectionFrame()
-        {
-            if (selectedControl != null)
-            {
-                Invalidate();
-            }
-        }
+        
         #endregion
 
         #region Resize and Move
