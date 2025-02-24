@@ -200,7 +200,7 @@ namespace WinSimpleIDriver.Editor
                     backgroundPictureBox = new PictureBox
                     {
                         Dock = DockStyle.Fill, // Фон теперь всегда на всю форму
-                        SizeMode = PictureBoxSizeMode.StretchImage
+                        SizeMode = PictureBoxSizeMode.Normal
                     };
                     this.Controls.Add(backgroundPictureBox);
                     backgroundPictureBox.SendToBack();
