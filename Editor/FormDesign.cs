@@ -74,12 +74,72 @@ namespace WinSimpleIDriver.Editor
 
         private void ToolStripMenuItemCommandCopy_Click(object sender, EventArgs e)
         {
+            if (selectedControl == null) return; // Проверяем, есть ли выбранный элемент
 
+            // Находим соответствующий элемент в списке
+            var originalElement = appElements.FirstOrDefault(el => el.Control == selectedControl);
+            if (originalElement == null) return;
+
+            // Увеличиваем идентификатор
+            elementID++;
+
+            // Создаем копию элемента
+            var newElement = new ElementDataApp
+            {
+                ElementType = originalElement.ElementType,
+                Control = CreateControl(originalElement.ElementType)
+            };
+
+            // Проверяем, был ли создан Control
+            if (newElement.Control == null) return;
+
+            // Присваиваем уникальное имя элементу
+            newElement.Control.Name = $"{originalElement.ElementType}{elementID}";
+
+            // Копируем основные свойства
+            newElement.Control.Left = originalElement.Control.Left + 10; // Смещаем копию
+            newElement.Control.Top = originalElement.Control.Top + 10;
+            newElement.Control.Width = originalElement.Control.Width;
+            newElement.Control.Height = originalElement.Control.Height;
+            newElement.Control.Text = originalElement.Control.Text;
+
+            if (newElement.Control is PictureBox pic && originalElement.Control is PictureBox originalPic)
+            {
+                pic.Image = originalPic.Image; // Копируем изображение
+            }
+
+            // Привязываем события для перемещения и изменения размеров
+            AttachControlEvents(newElement.Control);
+
+            // Добавляем элемент в список
+            appElements.Add(newElement);
+
+            // Добавляем Control на форму
+            this.Controls.Add(newElement.Control);
+
+            // Устанавливаем новый элемент как выбранный
+            selectedControl = newElement.Control;
         }
+
 
         private void ToolStripMenuItemCommandDelete_Click(object sender, EventArgs e)
         {
+            if (selectedControl == null) return; // Проверяем, есть ли выбранный элемент
 
+            // Находим соответствующий элемент в списке
+            var elementToRemove = appElements.FirstOrDefault(el => el.Control == selectedControl);
+            if (elementToRemove == null) return;
+
+            // Удаляем элемент из списка и с формы
+            appElements.Remove(elementToRemove);
+            this.Controls.Remove(selectedControl);
+            selectedControl.Dispose();
+
+            // Сбрасываем выбранный элемент
+            selectedControl = null;
+
+            // Обновляем статусную строку
+            UpdateStatus(null);
         }
 
         // ===================================================================================
@@ -219,7 +279,17 @@ namespace WinSimpleIDriver.Editor
         {
             isDragging = false;
             isResizing = false;
-            selectedControl = null;
+
+            // Если кнопка мыши все еще нажата – не сбрасываем selectedControl
+            if (Control.MouseButtons != MouseButtons.None)
+            {
+                return;
+            }
+
+            if (sender is Control ctrl && ctrl == selectedControl)
+            {
+                selectedControl = ctrl;
+            }
         }
 
         private ResizeDirection GetResizeDirection(Control ctrl, Point mousePosition)
@@ -276,6 +346,15 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
+        private void ToolStripMenuItemZindexBack_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ToolStripMenuItemZindexFront_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 
