@@ -109,6 +109,7 @@ namespace WinSimpleIDriver.Editor
                     if (!string.IsNullOrEmpty(value) && System.IO.File.Exists(value))
                     {
                         pictureBox.Image = Image.FromFile(value);
+                        pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
                         pictureBox.Tag = value;
                     }
                     else

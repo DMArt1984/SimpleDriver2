@@ -106,6 +106,8 @@ namespace WinSimpleIDriver.Editor
             if (newElement.Control is PictureBox pic && originalElement.Control is PictureBox originalPic)
             {
                 pic.Image = originalPic.Image; // Копируем изображение
+                pic.SizeMode = PictureBoxSizeMode.Zoom;
+                newElement.ImagePath = originalElement.ImagePath;
             }
 
             // Привязываем события для перемещения и изменения размеров
