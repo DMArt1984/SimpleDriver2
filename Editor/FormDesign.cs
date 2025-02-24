@@ -64,7 +64,17 @@ namespace WinSimpleIDriver.Editor
         {
             base.OnPaint(e);
 
-            
+            if (selectedControl != null)
+            {
+                using (Pen pen = new Pen(Color.Blue, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash })
+                {
+                    Rectangle rect = new Rectangle(
+                        selectedControl.Left - 2, selectedControl.Top - 2,
+                        selectedControl.Width + 4, selectedControl.Height + 4
+                    );
+                    e.Graphics.DrawRectangle(pen, rect);
+                }
+            }
         }
 
 
@@ -74,7 +84,7 @@ namespace WinSimpleIDriver.Editor
         {
             if (sender is Control ctrl && ctrl != this && ctrl != backgroundPictureBox)
             {
-                selectedControl = ctrl;
+                SelectElement(ctrl); // Выбираем элемент и рисуем рамку
                 resizeDirection = GetResizeDirection(ctrl, e.Location);
 
                 if (resizeDirection != ResizeDirection.None)
@@ -88,17 +98,11 @@ namespace WinSimpleIDriver.Editor
                     offset = new Point(e.X, e.Y);
                 }
 
-                //showSelection = true;
-
                 SetStatus(ctrl);
-
-                //Invalidate(); // Перерисовываем форму
             }
             else
             {
-                // Если кликнули на форму, сбрасываем выделение
-                selectedControl = null;
-                Invalidate();
+                DeselectElement(); // Убираем рамку
             }
         }
 
@@ -125,26 +129,18 @@ namespace WinSimpleIDriver.Editor
                     }
 
                     lastMousePosition = e.Location;
+                    UpdateSelectionFrame();
                 }
                 else if (resizeDirection == ResizeDirection.None && e.Button == MouseButtons.Left)
                 {
-                    // Очищаем старую рамку
-                    Invalidate();
-                    Update();
-
-                    // Двигаем элемент
                     selectedControl.Left = e.X + selectedControl.Left - offset.X;
                     selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
-
-                    // Перерисовываем рамку в новом месте
-                    Invalidate();
+                    UpdateSelectionFrame();
                 }
 
                 selectedControl.Cursor = GetResizeCursor(GetResizeDirection(selectedControl, e.Location));
             }
         }
-
-
 
 
 
@@ -725,6 +721,19 @@ namespace WinSimpleIDriver.Editor
 
         private void ToolStripMenuItemBackgroundImage_Click(object sender, EventArgs e)
         {
+            LoadBackgroundImage();
+        }
+
+        private void ToolStripMenuItemRemoveBackImage_Click(object sender, EventArgs e)
+        {
+            RemoveBackgroundImage();
+        }
+
+        /// <summary>
+        /// Загружает фоновое изображение напрямую в `BackgroundImage`.
+        /// </summary>
+        private void LoadBackgroundImage()
+        {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "Изображения|*.jpg;*.png;*.bmp",
@@ -733,26 +742,23 @@ namespace WinSimpleIDriver.Editor
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (backgroundPictureBox == null || !this.Controls.Contains(backgroundPictureBox))
-                {
-                    backgroundPictureBox = new PictureBox
-                    {
-                        Dock = DockStyle.Fill, // Фон теперь всегда на всю форму
-                        SizeMode = PictureBoxSizeMode.Normal
-                    };
-                    this.Controls.Add(backgroundPictureBox);
-                    backgroundPictureBox.SendToBack();
-                }
-
                 try
                 {
-                    backgroundPictureBox.Image = Image.FromFile(openFileDialog.FileName);
-                    backgroundPictureBox.Invalidate(); // Перерисовываем фон
-                    backgroundPictureBox.Update();
-                    backgroundPictureBox.Refresh();
-                    this.Invalidate(); // Обновляем всю форму
-                    this.Update();
-                    this.Refresh();
+                    // Удаляем предыдущее изображение, если оно было
+                    if (this.BackgroundImage != null)
+                    {
+                        this.BackgroundImage.Dispose();
+                        this.BackgroundImage = null;
+                    }
+
+                    // Загружаем новое изображение как фон формы
+                    this.BackgroundImage = Image.FromFile(openFileDialog.FileName);
+                    this.BackgroundImageLayout = ImageLayout.None; // Растягиваем на всю форму
+
+                    // 🔹 Принудительное обновление формы и рамки
+                    Invalidate();
+                    Update();
+                    UpdateSelectionFrame();
                 }
                 catch (Exception ex)
                 {
@@ -761,21 +767,56 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
-        private void ToolStripMenuItemRemoveBackImage_Click(object sender, EventArgs e)
-        {
-            RemoveBackgroundImage();
-        }
-
+        /// <summary>
+        /// Удаляет фоновое изображение.
+        /// </summary>
         private void RemoveBackgroundImage()
         {
-            if (backgroundPictureBox != null && backgroundPictureBox.Image != null)
+            if (this.BackgroundImage != null)
             {
-                backgroundPictureBox.Image.Dispose(); // Освобождаем память
-                backgroundPictureBox.Image = null; // Убираем изображение
-                backgroundPictureBox.Invalidate(); // Обновляем отображение
-                backgroundPictureBox.Refresh();
+                this.BackgroundImage.Dispose(); // Освобождаем память
+                this.BackgroundImage = null; // Убираем изображение
+
+                // 🔹 Обновляем отображение, чтобы вернуть прозрачный фон
+                Invalidate();
+                UpdateSelectionFrame();
             }
         }
+        
+
+        #region Обработка событий элементов
+
+        /// <summary>
+        /// Обновляет рамку при выборе элемента.
+        /// </summary>
+        private void SelectElement(Control ctrl)
+        {
+            selectedControl = ctrl;
+            Invalidate(); // Перерисовываем рамку
+        }
+
+        /// <summary>
+        /// Убирает рамку при клике на форму.
+        /// </summary>
+        private void DeselectElement()
+        {
+            selectedControl = null;
+            Invalidate(); // Убираем рамку
+        }
+
+        /// <summary>
+        /// Обновляет рамку при изменении размера или перемещении элемента.
+        /// </summary>
+        private void UpdateSelectionFrame()
+        {
+            if (selectedControl != null)
+            {
+                Invalidate();
+            }
+        }
+
+        #endregion
+
 
     }
 }
