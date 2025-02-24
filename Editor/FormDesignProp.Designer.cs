@@ -62,6 +62,7 @@ namespace WinSimpleIDriver.Editor
             this.Controls.Add(this.propertyGrid1);
             this.Name = "FormDesignProp";
             this.Text = "FormDesignProp";
+            //this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormDesignProp_FormClosed);
             this.Load += new System.EventHandler(this.FormDesignProp_Load);
             this.ResumeLayout(false);
 

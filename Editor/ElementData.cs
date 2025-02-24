@@ -98,6 +98,15 @@ namespace WinSimpleIDriver.Editor
     /// </summary>
     public class ElementDataApp
     {
+        // ✅ Объявляем событие
+        public event Action<ElementDataApp> OnElementDeleted;
+
+        // ✅ Метод, вызывающий событие
+        public void Delete()
+        {
+            OnElementDeleted?.Invoke(this); // Запускаем событие
+        }
+
         public eElementType ElementType { get; set; }
         public Control Control { get; set; }
 

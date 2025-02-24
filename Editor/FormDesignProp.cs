@@ -23,13 +23,33 @@ namespace WinSimpleIDriver.Editor
                 propertyGrid1.SelectedObject = new ElementProperties(element);
             }
 
-            
+            // Подписываемся на событие удаления
+            this.element.OnElementDeleted += ElementDeletedHandler;
 
         }
 
         private void FormDesignProp_Load(object sender, EventArgs e)
         {
 
+        }
+
+        // Метод, вызываемый при удалении элемента
+        private void ElementDeletedHandler(ElementDataApp el)
+        {
+            if (this.element == el)
+            {
+                this.Close(); // Закрываем окно свойств
+            }
+        }
+
+        // ✅ Отписываемся от события при закрытии окна
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            if (element != null)
+            {
+                element.OnElementDeleted -= ElementDeletedHandler;
+            }
+            base.OnFormClosed(e);
         }
     }
 

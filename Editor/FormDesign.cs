@@ -126,23 +126,21 @@ namespace WinSimpleIDriver.Editor
 
         private void ToolStripMenuItemCommandDelete_Click(object sender, EventArgs e)
         {
-            if (selectedControl == null) return; // Проверяем, есть ли выбранный элемент
+            if (selectedControl == null) return;
 
-            // Находим соответствующий элемент в списке
-            var elementToRemove = appElements.FirstOrDefault(el => el.Control == selectedControl);
-            if (elementToRemove == null) return;
+            var elementToDelete = appElements.FirstOrDefault(el => el.Control == selectedControl);
+            if (elementToDelete == null) return;
 
-            // Удаляем элемент из списка и с формы
-            appElements.Remove(elementToRemove);
+            // ✅ Вызов метода, который триггерит событие и закрывает окно
+            elementToDelete.Delete();
+
+            // ✅ Удаляем элемент из списка и формы
+            appElements.Remove(elementToDelete);
             this.Controls.Remove(selectedControl);
             selectedControl.Dispose();
-
-            // Сбрасываем выбранный элемент
             selectedControl = null;
-
-            // Обновляем статусную строку
-            UpdateStatus(null);
         }
+
 
         // ===================================================================================
 
