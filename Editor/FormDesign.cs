@@ -62,8 +62,6 @@ namespace WinSimpleIDriver.Editor
             this.MouseUp += Form_MouseUp;
         }
 
-        #region Events
-
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -81,107 +79,6 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
-
-
-        #region Events.Mouse
-
-        private void Form_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (sender is Control ctrl && ctrl != this && ctrl != backgroundPictureBox)
-            {
-                SelectElement(ctrl); // Выбираем элемент и рисуем рамку
-                resizeDirection = GetResizeDirection(ctrl, e.Location);
-
-                if (resizeDirection != ResizeDirection.None)
-                {
-                    isResizing = true;
-                    lastMousePosition = e.Location;
-                }
-                else
-                {
-                    isResizing = false;
-                    offset = new Point(e.X, e.Y);
-                }
-
-                SetStatus(ctrl);
-            }
-            else
-            {
-                DeselectElement(); // Убираем рамку
-            }
-        }
-
-        private void Form_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (selectedControl != null)
-            {
-                // Сохраняем старую область для обновления
-                Rectangle oldBounds = new Rectangle(
-                    selectedControl.Left - 2, selectedControl.Top - 2,
-                    selectedControl.Width + 4, selectedControl.Height + 4
-                );
-
-                if (isResizing)
-                {
-                    int dx = e.X - lastMousePosition.X;
-                    int dy = e.Y - lastMousePosition.Y;
-
-                    switch (resizeDirection)
-                    {
-                        case ResizeDirection.Right:
-                            selectedControl.Width = Math.Max(20, selectedControl.Width + dx);
-                            break;
-                        case ResizeDirection.Bottom:
-                            selectedControl.Height = Math.Max(20, selectedControl.Height + dy);
-                            break;
-                    }
-
-                    lastMousePosition = e.Location;
-                }
-                else if (resizeDirection == ResizeDirection.None && e.Button == MouseButtons.Left)
-                {
-                    selectedControl.Left = e.X + selectedControl.Left - offset.X;
-                    selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
-                }
-
-                // Создаем новую область для обновления
-                Rectangle newBounds = new Rectangle(
-                    selectedControl.Left - 2, selectedControl.Top - 2,
-                    selectedControl.Width + 4, selectedControl.Height + 4
-                );
-
-                // Перерисовываем только измененные области
-                Invalidate(oldBounds);
-                Invalidate(newBounds);
-
-                // Устанавливаем корректный курсор
-                selectedControl.Cursor = GetResizeCursor(GetResizeDirection(selectedControl, e.Location));
-            }
-        }
-
-        private void Form_MouseUp(object sender, MouseEventArgs e)
-        {
-            isResizing = false;
-            resizeDirection = ResizeDirection.None;
-
-            if (selectedControl != null)
-            {
-                Invalidate();
-                Update(); // Принудительное обновление формы
-
-                // Обновляем PropertyGrid
-                if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
-                {
-                    openedPropertyForm.UpdateProperties(selectedControl);
-                }
-            }
-        }
-
-
-
-        #endregion
-
-        #endregion
 
         // =====================================================================================
 
@@ -287,15 +184,7 @@ namespace WinSimpleIDriver.Editor
 
         #endregion
 
-
-        private void AttachControlEvents(Control control)
-        {
-            control.MouseDown += Form_MouseDown;
-            control.MouseMove += Form_MouseMove;
-            control.MouseUp += Form_MouseUp;
-            control.MouseDoubleClick += Element_DoubleClick;
-            control.LocationChanged += Element_LocationChanged;
-        }
+        
 
         // ===================================================================================
 
@@ -581,6 +470,104 @@ namespace WinSimpleIDriver.Editor
 
         #region Elements
 
+        #region Mouse
+
+        private void Form_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (sender is Control ctrl && ctrl != this && ctrl != backgroundPictureBox)
+            {
+                SelectElement(ctrl); // Выбираем элемент и рисуем рамку
+                resizeDirection = GetResizeDirection(ctrl, e.Location);
+
+                if (resizeDirection != ResizeDirection.None)
+                {
+                    isResizing = true;
+                    lastMousePosition = e.Location;
+                }
+                else
+                {
+                    isResizing = false;
+                    offset = new Point(e.X, e.Y);
+                }
+
+                SetStatus(ctrl);
+            }
+            else
+            {
+                DeselectElement(); // Убираем рамку
+            }
+        }
+
+        private void Form_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (selectedControl != null)
+            {
+                // Сохраняем старую область для обновления
+                Rectangle oldBounds = new Rectangle(
+                    selectedControl.Left - 2, selectedControl.Top - 2,
+                    selectedControl.Width + 4, selectedControl.Height + 4
+                );
+
+                if (isResizing)
+                {
+                    int dx = e.X - lastMousePosition.X;
+                    int dy = e.Y - lastMousePosition.Y;
+
+                    switch (resizeDirection)
+                    {
+                        case ResizeDirection.Right:
+                            selectedControl.Width = Math.Max(20, selectedControl.Width + dx);
+                            break;
+                        case ResizeDirection.Bottom:
+                            selectedControl.Height = Math.Max(20, selectedControl.Height + dy);
+                            break;
+                    }
+
+                    lastMousePosition = e.Location;
+                }
+                else if (resizeDirection == ResizeDirection.None && e.Button == MouseButtons.Left)
+                {
+                    selectedControl.Left = e.X + selectedControl.Left - offset.X;
+                    selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
+                }
+
+                // Создаем новую область для обновления
+                Rectangle newBounds = new Rectangle(
+                    selectedControl.Left - 2, selectedControl.Top - 2,
+                    selectedControl.Width + 4, selectedControl.Height + 4
+                );
+
+                // Перерисовываем только измененные области
+                Invalidate(oldBounds);
+                Invalidate(newBounds);
+
+                // Устанавливаем корректный курсор
+                selectedControl.Cursor = GetResizeCursor(GetResizeDirection(selectedControl, e.Location));
+            }
+        }
+
+        private void Form_MouseUp(object sender, MouseEventArgs e)
+        {
+            isResizing = false;
+            resizeDirection = ResizeDirection.None;
+
+            if (selectedControl != null)
+            {
+                Invalidate();
+                Update(); // Принудительное обновление формы
+
+                // Обновляем PropertyGrid
+                if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
+                {
+                    openedPropertyForm.UpdateProperties(selectedControl);
+                }
+            }
+        }
+
+
+
+        #endregion
+
         #region Select/Deselect
         /// <summary>
         /// Обновляет рамку при выборе элемента.
@@ -645,6 +632,15 @@ namespace WinSimpleIDriver.Editor
         #endregion
 
         // =============================================================================
+
+        private void AttachControlEvents(Control control)
+        {
+            control.MouseDown += Form_MouseDown;
+            control.MouseMove += Form_MouseMove;
+            control.MouseUp += Form_MouseUp;
+            control.MouseDoubleClick += Element_DoubleClick;
+            control.LocationChanged += Element_LocationChanged;
+        }
 
         #region ADD NEW Element
 
