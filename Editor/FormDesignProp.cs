@@ -18,7 +18,12 @@ namespace WinSimpleIDriver.Editor
             if (element != null && element.Control != null)
             {
                 this.Text = element.Control.Name; // Устанавливаем заголовок формы в имя элемента
+
+                // Передаём объект для редактирования в PropertyGrid
+                propertyGrid1.SelectedObject = new ElementProperties(element);
             }
+
+            
 
         }
 

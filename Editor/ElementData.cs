@@ -36,6 +36,20 @@ namespace WinSimpleIDriver.Editor
         ProgressBar
     }
 
+    public enum eElementEditor
+    {
+        Name,        // Имя элемента
+        Text,        // Текст элемента
+        X,    // Позиция X
+        Y,    // Позиция Y
+        Width,        // Ширина
+        Height,         // высота
+        FontSize,    // Размер шрифта (для Label, TextBox)
+        ForeColor,   // Цвет текста
+        BackColor,   // Цвет фона
+        Visible,     // Видимость элемента
+        ImagePath    // Путь к изображению (для PictureBox)
+    }
 
 
     /// <summary>
@@ -108,7 +122,6 @@ namespace WinSimpleIDriver.Editor
                 { eElementType.Progress, eUsedFormClass.ProgressBar }
             };
         }
-
 
 
     }

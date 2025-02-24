@@ -101,6 +101,7 @@
     <Compile Include="DML\FileControl.cs" />
     <Compile Include="Editor\ControlProperties.cs" />
     <Compile Include="Editor\ElementData.cs" />
+    <Compile Include="Editor\ElementProperties.cs" />
     <Compile Include="Editor\FormDesign.cs">
       <SubType>Form</SubType>
     </Compile>
