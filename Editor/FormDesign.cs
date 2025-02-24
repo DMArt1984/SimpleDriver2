@@ -18,7 +18,6 @@ namespace WinSimpleIDriver.Editor
         private Point lastMousePosition; // Последняя позиция мыши
         private ResizeDirection resizeDirection = ResizeDirection.None; // Направление изменения
         private PictureBox backgroundPictureBox = new PictureBox();
-        private bool showSelection = false; // Показывать рамку или нет
 
         private FormDesignProp openedPropertyForm; // Открываем PropertyForm
 
@@ -65,17 +64,7 @@ namespace WinSimpleIDriver.Editor
         {
             base.OnPaint(e);
 
-            if (showSelection && selectedControl != null && !isResizing)
-            {
-                using (Pen pen = new Pen(Color.Blue, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash })
-                {
-                    Rectangle rect = new Rectangle(
-                        selectedControl.Left - 2, selectedControl.Top - 2,
-                        selectedControl.Width + 4, selectedControl.Height + 4
-                    );
-                    e.Graphics.DrawRectangle(pen, rect);
-                }
-            }
+            
         }
 
 
@@ -99,17 +88,16 @@ namespace WinSimpleIDriver.Editor
                     offset = new Point(e.X, e.Y);
                 }
 
-                showSelection = true;
+                //showSelection = true;
 
                 SetStatus(ctrl);
 
-                Invalidate(); // Перерисовываем форму
+                //Invalidate(); // Перерисовываем форму
             }
             else
             {
                 // Если кликнули на форму, сбрасываем выделение
                 selectedControl = null;
-                showSelection = false;
                 Invalidate();
             }
         }
@@ -168,7 +156,6 @@ namespace WinSimpleIDriver.Editor
 
             if (selectedControl != null)
             {
-                showSelection = true;
                 Invalidate();
                 Update(); // Принудительное обновление формы
 
