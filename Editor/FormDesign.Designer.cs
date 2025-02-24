@@ -36,7 +36,7 @@ namespace WinSimpleIDriver.Editor
             this.toolStripStatusLabelTitle = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolStripMenuItemAddControl = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemAddControlLabel = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemAddControlOutput = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemAddControlInput = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemAddControlPicture = new System.Windows.Forms.ToolStripMenuItem();
             this.командыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemCommandCopy = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +44,8 @@ namespace WinSimpleIDriver.Editor
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveJsonToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemAddControlOutput = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemAddControlRectangle = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -96,8 +98,10 @@ namespace WinSimpleIDriver.Editor
             // 
             this.ToolStripMenuItemAddControl.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripMenuItemAddControlLabel,
+            this.ToolStripMenuItemAddControlInput,
             this.ToolStripMenuItemAddControlOutput,
-            this.ToolStripMenuItemAddControlPicture});
+            this.ToolStripMenuItemAddControlPicture,
+            this.ToolStripMenuItemAddControlRectangle});
             this.ToolStripMenuItemAddControl.Name = "ToolStripMenuItemAddControl";
             this.ToolStripMenuItemAddControl.Size = new System.Drawing.Size(71, 20);
             this.ToolStripMenuItemAddControl.Text = "Добавить";
@@ -109,12 +113,12 @@ namespace WinSimpleIDriver.Editor
             this.ToolStripMenuItemAddControlLabel.Text = "Label";
             this.ToolStripMenuItemAddControlLabel.Click += new System.EventHandler(this.ToolStripMenuItemAddControlLabel_Click);
             // 
-            // ToolStripMenuItemAddControlOutput
+            // ToolStripMenuItemAddControlInput
             // 
-            this.ToolStripMenuItemAddControlOutput.Name = "ToolStripMenuItemAddControlOutput";
-            this.ToolStripMenuItemAddControlOutput.Size = new System.Drawing.Size(180, 22);
-            this.ToolStripMenuItemAddControlOutput.Text = "OutputBox";
-            this.ToolStripMenuItemAddControlOutput.Click += new System.EventHandler(this.ToolStripMenuItemAddControlOutput_Click);
+            this.ToolStripMenuItemAddControlInput.Name = "ToolStripMenuItemAddControlInput";
+            this.ToolStripMenuItemAddControlInput.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemAddControlInput.Text = "input Box";
+            this.ToolStripMenuItemAddControlInput.Click += new System.EventHandler(this.ToolStripMenuItemAddControlOutput_Click);
             // 
             // ToolStripMenuItemAddControlPicture
             // 
@@ -169,6 +173,20 @@ namespace WinSimpleIDriver.Editor
             this.saveJsonToolStripMenuItem1.Text = "save json";
             this.saveJsonToolStripMenuItem1.Click += new System.EventHandler(this.saveJsonToolStripMenuItem1_Click);
             // 
+            // ToolStripMenuItemAddControlOutput
+            // 
+            this.ToolStripMenuItemAddControlOutput.Name = "ToolStripMenuItemAddControlOutput";
+            this.ToolStripMenuItemAddControlOutput.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemAddControlOutput.Text = "output Box";
+            this.ToolStripMenuItemAddControlOutput.Click += new System.EventHandler(this.ToolStripMenuItemAddControlOutput_Click_1);
+            // 
+            // ToolStripMenuItemAddControlRectangle
+            // 
+            this.ToolStripMenuItemAddControlRectangle.Name = "ToolStripMenuItemAddControlRectangle";
+            this.ToolStripMenuItemAddControlRectangle.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemAddControlRectangle.Text = "Rectangle";
+            this.ToolStripMenuItemAddControlRectangle.Click += new System.EventHandler(this.ToolStripMenuItemAddControlRectangle_Click);
+            // 
             // FormDesign
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -198,7 +216,7 @@ namespace WinSimpleIDriver.Editor
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelTitle;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAddControl;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAddControlLabel;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAddControlOutput;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAddControlInput;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAddControlPicture;
         private System.Windows.Forms.ToolStripMenuItem командыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCommandCopy;
@@ -206,5 +224,7 @@ namespace WinSimpleIDriver.Editor
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveJsonToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAddControlOutput;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAddControlRectangle;
     }
 }

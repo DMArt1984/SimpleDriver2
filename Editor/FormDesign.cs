@@ -604,5 +604,14 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
+        private void ToolStripMenuItemAddControlOutput_Click_1(object sender, EventArgs e)
+        {
+            AddElement(eElementType.OutputBox);
+        }
+
+        private void ToolStripMenuItemAddControlRectangle_Click(object sender, EventArgs e)
+        {
+            AddElement(eElementType.Rectangle);
+        }
     }
 }
