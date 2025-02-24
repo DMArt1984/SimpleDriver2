@@ -65,7 +65,7 @@ namespace WinSimpleIDriver.Editor
         {
             base.OnPaint(e);
 
-            if (showSelection && selectedControl != null)
+            if (showSelection && selectedControl != null && !isResizing)
             {
                 using (Pen pen = new Pen(Color.Blue, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash })
                 {
@@ -78,11 +78,12 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
+
         #region Events.Mouse
 
         private void Form_MouseDown(object sender, MouseEventArgs e)
         {
-            if (sender is Control ctrl && ctrl != backgroundPictureBox)
+            if (sender is Control ctrl && ctrl != this && ctrl != backgroundPictureBox)
             {
                 selectedControl = ctrl;
                 resizeDirection = GetResizeDirection(ctrl, e.Location);
@@ -99,15 +100,17 @@ namespace WinSimpleIDriver.Editor
                 }
 
                 showSelection = true;
-                Invalidate(); // Обновляем рамку
+                Invalidate(); // Перерисовываем форму
             }
             else
             {
+                // Если кликнули на форму, сбрасываем выделение
                 selectedControl = null;
                 showSelection = false;
                 Invalidate();
             }
         }
+
 
 
 
@@ -141,11 +144,19 @@ namespace WinSimpleIDriver.Editor
                 {
                     selectedControl.Left = e.X + selectedControl.Left - offset.X;
                     selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
+
+                    // Отключаем отрисовку рамки во время перемещения
+                    showSelection = false;
+                }
+                else
+                {
+                    showSelection = true; // Включаем рамку, если не перетаскиваем
                 }
 
                 selectedControl.Cursor = GetResizeCursor(GetResizeDirection(selectedControl, e.Location));
             }
         }
+
 
 
 
@@ -156,11 +167,15 @@ namespace WinSimpleIDriver.Editor
 
             if (selectedControl != null)
             {
+                showSelection = true; // Включаем рамку после перемещения
+
                 // Обновляем PropertyGrid
                 if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
                 {
                     openedPropertyForm.UpdateProperties(selectedControl);
                 }
+
+                Invalidate();
             }
         }
 
