@@ -31,7 +31,6 @@ namespace WinSimpleIDriver.Editor
         {
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.buttonApply = new System.Windows.Forms.Button();
-            this.buttonLoadImage = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // propertyGrid1
@@ -55,23 +54,11 @@ namespace WinSimpleIDriver.Editor
             this.buttonApply.UseVisualStyleBackColor = true;
             this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
             // 
-            // buttonLoadImage
-            // 
-            this.buttonLoadImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLoadImage.Location = new System.Drawing.Point(240, 420);
-            this.buttonLoadImage.Name = "buttonLoadImage";
-            this.buttonLoadImage.Size = new System.Drawing.Size(109, 25);
-            this.buttonLoadImage.TabIndex = 2;
-            this.buttonLoadImage.Text = "Рисунок";
-            this.buttonLoadImage.UseVisualStyleBackColor = true;
-            this.buttonLoadImage.Click += new System.EventHandler(this.buttonLoadImage_Click);
-            // 
             // FormDesignProp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(361, 449);
-            this.Controls.Add(this.buttonLoadImage);
             this.Controls.Add(this.buttonApply);
             this.Controls.Add(this.propertyGrid1);
             this.Name = "FormDesignProp";
@@ -85,6 +72,5 @@ namespace WinSimpleIDriver.Editor
 
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private System.Windows.Forms.Button buttonApply;
-        private System.Windows.Forms.Button buttonLoadImage;
     }
 }

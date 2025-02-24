@@ -2,6 +2,8 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,8 +84,41 @@ namespace WinSimpleIDriver.Editor
     {
         public string Name { get; set; }
         public eElementType ElementType { get; set; }
-        public Control Control { get; set; } // Связанный элемент формы
+        public Control Control { get; set; }
 
+        public int X
+        {
+            get => Control?.Left ?? 0;
+            set { if (Control != null) Control.Left = value; }
+        }
+
+        public int Y
+        {
+            get => Control?.Top ?? 0;
+            set { if (Control != null) Control.Top = value; }
+        }
+
+        public int Width
+        {
+            get => Control?.Width ?? 0;
+            set { if (Control != null) Control.Width = value; }
+        }
+
+        public int Height
+        {
+            get => Control?.Height ?? 0;
+            set { if (Control != null) Control.Height = value; }
+        }
+
+
+        public bool Relative { get; set; }
+        public string Text { get; set; }
+        public float Size { get; set; }
+        public string Color { get; set; }
+        public int ZIndex { get; set; }
+        public string ImagePath { get; set; }
+
+        // Конструктор, который принимает 3 аргумента
         public ElementDataApp(string name, eElementType elementType, Control control)
         {
             Name = name;
@@ -91,33 +126,82 @@ namespace WinSimpleIDriver.Editor
             Control = control;
         }
 
-        /// <summary>
-        /// Конвертирует данные приложения в JSON-совместимый объект.
-        /// </summary>
+        public ElementDataApp(ElementDataJson data)
+        {
+            this.Name = data.Name;
+            this.ElementType = data.ElementType;
+            this.X = data.X;
+            this.Y = data.Y;
+            this.Relative = data.Relative;
+            this.Width = data.Width;
+            this.Height = data.Height;
+            this.Text = data.Text;
+            this.Size = data.Size;
+            this.Color = data.Color;
+            this.ZIndex = data.ZIndex;
+            this.ImagePath = data.ImagePath;
+
+            this.Control = CreateControl();
+            if (this.Control != null)
+            {
+                this.Control.Name = this.Name;
+                this.Control.Left = this.X;
+                this.Control.Top = this.Y;
+                this.Control.Width = this.Width;
+                this.Control.Height = this.Height;
+
+                if (this.Control is Label || this.Control is TextBox)
+                    this.Control.Font = new Font("Arial", this.Size);
+
+                if (this.Control is PictureBox pic && !string.IsNullOrEmpty(this.ImagePath) && File.Exists(this.ImagePath))
+                {
+                    pic.Image = Image.FromFile(this.ImagePath);
+                    pic.Tag = this.ImagePath;
+                }
+            }
+        }
+
+        // Метод для получения данных в формате JSON
         public ElementDataJson ToJsonData()
         {
             return new ElementDataJson
             {
                 Name = this.Name,
                 ElementType = this.ElementType,
-                X = this.Control.Left,
-                Y = this.Control.Top,
-                Width = this.Control.Width,
-                Height = this.Control.Height,
-                Text = this.Control.Text,
-                Size = this.Control.Font?.Size ?? 12.0f,
-                Color = null,
-                ZIndex = this.Control.Parent?.Controls.GetChildIndex(this.Control) ?? 0,
-                ImagePath = this.Control is PictureBox pic ? pic.Tag as string : null
+                X = this.X,
+                Y = this.Y,
+                Width = this.Width,
+                Height = this.Height,
+                Text = Control?.Text,
+                Size = Control?.Font.Size ?? 12.0f
             };
         }
 
-        /// <summary>
-        /// Создает объект ElementDataApp из JSON-данных и привязывает к переданному элементу управления.
-        /// </summary>
-        public static ElementDataApp FromJsonData(ElementDataJson jsonData, Control control)
+        private Control CreateControl()
         {
-            return new ElementDataApp(jsonData.Name, jsonData.ElementType, control);
+            switch (this.ElementType)
+            {
+                case eElementType.Label:
+                    return new Label { Text = this.Text };
+                case eElementType.OutputBox:
+                case eElementType.InputBox:
+                case eElementType.IOBox:
+                case eElementType.IOPop:
+                    return new TextBox { Text = this.Text, ReadOnly = (this.ElementType == eElementType.OutputBox) };
+                case eElementType.Button:
+                    return new Button { Text = this.Text };
+                case eElementType.PictureBox:
+                case eElementType.Rectangle:
+                    return new PictureBox
+                    {
+                        BorderStyle = BorderStyle.FixedSingle,
+                        SizeMode = PictureBoxSizeMode.Zoom
+                    };
+                case eElementType.Progress:
+                    return new ProgressBar();
+                default:
+                    return null;
+            }
         }
     }
 

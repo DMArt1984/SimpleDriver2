@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,283 +14,71 @@ namespace WinSimpleIDriver.Editor
     public partial class FormDesign : Form
     {
         private List<ElementDataApp> elements = new List<ElementDataApp>(); // Список элементов приложения
-        private Control selectedControl;
+        private ElementDataApp selectedElement;
         private Control clipboardControl; // Для копирования элементов
         private Point offset;
         private bool isResizing = false; // Флаг изменения размера
-        private Point lastMousePosition; // Последняя позиция мыши
-        private ResizeDirection resizeDirection = ResizeDirection.None; // Направление изменения
+        private Point lastMousePosition;
+        private ResizeDirection resizeDirection = ResizeDirection.None;
 
-        private FormDesignProp openedPropertyForm; // Открываем PropertyForm
+        private FormDesignProp openedPropertyForm;
 
-        //private HashSet<string> allowedTypes = new HashSet<string> { "Label", "TextBox", "PictureBox" };
-        //private HashSet<Type> allowedTypes = new HashSet<Type> { typeof(Label), typeof(TextBox), typeof(PictureBox) };
+        private uint controlID = 0;
 
-        //private bool mouseMove = false;
-
-        private uint controlID = 0; // Идентификатор элемента
         public FormDesign()
         {
             InitializeComponent();
-            // Включаем двойную буферизацию для уменьшения мерцания
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
             this.UpdateStyles();
-
-            InitializeBackgroundImage();
         }
-
-        private void InitializeBackgroundImage()
-        {
-            this.BackgroundImage = new Bitmap(this.ClientSize.Width, this.ClientSize.Height);
-            this.BackgroundImageLayout = ImageLayout.None;
-        }
-
 
         private void FormDesign_Load(object sender, EventArgs e)
         {
-            //LoadJson(); // Автоматическая загрузка
             SetStatus();
-
             this.MouseMove += Form_MouseMove;
             this.MouseDown += Form_MouseDown;
             this.MouseUp += Form_MouseUp;
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-
-            
-        }
-
-
-        // =====================================================================================
-
-        #region Copy and Delete
-
-        #region Events
-        private void ToolStripMenuItemCommandCopy_Click(object sender, EventArgs e)
-        {
-            CopyElement();
-            PasteElement();
-        }
-
-        private void ToolStripMenuItemCommandDelete_Click(object sender, EventArgs e)
-        {
-            Delete();
-        }
-
-        #endregion
-
-        // Копировать элемент в буфер
-        public void CopyElement()
-        {
-            if (selectedControl != null)
-            {
-                clipboardControl = selectedControl; // Сохраняем копируемый элемент
-                SetStatus(selectedControl);
-            }
-        }
-        // Вставить элемент из буфера
-        public void PasteElement()
-        {
-            if (clipboardControl != null)
-            {
-                Control newControl = CloneControl(clipboardControl);
-                this.Controls.Add(newControl);
-                newControl.BringToFront();
-                selectedControl = newControl;
-                SetStatus(selectedControl);
-            }
-        }
-        // Клонирование элемента
-        private Control CloneControl(Control original)
-        {
-            Control clone = null;
-
-            if (original is Label lbl)
-            {
-                clone = new Label
-                {
-                    Text = lbl.Text,
-                    Size = lbl.Size,
-                    Location = new Point(lbl.Left + 10, lbl.Top + 10),
-                    Font = lbl.Font,
-                    BackColor = lbl.BackColor
-                };
-            }
-            else if (original is TextBox txt)
-            {
-                clone = new TextBox
-                {
-                    Text = txt.Text,
-                    Size = txt.Size,
-                    Location = new Point(txt.Left + 10, txt.Top + 10),
-                    Font = txt.Font
-                };
-            }
-            else if (original is PictureBox pic)
-            {
-                clone = new PictureBox
-                {
-                    Size = pic.Size,
-                    Location = new Point(pic.Left + 10, pic.Top + 10),
-                    Image = pic.Image,
-                    SizeMode = pic.SizeMode,
-                    BorderStyle = pic.BorderStyle
-                };
-            }
-
-            clone.Name = $"{original.Name}_copy";
-
-            if (clone != null)
-            {
-                clone.MouseDown += Form_MouseDown;
-                clone.MouseMove += Form_MouseMove;
-                clone.MouseUp += Form_MouseUp;
-                clone.MouseDoubleClick += Element_DoubleClick;
-            }
-
-            return clone;
-        }
-
-        // Удалить текущий элемент
-        public void Delete()
-        {
-            if (selectedControl != null)
-            {
-                this.Controls.Remove(selectedControl);
-                selectedControl.Dispose();
-                selectedControl = null;
-                SetStatus();
-            }
-        }
-
-        #endregion
-
-        
-
         // ===================================================================================
+        #region Работа с элементами
 
-        #region File
-
-        #region Events
-
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SelectElement(ElementDataApp element)
         {
-            LoadJson();
-        }
-        private void saveJsonToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            SaveJson();
+            selectedElement = element;
         }
 
-        #endregion
-
-        private void LoadJson()
+        private void DeselectElement()
         {
-            if (!File.Exists("config.json")) return;
-
-            var settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            };
-
-            var jsonData = JsonConvert.DeserializeObject<Dictionary<string, List<ElementDataJson>>>(File.ReadAllText("config.json"), settings);
-
-            if (jsonData.ContainsKey("Main"))
-            {
-                var allowedUsedClasses = new HashSet<string>(Enum.GetNames(typeof(eUsedFormClass)));
-
-                var controlsToRemove = this.Controls.OfType<Control>()
-                    .Where(c => allowedUsedClasses.Contains(c.GetType().Name))
-                    .ToList();
-
-                foreach (var ctrl in controlsToRemove)
-                {
-                    this.Controls.Remove(ctrl);
-                    ctrl.Dispose();
-                }
-
-                var allowedElementTypes = new HashSet<eElementType>((eElementType[])Enum.GetValues(typeof(eElementType)));
-
-                elements.Clear();
-
-                foreach (var el in jsonData["Main"])
-                {
-                    if (allowedElementTypes.Contains(el.ElementType))
-                    {
-                        Control ctrl = CreateControlFromElement(el);
-                        if (ctrl != null)
-                        {
-                            this.Controls.Add(ctrl);
-                            AttachControlEvents(ctrl);
-                            this.Controls.SetChildIndex(ctrl, el.ZIndex);
-
-                            elements.Add(new ElementDataApp(el.Name, el.ElementType, ctrl));
-                        }
-                    }
-                }
-            }
+            selectedElement = null;
         }
 
-        private void SaveJson()
+        public void AddElement(eElementType type)
         {
-            var allowedElementTypes = new HashSet<eElementType>((eElementType[])Enum.GetValues(typeof(eElementType)));
-
-            var jsonData = new
-            {
-                Main = elements
-                    .Where(e => allowedElementTypes.Contains(e.ElementType))
-                    .Select(e => e.ToJsonData())
-                    .ToList()
-            };
-
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,
-                NullValueHandling = NullValueHandling.Ignore
-            };
-
-            File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, settings));
-        }
-        private eElementType GetElementType(Control c)
-        {
-            if (c is Label) return eElementType.Label;
-            if (c is TextBox txt)
-            {
-                if (txt.ReadOnly) return eElementType.OutputBox;
-                return eElementType.InputBox;
-            }
-            if (c is Button) return eElementType.Button;
-            if (c is PictureBox pic)
-            {
-                return pic.Image != null ? eElementType.PictureBox : eElementType.Rectangle;
-            }
-            if (c is ProgressBar) return eElementType.Progress;
-
-            return eElementType.None;
+            ElementDataApp element = new ElementDataApp($"Element{++controlID}", type, CreateControlFromElement(type));
+            elements.Add(element);
+            this.Controls.Add(element.Control);
+            AttachControlEvents(element.Control);
+            element.Control.BringToFront();
         }
 
-        private Control CreateControlFromElement(ElementDataJson el)
+        private Control CreateControlFromElement(eElementType type)
         {
             Control control = null;
 
-            switch (el.ElementType)
+            switch (type)
             {
                 case eElementType.Label:
-                    control = new Label { Text = el.Text };
+                    control = new Label { Text = $"Label{controlID}" };
                     break;
                 case eElementType.OutputBox:
                 case eElementType.InputBox:
-                case eElementType.IOBox:
-                case eElementType.IOPop:
-                    control = new TextBox { Text = el.Text };
-                    if (el.ElementType == eElementType.OutputBox)
+                    control = new TextBox { Text = $"TextBox{controlID}" };
+                    if (type == eElementType.OutputBox)
                         ((TextBox)control).ReadOnly = true;
                     break;
                 case eElementType.Button:
-                    control = new Button { Text = el.Text };
+                    control = new Button { Text = $"Button{controlID}" };
                     break;
                 case eElementType.PictureBox:
                 case eElementType.Rectangle:
@@ -304,171 +95,167 @@ namespace WinSimpleIDriver.Editor
 
             if (control != null)
             {
-                control.Name = el.Name;
-                control.Left = el.X;
-                control.Top = el.Y;
-                control.Width = el.Width;
-                control.Height = el.Height;
-
-                if (control is Label || control is TextBox)
-                {
-                    control.Font = new Font("Arial", el.Size);
-                }
-
-                if (control is PictureBox pic && !string.IsNullOrEmpty(el.ImagePath) && File.Exists(el.ImagePath))
-                {
-                    pic.Image = Image.FromFile(el.ImagePath);
-                    pic.Tag = el.ImagePath;
-                }
+                control.Name = $"Element{controlID}";
+                control.Left = 100;
+                control.Top = 100;
+                control.Width = 100;
+                control.Height = 30;
+                AttachControlEvents(control);
             }
 
             return control;
         }
 
-        #endregion
-
-        // ===================================================================================
-
-        #region FormStatus
-
-        // Текущий элемент
-        private void SetStatus(Control ctrl)
+        public void DeleteElement()
         {
-            string controlTypeName = ctrl.GetType().Name;
-            SetStatus(controlTypeName, ctrl.Name);
-        }
-        private void SetStatus(string valueType = "", string valueTitle = "")
-        {
-            toolStripStatusLabelType.Text = valueType;
-            toolStripStatusLabelTitle.Text = valueTitle;
-        }
-
-
-        #endregion
-
-        // ===================================================================================
-
-        #region Form background image
-
-        #region Events
-        private void ToolStripMenuItemBackgroundImage_Click(object sender, EventArgs e)
-        {
-            LoadBackgroundImage();
-        }
-
-        private void ToolStripMenuItemRemoveBackImage_Click(object sender, EventArgs e)
-        {
-            RemoveBackgroundImage();
-        }
-        #endregion
-
-        /// <summary>
-        /// Загружает фоновое изображение напрямую в `BackgroundImage`.
-        /// </summary>
-        private void LoadBackgroundImage()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            if (selectedElement != null)
             {
-                Filter = "Изображения|*.jpg;*.png;*.bmp",
-                Title = "Выберите фоновое изображение"
+                this.Controls.Remove(selectedElement.Control);
+                elements.Remove(selectedElement);
+                selectedElement = null;
+            }
+        }
+
+        #endregion
+
+        // ===================================================================================
+        #region Работа с PropertyGrid
+
+        private void Element_DoubleClick(object sender, EventArgs e)
+        {
+            if (sender is Control ctrl)
+            {
+                ElementDataApp element = elements.FirstOrDefault(x => x.Control == ctrl);
+                if (element != null)
+                {
+                    if (openedPropertyForm == null || openedPropertyForm.IsDisposed)
+                    {
+                        openedPropertyForm = new FormDesignProp(element);
+                        openedPropertyForm.Show();
+                    }
+                    else
+                    {
+                        openedPropertyForm.UpdateProperties(element);
+                        openedPropertyForm.BringToFront();
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        // ===================================================================================
+        #region Сохранение и загрузка
+
+        private void SaveJson()
+        {
+            // 🔹 Обновляем `ElementDataApp` перед сохранением
+            foreach (var element in elements)
+            {
+                element.X = element.Control.Left;
+                element.Y = element.Control.Top;
+                element.Width = element.Control.Width;
+                element.Height = element.Control.Height;
+                element.Text = element.Control.Text;
+            }
+
+            var jsonData = new
+            {
+                Main = elements.Select(e => e.ToJsonData()).ToList()
             };
 
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            JsonSerializerSettings settings = new JsonSerializerSettings
             {
-                try
-                {
-                    // Освобождаем память от предыдущего изображения
-                    this.BackgroundImage?.Dispose();
-                    this.BackgroundImage = null;
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore
+            };
 
-                    // Загружаем изображение безопасно (создаем копию)
-                    using (var img = Image.FromFile(openFileDialog.FileName))
-                    {
-                        this.BackgroundImage = new Bitmap(img);
-                    }
-                    this.BackgroundImageLayout = ImageLayout.None;
-
-                    // 🔹 Отправляем фон назад
-                    this.SendToBack();
-
-                    // 🔹 Обновляем порядок элементов
-                    foreach (Control ctrl in this.Controls)
-                    {
-                        ctrl.BringToFront();
-                    }
-
-                    // 🔹 Принудительная перерисовка формы и элементов
-                    this.Invalidate();
-                    this.Update();
-                    foreach (Control ctrl in this.Controls)
-                    {
-                        ctrl.Refresh();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, settings));
         }
 
 
-
-        /// <summary>
-        /// Удаляет фоновое изображение.
-        /// </summary>
-        private void RemoveBackgroundImage()
+        private void LoadJson()
         {
-            if (this.BackgroundImage != null)
-            {
-                this.BackgroundImage.Dispose(); // Освобождаем память
-                this.BackgroundImage = null; // Убираем изображение
+            if (!File.Exists("config.json")) return;
 
-                // 🔹 Обновляем отображение, чтобы вернуть прозрачный фон
-                Invalidate();
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            var jsonData = JsonConvert.DeserializeObject<Dictionary<string, List<ElementDataJson>>>(File.ReadAllText("config.json"), settings);
+
+            if (jsonData.ContainsKey("Main"))
+            {
+                foreach (var element in elements.Where(el => el.Control != null))
+                {
+                    this.Controls.Remove(element.Control);
+                }
+                elements.Clear();
+
+                foreach (var el in jsonData["Main"])
+                {
+                    Control ctrl = CreateControlFromElement(el.ElementType);
+                    if (ctrl != null)
+                    {
+                        this.Controls.Add(ctrl);
+                        AttachControlEvents(ctrl);
+                        ctrl.BringToFront();
+
+                        var newElement = new ElementDataApp(el.Name, el.ElementType, ctrl)
+                        {
+                            X = el.X,
+                            Y = el.Y,
+                            Width = el.Width,
+                            Height = el.Height,
+                            Text = el.Text,
+                            Size = el.Size,
+                            ImagePath = el.ImagePath
+                        };
+
+                        elements.Add(newElement);
+                    }
+                }
             }
         }
 
         #endregion
 
         // ===================================================================================
-
-        #region Elements
-
-        #region Mouse
+        #region Обработка событий мыши
 
         private void Form_MouseDown(object sender, MouseEventArgs e)
         {
             if (sender is Control ctrl && ctrl != this)
             {
-                SelectElement(ctrl); // Выбираем элемент и рисуем рамку
-                resizeDirection = GetResizeDirection(ctrl, e.Location);
-
-                if (resizeDirection != ResizeDirection.None)
+                ElementDataApp element = elements.FirstOrDefault(x => x.Control == ctrl);
+                if (element != null)
                 {
-                    isResizing = true;
-                    lastMousePosition = e.Location;
-                }
-                else
-                {
-                    isResizing = false;
-                    offset = new Point(e.X, e.Y);
-                }
+                    SelectElement(element);
+                    resizeDirection = GetResizeDirection(ctrl, e.Location);
 
-                SetStatus(ctrl);
+                    if (resizeDirection != ResizeDirection.None)
+                    {
+                        isResizing = true;
+                        lastMousePosition = e.Location;
+                    }
+                    else
+                    {
+                        isResizing = false;
+                        offset = new Point(e.X, e.Y);
+                    }
+                }
             }
             else
             {
-                DeselectElement(); // Убираем рамку
+                DeselectElement();
             }
         }
 
         private void Form_MouseMove(object sender, MouseEventArgs e)
         {
-            if (selectedControl != null)
+            if (selectedElement != null)
             {
-                
-
                 if (isResizing)
                 {
                     int dx = e.X - lastMousePosition.X;
@@ -477,10 +264,10 @@ namespace WinSimpleIDriver.Editor
                     switch (resizeDirection)
                     {
                         case ResizeDirection.Right:
-                            selectedControl.Width = Math.Max(20, selectedControl.Width + dx);
+                            selectedElement.Width = Math.Max(20, selectedElement.Width + dx);
                             break;
                         case ResizeDirection.Bottom:
-                            selectedControl.Height = Math.Max(20, selectedControl.Height + dy);
+                            selectedElement.Height = Math.Max(20, selectedElement.Height + dy);
                             break;
                     }
 
@@ -488,89 +275,124 @@ namespace WinSimpleIDriver.Editor
                 }
                 else if (resizeDirection == ResizeDirection.None && e.Button == MouseButtons.Left)
                 {
-                    selectedControl.Left = e.X + selectedControl.Left - offset.X;
-                    selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
+                    selectedElement.X = e.X + selectedElement.X - offset.X;
+                    selectedElement.Y = e.Y + selectedElement.Y - offset.Y;
                 }
 
-                selectedControl.Cursor = GetResizeCursor(GetResizeDirection(selectedControl, e.Location));
+                // Теперь обновляем Control
+                UpdateElementControl(selectedElement);
             }
         }
 
+
+        private void UpdateElementControl(ElementDataApp element)
+        {
+            if (element.Control != null)
+            {
+                element.Control.Left = element.X;
+                element.Control.Top = element.Y;
+                element.Control.Width = element.Width;
+                element.Control.Height = element.Height;
+                element.Control.Text = element.Text;
+
+                if (element.Control is Label || element.Control is TextBox)
+                {
+                    element.Control.Font = new Font("Arial", element.Size);
+                }
+
+                if (element.Control is PictureBox pic && !string.IsNullOrEmpty(element.ImagePath))
+                {
+                    if (File.Exists(element.ImagePath))
+                    {
+                        pic.Image = Image.FromFile(element.ImagePath);
+                        pic.Tag = element.ImagePath;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region FormStatus
+
+        /// <summary>
+        /// Обновляет статусную строку с информацией о выбранном элементе.
+        /// </summary>
+        private void SetStatus()
+        {
+            if (selectedElement != null)
+            {
+                toolStripStatusLabelType.Text = selectedElement.ElementType.ToString();
+                toolStripStatusLabelTitle.Text = selectedElement.Name;
+                //toolStripStatusLabelPosition.Text = $"X: {selectedElement.X}, Y: {selectedElement.Y}";
+                //toolStripStatusLabelSize.Text = $"W: {selectedElement.Width}, H: {selectedElement.Height}";
+            }
+            else
+            {
+                toolStripStatusLabelType.Text = "Нет элемента";
+                toolStripStatusLabelTitle.Text = "";
+                //toolStripStatusLabelPosition.Text = "";
+                //toolStripStatusLabelSize.Text = "";
+            }
+        }
+
+        /// <summary>
+        /// Обновляет статусную строку с информацией о переданном элементе.
+        /// </summary>
+        /// <param name="element">Элемент, информацию о котором нужно отобразить.</param>
+        private void SetStatus(ElementDataApp element)
+        {
+            if (element != null)
+            {
+                toolStripStatusLabelType.Text = element.ElementType.ToString();
+                toolStripStatusLabelTitle.Text = element.Name;
+                //toolStripStatusLabelPosition.Text = $"X: {element.X}, Y: {element.Y}";
+                //toolStripStatusLabelSize.Text = $"W: {element.Width}, H: {element.Height}";
+            }
+            else
+            {
+                SetStatus();
+            }
+        }
+
+        #endregion
 
         private void Form_MouseUp(object sender, MouseEventArgs e)
         {
             isResizing = false;
             resizeDirection = ResizeDirection.None;
 
-            if (selectedControl != null)
+            if (selectedElement != null)
             {
-                // Обновляем PropertyGrid
+                // 🔹 Обновляем данные в ElementDataApp после перемещения или изменения размера
+                selectedElement.X = selectedElement.Control.Left;
+                selectedElement.Y = selectedElement.Control.Top;
+                selectedElement.Width = selectedElement.Control.Width;
+                selectedElement.Height = selectedElement.Control.Height;
+
+                // 🔹 Обновляем статусную строку
+                SetStatus(selectedElement);
+
+                // 🔹 Обновляем PropertyGrid, если он открыт
                 if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
                 {
-                    openedPropertyForm.UpdateProperties(selectedControl);
+                    openedPropertyForm.UpdateProperties(selectedElement);
                 }
             }
         }
 
-        #endregion
-
-        #region Select/Deselect
         /// <summary>
-        /// Обновляет рамку при выборе элемента.
+        /// Привязывает события к элементу управления.
         /// </summary>
-        private void SelectElement(Control ctrl)
-        {
-            selectedControl = ctrl;
-            Invalidate(); // Перерисовываем рамку
-        }
-
-        /// <summary>
-        /// Убирает рамку при клике на форму.
-        /// </summary>
-        private void DeselectElement()
-        {
-            selectedControl = null;
-        }
-
-        
-        #endregion
-
-        #region Resize and Move
-        private Cursor GetResizeCursor(ResizeDirection direction)
-        {
-            switch (direction)
-            {
-                case ResizeDirection.Right:
-                    return Cursors.SizeWE;
-                case ResizeDirection.Bottom:
-                    return Cursors.SizeNS;
-                default:
-                    return Cursors.Default;
-            }
-        }
-
-        private ResizeDirection GetResizeDirection(Control ctrl, Point mousePosition)
-        {
-            const int resizeMargin = 6; // Отступ для изменения размера
-
-            bool right = mousePosition.X > ctrl.Width - resizeMargin;
-            bool bottom = mousePosition.Y > ctrl.Height - resizeMargin;
-
-            if (right) return ResizeDirection.Right;
-            if (bottom) return ResizeDirection.Bottom;
-
-            return ResizeDirection.None;
-        }
-
-
-        #endregion
-
-        #endregion
-
-        // =============================================================================
-
+        /// <param name="control">Элемент управления, к которому нужно привязать события.</param>
         private void AttachControlEvents(Control control)
         {
+            control.MouseDown -= Form_MouseDown;
+            control.MouseMove -= Form_MouseMove;
+            control.MouseUp -= Form_MouseUp;
+            control.MouseDoubleClick -= Element_DoubleClick;
+            control.LocationChanged -= Element_LocationChanged;
+
             control.MouseDown += Form_MouseDown;
             control.MouseMove += Form_MouseMove;
             control.MouseUp += Form_MouseUp;
@@ -578,207 +400,107 @@ namespace WinSimpleIDriver.Editor
             control.LocationChanged += Element_LocationChanged;
         }
 
-        #region ADD NEW Element
+        /// <summary>
+        /// Обработчик изменения позиции элемента управления.
+        /// Обновляет данные в ElementDataApp при изменении местоположения элемента.
+        /// </summary>
+        /// <param name="sender">Элемент управления, изменивший местоположение.</param>
+        /// <param name="e">Аргументы события.</param>
+        private void Element_LocationChanged(object sender, EventArgs e)
+        {
+            if (sender is Control ctrl)
+            {
+                // Находим соответствующий элемент
+                var element = elements.FirstOrDefault(el => el.Control == ctrl);
+                if (element != null)
+                {
+                    element.X = ctrl.Left;
+                    element.Y = ctrl.Top;
 
-        #region Events
+                    // Обновляем PropertyGrid, если он открыт
+                    if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
+                    {
+                        openedPropertyForm.UpdateProperties(element);
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Определяет направление изменения размера элемента на основе положения курсора мыши.
+        /// </summary>
+        /// <param name="ctrl">Элемент управления</param>
+        /// <param name="mousePosition">Текущая позиция курсора</param>
+        /// <returns>Возвращает направление изменения размера</returns>
+        private ResizeDirection GetResizeDirection(Control ctrl, Point mousePosition)
+        {
+            const int resizeMargin = 6;
+
+            bool left = mousePosition.X < resizeMargin;
+            bool right = mousePosition.X > ctrl.Width - resizeMargin;
+            bool top = mousePosition.Y < resizeMargin;
+            bool bottom = mousePosition.Y > ctrl.Height - resizeMargin;
+
+            if (left && top) return ResizeDirection.TopLeft;
+            if (right && top) return ResizeDirection.TopRight;
+            if (left && bottom) return ResizeDirection.BottomLeft;
+            if (right && bottom) return ResizeDirection.BottomRight;
+
+            if (left) return ResizeDirection.Left;
+            if (right) return ResizeDirection.Right;
+            if (top) return ResizeDirection.Top;
+            if (bottom) return ResizeDirection.Bottom;
+
+            return ResizeDirection.None;
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadJson();
+        }
+
+        private void saveJsonToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveJson();
+        }
+
         private void ToolStripMenuItemAddControlLabel_Click(object sender, EventArgs e)
         {
             AddElement(eElementType.Label);
         }
 
-        private void ToolStripMenuItemAddControlOutput_Click(object sender, EventArgs e)
+        private void ToolStripMenuItemAddControlInput_Click(object sender, EventArgs e)
         {
             AddElement(eElementType.InputBox);
+        }
+
+        private void ToolStripMenuItemAddControlOutput_Click(object sender, EventArgs e)
+        {
+            AddElement(eElementType.OutputBox);
         }
 
         private void ToolStripMenuItemAddControlPicture_Click(object sender, EventArgs e)
         {
             AddElement(eElementType.PictureBox);
-
-        }
-
-        private void ToolStripMenuItemAddControlOutput_Click_1(object sender, EventArgs e)
-        {
-            AddElement(eElementType.OutputBox);
         }
 
         private void ToolStripMenuItemAddControlRectangle_Click(object sender, EventArgs e)
         {
             AddElement(eElementType.Rectangle);
         }
-        #endregion
 
-        #region My Elements
-
-        // Добавление Label
-        public void AddLabel()
+        // Копировать текущий элемент
+        private void ToolStripMenuItemCommandCopy_Click(object sender, EventArgs e)
         {
-            string title = $"Label{++controlID}";
-            Label lbl = new Label
-            {
-                Name = title,
-                Text = title,
-                Width = 200,
-                Height = 25,
-                Left = 100,
-                Top = 100,
-                Font = new Font("Arial", 12),
-                BackColor = Color.Transparent
-            };
-
-            AttachControlEvents(lbl);
-            this.Controls.Add(lbl);
-            lbl.BringToFront();
+            
         }
 
-        // Добавление TextBox
-        public void AddTextBox(eElementType type)
+        // Удалить текущий элемент
+        private void ToolStripMenuItemCommandDelete_Click(object sender, EventArgs e)
         {
-            string title = $"{type}{++controlID}";
-            TextBox txt = new TextBox
-            {
-                Name = title,
-                Text = title,
-                Width = 200,
-                Height = 25,
-                Left = 100,
-                Top = 100,
-                ReadOnly = (type == eElementType.OutputBox) // OutputBox только для чтения
-            };
-
-            AttachControlEvents(txt);
-            this.Controls.Add(txt);
-            txt.BringToFront();
+           
         }
-
-        // Добавление Button
-        public void AddButton()
-        {
-            string title = $"Button{++controlID}";
-            Button btn = new Button
-            {
-                Name = title,
-                Text = "Кнопка",
-                Width = 100,
-                Height = 30,
-                Left = 100,
-                Top = 100
-            };
-
-            AttachControlEvents(btn);
-            this.Controls.Add(btn);
-            btn.BringToFront();
-        }
-
-        // Добавление PictureBox
-        public void AddPictureBox()
-        {
-            string title = $"PictureBox{++controlID}";
-            PictureBox pic = new PictureBox
-            {
-                Name = title,
-                Width = 100,
-                Height = 100,
-                Left = 100,
-                Top = 100,
-                BorderStyle = BorderStyle.FixedSingle,
-                SizeMode = PictureBoxSizeMode.Zoom,
-                BackColor = Color.LightGray
-            };
-
-            AttachControlEvents(pic);
-            this.Controls.Add(pic);
-            pic.BringToFront();
-        }
-
-        // Добавление ProgressBar
-        public void AddProgressBar()
-        {
-            string title = $"Progress{++controlID}";
-            ProgressBar progress = new ProgressBar
-            {
-                Name = title,
-                Width = 200,
-                Height = 25,
-                Left = 100,
-                Top = 100
-            };
-
-            AttachControlEvents(progress);
-            this.Controls.Add(progress);
-            progress.BringToFront();
-        }
-
-        #endregion
-
-        public void AddElement(eElementType type)
-        {
-            switch (type)
-            {
-                case eElementType.Label:
-                    AddLabel();
-                    break;
-                case eElementType.OutputBox:
-                case eElementType.InputBox:
-                case eElementType.IOBox:
-                case eElementType.IOPop:
-                    AddTextBox(type);
-                    break;
-                case eElementType.Button:
-                    AddButton();
-                    break;
-                case eElementType.PictureBox:
-                case eElementType.Rectangle:
-                    AddPictureBox();
-                    break;
-                case eElementType.Progress:
-                    AddProgressBar();
-                    break;
-            }
-        }
-
-        #endregion
-
-        // =============================================================================
-
-        // Открыть окно свойств
-        private void Element_DoubleClick(object sender, EventArgs e)
-        {
-            // v1
-            //if (sender is Control ctrl)
-            //{
-            //    FormDesignProp propForm = new FormDesignProp(ctrl);
-            //    propForm.Show(this);
-            //}
-
-            // v2
-            if (sender is Control ctrl)
-            {
-                if (openedPropertyForm == null || openedPropertyForm.IsDisposed)
-                {
-                    openedPropertyForm = new FormDesignProp(ctrl);
-                    openedPropertyForm.Show();
-                }
-                else
-                {
-                    openedPropertyForm.UpdateProperties(ctrl);
-                    openedPropertyForm.BringToFront();
-                }
-            }
-        }
-
-        // Обновляем свойства в окне PropertyGrid
-        private void Element_LocationChanged(object sender, EventArgs e)
-        {
-            if (sender is Control ctrl)
-            {
-                if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
-                {
-                    openedPropertyForm.UpdateProperties(ctrl);
-                }
-            }
-        }
-
 
     }
 }
