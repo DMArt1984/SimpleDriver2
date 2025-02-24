@@ -185,43 +185,7 @@ namespace WinSimpleIDriver.Editor
         #endregion
 
         #region Events.Menu
-        private void loadBacgroundToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Filter = "Изображения|*.jpg;*.png;*.bmp",
-                Title = "Выберите фоновое изображение"
-            };
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                if (backgroundPictureBox == null || !this.Controls.Contains(backgroundPictureBox))
-                {
-                    backgroundPictureBox = new PictureBox
-                    {
-                        Dock = DockStyle.Fill, // Фон теперь всегда на всю форму
-                        SizeMode = PictureBoxSizeMode.Normal
-                    };
-                    this.Controls.Add(backgroundPictureBox);
-                    backgroundPictureBox.SendToBack();
-                }
-
-                try
-                {
-                    backgroundPictureBox.Image = Image.FromFile(openFileDialog.FileName);
-                    backgroundPictureBox.Invalidate(); // Перерисовываем фон
-                    backgroundPictureBox.Update();
-                    backgroundPictureBox.Refresh();
-                    this.Invalidate(); // Обновляем всю форму
-                    this.Update();
-                    this.Refresh();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
+        
 
         #region Events.Menu.Add
         private void ToolStripMenuItemAddControlLabel_Click(object sender, EventArgs e)
@@ -771,5 +735,60 @@ namespace WinSimpleIDriver.Editor
         {
             AddElement(eElementType.Rectangle);
         }
+
+        private void ToolStripMenuItemBackgroundImage_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Изображения|*.jpg;*.png;*.bmp",
+                Title = "Выберите фоновое изображение"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (backgroundPictureBox == null || !this.Controls.Contains(backgroundPictureBox))
+                {
+                    backgroundPictureBox = new PictureBox
+                    {
+                        Dock = DockStyle.Fill, // Фон теперь всегда на всю форму
+                        SizeMode = PictureBoxSizeMode.Normal
+                    };
+                    this.Controls.Add(backgroundPictureBox);
+                    backgroundPictureBox.SendToBack();
+                }
+
+                try
+                {
+                    backgroundPictureBox.Image = Image.FromFile(openFileDialog.FileName);
+                    backgroundPictureBox.Invalidate(); // Перерисовываем фон
+                    backgroundPictureBox.Update();
+                    backgroundPictureBox.Refresh();
+                    this.Invalidate(); // Обновляем всю форму
+                    this.Update();
+                    this.Refresh();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void ToolStripMenuItemRemoveBackImage_Click(object sender, EventArgs e)
+        {
+            RemoveBackgroundImage();
+        }
+
+        private void RemoveBackgroundImage()
+        {
+            if (backgroundPictureBox != null && backgroundPictureBox.Image != null)
+            {
+                backgroundPictureBox.Image.Dispose(); // Освобождаем память
+                backgroundPictureBox.Image = null; // Убираем изображение
+                backgroundPictureBox.Invalidate(); // Обновляем отображение
+                backgroundPictureBox.Refresh();
+            }
+        }
+
     }
 }
