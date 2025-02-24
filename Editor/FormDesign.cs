@@ -30,6 +30,10 @@ namespace WinSimpleIDriver.Editor
         public FormDesign()
         {
             InitializeComponent();
+            // Включаем двойную буферизацию для уменьшения мерцания
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
+            this.UpdateStyles();
+
             InitializeBackgroundImage();
         }
 
@@ -78,6 +82,7 @@ namespace WinSimpleIDriver.Editor
         }
 
 
+
         #region Events.Mouse
 
         private void Form_MouseDown(object sender, MouseEventArgs e)
@@ -106,13 +111,16 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
-
-
-
         private void Form_MouseMove(object sender, MouseEventArgs e)
         {
             if (selectedControl != null)
             {
+                // Сохраняем старую область для обновления
+                Rectangle oldBounds = new Rectangle(
+                    selectedControl.Left - 2, selectedControl.Top - 2,
+                    selectedControl.Width + 4, selectedControl.Height + 4
+                );
+
                 if (isResizing)
                 {
                     int dx = e.X - lastMousePosition.X;
@@ -129,19 +137,27 @@ namespace WinSimpleIDriver.Editor
                     }
 
                     lastMousePosition = e.Location;
-                    UpdateSelectionFrame();
                 }
                 else if (resizeDirection == ResizeDirection.None && e.Button == MouseButtons.Left)
                 {
                     selectedControl.Left = e.X + selectedControl.Left - offset.X;
                     selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
-                    UpdateSelectionFrame();
                 }
 
+                // Создаем новую область для обновления
+                Rectangle newBounds = new Rectangle(
+                    selectedControl.Left - 2, selectedControl.Top - 2,
+                    selectedControl.Width + 4, selectedControl.Height + 4
+                );
+
+                // Перерисовываем только измененные области
+                Invalidate(oldBounds);
+                Invalidate(newBounds);
+
+                // Устанавливаем корректный курсор
                 selectedControl.Cursor = GetResizeCursor(GetResizeDirection(selectedControl, e.Location));
             }
         }
-
 
 
 
