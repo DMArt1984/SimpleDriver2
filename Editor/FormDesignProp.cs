@@ -12,7 +12,14 @@ namespace WinSimpleIDriver.Editor
         public FormDesignProp(ElementDataApp element)
         {
             InitializeComponent();
-            
+
+            this.element = element;
+
+            if (element != null && element.Control != null)
+            {
+                this.Text = element.Control.Name; // Устанавливаем заголовок формы в имя элемента
+            }
+
         }
 
         private void FormDesignProp_Load(object sender, EventArgs e)

@@ -219,7 +219,10 @@ namespace WinSimpleIDriver.Editor
             control.MouseDown += Control_MouseDown;
             control.MouseMove += Control_MouseMove;
             control.MouseUp += Control_MouseUp;
+            control.MouseDoubleClick += Control_MouseDoubleClick; // Добавляем двойной клик
         }
+
+        // =============================================================================
 
         private void Control_MouseDown(object sender, MouseEventArgs e)
         {
@@ -292,6 +295,23 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
+        private void Control_MouseDoubleClick(object sender, EventArgs e)
+        {
+            if (sender is Control ctrl)
+            {
+                // Ищем соответствующий элемент в списке
+                var element = appElements.FirstOrDefault(el => el.Control == ctrl);
+                if (element != null)
+                {
+                    // Открываем форму свойств и передаем текущий элемент
+                    FormDesignProp propForm = new FormDesignProp(element);
+                    propForm.Show();
+                }
+            }
+        }
+
+        // =================================================================================
+
         private ResizeDirection GetResizeDirection(Control ctrl, Point mousePosition)
         {
             bool right = mousePosition.X >= ctrl.Width - ResizeMargin;
@@ -362,7 +382,7 @@ namespace WinSimpleIDriver.Editor
             this.Controls.SetChildIndex(selectedControl, 0);
         }
 
-
+        // =========================================================================
 
     }
 
