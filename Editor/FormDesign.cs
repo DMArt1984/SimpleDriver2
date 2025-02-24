@@ -134,31 +134,29 @@ namespace WinSimpleIDriver.Editor
                         case ResizeDirection.Bottom:
                             selectedControl.Height = Math.Max(20, selectedControl.Height + dy);
                             break;
-                        case ResizeDirection.BottomRight:
-                            selectedControl.Width = Math.Max(20, selectedControl.Width + dx);
-                            selectedControl.Height = Math.Max(20, selectedControl.Height + dy);
-                            break;
                     }
 
                     lastMousePosition = e.Location;
-                    Invalidate();
                 }
                 else if (resizeDirection == ResizeDirection.None && e.Button == MouseButtons.Left)
                 {
+                    // Очищаем старую рамку
+                    Invalidate();
+                    Update();
+
+                    // Двигаем элемент
                     selectedControl.Left = e.X + selectedControl.Left - offset.X;
                     selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
 
-                    // Отключаем отрисовку рамки во время перемещения
-                    showSelection = false;
-                }
-                else
-                {
-                    showSelection = true; // Включаем рамку, если не перетаскиваем
+                    // Перерисовываем рамку в новом месте
+                    Invalidate();
                 }
 
                 selectedControl.Cursor = GetResizeCursor(GetResizeDirection(selectedControl, e.Location));
             }
         }
+
+
 
 
 
@@ -170,17 +168,18 @@ namespace WinSimpleIDriver.Editor
 
             if (selectedControl != null)
             {
-                showSelection = true; // Включаем рамку после перемещения
+                showSelection = true;
+                Invalidate();
+                Update(); // Принудительное обновление формы
 
                 // Обновляем PropertyGrid
                 if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
                 {
                     openedPropertyForm.UpdateProperties(selectedControl);
                 }
-
-                Invalidate();
             }
         }
+
 
 
         #endregion
@@ -587,43 +586,30 @@ namespace WinSimpleIDriver.Editor
         {
             const int resizeMargin = 6; // Отступ для изменения размера
 
-            bool left = mousePosition.X < resizeMargin;
             bool right = mousePosition.X > ctrl.Width - resizeMargin;
-            bool top = mousePosition.Y < resizeMargin;
             bool bottom = mousePosition.Y > ctrl.Height - resizeMargin;
 
-            if (left && top) return ResizeDirection.TopLeft;
-            if (right && top) return ResizeDirection.TopRight;
-            if (left && bottom) return ResizeDirection.BottomLeft;
-            if (right && bottom) return ResizeDirection.BottomRight;
-            if (left) return ResizeDirection.Left;
             if (right) return ResizeDirection.Right;
-            if (top) return ResizeDirection.Top;
             if (bottom) return ResizeDirection.Bottom;
 
             return ResizeDirection.None;
         }
 
+
+
         private Cursor GetResizeCursor(ResizeDirection direction)
         {
             switch (direction)
             {
-                case ResizeDirection.Left:
                 case ResizeDirection.Right:
                     return Cursors.SizeWE;
-                case ResizeDirection.Top:
                 case ResizeDirection.Bottom:
                     return Cursors.SizeNS;
-                case ResizeDirection.TopLeft:
-                case ResizeDirection.BottomRight:
-                    return Cursors.SizeNWSE;
-                case ResizeDirection.TopRight:
-                case ResizeDirection.BottomLeft:
-                    return Cursors.SizeNESW;
                 default:
                     return Cursors.Default;
             }
         }
+
 
         // ==================================================================
 
