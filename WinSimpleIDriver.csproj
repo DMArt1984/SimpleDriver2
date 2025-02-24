@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{BB27A98A-FD2B-4C79-964C-389D23AA4783}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>WinSimpleIDriver</RootNamespace>
     <AssemblyName>WinSimpleIDriver</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>

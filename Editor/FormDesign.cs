@@ -18,6 +18,9 @@ namespace WinSimpleIDriver.Editor
 
         private FormDesignProp openedPropertyForm; // Открываем PropertyForm
 
+        //private HashSet<string> allowedTypes = new HashSet<string> { "Label", "TextBox", "PictureBox" };
+        private HashSet<Type> allowedTypes = new HashSet<Type> { typeof(Label), typeof(TextBox), typeof(PictureBox) };
+
         private bool mouseMove = false;
 
         private uint controlID = 0; // Идентификатор элемента
@@ -388,21 +391,48 @@ namespace WinSimpleIDriver.Editor
 
             if (jsonData.ContainsKey("Main"))
             {
-                var allowedTypes = new HashSet<string> { "Label", "TextBox", "PictureBox" };
+                // Удаляем существующие элементы заданных типов перед загрузкой
+                var controlsToRemove = this.Controls.OfType<Control>()
+                    .Where(c => allowedTypes.Contains(c.GetType()))
+                    .ToList();
 
-                foreach (var el in jsonData["Main"].Where(e => allowedTypes.Contains(e.Type)))
+                foreach (var ctrl in controlsToRemove)
                 {
-                    Control ctrl = CreateControlFromElement(el);
-                    this.Controls.Add(ctrl);
-                    AttachControlEvents(ctrl);
-                    this.Controls.SetChildIndex(ctrl, el.ZIndex); // Восстанавливаем ZIndex
+                    this.Controls.Remove(ctrl);
+                    ctrl.Dispose();
                 }
+
+                // Загружаем новые элементы
+                foreach (var el in jsonData["Main"])
+                {
+                    // Ищем тип среди всех загруженных классов
+                    Type controlType = AppDomain.CurrentDomain
+                        .GetAssemblies()
+                        .SelectMany(a => a.GetTypes())
+                        .FirstOrDefault(t => t.Name == el.Type && typeof(Control).IsAssignableFrom(t));
+
+                    // Отладочный вывод
+                    Console.WriteLine($"Загружаем элемент: {el.Name}, Тип: {el.Type}, Найденный тип: {controlType}");
+
+                    if (controlType != null && allowedTypes.Contains(controlType))
+                    {
+                        Control ctrl = CreateControlFromElement(el);
+                        this.Controls.Add(ctrl);
+                        AttachControlEvents(ctrl);
+                        this.Controls.SetChildIndex(ctrl, el.ZIndex);
+                        Console.WriteLine($"✅ Добавлен элемент: {el.Name}, Тип: {el.Type}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"❌ Пропущен элемент: {el.Name}, Тип: {el.Type}");
+                    }
+                }
+
             }
         }
 
         private void SaveJson()
         {
-            var allowedTypes = new HashSet<Type> { typeof(Label), typeof(TextBox), typeof(PictureBox) };
 
             var jsonData = new
             {
