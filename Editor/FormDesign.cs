@@ -385,99 +385,125 @@ namespace WinSimpleIDriver.Editor
 
         private void LoadJson()
         {
-            if (!File.Exists("config.json")) return; // Если файла нет, выходим
+            if (!File.Exists("config.json")) return;
 
             var jsonData = JsonConvert.DeserializeObject<Dictionary<string, List<ElementData>>>(File.ReadAllText("config.json"));
 
             if (jsonData.ContainsKey("Main"))
             {
-                // Удаляем существующие элементы заданных типов перед загрузкой
-                var controlsToRemove = this.Controls.OfType<Control>()
-                    .Where(c => allowedTypes.Contains(c.GetType()))
-                    .ToList();
-
-                foreach (var ctrl in controlsToRemove)
-                {
-                    this.Controls.Remove(ctrl);
-                    ctrl.Dispose();
-                }
+                // Удаляем только элементы, которые соответствуют eElementType (не удаляем системные элементы)
+                this.Controls.OfType<Control>()
+                    .Where(c => GetElementType(c) != eElementType.None) // Удаляем только распознанные элементы
+                    .ToList()
+                    .ForEach(c => { this.Controls.Remove(c); c.Dispose(); });
 
                 // Загружаем новые элементы
                 foreach (var el in jsonData["Main"])
                 {
-                    // Ищем тип среди всех загруженных классов
-                    Type controlType = AppDomain.CurrentDomain
-                        .GetAssemblies()
-                        .SelectMany(a => a.GetTypes())
-                        .FirstOrDefault(t => t.Name == el.Type && typeof(Control).IsAssignableFrom(t));
-
-                    // Отладочный вывод
-                    Console.WriteLine($"Загружаем элемент: {el.Name}, Тип: {el.Type}, Найденный тип: {controlType}");
-
-                    if (controlType != null && allowedTypes.Contains(controlType))
+                    Control ctrl = CreateControlFromElement(el);
+                    if (ctrl != null)
                     {
-                        Control ctrl = CreateControlFromElement(el);
                         this.Controls.Add(ctrl);
                         AttachControlEvents(ctrl);
                         this.Controls.SetChildIndex(ctrl, el.ZIndex);
-                        Console.WriteLine($"✅ Добавлен элемент: {el.Name}, Тип: {el.Type}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"❌ Пропущен элемент: {el.Name}, Тип: {el.Type}");
                     }
                 }
-
             }
         }
 
+
+
         private void SaveJson()
         {
-
             var jsonData = new
             {
                 Main = this.Controls.OfType<Control>()
-                    .Where(c => allowedTypes.Contains(c.GetType()) && c != backgroundPictureBox && !(c is MenuStrip))
-                    .Select(c => new ElementData
+                    .Where(c => c != backgroundPictureBox && !(c is MenuStrip) && !(c is StatusStrip)) // Исключаем StatusStrip
+                    .Select(c =>
                     {
-                        Name = c.Name,
-                        Type = c.GetType().Name,
-                        X = c.Left,
-                        Y = c.Top,
-                        Width = c.Width,
-                        Height = c.Height,
-                        Text = c.Text,
-                        FontSize = c.Font.Size,
-                        ZIndex = this.Controls.GetChildIndex(c), // Сохраняем порядок слоев
-                ImagePath = c is PictureBox pic ? pic.Tag as string : null // Путь к изображению
-            }).ToList()
+                        eElementType type = GetElementType(c);
+                        if (type == eElementType.None) return null; // Пропускаем элементы без типа
+
+                return new ElementData
+                        {
+                            Name = c.Name,
+                            ElementType = type,
+                            X = c.Left,
+                            Y = c.Top,
+                            Width = c.Width,
+                            Height = c.Height,
+                            Text = c.Text,
+                            FontSize = c.Font.Size,
+                            ZIndex = this.Controls.GetChildIndex(c),
+                            ImagePath = c is PictureBox pic ? pic.Tag as string : null
+                        };
+                    })
+                    .Where(el => el != null) // Убираем null элементы
+                    .ToList()
             };
 
             File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, Formatting.Indented));
-            MessageBox.Show("Настройки сохранены!", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+
+
+        private eElementType GetElementType(Control c)
+        {
+            if (c is Label) return eElementType.Label;
+            if (c is TextBox txt)
+            {
+                if (txt.ReadOnly) return eElementType.OutputBox;
+                return eElementType.InputBox;
+            }
+            if (c is Button) return eElementType.Button;
+            if (c is PictureBox pic)
+            {
+                return pic.Image != null ? eElementType.PictureBox : eElementType.Rectangle;
+            }
+            if (c is ProgressBar) return eElementType.Progress;
+
+            return eElementType.None; // Если элемент не распознан, он теперь не попадет в JSON
+        }
+
+
+
+
 
         private Control CreateControlFromElement(ElementData el)
         {
             Control control = null;
 
-            if (el.Type == "Label")
-                control = new Label { Text = el.Text };
-            else if (el.Type == "TextBox")
-                control = new TextBox { Text = el.Text };
-            else if (el.Type == "PictureBox")
+            switch (el.ElementType)
             {
-                PictureBox pic = new PictureBox
-                {
-                    BorderStyle = BorderStyle.FixedSingle,
-                    SizeMode = PictureBoxSizeMode.Zoom
-                };
-                if (!string.IsNullOrEmpty(el.ImagePath) && File.Exists(el.ImagePath))
-                {
-                    pic.Image = Image.FromFile(el.ImagePath);
-                    pic.Tag = el.ImagePath;
-                }
-                control = pic;
+                case eElementType.Label:
+                    control = new Label { Text = el.Text };
+                    break;
+
+                case eElementType.OutputBox:
+                case eElementType.InputBox:
+                case eElementType.IOBox:
+                case eElementType.IOPop:
+                    control = new TextBox { Text = el.Text };
+                    if (el.ElementType == eElementType.OutputBox)
+                        ((TextBox)control).ReadOnly = true;
+                    break;
+
+                case eElementType.Button:
+                    control = new Button { Text = el.Text };
+                    break;
+
+                case eElementType.PictureBox:
+                case eElementType.Rectangle:
+                    control = new PictureBox
+                    {
+                        BorderStyle = BorderStyle.FixedSingle,
+                        SizeMode = PictureBoxSizeMode.Zoom
+                    };
+                    break;
+
+                case eElementType.Progress:
+                    control = new ProgressBar();
+                    break;
             }
 
             if (control != null)
@@ -488,10 +514,17 @@ namespace WinSimpleIDriver.Editor
                 control.Width = el.Width;
                 control.Height = el.Height;
                 control.Font = new Font("Arial", el.FontSize);
+
+                if (control is PictureBox pic && !string.IsNullOrEmpty(el.ImagePath) && File.Exists(el.ImagePath))
+                {
+                    pic.Image = Image.FromFile(el.ImagePath);
+                    pic.Tag = el.ImagePath;
+                }
             }
 
             return control;
         }
+
 
         #endregion
 
