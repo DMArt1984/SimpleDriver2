@@ -6,6 +6,11 @@ using System.Windows.Forms;
 
 namespace WinSimpleIDriver.Editor
 {
+    public enum ResizeDirection
+    {
+        None, Left, Right, Top, Bottom, TopLeft, TopRight, BottomLeft, BottomRight
+    }
+
     class ControlProperties
     {
         private Control control;

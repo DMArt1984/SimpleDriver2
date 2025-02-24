@@ -14,7 +14,11 @@ namespace WinSimpleIDriver.Editor
         private Control selectedControl;
         private Control clipboardControl; // Для копирования элементов
         private Point offset;
+        private bool isResizing = false; // Флаг изменения размера
+        private Point lastMousePosition; // Последняя позиция мыши
+        private ResizeDirection resizeDirection = ResizeDirection.None; // Направление изменения
         private PictureBox backgroundPictureBox = new PictureBox();
+        private bool showSelection = false; // Показывать рамку или нет
 
         private FormDesignProp openedPropertyForm; // Открываем PropertyForm
 
@@ -57,52 +61,110 @@ namespace WinSimpleIDriver.Editor
 
         #region Events
 
-        
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            if (showSelection && selectedControl != null)
+            {
+                using (Pen pen = new Pen(Color.Blue, 2) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash })
+                {
+                    Rectangle rect = new Rectangle(
+                        selectedControl.Left - 2, selectedControl.Top - 2,
+                        selectedControl.Width + 4, selectedControl.Height + 4
+                    );
+                    e.Graphics.DrawRectangle(pen, rect);
+                }
+            }
+        }
+
         #region Events.Mouse
 
         private void Form_MouseDown(object sender, MouseEventArgs e)
         {
-            if (sender is Control ctrl && ctrl != this && ctrl != backgroundPictureBox)
+            if (sender is Control ctrl && ctrl != backgroundPictureBox)
             {
                 selectedControl = ctrl;
-                mouseMove = true;
-                offset = new Point(e.X, e.Y);
-                SetStatus(ctrl);
+                resizeDirection = GetResizeDirection(ctrl, e.Location);
+
+                if (resizeDirection != ResizeDirection.None)
+                {
+                    isResizing = true;
+                    lastMousePosition = e.Location;
+                }
+                else
+                {
+                    isResizing = false;
+                    offset = new Point(e.X, e.Y);
+                }
+
+                showSelection = true;
+                Invalidate(); // Обновляем рамку
+            }
+            else
+            {
+                selectedControl = null;
+                showSelection = false;
+                Invalidate();
             }
         }
+
+
 
         private void Form_MouseMove(object sender, MouseEventArgs e)
         {
-            if (selectedControl != null && mouseMove)
+            if (selectedControl != null)
             {
-                selectedControl.Left = e.X + selectedControl.Left - offset.X;
-                selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
+                if (isResizing)
+                {
+                    int dx = e.X - lastMousePosition.X;
+                    int dy = e.Y - lastMousePosition.Y;
+
+                    switch (resizeDirection)
+                    {
+                        case ResizeDirection.Right:
+                            selectedControl.Width = Math.Max(20, selectedControl.Width + dx);
+                            break;
+                        case ResizeDirection.Bottom:
+                            selectedControl.Height = Math.Max(20, selectedControl.Height + dy);
+                            break;
+                        case ResizeDirection.BottomRight:
+                            selectedControl.Width = Math.Max(20, selectedControl.Width + dx);
+                            selectedControl.Height = Math.Max(20, selectedControl.Height + dy);
+                            break;
+                    }
+
+                    lastMousePosition = e.Location;
+                    Invalidate();
+                }
+                else if (resizeDirection == ResizeDirection.None && e.Button == MouseButtons.Left)
+                {
+                    selectedControl.Left = e.X + selectedControl.Left - offset.X;
+                    selectedControl.Top = e.Y + selectedControl.Top - offset.Y;
+                }
+
+                selectedControl.Cursor = GetResizeCursor(GetResizeDirection(selectedControl, e.Location));
             }
         }
 
+
+
         private void Form_MouseUp(object sender, MouseEventArgs e)
         {
-            mouseMove = false;
-            //selectedControl = null;
-            //SetStatus();
+            isResizing = false;
+            resizeDirection = ResizeDirection.None;
 
-            // ---
-            //if (selectedControl != null)
-            //{
-            //    elements.Add(new ElementData
-            //    {
-            //        Name = selectedControl.Name,
-            //        Type = selectedControl.GetType().Name,
-            //        X = selectedControl.Left,
-            //        Y = selectedControl.Top,
-            //        Height = selectedControl.Height,
-            //        Width = selectedControl.Width,
-            //        Text = selectedControl.Text,
-            //        FontSize = selectedControl.Font.Size
-            //    });
-            //    selectedControl = null;
-            //}
+            if (selectedControl != null)
+            {
+                // Обновляем PropertyGrid
+                if (openedPropertyForm != null && !openedPropertyForm.IsDisposed)
+                {
+                    openedPropertyForm.UpdateProperties(selectedControl);
+                }
+            }
         }
+
+
         #endregion
 
         #region Events.Menu
@@ -500,6 +562,50 @@ namespace WinSimpleIDriver.Editor
 
 
         #endregion
+
+        // ==================================================================
+
+        private ResizeDirection GetResizeDirection(Control ctrl, Point mousePosition)
+        {
+            const int resizeMargin = 6; // Отступ для изменения размера
+
+            bool left = mousePosition.X < resizeMargin;
+            bool right = mousePosition.X > ctrl.Width - resizeMargin;
+            bool top = mousePosition.Y < resizeMargin;
+            bool bottom = mousePosition.Y > ctrl.Height - resizeMargin;
+
+            if (left && top) return ResizeDirection.TopLeft;
+            if (right && top) return ResizeDirection.TopRight;
+            if (left && bottom) return ResizeDirection.BottomLeft;
+            if (right && bottom) return ResizeDirection.BottomRight;
+            if (left) return ResizeDirection.Left;
+            if (right) return ResizeDirection.Right;
+            if (top) return ResizeDirection.Top;
+            if (bottom) return ResizeDirection.Bottom;
+
+            return ResizeDirection.None;
+        }
+
+        private Cursor GetResizeCursor(ResizeDirection direction)
+        {
+            switch (direction)
+            {
+                case ResizeDirection.Left:
+                case ResizeDirection.Right:
+                    return Cursors.SizeWE;
+                case ResizeDirection.Top:
+                case ResizeDirection.Bottom:
+                    return Cursors.SizeNS;
+                case ResizeDirection.TopLeft:
+                case ResizeDirection.BottomRight:
+                    return Cursors.SizeNWSE;
+                case ResizeDirection.TopRight:
+                case ResizeDirection.BottomLeft:
+                    return Cursors.SizeNESW;
+                default:
+                    return Cursors.Default;
+            }
+        }
 
         // ==================================================================
 
