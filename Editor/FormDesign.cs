@@ -23,6 +23,8 @@ namespace WinSimpleIDriver.Editor
         private Point offset;
         private Control selectedControl = null;
 
+        private uint elementID = 0; // абсолютный идентификатор
+
         private const int ResizeMargin = 6; // Отступ в пикселях для изменения размеров
 
         public FormDesign()
@@ -87,6 +89,9 @@ namespace WinSimpleIDriver.Editor
         // Общая функция для добавления элементов
         private void AddElement(eElementType type)
         {
+            // Увеличиваем идентификатор
+            elementID++;
+
             // Создаем новый элемент данных
             var newElement = new ElementDataApp
             {
@@ -97,6 +102,9 @@ namespace WinSimpleIDriver.Editor
             // Проверяем, был ли создан Control
             if (newElement.Control == null) return;
 
+            // Присваиваем уникальное имя элементу
+            newElement.Control.Name = $"{type}{elementID}";
+
             // Устанавливаем координаты элемента на форме
             newElement.Control.Left = 100;
             newElement.Control.Top = 100;
@@ -104,13 +112,13 @@ namespace WinSimpleIDriver.Editor
             // Привязываем события для перемещения и изменения размеров
             AttachControlEvents(newElement.Control);
 
-
             // Добавляем элемент в список
             appElements.Add(newElement);
 
             // Добавляем Control на форму
             this.Controls.Add(newElement.Control);
         }
+
 
         // Функция для создания Control на основе eElementType
         private Control CreateControl(eElementType type)
@@ -171,6 +179,9 @@ namespace WinSimpleIDriver.Editor
                     selectedControl = ctrl;
                     offset = e.Location;
                 }
+
+                // Обновляем статусную строку
+                UpdateStatus(selectedControl);
             }
         }
 
@@ -236,7 +247,34 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
+        /// <summary>
+        /// Обновляет статусную строку с информацией о выбранном элементе.
+        /// </summary>
+        /// <param name="ctrl">Выбранный элемент управления.</param>
+        private void UpdateStatus(Control ctrl)
+        {
+            if (ctrl == null)
+            {
+                toolStripStatusLabelType.Text = "Не выбрано";
+                toolStripStatusLabelTitle.Text = "";
+                return;
+            }
 
+            // Получаем соответствие eElementType -> eUsedFormClass
+            var typeMap = ElementDataApp.GetClassFromType();
+            var element = appElements.FirstOrDefault(el => el.Control == ctrl);
+
+            if (element != null && typeMap.ContainsKey(element.ElementType))
+            {
+                toolStripStatusLabelType.Text = typeMap[element.ElementType].ToString(); // Отображаем eUsedFormClass
+                toolStripStatusLabelTitle.Text = ctrl.Name; // Отображаем имя элемента
+            }
+            else
+            {
+                toolStripStatusLabelType.Text = "Неизвестный элемент";
+                toolStripStatusLabelTitle.Text = ctrl.Name;
+            }
+        }
 
     }
 
