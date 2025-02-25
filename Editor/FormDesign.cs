@@ -405,6 +405,132 @@ namespace WinSimpleIDriver.Editor
             // Группируем элементы по структуре дерева
             var groupedElements = jsonElements
                 .GroupBy(e => e.Page ?? "Без страницы")
+                .Select(pageGroup => new
+                {
+                    Title = pageGroup.Key,
+                    Templates = pageGroup.GroupBy(e => e.Template ?? "Без шаблона")
+                        .Select(templateGroup => new
+                        {
+                            Title = templateGroup.Key,
+                            Groups = templateGroup.GroupBy(e => e.Group == 0 ? "Без группы" : e.Group.ToString())
+                                .Select(group => new
+                                {
+                                    Title = group.Key,
+                                    Elements = group.Select(el => new
+                                    {
+                                        el.Name,
+                                        el.ElementType,
+                                        el.X,
+                                        el.Y,
+                                        el.Relative,
+                                        el.Height,
+                                        el.Width,
+                                        el.Text,
+                                        el.Format,
+                                        el.Size,
+                                        el.Color,
+                                        el.ZIndex,
+                                        el.ImagePath,
+                                        el.ImagesName,
+                                        el.Command,
+                                        el.Visible,
+                                        el.Min,
+                                        el.Max,
+                                        el.Value,
+                                        el.ListName,
+                                        el.ToolTip,
+                                        el.TagTitle
+                                    }).ToList() // Исключаем "Page", "Template", "Group"
+                        })
+                                .ToList()
+                        })
+                        .ToList()
+                })
+                .ToList();
+
+            // Оборачиваем в объект с ключом "Pages"
+            var jsonData = new { Pages = groupedElements };
+
+            // Опции сериализации
+            var jsonSettings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            // Сохраняем JSON в файл
+            try
+            {
+                File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, jsonSettings));
+                MessageBox.Show("Конфигурация сохранена успешно!", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SaveToJson2()
+        {
+            // Преобразуем List<ElementDataApp> в List<ElementDataJson>
+            List<ElementDataJson> jsonElements = appElements
+                .Select(ElementConverter.ConvertToJson)
+                .ToList();
+
+            // Группируем элементы по структуре дерева
+            var groupedElements = jsonElements
+                .GroupBy(e => e.Page ?? "Без страницы")
+                .Select(pageGroup => new
+                {
+                    Title = pageGroup.Key,
+                    Templates = pageGroup.GroupBy(e => e.Template ?? "Без шаблона")
+                        .Select(templateGroup => new
+                        {
+                            Title = templateGroup.Key,
+                            Groups = templateGroup.GroupBy(e => e.Group == 0 ? "Без группы" : e.Group.ToString())
+                                .Select(group => new
+                                {
+                                    Title = group.Key,
+                                    Elements = group.ToList() // Здесь остаются только ElementDataJson
+                        })
+                                .ToList()
+                        })
+                        .ToList()
+                })
+                .ToList();
+
+            // Оборачиваем в объект с ключом "Pages"
+            var jsonData = new { Pages = groupedElements };
+
+            // Опции сериализации
+            var jsonSettings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            // Сохраняем JSON в файл
+            try
+            {
+                File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, jsonSettings));
+                MessageBox.Show("Конфигурация сохранена успешно!", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SaveToJson1()
+        {
+            // Преобразуем List<ElementDataApp> в List<ElementDataJson>
+            List<ElementDataJson> jsonElements = appElements
+                .Select(ElementConverter.ConvertToJson)
+                .ToList();
+
+            // Группируем элементы по структуре дерева
+            var groupedElements = jsonElements
+                .GroupBy(e => e.Page ?? "Без страницы")
                 .ToDictionary(
                     g => g.Key,
                     g => g.GroupBy(e => e.Template ?? "Без шаблона")

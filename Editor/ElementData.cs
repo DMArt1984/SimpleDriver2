@@ -60,7 +60,7 @@ namespace WinSimpleIDriver.Editor
         public string Name { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))] // Преобразует eElementType в строку при сохранении
-        public eElementType ElementType { get; set; }
+        public string ElementType { get; set; }
 
         public string Page { get; set; } // Название страницы
         public string Template { get; set; } // Используемый шаблон
@@ -150,7 +150,12 @@ namespace WinSimpleIDriver.Editor
         // Пример вызова: ElementDataApp elementApp = ConvertToApp(jsonData, CreateControl);
         public static ElementDataApp ConvertToApp(ElementDataJson jsonData, Func<eElementType, Control> createControl)
         {
-            Control control = createControl(jsonData.ElementType);
+            if (!Enum.TryParse(jsonData.ElementType, out eElementType elementType))
+            {
+                throw new ArgumentException($"Неизвестный тип элемента: {jsonData.ElementType}");
+            }
+
+            Control control = createControl(elementType);
 
             if (control != null)
             {
@@ -173,7 +178,7 @@ namespace WinSimpleIDriver.Editor
 
             return new ElementDataApp
             {
-                ElementType = jsonData.ElementType,
+                ElementType = elementType,
                 Control = control,
                 Page = jsonData.Page,
                 Template = jsonData.Template,
@@ -190,7 +195,7 @@ namespace WinSimpleIDriver.Editor
             return new ElementDataJson
             {
                 Name = appData.Control?.Name,
-                ElementType = appData.ElementType,
+                ElementType = appData.ElementType.ToString(), // Преобразуем в строку
                 Page = appData.Page,
                 Template = appData.Template,
                 Group = appData.Group,
