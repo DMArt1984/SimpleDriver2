@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace WinSimpleIDriver.Editor
 {
@@ -64,7 +65,7 @@ namespace WinSimpleIDriver.Editor
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            LoadFromJson();
         }
 
         private void saveJsonToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -565,6 +566,135 @@ namespace WinSimpleIDriver.Editor
 
 
         }
+
+        // ======================================
+
+        /// <summary>
+        /// Загружает данные из config.json и добавляет элементы на форму.
+        /// </summary>
+        private void LoadFromJson()
+        {
+            if (!File.Exists("config.json"))
+            {
+                MessageBox.Show("Файл конфигурации не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                // Читаем JSON из файла
+                string jsonContent = File.ReadAllText("config.json");
+
+                // Разбираем JSON вручную
+                JObject root = JObject.Parse(jsonContent);
+
+                if (!root.ContainsKey("Pages") || root["Pages"] == null)
+                {
+                    MessageBox.Show("Файл конфигурации не содержит страницы!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                JArray pagesArray = (JArray)root["Pages"];
+
+                // Очищаем текущие элементы на форме
+                foreach (var element in appElements)
+                {
+                    this.Controls.Remove(element.Control);
+                }
+                appElements.Clear();
+
+                // Проходим по всем страницам
+                foreach (JObject pageObj in pagesArray)
+                {
+                    string pageTitle = pageObj.ContainsKey("Title") ? pageObj["Title"].ToString() : "Без страницы";
+
+                    if (!pageObj.ContainsKey("Templates") || pageObj["Templates"] == null)
+                        continue;
+
+                    JArray templatesArray = (JArray)pageObj["Templates"];
+
+                    // Проходим по всем шаблонам
+                    foreach (JObject templateObj in templatesArray)
+                    {
+                        string templateTitle = templateObj.ContainsKey("Title") ? templateObj["Title"].ToString() : "Без шаблона";
+
+                        if (!templateObj.ContainsKey("Groups") || templateObj["Groups"] == null)
+                            continue;
+
+                        JArray groupsArray = (JArray)templateObj["Groups"];
+
+                        // Проходим по всем группам
+                        foreach (JObject groupObj in groupsArray)
+                        {
+                            string groupTitle = groupObj.ContainsKey("Title") ? groupObj["Title"].ToString() : "Без группы";
+                            int groupNumber = int.TryParse(groupTitle, out int parsedGroup) ? parsedGroup : 0;
+
+                            if (!groupObj.ContainsKey("Elements") || groupObj["Elements"] == null)
+                                continue;
+
+                            JArray elementsArray = (JArray)groupObj["Elements"];
+
+                            // Проходим по всем элементам
+                            foreach (JObject elementObj in elementsArray)
+                            {
+                                var jsonElement = new ElementDataJson
+                                {
+                                    Name = elementObj.ContainsKey("Name") ? elementObj["Name"].ToString() : $"Element{elementID++}",
+                                    ElementType = elementObj.ContainsKey("ElementType") ? elementObj["ElementType"].ToString() : "Label",
+                                    Page = pageTitle,
+                                    Template = templateTitle,
+                                    Group = groupNumber,
+                                    X = elementObj.ContainsKey("X") ? (int)elementObj["X"] : 0,
+                                    Y = elementObj.ContainsKey("Y") ? (int)elementObj["Y"] : 0,
+                                    Relative = elementObj.ContainsKey("Relative") && (bool)elementObj["Relative"],
+                                    Width = elementObj.ContainsKey("Width") ? (int)elementObj["Width"] : 100,
+                                    Height = elementObj.ContainsKey("Height") ? (int)elementObj["Height"] : 30,
+                                    Text = elementObj.ContainsKey("Text") ? elementObj["Text"].ToString() : "",
+                                    Format = elementObj.ContainsKey("Format") ? elementObj["Format"].ToString() : "",
+                                    Size = elementObj.ContainsKey("Size") ? (float)elementObj["Size"] : 12.0f,
+                                    Color = elementObj.ContainsKey("Color") ? elementObj["Color"].ToString() : "Black",
+                                    ZIndex = elementObj.ContainsKey("ZIndex") ? (int)elementObj["ZIndex"] : 0,
+                                    ImagePath = elementObj.ContainsKey("ImagePath") ? elementObj["ImagePath"].ToString() : "",
+                                    Min = elementObj.ContainsKey("Min") ? (int)elementObj["Min"] : 0,
+                                    Max = elementObj.ContainsKey("Max") ? (int)elementObj["Max"] : 100,
+                                    Value = elementObj.ContainsKey("Value") ? elementObj["Value"].ToString() : "",
+                                    ListName = elementObj.ContainsKey("ListName") ? elementObj["ListName"].ToString() : "",
+                                    ToolTip = elementObj.ContainsKey("ToolTip") ? elementObj["ToolTip"].ToString() : "",
+                                    TagTitle = elementObj.ContainsKey("TagTitle") ? elementObj["TagTitle"].ToString() : ""
+                                };
+
+                                // ✅ Преобразуем строку в eElementType
+                                if (Enum.TryParse(jsonElement.ElementType, out eElementType elementType))
+                                {
+                                    jsonElement.ElementType = elementType.ToString();
+                                    var element = ElementConverter.ConvertToApp(jsonElement, CreateControl);
+                                    if (element.Control != null)
+                                    {
+                                        this.Controls.Add(element.Control);
+                                        AttachControlEvents(element.Control);
+                                        appElements.Add(element);
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show($"Неизвестный тип элемента: {jsonElement.ElementType}", "Ошибка загрузки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                MessageBox.Show("Конфигурация загружена успешно!", "Загрузка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        
+
 
     }
 
