@@ -98,22 +98,24 @@ namespace WinSimpleIDriver.Editor
     /// </summary>
     public class ElementDataApp
     {
-        // ✅ Объявляем событие
+        public eElementType ElementType { get; set; } // тип элемента
+        public Control Control { get; set; } // control элемента
+
+        public bool Relative { get; set; } // Относительная позиция
+        public int ZIndex { get; set; } // Уровень расположения слоя
+        public string ImagePath { get; set; } // Путь к файлу рисунка
+
+        public string Template { get; set; } // Используемый шаблон
+        public int Group { get; set; } // Номер группы шаблона
+
+        // Объявляем событие
         public event Action<ElementDataApp> OnElementDeleted;
 
-        // ✅ Метод, вызывающий событие
+        // Метод, вызывающий событие
         public void Delete()
         {
             OnElementDeleted?.Invoke(this); // Запускаем событие
         }
-
-        public eElementType ElementType { get; set; }
-        public Control Control { get; set; }
-
-        public bool Relative { get; set; }
-
-        public int ZIndex { get; set; }
-        public string ImagePath { get; set; }
 
         public static Dictionary<eElementType, eUsedFormClass> GetClassFromType()
         {
