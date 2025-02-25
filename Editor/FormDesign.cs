@@ -382,10 +382,17 @@ namespace WinSimpleIDriver.Editor
             this.Controls.SetChildIndex(selectedControl, 0);
         }
 
+        // ==============================================================
+
         private void TreeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormDesignTree frm = new FormDesignTree();
+            FormDesignTree frm = new FormDesignTree(this);
             frm.Show(this);
+        }
+
+        public List<ElementDataApp> GetAppElements()
+        {
+            return appElements;
         }
 
         // =========================================================================
