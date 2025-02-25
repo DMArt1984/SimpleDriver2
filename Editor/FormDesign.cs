@@ -69,7 +69,7 @@ namespace WinSimpleIDriver.Editor
 
         private void saveJsonToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-
+            SaveToJson();
         }
 
         private void ToolStripMenuItemCommandCopy_Click(object sender, EventArgs e)
@@ -143,8 +143,6 @@ namespace WinSimpleIDriver.Editor
 
 
         // ===================================================================================
-
-
 
         // Общая функция для добавления элементов
         private void AddElement(eElementType type)
@@ -396,6 +394,51 @@ namespace WinSimpleIDriver.Editor
         }
 
         // =========================================================================
+
+        private void SaveToJson()
+        {
+            // Преобразуем List<ElementDataApp> в List<ElementDataJson>
+            List<ElementDataJson> jsonElements = appElements
+                .Select(ElementConverter.ConvertToJson)
+                .ToList();
+
+            // Группируем элементы по структуре дерева
+            var groupedElements = jsonElements
+                .GroupBy(e => e.Page ?? "Без страницы")
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.GroupBy(e => e.Template ?? "Без шаблона")
+                          .ToDictionary(
+                              t => t.Key,
+                              t => t.GroupBy(e => e.Group == 0 ? "Без группы" : e.Group.ToString())
+                                    .ToDictionary(
+                                        gr => gr.Key,
+                                        gr => gr.ToList()
+                                    )
+                          )
+                );
+
+            // Опции сериализации
+            var jsonSettings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            // Сохраняем JSON в файл
+            try
+            {
+                File.WriteAllText("config.json", JsonConvert.SerializeObject(groupedElements, jsonSettings));
+                MessageBox.Show("Конфигурация сохранена успешно!", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
+
+        }
 
     }
 
