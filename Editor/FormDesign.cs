@@ -425,9 +425,9 @@ namespace WinSimpleIDriver.Editor
                                         el.Height,
                                         el.Width,
                                         el.Text, // ✅ Сохранение текста
-                                el.Size,
+                                        el.Size,
                                         el.Color,
-                                        el.ZIndex,
+                                        el.ZIndex,  // ✅ Здесь сохраняется ZIndex
                                         el.ImagePath,
                                         el.ImagesName,
                                         el.Command,
@@ -586,21 +586,23 @@ namespace WinSimpleIDriver.Editor
 
                     foreach (var page in pages)
                     {
-                        string pageTitle = page.Title;
+                        string pageTitle = page.Title ?? "Без страницы";
                         var templates = page.Templates ?? new List<dynamic>();
 
                         foreach (var template in templates)
                         {
-                            string templateTitle = template.Title;
+                            string templateTitle = template.Title ?? "Без шаблона";
                             var groups = template.Groups ?? new List<dynamic>();
 
                             foreach (var group in groups)
                             {
-                                string groupTitle = group.Title;
+                                string groupTitle = group.Title ?? "Без группы";
                                 var elements = group.Elements ?? new List<dynamic>();
 
                                 foreach (var el in elements)
                                 {
+                                    int zIndex = el.ZIndex != null ? (int)el.ZIndex : -1; // Если `ZIndex` отсутствует, устанавливаем `-1`
+
                                     ElementDataJson jsonData = new ElementDataJson
                                     {
                                         Name = el.Name ?? $"Element{elementID++}",
@@ -610,19 +612,24 @@ namespace WinSimpleIDriver.Editor
                                         Relative = el.Relative ?? false,
                                         Width = el.Width ?? 100,
                                         Height = el.Height ?? 30,
-                                        Text = el.Text ?? string.Empty, // ✅ Проверка на null
+                                        Text = el.Text ?? string.Empty,
                                         Size = el.Size ?? 12.0f,
-                                        Color = el.Color ?? "Black", // ✅ Проверка на null
-                                        ZIndex = el.ZIndex ?? 0,
+                                        Color = el.Color ?? "Black",
+                                        ZIndex = zIndex,
                                         ImagePath = el.ImagePath ?? string.Empty
                                     };
 
-                                    ElementDataApp newElement = ElementConverter.ConvertToApp(jsonData, CreateControl);
-                                    if (newElement.Control != null)
+                                    // Преобразуем в объект приложения и добавляем на форму
+                                    ElementDataApp appElement = ElementConverter.ConvertToApp(jsonData, CreateControl);
+                                    appElements.Add(appElement);
+                                    this.Controls.Add(appElement.Control);
+                                    AttachControlEvents(appElement.Control);
+
+                                    // ✅ Если `ZIndex` загружен и не `-1`, устанавливаем порядок на форме
+                                    if (zIndex >= 0)
                                     {
-                                        AttachControlEvents(newElement.Control); // Добавляем обработчики событий
-                                        appElements.Add(newElement);
-                                        this.Controls.Add(newElement.Control);
+                                        appElement.ZIndex = zIndex;
+                                        this.Controls.SetChildIndex(appElement.Control, zIndex);
                                     }
                                 }
                             }
@@ -637,6 +644,7 @@ namespace WinSimpleIDriver.Editor
                 MessageBox.Show($"Ошибка загрузки: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
 
 

@@ -218,7 +218,7 @@ namespace WinSimpleIDriver.Editor
                         ? ColorConverterHelper.ColorToString(appData.Control.BackColor)
                         : null,
                 ImagePath = appData.ImagePath,
-                ZIndex = appData.ZIndex
+                ZIndex = appData.Control?.Parent?.Controls.GetChildIndex(appData.Control) ?? 0 // ✅ Учитываем реальный индекс в Controls
             };
         }
 
