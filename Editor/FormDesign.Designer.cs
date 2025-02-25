@@ -36,6 +36,7 @@ namespace WinSimpleIDriver.Editor
             this.страницаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemBackgroundImage = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemRemoveBackImage = new System.Windows.Forms.ToolStripMenuItem();
+            this.TreeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemAddControl = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemAddControlLabel = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemAddControlInput = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +51,6 @@ namespace WinSimpleIDriver.Editor
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelType = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelTitle = new System.Windows.Forms.ToolStripStatusLabel();
-            this.TreeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -112,6 +112,13 @@ namespace WinSimpleIDriver.Editor
             this.ToolStripMenuItemRemoveBackImage.Name = "ToolStripMenuItemRemoveBackImage";
             this.ToolStripMenuItemRemoveBackImage.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemRemoveBackImage.Text = "Убрать рисунок";
+            // 
+            // TreeToolStripMenuItem
+            // 
+            this.TreeToolStripMenuItem.Name = "TreeToolStripMenuItem";
+            this.TreeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.TreeToolStripMenuItem.Text = "Дерево";
+            this.TreeToolStripMenuItem.Click += new System.EventHandler(this.TreeToolStripMenuItem_Click);
             // 
             // ToolStripMenuItemAddControl
             // 
@@ -222,13 +229,6 @@ namespace WinSimpleIDriver.Editor
             this.toolStripStatusLabelTitle.Name = "toolStripStatusLabelTitle";
             this.toolStripStatusLabelTitle.Size = new System.Drawing.Size(127, 17);
             this.toolStripStatusLabelTitle.Text = "toolStripStatusLabel2";
-            // 
-            // TreeToolStripMenuItem
-            // 
-            this.TreeToolStripMenuItem.Name = "TreeToolStripMenuItem";
-            this.TreeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.TreeToolStripMenuItem.Text = "Дерево";
-            this.TreeToolStripMenuItem.Click += new System.EventHandler(this.TreeToolStripMenuItem_Click);
             // 
             // FormDesign
             // 

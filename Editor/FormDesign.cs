@@ -603,18 +603,18 @@ namespace WinSimpleIDriver.Editor
                                 {
                                     ElementDataJson jsonData = new ElementDataJson
                                     {
-                                        Name = el.Name,
-                                        ElementType = el.ElementType,
-                                        X = el.X,
-                                        Y = el.Y,
-                                        Relative = el.Relative,
-                                        Width = el.Width,
-                                        Height = el.Height,
-                                        Text = el.Text,
-                                        Size = el.Size,
-                                        Color = el.Color,
-                                        ZIndex = el.ZIndex,
-                                        ImagePath = el.ImagePath
+                                        Name = el.Name ?? $"Element{elementID++}",
+                                        ElementType = el.ElementType ?? "Label",
+                                        X = el.X ?? 0,
+                                        Y = el.Y ?? 0,
+                                        Relative = el.Relative ?? false,
+                                        Width = el.Width ?? 100,
+                                        Height = el.Height ?? 30,
+                                        Text = el.Text ?? string.Empty, // ✅ Проверка на null
+                                        Size = el.Size ?? 12.0f,
+                                        Color = el.Color ?? "Black", // ✅ Проверка на null
+                                        ZIndex = el.ZIndex ?? 0,
+                                        ImagePath = el.ImagePath ?? string.Empty
                                     };
 
                                     ElementDataApp newElement = ElementConverter.ConvertToApp(jsonData, CreateControl);

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinSimpleIDriver.Connector.SGT;
+using WinSimpleIDriver.DML;
 
 namespace WinSimpleIDriver.Editor
 {
@@ -75,7 +76,7 @@ namespace WinSimpleIDriver.Editor
         public string Text { get; set; }
         public string Format { get; set; } // Формат текста
         public float Size { get; set; }
-        public string Color { get; set; }
+        public string Color { get; set; } // Цвет (например, шрифта у Label или фон у Rectangle)
 
         public int ZIndex { get; set; }
 
@@ -162,7 +163,10 @@ namespace WinSimpleIDriver.Editor
                 control.Text = jsonData.Text; // ✅ Восстанавливаем текст
 
                 if (control is Label || control is TextBox)
+                {
                     control.Font = new Font(control.Font.FontFamily, jsonData.Size);
+                    control.ForeColor = ColorConverterHelper.StringToColor(jsonData.Color);
+                }
 
                 if (control is PictureBox pic && !string.IsNullOrEmpty(jsonData.ImagePath) && File.Exists(jsonData.ImagePath))
                 {
@@ -170,6 +174,13 @@ namespace WinSimpleIDriver.Editor
                     pic.Tag = jsonData.ImagePath;
                     pic.SizeMode = PictureBoxSizeMode.Zoom;
                 }
+
+                if (control is PictureBox)
+                {
+                   control.BackColor = ColorConverterHelper.StringToColor(jsonData.Color);
+                }
+
+
             }
 
             return new ElementDataApp
@@ -199,8 +210,13 @@ namespace WinSimpleIDriver.Editor
                 Relative = appData.Relative,
                 Width = appData.Control?.Width ?? 0,
                 Height = appData.Control?.Height ?? 0,
-                Text = appData.Control?.Text, // ✅ Добавлено свойство
+                Text = appData.Control?.Text,
                 Size = appData.Control?.Font.Size ?? 12.0f,
+                Color = (appData.Control is Label || appData.Control is TextBox)
+                    ? ColorConverterHelper.ColorToString(appData.Control.ForeColor)
+                    : (appData.Control is PictureBox)
+                        ? ColorConverterHelper.ColorToString(appData.Control.BackColor)
+                        : null,
                 ImagePath = appData.ImagePath,
                 ZIndex = appData.ZIndex
             };

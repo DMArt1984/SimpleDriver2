@@ -96,6 +96,7 @@
     <Compile Include="Connector\SGT\Source.cs" />
     <Compile Include="Connector\SGT\Tag.cs" />
     <Compile Include="Connector\Driver\TestTable.cs" />
+    <Compile Include="DML\ColorConverterHelper.cs" />
     <Compile Include="DML\DataTableLib.cs" />
     <Compile Include="Architecture\DGVStructures.cs" />
     <Compile Include="DML\FileControl.cs" />
