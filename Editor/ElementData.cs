@@ -62,6 +62,10 @@ namespace WinSimpleIDriver.Editor
         [JsonConverter(typeof(StringEnumConverter))] // Преобразует eElementType в строку при сохранении
         public eElementType ElementType { get; set; }
 
+        public string Page { get; set; } // Название страницы
+        public string Template { get; set; } // Используемый шаблон
+        public int Group { get; set; } // Номер группы шаблона
+
         public int X { get; set; }
         public int Y { get; set; }
         public bool Relative { get; set; } // Относительная позиция X, Y
@@ -138,5 +142,71 @@ namespace WinSimpleIDriver.Editor
 
     }
 
+    /// <summary>
+    /// Преобразования между собой
+    /// </summary>
+    public class ElementConverter
+    {
+        // Пример вызова: ElementDataApp elementApp = ConvertToApp(jsonData, CreateControl);
+        public static ElementDataApp ConvertToApp(ElementDataJson jsonData, Func<eElementType, Control> createControl)
+        {
+            Control control = createControl(jsonData.ElementType);
+
+            if (control != null)
+            {
+                control.Name = jsonData.Name;
+                control.Left = jsonData.X;
+                control.Top = jsonData.Y;
+                control.Width = jsonData.Width;
+                control.Height = jsonData.Height;
+
+                if (control is Label || control is TextBox)
+                    control.Font = new Font(control.Font.FontFamily, jsonData.Size);
+
+                if (control is PictureBox pic && !string.IsNullOrEmpty(jsonData.ImagePath) && File.Exists(jsonData.ImagePath))
+                {
+                    pic.Image = Image.FromFile(jsonData.ImagePath);
+                    pic.Tag = jsonData.ImagePath;
+                    pic.SizeMode = PictureBoxSizeMode.Zoom;
+                }
+            }
+
+            return new ElementDataApp
+            {
+                ElementType = jsonData.ElementType,
+                Control = control,
+                Page = jsonData.Page,
+                Template = jsonData.Template,
+                Group = jsonData.Group,
+                Relative = jsonData.Relative,
+                ZIndex = jsonData.ZIndex,
+                ImagePath = jsonData.ImagePath
+            };
+        }
+
+
+        public static ElementDataJson ConvertToJson(ElementDataApp appData)
+        {
+            return new ElementDataJson
+            {
+                Name = appData.Control?.Name,
+                ElementType = appData.ElementType,
+                Page = appData.Page,
+                Template = appData.Template,
+                Group = appData.Group,
+                X = appData.Control?.Left ?? 0,
+                Y = appData.Control?.Top ?? 0,
+                Relative = appData.Relative,
+                Width = appData.Control?.Width ?? 0,
+                Height = appData.Control?.Height ?? 0,
+                ImagePath = appData.ImagePath,
+                ZIndex = appData.ZIndex,
+                Size = appData.Control?.Font.Size ?? 12.0f
+            };
+        }
+
+
+
+    }
 
 }

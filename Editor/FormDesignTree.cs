@@ -14,6 +14,15 @@ namespace WinSimpleIDriver.Editor
     {
         private FormDesign design;
 
+        // 
+        public enum TypeBranch
+        {
+            Page,
+            Template,
+            Group,
+            Element
+        }
+
         public FormDesignTree(FormDesign design)
         {
             InitializeComponent();
@@ -54,19 +63,19 @@ namespace WinSimpleIDriver.Editor
             // Строим дерево
             foreach (var pageGroup in groupedElements)
             {
-                TreeNode pageNode = new TreeNode(pageGroup.Key);
+                TreeNode pageNode = new TreeNode(pageGroup.Key) { Tag = TypeBranch.Page };
 
                 foreach (var templateGroup in pageGroup.Value)
                 {
-                    TreeNode templateNode = new TreeNode(templateGroup.Key);
+                    TreeNode templateNode = new TreeNode(templateGroup.Key) { Tag = TypeBranch.Template };
 
                     foreach (var group in templateGroup.Value)
                     {
-                        TreeNode groupNode = new TreeNode(group.Key);
+                        TreeNode groupNode = new TreeNode(group.Key) { Tag = TypeBranch.Group };
 
                         foreach (var element in group.Value)
                         {
-                            TreeNode elementNode = new TreeNode(element.Control.Name);
+                            TreeNode elementNode = new TreeNode(element.Control.Name) { Tag = TypeBranch.Element };
 
                             // Если у элемента нет Page, Template и Group = 0, добавляем его на верхний уровень
                             if (string.IsNullOrEmpty(element.Page) && string.IsNullOrEmpty(element.Template) && element.Group == 0)
@@ -164,6 +173,8 @@ namespace WinSimpleIDriver.Editor
             // Разворачиваем дерево после загрузки
             treeView1.ExpandAll();
         }
+
+        
 
     }
 }

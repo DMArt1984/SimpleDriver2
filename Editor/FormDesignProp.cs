@@ -42,7 +42,7 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
-        // ✅ Отписываемся от события при закрытии окна
+        // Отписываемся от события при закрытии окна
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             if (element != null)
