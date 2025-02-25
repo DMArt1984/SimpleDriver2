@@ -50,6 +50,13 @@ namespace WinSimpleIDriver.Editor
             set => element.Control.Height = value;
         }
 
+        [Category("Текст"), DisplayName("Текст")]
+        public string Text
+        {
+            get => element.Control.Text;
+            set => element.Control.Text = value;
+        }
+
         [Category("Шрифт"), DisplayName("Размер шрифта")]
         public float FontSize
         {

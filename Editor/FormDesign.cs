@@ -398,12 +398,10 @@ namespace WinSimpleIDriver.Editor
 
         private void SaveToJson()
         {
-            // Преобразуем List<ElementDataApp> в List<ElementDataJson>
             List<ElementDataJson> jsonElements = appElements
                 .Select(ElementConverter.ConvertToJson)
                 .ToList();
 
-            // Группируем элементы по структуре дерева
             var groupedElements = jsonElements
                 .GroupBy(e => e.Page ?? "Без страницы")
                 .Select(pageGroup => new
@@ -426,9 +424,8 @@ namespace WinSimpleIDriver.Editor
                                         el.Relative,
                                         el.Height,
                                         el.Width,
-                                        el.Text,
-                                        el.Format,
-                                        el.Size,
+                                        el.Text, // ✅ Сохранение текста
+                                el.Size,
                                         el.Color,
                                         el.ZIndex,
                                         el.ImagePath,
@@ -441,25 +438,22 @@ namespace WinSimpleIDriver.Editor
                                         el.ListName,
                                         el.ToolTip,
                                         el.TagTitle
-                                    }).ToList() // Исключаем "Page", "Template", "Group"
-                        })
+                                    }).ToList()
+                                })
                                 .ToList()
                         })
                         .ToList()
                 })
                 .ToList();
 
-            // Оборачиваем в объект с ключом "Pages"
             var jsonData = new { Pages = groupedElements };
 
-            // Опции сериализации
             var jsonSettings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore
             };
 
-            // Сохраняем JSON в файл
             try
             {
                 File.WriteAllText("config.json", JsonConvert.SerializeObject(jsonData, jsonSettings));
@@ -470,6 +464,7 @@ namespace WinSimpleIDriver.Editor
                 MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void SaveToJson2()
         {
@@ -576,115 +571,62 @@ namespace WinSimpleIDriver.Editor
         {
             if (!File.Exists("config.json"))
             {
-                MessageBox.Show("Файл конфигурации не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Файл конфигурации не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             try
             {
-                // Читаем JSON из файла
                 string jsonContent = File.ReadAllText("config.json");
+                var jsonObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonContent);
 
-                // Разбираем JSON вручную
-                JObject root = JObject.Parse(jsonContent);
-
-                if (!root.ContainsKey("Pages") || root["Pages"] == null)
+                if (jsonObject != null && jsonObject.ContainsKey("Pages"))
                 {
-                    MessageBox.Show("Файл конфигурации не содержит страницы!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                    var pages = JsonConvert.DeserializeObject<List<dynamic>>(jsonObject["Pages"].ToString());
 
-                JArray pagesArray = (JArray)root["Pages"];
-
-                // Очищаем текущие элементы на форме
-                foreach (var element in appElements)
-                {
-                    this.Controls.Remove(element.Control);
-                }
-                appElements.Clear();
-
-                // Проходим по всем страницам
-                foreach (JObject pageObj in pagesArray)
-                {
-                    string pageTitle = pageObj.ContainsKey("Title") ? pageObj["Title"].ToString() : "Без страницы";
-
-                    if (!pageObj.ContainsKey("Templates") || pageObj["Templates"] == null)
-                        continue;
-
-                    JArray templatesArray = (JArray)pageObj["Templates"];
-
-                    // Проходим по всем шаблонам
-                    foreach (JObject templateObj in templatesArray)
+                    foreach (var page in pages)
                     {
-                        string templateTitle = templateObj.ContainsKey("Title") ? templateObj["Title"].ToString() : "Без шаблона";
+                        string pageTitle = page.Title;
+                        var templates = page.Templates ?? new List<dynamic>();
 
-                        if (!templateObj.ContainsKey("Groups") || templateObj["Groups"] == null)
-                            continue;
-
-                        JArray groupsArray = (JArray)templateObj["Groups"];
-
-                        // Проходим по всем группам
-                        foreach (JObject groupObj in groupsArray)
+                        foreach (var template in templates)
                         {
-                            string groupTitle = groupObj.ContainsKey("Title") ? groupObj["Title"].ToString() : "Без группы";
-                            int groupNumber = int.TryParse(groupTitle, out int parsedGroup) ? parsedGroup : 0;
+                            string templateTitle = template.Title;
+                            var groups = template.Groups ?? new List<dynamic>();
 
-                            if (!groupObj.ContainsKey("Elements") || groupObj["Elements"] == null)
-                                continue;
-
-                            JArray elementsArray = (JArray)groupObj["Elements"];
-
-                            // Проходим по всем элементам
-                            foreach (JObject elementObj in elementsArray)
+                            foreach (var group in groups)
                             {
-                                var jsonElement = new ElementDataJson
-                                {
-                                    Name = elementObj.ContainsKey("Name") ? elementObj["Name"].ToString() : $"Element{elementID++}",
-                                    ElementType = elementObj.ContainsKey("ElementType") ? elementObj["ElementType"].ToString() : "Label",
-                                    Page = pageTitle,
-                                    Template = templateTitle,
-                                    Group = groupNumber,
-                                    X = elementObj.ContainsKey("X") ? (int)elementObj["X"] : 0,
-                                    Y = elementObj.ContainsKey("Y") ? (int)elementObj["Y"] : 0,
-                                    Relative = elementObj.ContainsKey("Relative") && (bool)elementObj["Relative"],
-                                    Width = elementObj.ContainsKey("Width") ? (int)elementObj["Width"] : 100,
-                                    Height = elementObj.ContainsKey("Height") ? (int)elementObj["Height"] : 30,
-                                    Text = elementObj.ContainsKey("Text") ? elementObj["Text"].ToString() : "",
-                                    Format = elementObj.ContainsKey("Format") ? elementObj["Format"].ToString() : "",
-                                    Size = elementObj.ContainsKey("Size") ? (float)elementObj["Size"] : 12.0f,
-                                    Color = elementObj.ContainsKey("Color") ? elementObj["Color"].ToString() : "Black",
-                                    ZIndex = elementObj.ContainsKey("ZIndex") ? (int)elementObj["ZIndex"] : 0,
-                                    ImagePath = elementObj.ContainsKey("ImagePath") ? elementObj["ImagePath"].ToString() : "",
-                                    Min = elementObj.ContainsKey("Min") ? (int)elementObj["Min"] : 0,
-                                    Max = elementObj.ContainsKey("Max") ? (int)elementObj["Max"] : 100,
-                                    Value = elementObj.ContainsKey("Value") ? elementObj["Value"].ToString() : "",
-                                    ListName = elementObj.ContainsKey("ListName") ? elementObj["ListName"].ToString() : "",
-                                    ToolTip = elementObj.ContainsKey("ToolTip") ? elementObj["ToolTip"].ToString() : "",
-                                    TagTitle = elementObj.ContainsKey("TagTitle") ? elementObj["TagTitle"].ToString() : ""
-                                };
+                                string groupTitle = group.Title;
+                                var elements = group.Elements ?? new List<dynamic>();
 
-                                // ✅ Преобразуем строку в eElementType
-                                if (Enum.TryParse(jsonElement.ElementType, out eElementType elementType))
+                                foreach (var el in elements)
                                 {
-                                    jsonElement.ElementType = elementType.ToString();
-                                    var element = ElementConverter.ConvertToApp(jsonElement, CreateControl);
-                                    if (element.Control != null)
+                                    ElementDataJson jsonData = new ElementDataJson
                                     {
-                                        this.Controls.Add(element.Control);
-                                        AttachControlEvents(element.Control);
-                                        appElements.Add(element);
-                                    }
-                                }
-                                else
-                                {
-                                    MessageBox.Show($"Неизвестный тип элемента: {jsonElement.ElementType}", "Ошибка загрузки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                        Name = el.Name,
+                                        ElementType = el.ElementType,
+                                        X = el.X,
+                                        Y = el.Y,
+                                        Relative = el.Relative,
+                                        Width = el.Width,
+                                        Height = el.Height,
+                                        Text = el.Text, // ✅ Загружаем текст
+                                        Size = el.Size,
+                                        Color = el.Color,
+                                        ZIndex = el.ZIndex,
+                                        ImagePath = el.ImagePath
+                                    };
+
+                                    ElementDataApp appElement = ElementConverter.ConvertToApp(jsonData, CreateControl);
+                                    appElements.Add(appElement);
+                                    this.Controls.Add(appElement.Control);
                                 }
                             }
                         }
                     }
-                }
 
-                MessageBox.Show("Конфигурация загружена успешно!", "Загрузка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Конфигурация загружена успешно!", "Загрузка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -693,7 +635,8 @@ namespace WinSimpleIDriver.Editor
         }
 
 
-        
+
+
 
 
     }

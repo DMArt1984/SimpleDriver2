@@ -150,12 +150,7 @@ namespace WinSimpleIDriver.Editor
         // Пример вызова: ElementDataApp elementApp = ConvertToApp(jsonData, CreateControl);
         public static ElementDataApp ConvertToApp(ElementDataJson jsonData, Func<eElementType, Control> createControl)
         {
-            if (!Enum.TryParse(jsonData.ElementType, out eElementType elementType))
-            {
-                throw new ArgumentException($"Неизвестный тип элемента: {jsonData.ElementType}");
-            }
-
-            Control control = createControl(elementType);
+            Control control = createControl((eElementType)Enum.Parse(typeof(eElementType), jsonData.ElementType));
 
             if (control != null)
             {
@@ -164,6 +159,7 @@ namespace WinSimpleIDriver.Editor
                 control.Top = jsonData.Y;
                 control.Width = jsonData.Width;
                 control.Height = jsonData.Height;
+                control.Text = jsonData.Text; // ✅ Восстанавливаем текст
 
                 if (control is Label || control is TextBox)
                     control.Font = new Font(control.Font.FontFamily, jsonData.Size);
@@ -178,7 +174,7 @@ namespace WinSimpleIDriver.Editor
 
             return new ElementDataApp
             {
-                ElementType = elementType,
+                ElementType = (eElementType)Enum.Parse(typeof(eElementType), jsonData.ElementType),
                 Control = control,
                 Page = jsonData.Page,
                 Template = jsonData.Template,
@@ -189,13 +185,12 @@ namespace WinSimpleIDriver.Editor
             };
         }
 
-
         public static ElementDataJson ConvertToJson(ElementDataApp appData)
         {
             return new ElementDataJson
             {
                 Name = appData.Control?.Name,
-                ElementType = appData.ElementType.ToString(), // Преобразуем в строку
+                ElementType = appData.ElementType.ToString(),
                 Page = appData.Page,
                 Template = appData.Template,
                 Group = appData.Group,
@@ -204,9 +199,10 @@ namespace WinSimpleIDriver.Editor
                 Relative = appData.Relative,
                 Width = appData.Control?.Width ?? 0,
                 Height = appData.Control?.Height ?? 0,
+                Text = appData.Control?.Text, // ✅ Добавлено свойство
+                Size = appData.Control?.Font.Size ?? 12.0f,
                 ImagePath = appData.ImagePath,
-                ZIndex = appData.ZIndex,
-                Size = appData.Control?.Font.Size ?? 12.0f
+                ZIndex = appData.ZIndex
             };
         }
 
