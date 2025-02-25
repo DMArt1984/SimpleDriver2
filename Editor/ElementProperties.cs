@@ -121,6 +121,27 @@ namespace WinSimpleIDriver.Editor
             }
         }
 
+        [Category("Шаблоны"), DisplayName("Используемый шаблон")]
+        public string Template
+        {
+            get => element.Template;
+            set => element.Template = value;
+        }
+
+        [Category("Шаблоны"), DisplayName("Номер группы")]
+        public int Group
+        {
+            get => element.Group;
+            set => element.Group = value;
+        }
+
+        [Category("Страница"), DisplayName("Название страницы")]
+        public string Page
+        {
+            get => element.Page;
+            set => element.Page = value;
+        }
+
 
     }
 }

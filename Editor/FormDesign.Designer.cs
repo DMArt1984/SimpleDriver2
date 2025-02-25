@@ -45,11 +45,12 @@ namespace WinSimpleIDriver.Editor
             this.командыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemCommandCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemCommandDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemZindexBack = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemZindexFront = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelType = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelTitle = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ToolStripMenuItemZindexBack = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemZindexFront = new System.Windows.Forms.ToolStripMenuItem();
+            this.TreeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -79,14 +80,14 @@ namespace WinSimpleIDriver.Editor
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openToolStripMenuItem.Text = "load json";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveJsonToolStripMenuItem1
             // 
             this.saveJsonToolStripMenuItem1.Name = "saveJsonToolStripMenuItem1";
-            this.saveJsonToolStripMenuItem1.Size = new System.Drawing.Size(122, 22);
+            this.saveJsonToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.saveJsonToolStripMenuItem1.Text = "save json";
             this.saveJsonToolStripMenuItem1.Click += new System.EventHandler(this.saveJsonToolStripMenuItem1_Click);
             // 
@@ -94,7 +95,8 @@ namespace WinSimpleIDriver.Editor
             // 
             this.страницаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripMenuItemBackgroundImage,
-            this.ToolStripMenuItemRemoveBackImage});
+            this.ToolStripMenuItemRemoveBackImage,
+            this.TreeToolStripMenuItem});
             this.страницаToolStripMenuItem.Name = "страницаToolStripMenuItem";
             this.страницаToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.страницаToolStripMenuItem.Text = "Страница";
@@ -102,13 +104,13 @@ namespace WinSimpleIDriver.Editor
             // ToolStripMenuItemBackgroundImage
             // 
             this.ToolStripMenuItemBackgroundImage.Name = "ToolStripMenuItemBackgroundImage";
-            this.ToolStripMenuItemBackgroundImage.Size = new System.Drawing.Size(161, 22);
+            this.ToolStripMenuItemBackgroundImage.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemBackgroundImage.Text = "Рисунок";
             // 
             // ToolStripMenuItemRemoveBackImage
             // 
             this.ToolStripMenuItemRemoveBackImage.Name = "ToolStripMenuItemRemoveBackImage";
-            this.ToolStripMenuItemRemoveBackImage.Size = new System.Drawing.Size(161, 22);
+            this.ToolStripMenuItemRemoveBackImage.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemRemoveBackImage.Text = "Убрать рисунок";
             // 
             // ToolStripMenuItemAddControl
@@ -172,16 +174,30 @@ namespace WinSimpleIDriver.Editor
             // ToolStripMenuItemCommandCopy
             // 
             this.ToolStripMenuItemCommandCopy.Name = "ToolStripMenuItemCommandCopy";
-            this.ToolStripMenuItemCommandCopy.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemCommandCopy.Size = new System.Drawing.Size(126, 22);
             this.ToolStripMenuItemCommandCopy.Text = "Дубликат";
             this.ToolStripMenuItemCommandCopy.Click += new System.EventHandler(this.ToolStripMenuItemCommandCopy_Click);
             // 
             // ToolStripMenuItemCommandDelete
             // 
             this.ToolStripMenuItemCommandDelete.Name = "ToolStripMenuItemCommandDelete";
-            this.ToolStripMenuItemCommandDelete.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemCommandDelete.Size = new System.Drawing.Size(126, 22);
             this.ToolStripMenuItemCommandDelete.Text = "Удалить";
             this.ToolStripMenuItemCommandDelete.Click += new System.EventHandler(this.ToolStripMenuItemCommandDelete_Click);
+            // 
+            // ToolStripMenuItemZindexBack
+            // 
+            this.ToolStripMenuItemZindexBack.Name = "ToolStripMenuItemZindexBack";
+            this.ToolStripMenuItemZindexBack.Size = new System.Drawing.Size(126, 22);
+            this.ToolStripMenuItemZindexBack.Text = "Назад";
+            this.ToolStripMenuItemZindexBack.Click += new System.EventHandler(this.ToolStripMenuItemZindexBack_Click);
+            // 
+            // ToolStripMenuItemZindexFront
+            // 
+            this.ToolStripMenuItemZindexFront.Name = "ToolStripMenuItemZindexFront";
+            this.ToolStripMenuItemZindexFront.Size = new System.Drawing.Size(126, 22);
+            this.ToolStripMenuItemZindexFront.Text = "Вперед";
+            this.ToolStripMenuItemZindexFront.Click += new System.EventHandler(this.ToolStripMenuItemZindexFront_Click);
             // 
             // statusStrip1
             // 
@@ -207,19 +223,12 @@ namespace WinSimpleIDriver.Editor
             this.toolStripStatusLabelTitle.Size = new System.Drawing.Size(127, 17);
             this.toolStripStatusLabelTitle.Text = "toolStripStatusLabel2";
             // 
-            // ToolStripMenuItemZindexBack
+            // TreeToolStripMenuItem
             // 
-            this.ToolStripMenuItemZindexBack.Name = "ToolStripMenuItemZindexBack";
-            this.ToolStripMenuItemZindexBack.Size = new System.Drawing.Size(180, 22);
-            this.ToolStripMenuItemZindexBack.Text = "Назад";
-            this.ToolStripMenuItemZindexBack.Click += new System.EventHandler(this.ToolStripMenuItemZindexBack_Click);
-            // 
-            // ToolStripMenuItemZindexFront
-            // 
-            this.ToolStripMenuItemZindexFront.Name = "ToolStripMenuItemZindexFront";
-            this.ToolStripMenuItemZindexFront.Size = new System.Drawing.Size(180, 22);
-            this.ToolStripMenuItemZindexFront.Text = "Вперед";
-            this.ToolStripMenuItemZindexFront.Click += new System.EventHandler(this.ToolStripMenuItemZindexFront_Click);
+            this.TreeToolStripMenuItem.Name = "TreeToolStripMenuItem";
+            this.TreeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.TreeToolStripMenuItem.Text = "Дерево";
+            this.TreeToolStripMenuItem.Click += new System.EventHandler(this.TreeToolStripMenuItem_Click);
             // 
             // FormDesign
             // 
@@ -264,5 +273,6 @@ namespace WinSimpleIDriver.Editor
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemRemoveBackImage;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemZindexBack;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemZindexFront;
+        private System.Windows.Forms.ToolStripMenuItem TreeToolStripMenuItem;
     }
 }

@@ -305,7 +305,7 @@ namespace WinSimpleIDriver.Editor
                 {
                     // Открываем форму свойств и передаем текущий элемент
                     FormDesignProp propForm = new FormDesignProp(element);
-                    propForm.Show();
+                    propForm.Show(this);
                 }
             }
         }
@@ -380,6 +380,12 @@ namespace WinSimpleIDriver.Editor
 
             // Перемещаем элемент впереди всех
             this.Controls.SetChildIndex(selectedControl, 0);
+        }
+
+        private void TreeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormDesignTree frm = new FormDesignTree();
+            frm.Show(this);
         }
 
         // =========================================================================

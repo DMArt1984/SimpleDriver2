@@ -105,6 +105,7 @@ namespace WinSimpleIDriver.Editor
         public int ZIndex { get; set; } // Уровень расположения слоя
         public string ImagePath { get; set; } // Путь к файлу рисунка
 
+        public string Page { get; set; } // Название страницы
         public string Template { get; set; } // Используемый шаблон
         public int Group { get; set; } // Номер группы шаблона
 
