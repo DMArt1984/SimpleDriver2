@@ -610,16 +610,20 @@ namespace WinSimpleIDriver.Editor
                                         Relative = el.Relative,
                                         Width = el.Width,
                                         Height = el.Height,
-                                        Text = el.Text, // ✅ Загружаем текст
+                                        Text = el.Text,
                                         Size = el.Size,
                                         Color = el.Color,
                                         ZIndex = el.ZIndex,
                                         ImagePath = el.ImagePath
                                     };
 
-                                    ElementDataApp appElement = ElementConverter.ConvertToApp(jsonData, CreateControl);
-                                    appElements.Add(appElement);
-                                    this.Controls.Add(appElement.Control);
+                                    ElementDataApp newElement = ElementConverter.ConvertToApp(jsonData, CreateControl);
+                                    if (newElement.Control != null)
+                                    {
+                                        AttachControlEvents(newElement.Control); // Добавляем обработчики событий
+                                        appElements.Add(newElement);
+                                        this.Controls.Add(newElement.Control);
+                                    }
                                 }
                             }
                         }
@@ -633,6 +637,7 @@ namespace WinSimpleIDriver.Editor
                 MessageBox.Show($"Ошибка загрузки: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
 
 
