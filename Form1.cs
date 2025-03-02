@@ -336,6 +336,7 @@ namespace WinSimpleIDriver
         {
             DataTableLib.dtSource.DrawTable(EditorControl.sources);
             DataTableLib.dtGroup.DrawTable(EditorControl.groups);
+            DataTableLib.dtTag.DrawTable(EditorControl.tags);
             //...
 
             DrawTreeSGT();

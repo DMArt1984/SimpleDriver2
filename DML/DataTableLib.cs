@@ -334,9 +334,25 @@ namespace DML
                 dgv.Rows.Clear();
                 foreach (var item in tags)
                 {
+                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                    row.Cells[0].Value = item.Id;
+                    row.Cells[3].Value = !item.off;
+
+                    row.Cells[col.Title].Value = item.title;
+                    row.Cells[col.DataType].Value = item.dataType.ToString();
+                    row.Cells[col.Group].Value = item.groupTitle;
+                    row.Cells[col.Address].Value = item.address;
+                    row.Cells[col.Desc].Value = item.description;
+                    row.Cells[col.Block].Value = item.block;
+                    row.Cells[col.Page].Value = ""; //public int Page;
+
+                    row.Cells[col.Calc].Value = false;
+                    row.Cells[col.Status].Value = "";
+                    row.Cells[col.Message].Value = "";
+                    row.Cells[col.Value].Value = "";
 
                     // -
-                    //dgv.Rows.Add(row);
+                    dgv.Rows.Add(row);
                 }
             }
             #endregion
