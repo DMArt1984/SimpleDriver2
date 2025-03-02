@@ -472,8 +472,9 @@ namespace DML
                 string text3 = coFilterBlock.Text;
                 string text4 = coFilterPage.Text;
 
-                TableFilter(tbFilter.Text, dgv,
-                    GetColumnIndexFilter(), GetPairFilter(text1, text2, text3, text4));
+                //TableFilter(tbFilter.Text, dgv, GetColumnIndexFilter(), GetPairFilter(text1, text2, text3, text4));
+                DataTableFilter(tbFilter.Text, tagTable, dtTag.bindingSource, GetColumnIndexFilter(), GetPairFilter(text1, text2, text3, text4));
+
             }
             #endregion
 
@@ -1136,7 +1137,7 @@ namespace DML
         #endregion
 
 
-        #region Table Filter
+        #region Table Filter [1 DataGridView]
         static public void TableFilter(string FilterText, DataGridView dgv, int[] cells, PairFilterCol[] pairs)
         {
             foreach (DataGridViewRow row in dgv.Rows)
@@ -1215,6 +1216,60 @@ namespace DML
 
 
         #endregion
+
+        #region Table Filter [2 DataTable]
+
+        /// <summary>
+        /// Фильтрует данные в DataTable через BindingSource, используя текстовый фильтр и пары "колонка-значение".
+        /// </summary>
+        /// <param name="filterText">Текстовый фильтр для поиска в нескольких колонках.</param>
+        /// <param name="bindingSource">BindingSource, привязанный к DataTable.</param>
+        /// <param name="columnIndices">Индексы колонок, в которых выполняется поиск по текстовому фильтру.</param>
+        /// <param name="pairs">Пары "индекс колонки - фильтр", которые должны точно соответствовать значениям в таблице.</param>
+        public static void DataTableFilter(string filterText, DataTable dt, BindingSource bindingSource, int[] columnIndices, PairFilterCol[] pairs)
+        {
+            if (bindingSource == null)
+                return;
+
+            var filters = new List<string>();
+
+            // 1. Добавляем текстовый фильтр для указанных колонок по индексам
+            if (!string.IsNullOrWhiteSpace(filterText) && columnIndices?.Length > 0)
+            {
+                var textFilters = columnIndices
+                    .Where(index => index >= 0 && index < dt.Columns.Count)
+                    .Select(index => $"CONVERT([{dt.Columns[index].ColumnName}], System.String) LIKE '%{filterText.Replace("'", "''")}%'")
+                    .ToArray();
+
+                if (textFilters.Length > 0)
+                {
+                    filters.Add($"({string.Join(" OR ", textFilters)})");
+                }
+            }
+
+            // 2. Добавляем точные фильтры по парам "индекс колонки - значение"
+            if (pairs?.Length > 0)
+            {
+                foreach (var pair in pairs)
+                {
+                    if (!string.IsNullOrWhiteSpace(pair.filter) &&
+                        pair.col >= 0 && pair.col < dt.Columns.Count)
+                    {
+                        string columnName = dt.Columns[pair.col].ColumnName;
+                        filters.Add($"[{columnName}] = '{pair.filter.Replace("'", "''")}'");
+                    }
+                }
+            }
+
+            // 3. Объединяем все фильтры в одно выражение
+            string filterExpression = string.Join(" AND ", filters);
+
+            // 4. Применяем фильтрацию к BindingSource
+            bindingSource.Filter = filterExpression;
+        }
+
+        #endregion
+
 
         // Привязка DataTable к DataGridView через BindingSource
         public static void LinkDatatTable(DataTable dt, BindingSource bind, DataGridView dgv)
