@@ -327,33 +327,101 @@ namespace DML
             static public ComboBox coFilterBlock;
             static public ComboBox coFilterPage;
 
+            static private DataTable tagTable; // DataTable для хранения данных тегов
+            static private BindingSource bindingSource = new BindingSource(); // BindingSource для привязки данных к DataGridView
+
             #region DGV.Add
+            //static public void DrawTable(List<TagEditor> tags)
+            //{
+            //    // Таблица групп
+            //    dgv.Rows.Clear();
+            //    foreach (var item in tags)
+            //    {
+            //        DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+            //        row.Cells[0].Value = item.Id;
+            //        row.Cells[3].Value = !item.off;
+
+            //        row.Cells[col.Title].Value = item.title;
+            //        row.Cells[col.DataType].Value = item.dataType.ToString();
+            //        row.Cells[col.Group].Value = item.groupTitle;
+            //        row.Cells[col.Address].Value = item.address;
+            //        row.Cells[col.Desc].Value = item.description;
+            //        row.Cells[col.Block].Value = item.block;
+            //        row.Cells[col.Page].Value = ""; //public int Page;
+
+            //        row.Cells[col.Calc].Value = false;
+            //        row.Cells[col.Status].Value = "";
+            //        row.Cells[col.Message].Value = "";
+            //        row.Cells[col.Value].Value = "";
+
+            //        // -
+            //        dgv.Rows.Add(row);
+            //    }
+            //}
             static public void DrawTable(List<TagEditor> tags)
             {
-                // Таблица групп
-                dgv.Rows.Clear();
+                // Проверка на null DataGridView
+                if (dgv == null)
+                {
+                    MessageBox.Show("DataGridView не инициализирован!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Инициализация DataTable, если DataSource отсутствует
+                if (dgv.DataSource == null)
+                {
+                    tagTable = new DataTable();
+
+                    // Добавляем только те столбцы, которые уже существуют в DataGridView
+                    foreach (DataGridViewColumn column in dgv.Columns)
+                    {
+                            Type columnType = column.ValueType ?? typeof(string); // Если тип null, используем string
+                            tagTable.Columns.Add(column.Name, columnType);
+                    }
+
+                    // Создание BindingSource и привязка к DataGridView
+                    bindingSource = new BindingSource { DataSource = tagTable };
+                    dgv.DataSource = bindingSource;
+                }
+                else
+                {
+                    // Получаем существующую DataTable из DataSource
+                    if (dgv.DataSource is BindingSource binding && binding.DataSource is DataTable existingTable)
+                    {
+                        tagTable = existingTable;
+                        tagTable.Clear(); // Очищаем таблицу перед добавлением новых данных
+                    }
+                    else
+                    {
+                        MessageBox.Show("Не удалось получить DataTable из DataSource!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
+                // Добавляем данные в DataTable
                 foreach (var item in tags)
                 {
-                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
-                    row.Cells[0].Value = item.Id;
-                    row.Cells[3].Value = !item.off;
+                    var row = tagTable.NewRow();
+                    row[0] = item.Id;
+                    row[3] = !item.off;
+                    row[col.Title] = item.title;
+                    row[col.DataType] = item.dataType.ToString();
+                    row[col.Group] = item.groupTitle;
+                    row[col.Address] = item.address;
+                    row[col.Desc] = item.description;
+                    row[col.Block] = item.block;
+                    row[col.Page] = "";
 
-                    row.Cells[col.Title].Value = item.title;
-                    row.Cells[col.DataType].Value = item.dataType.ToString();
-                    row.Cells[col.Group].Value = item.groupTitle;
-                    row.Cells[col.Address].Value = item.address;
-                    row.Cells[col.Desc].Value = item.description;
-                    row.Cells[col.Block].Value = item.block;
-                    row.Cells[col.Page].Value = ""; //public int Page;
+                    row[col.Calc] = false;
+                    row[col.Status] = "";
+                    row[col.Message] = "";
+                    row[col.Value] = "";
 
-                    row.Cells[col.Calc].Value = false;
-                    row.Cells[col.Status].Value = "";
-                    row.Cells[col.Message].Value = "";
-                    row.Cells[col.Value].Value = "";
-
-                    // -
-                    dgv.Rows.Add(row);
+                    tagTable.Rows.Add(row);
                 }
+
+                // Обновляем данные в DataGridView
+                bindingSource.ResetBindings(false);
             }
             #endregion
 
