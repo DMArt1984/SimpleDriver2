@@ -824,6 +824,27 @@ namespace DML
             }
             #endregion
 
+            #region DGV.Add
+            static public void DrawTable(List<StructTargetEditor> targets)
+            {
+                // Таблица источников
+                dgv.Rows.Clear();
+                foreach (var item in targets)
+                {
+                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                    row.Cells[0].Value = item.Id;
+
+                    row.Cells[col.Structure].Value = item.structureTitle;
+                    row.Cells[col.InnerTitle].Value = item.title;
+                    row.Cells[col.InnerAddress].Value = item.innerAddress;
+                    row.Cells[col.Desc].Value = item.desc;
+
+                    // -
+                    dgv.Rows.Add(row);
+                }
+            }
+            #endregion
+
 
             // Определение номеров колонок
             static public void LinkColumns(DataGridView targets)
@@ -832,7 +853,7 @@ namespace DML
                 col = new DGVStructTargetCol
                 {
                     Structure = dgv.Columns["targetStructure"].Index,
-                    Address = dgv.Columns["targetAddress"].Index,
+                    InnerAddress = dgv.Columns["targetAddress"].Index,
                     InnerTitle = dgv.Columns["targetTitle"].Index,
                     Desc = dgv.Columns["targetDesc"].Index
                 };
@@ -844,7 +865,7 @@ namespace DML
             {
                 return new int[]
                 {
-                col.InnerTitle, col.Desc, col.Address
+                col.InnerTitle, col.Desc, col.InnerAddress
                 };
             }
             static public PairFilterCol[] GetPairFilter(string textStructure)
@@ -872,6 +893,25 @@ namespace DML
 
                 TableFilter(tbFilter?.Text ?? "", dgv,
                     GetColumnIndexFilter(), GetPairFilter(text));
+            }
+            #endregion
+
+            #region DGV.Add
+            static public void DrawTable(List<StructTagEditor> tags)
+            {
+                // Таблица источников
+                dgv.Rows.Clear();
+                foreach (var item in tags)
+                {
+                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                    row.Cells[0].Value = item.Id;
+
+                    row.Cells[col.Structure].Value = item.structureTitle;
+                    row.Cells[col.TagTitle].Value = item.title;
+
+                    // -
+                    dgv.Rows.Add(row);
+                }
             }
             #endregion
 

@@ -56,7 +56,7 @@ namespace WinSimpleIDriver
     {
         public int Structure;
         public int InnerTitle;
-        public int Address;
+        public int InnerAddress;
         public int Desc;
     }
     public struct DGVStructTagCol

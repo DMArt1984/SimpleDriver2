@@ -337,6 +337,8 @@ namespace WinSimpleIDriver
             DataTableLib.dtGroup.DrawTable(EditorControl.groups);
             DataTableLib.dtTag.DrawTable(EditorControl.tags);
             DataTableLib.dtStructure.DrawTable(EditorControl.structures);
+            DataTableLib.dtStructTarget.DrawTable(EditorControl.structTargets);
+            DataTableLib.dtStructTag.DrawTable(EditorControl.structTags);
             //...
 
             // link group -> source
