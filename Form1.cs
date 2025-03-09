@@ -92,14 +92,21 @@ namespace WinSimpleIDriver
             DataTableLib.dtTag.coFilterPage = comboBoxTagFilterPage;
             DataTableLib.dtTag.CheckColumns();
 
+
             // Form: Structure
             DataTableLib.dtStructure.LinkColumns(dataGridViewStructure);
             DataTableLib.dtStructure.tbFilter = textBoxStructureFilter;
 
-            // Form: StructureTargetForm
+            // Form: StructureTarget
             DataTableLib.dtStructTarget.LinkColumns(dataGridViewStructureTarget);
-            DataTableLib.dtStructTarget.tbFilter = textBoxStructureFilter; // textBoxStructureTargetFilter;
+            DataTableLib.dtStructTarget.tbFilter = null; // textBoxStructureFilter; // textBoxStructureTargetFilter;
             DataTableLib.dtStructTarget.coFilterParent = comboBoxStructureTargetFilterParent;
+
+            // Form: StructureTag
+            DataTableLib.dtStructTag.LinkColumns(dataGridViewStructureTag);
+            DataTableLib.dtStructTag.tbFilter = null; // textBoxStructureFilter; // textBoxStructureTargetFilter;
+            DataTableLib.dtStructTag.coFilterParent = comboBoxStructureTargetFilterParent;
+
 
             // Form: Include
             DataTableLib.dtInclude.LinkColumns(dataGridViewInclude);
@@ -109,6 +116,7 @@ namespace WinSimpleIDriver
             DataTableLib.dtIncludeChild.LinkColumns(dataGridViewIncludeChild);
             DataTableLib.dtIncludeChild.tbFilter = textBoxIncludeChildFilter;
             DataTableLib.dtIncludeChild.coFilterParent = comboBoxIncludeChildFilterParent;
+
 
             // Form: Tree
             TreeLib.tree = treeViewProject;
@@ -922,6 +930,7 @@ namespace WinSimpleIDriver
             string text = (splitContainerStructure.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewStructure, DataTableLib.dtStructure.col.Title));
             comboBoxStructureTargetFilterParent.Text = text;
             DataTableLib.dtStructTarget.StructureTargetFilter();
+            DataTableLib.dtStructTag.StructureTagFilter();
         }
 
         
@@ -942,6 +951,7 @@ namespace WinSimpleIDriver
         private void comboBoxTargetFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
             DataTableLib.dtStructTarget.StructureTargetFilter();
+            DataTableLib.dtStructTag.StructureTagFilter();
         }
         private void comboBoxTargetFilterSource_TextChanged(object sender, EventArgs e)
         {
@@ -1318,6 +1328,13 @@ namespace WinSimpleIDriver
             design.Show();
         }
 
+        private void dataGridViewStructureTag_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewStructureTag); // new ID
+
+            DataTableLib.SetParentInRow(dataGridViewStructureTag, comboBoxStructureTargetFilterParent, DataTableLib.dtStructTag.col.Structure); // filter
+
+        }
 
     }
 }

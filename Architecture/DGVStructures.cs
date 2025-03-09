@@ -60,6 +60,11 @@ namespace WinSimpleIDriver
         public int Address;
         public int Desc;
     }
+    public struct DGVStructTagCol
+    {
+        public int Structure;
+        public int TagTitle;
+    }
 
 
     public struct DGVIncludeCol

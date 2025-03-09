@@ -63,6 +63,7 @@ namespace DML
             dtGroup.dgv.Rows.Clear();
             dtSource.dgv.Rows.Clear();
 
+            dtStructTag.dgv.Rows.Clear();
             dtStructTarget.dgv.Rows.Clear();
             dtStructure.dgv.Rows.Clear();
 
@@ -795,9 +796,9 @@ namespace DML
             #region Filter
             static public void StructureTargetFilter()
             {
-                string text = coFilterParent.Text;
+                string text = coFilterParent?.Text ?? "";
 
-                TableFilter(tbFilter.Text, dgv,
+                TableFilter(tbFilter?.Text ?? "", dgv,
                     GetColumnIndexFilter(), GetPairFilter(text));
             }
             #endregion
@@ -823,6 +824,54 @@ namespace DML
                 return new int[]
                 {
                 col.InnerTitle, col.Desc, col.Address
+                };
+            }
+            static public PairFilterCol[] GetPairFilter(string textStructure)
+            {
+                return new PairFilterCol[]
+                {
+                new PairFilterCol { col = col.Structure, filter = textStructure }
+                };
+            }
+
+        }
+
+        static public class dtStructTag
+        {
+            static public DGVStructTagCol col = new DGVStructTagCol(); // Номера колонок в DGV
+            static public DataGridView dgv;
+
+            static public TextBox tbFilter;
+            static public ComboBox coFilterParent;
+
+            #region Filter
+            static public void StructureTagFilter()
+            {
+                string text = coFilterParent?.Text ?? "";
+
+                TableFilter(tbFilter?.Text ?? "", dgv,
+                    GetColumnIndexFilter(), GetPairFilter(text));
+            }
+            #endregion
+
+            // Определение номеров колонок
+            static public void LinkColumns(DataGridView targets)
+            {
+                dgv = targets;
+                col = new DGVStructTagCol
+                {
+                    Structure = dgv.Columns["targetTagStruct"].Index,
+                    TagTitle = dgv.Columns["targetTagTitle"].Index,
+                };
+
+            }
+
+            // Теги структур. Номера колонок для фильтра в массив
+            static public int[] GetColumnIndexFilter()
+            {
+                return new int[]
+                {
+                col.TagTitle
                 };
             }
             static public PairFilterCol[] GetPairFilter(string textStructure)
