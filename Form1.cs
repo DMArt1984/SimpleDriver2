@@ -129,6 +129,8 @@ namespace WinSimpleIDriver
 
             #endregion
 
+            // Combo
+            SetComboPlaceholder();
             
 
             // Новый проект
@@ -328,7 +330,17 @@ namespace WinSimpleIDriver
             DataTableLib.dtTag.DrawTable(EditorControl.tags);
             //...
 
+            // link group -> source
+            DataTableLib.dtTag.UpdateDGVTagSourceLink();
+            // count
+            DataTableLib.SetCountTagForUsed(dataGridViewSource, dataGridViewTag, DataTableLib.dtSource.col.Title, DataTableLib.dtSource.col.CountTags, DataTableLib.dtTag.col.Source);
+            DataTableLib.SetCountTagForUsed(dataGridViewGroup, dataGridViewTag, DataTableLib.dtGroup.col.Title, DataTableLib.dtGroup.col.CountTags, DataTableLib.dtTag.col.Group);
+
+            //
             TreeLib.DrawTreeSGT();
+
+            //
+            SetComboPlaceholder();
 
         }
 
@@ -1125,7 +1137,11 @@ namespace WinSimpleIDriver
             switch (tabName)
             {
                 case "tabPageSource":
-                    DataTableLib.SetCountForUsed(dataGridViewSource, dataGridViewTag, DataTableLib.dtSource.col.Title, DataTableLib.dtSource.col.CountTags, DataTableLib.dtTag.col.Source);
+                    DataTableLib.SetCountTagForUsed(dataGridViewSource, dataGridViewTag, DataTableLib.dtSource.col.Title, DataTableLib.dtSource.col.CountTags, DataTableLib.dtTag.col.Source);
+                    break;
+
+                case "tabPageGroup":
+                    DataTableLib.SetCountTagForUsed(dataGridViewGroup, dataGridViewTag, DataTableLib.dtGroup.col.Title, DataTableLib.dtGroup.col.CountTags, DataTableLib.dtTag.col.Group);
                     break;
 
                 case "tabPageTag":
@@ -1209,6 +1225,33 @@ namespace WinSimpleIDriver
             }
         }
         #endregion
+
+        // ======================================================================
+
+        private void SetComboPlaceholder()
+        {
+            return;
+            InitializeComboBoxWithDefaultItem(comboBoxGroupFilterSource, "Источник");
+            InitializeComboBoxWithDefaultItem(comboBoxTagFilterSource, "Источник");
+            InitializeComboBoxWithDefaultItem(comboBoxTagFilterGroup, "Группа");
+            InitializeComboBoxWithDefaultItem(comboBoxTagFilterBlock, "Блок");
+            InitializeComboBoxWithDefaultItem(comboBoxTagFilterPage, "Страница");
+            InitializeComboBoxWithDefaultItem(comboBoxStructureTargetFilterParent, "Структура");
+            InitializeComboBoxWithDefaultItem(comboBoxIncludeChildFilterParent, "Класс");
+        }
+
+        private void InitializeComboBoxWithDefaultItem(ComboBox comboBox, string placeholderText)
+        {
+            comboBox.Items.Clear();
+            comboBox.Items.Add(placeholderText);
+            comboBox.SelectedIndex = 0;
+            comboBox.ForeColor = Color.Gray;
+
+            comboBox.SelectedIndexChanged += (s, e) =>
+            {
+                comboBox.ForeColor = (comboBox.SelectedIndex == 0) ? Color.Gray : Color.Black;
+            };
+        }
 
         // ================================================================================================================
 

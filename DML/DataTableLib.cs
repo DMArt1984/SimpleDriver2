@@ -298,7 +298,8 @@ namespace DML
                     Title = dgv.Columns["groupTitle"].Index,
                     Source = dgv.Columns["groupSource"].Index,
                     Desc = dgv.Columns["groupDesc"].Index,
-                    Status = dgv.Columns["groupStatus"].Index
+                    Status = dgv.Columns["groupStatus"].Index,
+                    CountTags = dgv.Columns["groupTags"].Index
                 };
             }
 
@@ -1107,28 +1108,30 @@ namespace DML
         }
 
         // Расставить количества элементов
-        public static void SetCountForUsed(DataGridView dgvSource, DataGridView dgvTag, int colTitle, int colCount, int colUsed)
+        public static void SetCountTagForUsed(DataGridView dgvTarget, DataGridView dgvList,
+            int colTargetTitle, int colTargetCount, 
+            int colUsed)
         {
-            if (dgvSource == null || dgvTag == null || dgvSource.RowCount == 0 || dgvTag.RowCount == 0)
+            if (dgvTarget == null || dgvList == null || dgvTarget.RowCount == 0 || dgvList.RowCount == 0)
                 return;
 
-            if (colTitle < 0 || colTitle >= dgvSource.ColumnCount || colCount < 0 || colCount >= dgvSource.ColumnCount)
+            if (colTargetTitle < 0 || colTargetTitle >= dgvTarget.ColumnCount || colTargetCount < 0 || colTargetCount >= dgvTarget.ColumnCount)
                 return;
 
-            var dic = GetDicForUsed(dgvTag, colUsed);
+            var dic = GetDicForUsed(dgvList, colUsed);
 
-            foreach (DataGridViewRow item in dgvSource.Rows)
+            foreach (DataGridViewRow item in dgvTarget.Rows)
             {
-                var itemTitle = item.Cells[colTitle].Value?.ToString();
+                var itemTitle = item.Cells[colTargetTitle].Value?.ToString();
                 if (string.IsNullOrWhiteSpace(itemTitle))
                     continue;
 
                 dic.TryGetValue(itemTitle, out int count); // Оптимальный способ извлечения из `Dictionary`
 
-                var currentValue = item.Cells[colCount].Value as int?;
+                var currentValue = item.Cells[colTargetCount].Value as int?;
                 if (currentValue == null || currentValue != count)
                 {
-                    item.Cells[colCount].Value = count;
+                    item.Cells[colTargetCount].Value = count;
                 }
             }
         }

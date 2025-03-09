@@ -25,6 +25,7 @@ namespace WinSimpleIDriver
         public int Source;
         public int Desc;
         public int Status;
+        public int CountTags;
     }
     public struct DGVTagsCol
     {
