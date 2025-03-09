@@ -283,9 +283,6 @@ namespace WinSimpleIDriver
         {
             // DGV
             DataTableLib.Clear();
-            //dataGridViewSource.Rows.Clear();
-            //dataGridViewGroup.Rows.Clear();
-            //dataGridViewTag.Rows.Clear();
 
             // treeView
             TreeLib.DrawTreeSGT();
@@ -961,13 +958,14 @@ namespace WinSimpleIDriver
 
         private void buttonTargetFilter_Click(object sender, EventArgs e)
         {
-            TargetFilter();
+            TargetAndTagFilter();
         }
 
-        private void TargetFilter()
+        private void TargetAndTagFilter()
         {
             FormLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
             DataTableLib.dtStructTarget.StructureTargetFilter();
+            DataTableLib.dtStructTag.StructureTagFilter();
         }
 
         private void dataGridViewTarget_UserAddedRow(object sender, DataGridViewRowEventArgs e)
@@ -976,14 +974,6 @@ namespace WinSimpleIDriver
 
             DataTableLib.SetParentInRow(dataGridViewStructureTarget, comboBoxStructureTargetFilterParent, DataTableLib.dtStructTarget.col.Structure); // filter
 
-            // filter
-            //string text = comboBoxTargetFilterSource.Text;
-            //if (String.IsNullOrWhiteSpace(text) == false)
-            //{
-            //    var row = dataGridViewTarget.CurrentRow;
-            //    if (row != null)
-            //        row.Cells[DataTableLib.targetCol.Structure].Value = text;
-            //}
         }
 
 
@@ -1079,7 +1069,7 @@ namespace WinSimpleIDriver
                 case TreeProjCategory.structures:
                     break;
 
-                case TreeProjCategory.targetItem:
+                case TreeProjCategory.structTagItem:
                     break;
 
                 case TreeProjCategory.includes:
@@ -1137,10 +1127,10 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.structures:
                     comboBoxStructureTargetFilterParent.Text = text;
-                    TargetFilter();
+                    TargetAndTagFilter();
                     break;
 
-                case TreeProjCategory.targetItem:
+                case TreeProjCategory.structTagItem:
                     break;
 
                 case TreeProjCategory.includes:
@@ -1241,9 +1231,9 @@ namespace WinSimpleIDriver
                     DataTableLib.ShowRow(dataGridViewStructure, Id, title, DataTableLib.dtStructure.col.Title);
                     break;
 
-                case TreeProjCategory.targetItem:
+                case TreeProjCategory.structTagItem:
                     tabControlProject.SelectTab(tabPageStructure);
-                    DataTableLib.ShowRow(dataGridViewStructureTarget, Id, title, DataTableLib.dtStructTarget.col.InnerTitle); // ?
+                    DataTableLib.ShowRow(dataGridViewStructureTag, Id, title, DataTableLib.dtStructTag.col.TagTitle); // ?
                     break;
 
 
@@ -1334,6 +1324,21 @@ namespace WinSimpleIDriver
 
             DataTableLib.SetParentInRow(dataGridViewStructureTag, comboBoxStructureTargetFilterParent, DataTableLib.dtStructTag.col.Structure); // filter
 
+        }
+
+        private void dataGridViewStructure_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeStructure();
+        }
+
+        private void dataGridViewStructureTag_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeStructure();
+        }
+
+        private void dataGridViewStructureTarget_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeStructure();
         }
 
     }

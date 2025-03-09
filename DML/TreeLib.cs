@@ -39,7 +39,7 @@ namespace DML
                 case TreeProjCategory.tagItem:
                 case TreeProjCategory.blockItem:
                 case TreeProjCategory.structureItem:
-                case TreeProjCategory.targetItem:
+                case TreeProjCategory.structTagItem:
                 case TreeProjCategory.includeItem:
                 case TreeProjCategory.changeItem:
                     contextMenuStripTreeProj.Items[0].Visible = true;
@@ -174,7 +174,7 @@ namespace DML
         {
             // Получить списки для дерева
             var collectionStructure = MyTree.SetTreeCollection(DataTableLib.dtStructure.dgv, DataTableLib.dtStructure.col.Title);
-            var collectionTarget = MyTree.SetTreeCollection(DataTableLib.dtStructTarget.dgv, DataTableLib.dtStructTarget.col.InnerTitle, DataTableLib.dtStructTarget.col.Structure);
+            var collectionTag = MyTree.SetTreeCollection(DataTableLib.dtStructTag.dgv, DataTableLib.dtStructTag.col.TagTitle, DataTableLib.dtStructTag.col.Structure);
 
             // Структуры
             TreeLib.treeStructure.Nodes.Clear();
@@ -193,17 +193,17 @@ namespace DML
                 tnStructure.ImageIndex = 0;
 
                 // Список тегов структур
-                foreach (var itemTarget in collectionTarget)
+                foreach (var itemTag in collectionTag)
                 {
-                    if (itemTarget.Link != itemStructure.Title)
+                    if (itemTag.Link != itemStructure.Title)
                         continue;
 
-                    TreeNode tnTarget = new TreeNode($"{itemTarget.Title}");
-                    tnTarget.Tag = new TreeProjTag(TreeProjCategory.targetItem, itemTarget.Id);
-                    tnTarget.NodeFont = new Font(tree.Font.FontFamily, 10, FontStyle.Regular);
-                    tnTarget.ImageIndex = 0;
+                    TreeNode tnTag = new TreeNode($"{itemTag.Title}");
+                    tnTag.Tag = new TreeProjTag(TreeProjCategory.structTagItem, itemTag.Id);
+                    tnTag.NodeFont = new Font(tree.Font.FontFamily, 10, FontStyle.Regular);
+                    tnTag.ImageIndex = 0;
 
-                    tnStructure.Nodes.Add(tnTarget); // тег структуры
+                    tnStructure.Nodes.Add(tnTag); // тег структуры
                 }
                 TreeLib.treeStructure.Nodes.Add(tnStructure); // структура
             }

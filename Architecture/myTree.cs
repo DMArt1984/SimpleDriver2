@@ -17,7 +17,7 @@ namespace WinSimpleIDriver
         tagItem, // Тег
         structures, // Структуры
         structureItem, // Структура
-        targetItem, // Тег структуры
+        structTagItem, // Тег структуры
         includes, // Классы
         includeItem, // Класс
         changeItem, // Замены класса
