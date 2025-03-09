@@ -994,24 +994,27 @@ namespace DML
         {
             if (dgv == null || dgv.RowCount == 0) return null;
 
-            return dgv.Rows
+            var result = dgv.Rows
                       .Cast<DataGridViewRow>()
                       .FirstOrDefault(row => !row.IsNewRow &&
-                                             row.Cells[0].Value is int cellValue &&
-                                             cellValue == id);
+                       int.TryParse(row.Cells[0].Value?.ToString(), out int cellValue) &&
+                       cellValue == id);
+
+            return result;
         }
 
         // Получить строку DataGridView по названию (колонка после ID)
         public static DataGridViewRow GetRowByTitle(DataGridView dgv, string title, int indexTitle)
         {
-            if (dgv == null || dgv.RowCount == 0 || string.IsNullOrWhiteSpace(title))
+            if (dgv == null || dgv.RowCount == 0 || string.IsNullOrWhiteSpace(title) || indexTitle < 0 || indexTitle >= dgv.ColumnCount)
                 return null;
 
             return dgv.Rows
                       .Cast<DataGridViewRow>()
                       .FirstOrDefault(row => !row.IsNewRow &&
-                                             row.Cells[indexTitle].Value is string cellValue &&
-                                             cellValue.Equals(title, StringComparison.OrdinalIgnoreCase));
+                                             row.Cells[indexTitle].Value != null &&
+                                             !(row.Cells[indexTitle].Value is DBNull) &&
+                                             row.Cells[indexTitle].Value.ToString().Trim().Equals(title.Trim(), StringComparison.OrdinalIgnoreCase));
         }
 
         // Получить ID из выделенной строки DataGridView
@@ -1146,11 +1149,13 @@ namespace DML
         {
             if (Id > 0)
             {
-                ShowRow(dgv, GetRowByID(dgv, Id));
+                var row = GetRowByID(dgv, Id);
+                ShowRow(dgv, row);
             }
             else if (title != "" && indexTitle > 0)
             {
-                ShowRow(dgv, GetRowByTitle(dgv, title, indexTitle));
+                var row = GetRowByTitle(dgv, title, indexTitle);
+                ShowRow(dgv, row);
             }
         }
         #endregion
