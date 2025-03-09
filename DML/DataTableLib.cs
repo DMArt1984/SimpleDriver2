@@ -346,7 +346,7 @@ namespace DML
             static public ComboBox coFilterBlock;
             static public ComboBox coFilterPage;
 
-            static private DataTable tagTable; // DataTable для хранения данных тегов
+            static private DataTable tagTable = new DataTable(); // DataTable для хранения данных тегов
             static private BindingSource bindingSource = new BindingSource(); // BindingSource для привязки данных к DataGridView
 
             #region DGV.Add
@@ -417,26 +417,29 @@ namespace DML
                     }
                 }
 
-                // Добавляем данные в DataTable
-                foreach (var item in tags)
+                if (tags != null)
                 {
-                    var row = tagTable.NewRow();
-                    row[0] = item.Id;
-                    row[3] = !item.off;
-                    row[col.Title] = item.title;
-                    row[col.DataType] = item.dataType.ToString();
-                    row[col.Group] = item.groupTitle;
-                    row[col.Address] = item.address;
-                    row[col.Desc] = item.description;
-                    row[col.Block] = item.block;
-                    row[col.Page] = "";
+                    // Добавляем данные в DataTable
+                    foreach (var item in tags)
+                    {
+                        var row = tagTable.NewRow();
+                        row[0] = item.Id;
+                        row[3] = !item.off;
+                        row[col.Title] = item.title;
+                        row[col.DataType] = item.dataType.ToString();
+                        row[col.Group] = item.groupTitle;
+                        row[col.Address] = item.address;
+                        row[col.Desc] = item.description;
+                        row[col.Block] = item.block;
+                        row[col.Page] = "";
 
-                    row[col.Calc] = false;
-                    row[col.Status] = "";
-                    row[col.Message] = "";
-                    row[col.Value] = "";
+                        row[col.Calc] = false;
+                        row[col.Status] = "";
+                        row[col.Message] = "";
+                        row[col.Value] = "";
 
-                    tagTable.Rows.Add(row);
+                        tagTable.Rows.Add(row);
+                    }
                 }
 
                 // Обновляем данные в DataGridView
@@ -492,7 +495,7 @@ namespace DML
                 string text4 = coFilterPage.Text;
 
                 //TableFilter(tbFilter.Text, dgv, GetColumnIndexFilter(), GetPairFilter(text1, text2, text3, text4));
-                DataTableFilter(tbFilter.Text, tagTable, dtTag.bindingSource, GetColumnIndexFilter(), GetPairFilter(text1, text2, text3, text4));
+                DataTableFilter(tbFilter.Text, tagTable, dtTag.bindingSource, GetColumnIndexFilter(), GetPairFilter(text1, text2, text4), new PairFilterCol { col = col.Block, filter = text3 });
 
             }
             #endregion
@@ -563,13 +566,13 @@ namespace DML
                 col.Title, col.Value, col.DataType, col.Address, col.Desc, col.Status, col.Message
                 };
             }
-            static public PairFilterCol[] GetPairFilter(string textSource, string textGroup, string textBlock, string textPage)
+            static public PairFilterCol[] GetPairFilter(string textSource, string textGroup, string textPage)
             {
                 return new PairFilterCol[]
                 {
                 new PairFilterCol { col = col.Source, filter = textSource },
                 new PairFilterCol { col = col.Group, filter = textGroup },
-                new PairFilterCol { col = col.Block, filter = textBlock },
+                //new PairFilterCol { col = col.Block, filter = textBlock },
                 new PairFilterCol { col = col.Page, filter = textPage }
                 };
             }
@@ -1249,11 +1252,11 @@ namespace DML
         /// <summary>
         /// Фильтрует данные в DataTable через BindingSource, используя текстовый фильтр и пары "колонка-значение".
         /// </summary>
-        /// <param name="filterText">Текстовый фильтр для поиска в нескольких колонках.</param>
+        /// <param name="midText">Текстовый фильтр для поиска в нескольких колонках.</param>
         /// <param name="bindingSource">BindingSource, привязанный к DataTable.</param>
         /// <param name="columnIndices">Индексы колонок, в которых выполняется поиск по текстовому фильтру.</param>
-        /// <param name="pairs">Пары "индекс колонки - фильтр", которые должны точно соответствовать значениям в таблице.</param>
-        public static void DataTableFilter(string filterText, DataTable dt, BindingSource bindingSource, int[] columnIndices, PairFilterCol[] pairs)
+        /// <param name="equalPairs">Пары "индекс колонки - фильтр", которые должны точно соответствовать значениям в таблице.</param>
+        public static void DataTableFilter(string midText, DataTable dt, BindingSource bindingSource, int[] columnIndices, PairFilterCol[] equalPairs, PairFilterCol blockPair)
         {
             if (bindingSource == null)
                 return;
@@ -1261,11 +1264,11 @@ namespace DML
             var filters = new List<string>();
 
             // 1. Добавляем текстовый фильтр для указанных колонок по индексам
-            if (!string.IsNullOrWhiteSpace(filterText) && columnIndices?.Length > 0)
+            if (!string.IsNullOrWhiteSpace(midText) && columnIndices?.Length > 0)
             {
                 var textFilters = columnIndices
                     .Where(index => index >= 0 && index < dt.Columns.Count)
-                    .Select(index => $"CONVERT([{dt.Columns[index].ColumnName}], System.String) LIKE '%{filterText.Replace("'", "''")}%'")
+                    .Select(index => $"CONVERT([{dt.Columns[index].ColumnName}], System.String) LIKE '%{midText.Replace("'", "''")}%'")
                     .ToArray();
 
                 if (textFilters.Length > 0)
@@ -1275,9 +1278,9 @@ namespace DML
             }
 
             // 2. Добавляем точные фильтры по парам "индекс колонки - значение"
-            if (pairs?.Length > 0)
+            if (equalPairs?.Length > 0)
             {
-                foreach (var pair in pairs)
+                foreach (var pair in equalPairs)
                 {
                     if (!string.IsNullOrWhiteSpace(pair.filter) &&
                         pair.col >= 0 && pair.col < dt.Columns.Count)
@@ -1288,10 +1291,22 @@ namespace DML
                 }
             }
 
-            // 3. Объединяем все фильтры в одно выражение
+            // 4.1. Добавляем фильтры блоков (title.???) по парам "индекс колонки - значение"
+            {
+
+                if (!string.IsNullOrWhiteSpace(blockPair.filter) &&
+                    blockPair.col >= 0 && blockPair.col < dt.Columns.Count)
+                {
+                    string columnName = dt.Columns[blockPair.col].ColumnName;
+                    filters.Add($"( [{columnName}] = '{blockPair.filter.Replace("'", "''")}' OR CONVERT([{columnName}], System.String) LIKE '{blockPair.filter.Replace("'", "''")}.%' )");
+                }
+
+            }
+
+            // 4. Объединяем все фильтры в одно выражение
             string filterExpression = string.Join(" AND ", filters);
 
-            // 4. Применяем фильтрацию к BindingSource
+            // 5. Применяем фильтрацию к BindingSource
             bindingSource.Filter = filterExpression;
         }
 

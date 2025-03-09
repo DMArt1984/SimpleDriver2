@@ -284,6 +284,8 @@ namespace WinSimpleIDriver
             dataGridViewGroup.Rows.Clear();
             dataGridViewTag.Rows.Clear();
 
+            //DataTableLib.dtTag.DrawTable(EditorControl.tags);
+
         }
 
         private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
@@ -338,6 +340,9 @@ namespace WinSimpleIDriver
 
             //
             TreeLib.DrawTreeSGT();
+            TreeLib.DrawTreeBlock();
+            TreeLib.DrawTreeStructure();
+            TreeLib.DrawTreeStructure();
 
             //
             SetComboPlaceholder();
@@ -533,11 +538,14 @@ namespace WinSimpleIDriver
 
         private void buttonGroupFilter_Click(object sender, EventArgs e)
         {
+            GroupFilter();
+        }
+
+        private void GroupFilter()
+        {
             FormLib.SaveTextComboBox(comboBoxGroupFilterSource);
             DataTableLib.dtGroup.TextFilter();
         }
-
-        
 
         #endregion
 
@@ -685,13 +693,17 @@ namespace WinSimpleIDriver
 
         private void buttonTagFilter_Click(object sender, EventArgs e)
         {
+            TagFilter();
+        }
+
+        private void TagFilter()
+        {
             FormLib.SaveTextComboBox(comboBoxTagFilterSource);
             FormLib.SaveTextComboBox(comboBoxTagFilterGroup);
             FormLib.SaveTextComboBox(comboBoxTagFilterBlock);
             FormLib.SaveTextComboBox(comboBoxTagFilterPage);
             DataTableLib.dtTag.TextFilter();
         }
-
         
 
         #endregion
@@ -821,6 +833,11 @@ namespace WinSimpleIDriver
 
         private void buttonChangeFilter_Click(object sender, EventArgs e)
         {
+            IncludeChildFilter();
+        }
+
+        private void IncludeChildFilter()
+        {
             FormLib.SaveTextComboBox(comboBoxIncludeChildFilterParent);
             DataTableLib.dtIncludeChild.IncludeChildFilter();
         }
@@ -929,6 +946,11 @@ namespace WinSimpleIDriver
         }
 
         private void buttonTargetFilter_Click(object sender, EventArgs e)
+        {
+            TargetFilter();
+        }
+
+        private void TargetFilter()
         {
             FormLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
             DataTableLib.dtTarget.StructureTargetFilter();
@@ -1084,13 +1106,16 @@ namespace WinSimpleIDriver
                 case TreeProjCategory.sourceItem:
                     comboBoxGroupFilterSource.Text = text;
                     comboBoxTagFilterSource.Text = text;
-                    DataTableLib.dtGroup.TextFilter();
-                    DataTableLib.dtTag.TextFilter();
+                    //DataTableLib.dtGroup.TextFilter();
+                    //DataTableLib.dtTag.TextFilter();
+                    GroupFilter();
+                    TagFilter();
                     break;
 
                 case TreeProjCategory.groupItem:
                     comboBoxTagFilterGroup.Text = text;
-                    DataTableLib.dtTag.TextFilter();
+                    //DataTableLib.dtTag.TextFilter();
+                    GroupFilter();
                     break;
 
                 case TreeProjCategory.tagItem:
@@ -1098,16 +1123,21 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.blockItem:
                     comboBoxTagFilterBlock.Text = text;
-                    DataTableLib.dtTag.TextFilter();
+                    //DataTableLib.dtTag.TextFilter();
+                    TagFilter();
                     break;
 
                 case TreeProjCategory.structures:
+                    comboBoxStructureTargetFilterParent.Text = text;
+                    TargetFilter();
                     break;
 
                 case TreeProjCategory.targetItem:
                     break;
 
                 case TreeProjCategory.includes:
+                    comboBoxIncludeChildFilterParent.Text = text;
+                    IncludeChildFilter();
                     break;
 
                 case TreeProjCategory.includeItem:
