@@ -63,7 +63,7 @@ namespace DML
             dtGroup.dgv.Rows.Clear();
             dtSource.dgv.Rows.Clear();
 
-            dtTarget.dgv.Rows.Clear();
+            dtStructTarget.dgv.Rows.Clear();
             dtStructure.dgv.Rows.Clear();
 
             dtIncludeChild.dgv.Rows.Clear();
@@ -759,8 +759,8 @@ namespace DML
                 {
                     Title = dgv.Columns["structureTitle"].Index,
                     Connector = dgv.Columns["structureConnector"].Index,
-                    TagSource = dgv.Columns["structureTagSource"].Index,
-                    Template = dgv.Columns["structureTemplate"].Index,
+                    //TagSource = dgv.Columns["structureTagSource"].Index,
+                    TemplateAddress = dgv.Columns["structureTemplate"].Index,
                     Group = dgv.Columns["structureGroup"].Index,
                     DataType = dgv.Columns["structureDataType"].Index
                 };
@@ -772,7 +772,7 @@ namespace DML
             {
                 return new int[]
                 {
-                col.Title, col.Template, col.TagSource, col.Group, col.Connector
+                col.Title, col.TemplateAddress, col.Group, col.Connector
                 };
             }
             static public PairFilterCol[] GetPairFilter()
@@ -783,9 +783,9 @@ namespace DML
             
         }
 
-        static public class dtTarget
+        static public class dtStructTarget
         {
-            static public DGVTargetCol col = new DGVTargetCol(); // Номера колонок в DGV
+            static public DGVStructTargetCol col = new DGVStructTargetCol(); // Номера колонок в DGV
 
             static public DataGridView dgv;
 
@@ -807,11 +807,11 @@ namespace DML
             static public void LinkColumns(DataGridView targets)
             {
                 dgv = targets;
-                col = new DGVTargetCol
+                col = new DGVStructTargetCol
                 {
                     Structure = dgv.Columns["targetStructure"].Index,
                     Address = dgv.Columns["targetAddress"].Index,
-                    Tag = dgv.Columns["targetTitle"].Index,
+                    InnerTitle = dgv.Columns["targetTitle"].Index,
                     Desc = dgv.Columns["targetDesc"].Index
                 };
 
@@ -822,7 +822,7 @@ namespace DML
             {
                 return new int[]
                 {
-                col.Tag, col.Desc, col.Address
+                col.InnerTitle, col.Desc, col.Address
                 };
             }
             static public PairFilterCol[] GetPairFilter(string textStructure)

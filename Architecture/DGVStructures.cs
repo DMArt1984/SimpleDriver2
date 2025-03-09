@@ -48,16 +48,16 @@ namespace WinSimpleIDriver
     {
         public int Title;
         public int Connector;
-        public int TagSource;
-        public int Template;
+        //public int TagSource;
+        public int TemplateAddress;
         public int Group;
         public int DataType;
     }
-    public struct DGVTargetCol
+    public struct DGVStructTargetCol
     {
         public int Structure;
+        public int InnerTitle;
         public int Address;
-        public int Tag;
         public int Desc;
     }
 

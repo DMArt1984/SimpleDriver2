@@ -174,7 +174,7 @@ namespace DML
         {
             // Получить списки для дерева
             var collectionStructure = MyTree.SetTreeCollection(DataTableLib.dtStructure.dgv, DataTableLib.dtStructure.col.Title);
-            var collectionTarget = MyTree.SetTreeCollection(DataTableLib.dtTarget.dgv, DataTableLib.dtTarget.col.Tag, DataTableLib.dtTarget.col.Structure);
+            var collectionTarget = MyTree.SetTreeCollection(DataTableLib.dtStructTarget.dgv, DataTableLib.dtStructTarget.col.InnerTitle, DataTableLib.dtStructTarget.col.Structure);
 
             // Структуры
             TreeLib.treeStructure.Nodes.Clear();

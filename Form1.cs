@@ -97,9 +97,9 @@ namespace WinSimpleIDriver
             DataTableLib.dtStructure.tbFilter = textBoxStructureFilter;
 
             // Form: StructureTargetForm
-            DataTableLib.dtTarget.LinkColumns(dataGridViewStructureTarget);
-            DataTableLib.dtTarget.tbFilter = textBoxStructureTargetFilter;
-            DataTableLib.dtTarget.coFilterParent = comboBoxStructureTargetFilterParent;
+            DataTableLib.dtStructTarget.LinkColumns(dataGridViewStructureTarget);
+            DataTableLib.dtStructTarget.tbFilter = textBoxStructureTargetFilter;
+            DataTableLib.dtStructTarget.coFilterParent = comboBoxStructureTargetFilterParent;
 
             // Form: Include
             DataTableLib.dtInclude.LinkColumns(dataGridViewInclude);
@@ -918,7 +918,7 @@ namespace WinSimpleIDriver
         {
             string text = (splitContainerStructure.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewStructure, DataTableLib.dtStructure.col.Title));
             comboBoxStructureTargetFilterParent.Text = text;
-            DataTableLib.dtTarget.StructureTargetFilter();
+            DataTableLib.dtStructTarget.StructureTargetFilter();
         }
 
         
@@ -938,12 +938,12 @@ namespace WinSimpleIDriver
         #region StructureTarget.ComboFilter.Event
         private void comboBoxTargetFilterSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DataTableLib.dtTarget.StructureTargetFilter();
+            DataTableLib.dtStructTarget.StructureTargetFilter();
         }
         private void comboBoxTargetFilterSource_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(comboBoxStructureTargetFilterParent.Text))
-                DataTableLib.dtTarget.StructureTargetFilter();
+                DataTableLib.dtStructTarget.StructureTargetFilter();
         }
 
         private void buttonTargetFilter_Click(object sender, EventArgs e)
@@ -954,20 +954,20 @@ namespace WinSimpleIDriver
         private void TargetFilter()
         {
             FormLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
-            DataTableLib.dtTarget.StructureTargetFilter();
+            DataTableLib.dtStructTarget.StructureTargetFilter();
         }
 
         private void textBoxTargetFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxStructureTargetFilter.Text))
-                DataTableLib.dtTarget.StructureTargetFilter();
+                DataTableLib.dtStructTarget.StructureTargetFilter();
         }
 
         private void dataGridViewTarget_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
             DataTableLib.ForNewRow(dataGridViewStructureTarget); // new ID
 
-            DataTableLib.SetParentInRow(dataGridViewStructureTarget, comboBoxStructureTargetFilterParent, DataTableLib.dtTarget.col.Structure); // filter
+            DataTableLib.SetParentInRow(dataGridViewStructureTarget, comboBoxStructureTargetFilterParent, DataTableLib.dtStructTarget.col.Structure); // filter
 
             // filter
             //string text = comboBoxTargetFilterSource.Text;
@@ -1236,7 +1236,7 @@ namespace WinSimpleIDriver
 
                 case TreeProjCategory.targetItem:
                     tabControlProject.SelectTab(tabPageStructure);
-                    DataTableLib.ShowRow(dataGridViewStructureTarget, Id, title, DataTableLib.dtTarget.col.Tag); // ?
+                    DataTableLib.ShowRow(dataGridViewStructureTarget, Id, title, DataTableLib.dtStructTarget.col.InnerTitle); // ?
                     break;
 
 
