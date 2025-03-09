@@ -57,6 +57,18 @@ namespace DML
         }
         #endregion
 
+        static public void Clear()
+        {
+            dtTag.Clear();
+            dtGroup.dgv.Rows.Clear();
+            dtSource.dgv.Rows.Clear();
+
+            dtTarget.dgv.Rows.Clear();
+            dtStructure.dgv.Rows.Clear();
+
+            dtIncludeChild.dgv.Rows.Clear();
+            dtInclude.dgv.Rows.Clear();
+        }
 
         #region Source
 
@@ -348,6 +360,11 @@ namespace DML
 
             static private DataTable tagTable = new DataTable(); // DataTable для хранения данных тегов
             static private BindingSource bindingSource = new BindingSource(); // BindingSource для привязки данных к DataGridView
+
+            static public void Clear()
+            {
+                tagTable.Rows.Clear();
+            }
 
             #region DGV.Add
             //static public void DrawTable(List<TagEditor> tags)

@@ -273,16 +273,17 @@ namespace WinSimpleIDriver
         // Новый проект
         private void FormClear()
         {
+            // DGV
+            DataTableLib.Clear();
+            //dataGridViewSource.Rows.Clear();
+            //dataGridViewGroup.Rows.Clear();
+            //dataGridViewTag.Rows.Clear();
+
             // treeView
             TreeLib.DrawTreeSGT();
             TreeLib.DrawTreeBlock();
             TreeLib.DrawTreeStructure();
             TreeLib.DrawTreeInclude();
-
-            // DGV
-            dataGridViewSource.Rows.Clear();
-            dataGridViewGroup.Rows.Clear();
-            dataGridViewTag.Rows.Clear();
 
             //DataTableLib.dtTag.DrawTable(EditorControl.tags);
 
