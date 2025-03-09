@@ -751,6 +751,27 @@ namespace DML
             }
             #endregion
 
+            #region DGV.Add
+            static public void DrawTable(List<StructureEditor> structures)
+            {
+                // Таблица источников
+                dgv.Rows.Clear();
+                foreach (var item in structures)
+                {
+                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                    row.Cells[0].Value = item.Id;
+
+                    row.Cells[col.Title].Value = item.title;
+                    row.Cells[col.Join].Value = item.join;
+                    row.Cells[col.TemplateAddress].Value = item.templateAddress;
+                    row.Cells[col.Group].Value = item.group;
+                    row.Cells[col.DataType].Value = item.dataType.ToString();
+
+                    // -
+                    dgv.Rows.Add(row);
+                }
+            }
+            #endregion
 
             // Определение номеров колонок
             static public void LinkColumns(DataGridView structures)
@@ -759,7 +780,7 @@ namespace DML
                 col = new DGVStructureCol
                 {
                     Title = dgv.Columns["structureTitle"].Index,
-                    Connector = dgv.Columns["structureConnector"].Index,
+                    Join = dgv.Columns["structureConnector"].Index,
                     //TagSource = dgv.Columns["structureTagSource"].Index,
                     TemplateAddress = dgv.Columns["structureTemplate"].Index,
                     Group = dgv.Columns["structureGroup"].Index,
@@ -773,7 +794,7 @@ namespace DML
             {
                 return new int[]
                 {
-                col.Title, col.TemplateAddress, col.Group, col.Connector
+                col.Title, col.TemplateAddress, col.Group, col.Join
                 };
             }
             static public PairFilterCol[] GetPairFilter()

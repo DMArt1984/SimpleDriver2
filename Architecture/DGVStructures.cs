@@ -47,8 +47,7 @@ namespace WinSimpleIDriver
     public struct DGVStructureCol
     {
         public int Title;
-        public int Connector;
-        //public int TagSource;
+        public int Join;
         public int TemplateAddress;
         public int Group;
         public int DataType;
