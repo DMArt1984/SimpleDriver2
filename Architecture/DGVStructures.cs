@@ -50,6 +50,7 @@ namespace WinSimpleIDriver
         public int TagSource;
         public int Template;
         public int Group;
+        public int DataType;
     }
     public struct DGVTargetCol
     {

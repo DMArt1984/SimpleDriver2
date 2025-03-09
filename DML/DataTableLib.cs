@@ -38,7 +38,25 @@ namespace DML
             public string filter;
         }
 
-        
+        #region Table Enum
+        static public void SetTableEnum()
+        {
+            // Устройства
+            ComboBox cbDriver = new ComboBox();
+            foreach (string title in Enum.GetNames(typeof(eDriverType)))
+                cbDriver.Items.Add(title);
+            ((DataGridViewComboBoxColumn)dtSource.dgv.Columns[dtSource.col.Driver]).DataSource = cbDriver.Items;
+
+            // Теги и структуры
+            ComboBox cbTypeData = new ComboBox();
+            foreach (string title in Enum.GetNames(typeof(eDataType)))
+                cbTypeData.Items.Add(title);
+            ((DataGridViewComboBoxColumn)dtTag.dgv.Columns[dtTag.col.DataType]).DataSource = cbTypeData.Items;
+            ((DataGridViewComboBoxColumn)dtStructure.dgv.Columns[dtStructure.col.DataType]).DataSource = cbTypeData.Items;
+            
+        }
+        #endregion
+
 
         #region Source
 
@@ -722,7 +740,8 @@ namespace DML
                     Connector = dgv.Columns["structureConnector"].Index,
                     TagSource = dgv.Columns["structureTagSource"].Index,
                     Template = dgv.Columns["structureTemplate"].Index,
-                    Group = dgv.Columns["structureGroup"].Index
+                    Group = dgv.Columns["structureGroup"].Index,
+                    DataType = dgv.Columns["structureDataType"].Index
                 };
 
             }

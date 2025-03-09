@@ -21,11 +21,7 @@ namespace WinSimpleIDriver
     
     public partial class Form1 : Form
     {
-        // Дерево проекта
-        TreeNode treeSGT; // Источники/Группы/Теги
-        TreeNode treeBlock; // Блоки
-        TreeNode treeStructure; // Структуры
-        TreeNode treeInclude; // Классы
+        
 
         // Теги
         DataTable dtTags;
@@ -114,22 +110,17 @@ namespace WinSimpleIDriver
             DataTableLib.dtIncludeChild.tbFilter = textBoxIncludeChildFilter;
             DataTableLib.dtIncludeChild.coFilterParent = comboBoxIncludeChildFilterParent;
 
+            // Form: Tree
+            TreeLib.tree = treeViewProject;
+            TreeLib.contextMenuStripTreeProj = contextMenuStripTreeProj;
+            // Дерево
+            TreeLib.treeSGT = treeViewProject.Nodes["Sources"]; // Источники/Группы/Теги
+            TreeLib.treeBlock = treeViewProject.Nodes["Blocks"]; // Блоки
+            TreeLib.treeStructure = treeViewProject.Nodes["Structures"]; // Структуры
+            TreeLib.treeInclude = treeViewProject.Nodes["Includes"]; // Классы
 
-
-            #region Table Enum
-            // Устройства
-            ComboBox cbDriver = new ComboBox();
-            foreach (string title in Enum.GetNames(typeof(eDriverType)))
-                cbDriver.Items.Add(title);
-            ((DataGridViewComboBoxColumn)dataGridViewSource.Columns["sourceDriver"]).DataSource = cbDriver.Items;
-
-            // Теги и структуры
-            ComboBox cbTypeData = new ComboBox();
-            foreach (string title in Enum.GetNames(typeof(eDataType)))
-                cbTypeData.Items.Add(title);
-            ((DataGridViewComboBoxColumn)dataGridViewTag.Columns["tagDataType"]).DataSource = cbTypeData.Items;
-            ((DataGridViewComboBoxColumn)dataGridViewStructure.Columns["structureDataType"]).DataSource = cbTypeData.Items;
-            #endregion
+            //
+            DataTableLib.SetTableEnum();
 
             #region View
             // Вид - Дерево
@@ -138,11 +129,7 @@ namespace WinSimpleIDriver
 
             #endregion
 
-            // Дерево
-            treeSGT = treeViewProject.Nodes["Sources"]; // Источники/Группы/Теги
-            treeBlock = treeViewProject.Nodes["Blocks"]; // Блоки
-            treeStructure = treeViewProject.Nodes["Structures"]; // Структуры
-            treeInclude = treeViewProject.Nodes["Includes"]; // Классы
+            
 
             // Новый проект
             FormClear();
@@ -156,6 +143,8 @@ namespace WinSimpleIDriver
 
             //MessageBox.Show(Settings.x);
         }
+
+        
 
         // ================================================================================================================
 
@@ -283,10 +272,10 @@ namespace WinSimpleIDriver
         private void FormClear()
         {
             // treeView
-            DrawTreeSGT();
-            DrawTreeBlock();
-            DrawTreeStructure();
-            DrawTreeInclude();
+            TreeLib.DrawTreeSGT();
+            TreeLib.DrawTreeBlock();
+            TreeLib.DrawTreeStructure();
+            TreeLib.DrawTreeInclude();
 
             // DGV
             dataGridViewSource.Rows.Clear();
@@ -339,7 +328,7 @@ namespace WinSimpleIDriver
             DataTableLib.dtTag.DrawTable(EditorControl.tags);
             //...
 
-            DrawTreeSGT();
+            TreeLib.DrawTreeSGT();
 
         }
 
@@ -377,10 +366,6 @@ namespace WinSimpleIDriver
         #endregion
 
         #endregion
-
-        // ================================================================================================================
-
-
 
         // ================================================================================================================
 
@@ -449,7 +434,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewSource_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            DrawTreeSGT();
+            TreeLib.DrawTreeSGT();
         }
 
         private void dataGridViewSource_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -553,7 +538,7 @@ namespace WinSimpleIDriver
 
         private void dataGridViewGroup_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            DrawTreeSGT();
+            TreeLib.DrawTreeSGT();
         }
 
         private void dataGridViewGroup_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -716,8 +701,8 @@ namespace WinSimpleIDriver
             {
                 DataTableLib.dtTag.UpdateDGVTagSourceLink();
             }
-            DrawTreeSGT();
-            DrawTreeBlock();
+            TreeLib.DrawTreeSGT();
+            TreeLib.DrawTreeBlock();
         }
 
         private void dataGridViewTag_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -993,37 +978,11 @@ namespace WinSimpleIDriver
         private void treeViewProject_AfterSelect(object sender, TreeViewEventArgs e)
         {
             var selNode = treeViewProject.SelectedNode;
-            TreeProjContexMenu(selNode);
+            TreeLib.TreeProjContexMenu(selNode);
         }
         #endregion
 
-        // Пункты контекстного меню
-        private void TreeProjContexMenu(TreeNode selNode)
-        {
-            if (selNode.Tag == null)
-                return;
-
-            var tpt = (selNode.Tag as TreeProjTag);
-
-            // Контекстное меню в зависимости от категории
-            contextMenuStripTreeProj.Items[0].Visible = false;
-            contextMenuStripTreeProj.Items[1].Visible = false;
-            switch (tpt.category)
-            {
-                case TreeProjCategory.sourceItem:
-                case TreeProjCategory.groupItem:
-                case TreeProjCategory.tagItem:
-                case TreeProjCategory.blockItem:
-                case TreeProjCategory.structureItem:
-                case TreeProjCategory.targetItem:
-                case TreeProjCategory.includeItem:
-                case TreeProjCategory.changeItem:
-                    contextMenuStripTreeProj.Items[0].Visible = true;
-                    contextMenuStripTreeProj.Items[1].Visible = true;
-                    break;
-
-            }
-        }
+        
 
 
         // Добавить в фильт тегов источник, группу и т.п.
@@ -1092,207 +1051,6 @@ namespace WinSimpleIDriver
         }
 
         #region Tree.lib
-
-        // Построить дерево для Источники/Группы/Теги
-        private void DrawTreeSGT()
-        {
-            // Получить списки для дерева
-            var collectionSource = MyTree.SetTreeCollection(dataGridViewSource, DataTableLib.dtSource.col.Title);
-            var collectionGroup = MyTree.SetTreeCollection(dataGridViewGroup, DataTableLib.dtGroup.col.Title, DataTableLib.dtGroup.col.Source);
-            var collectionTag = MyTree.SetTreeCollection(dataGridViewTag, DataTableLib.dtTag.col.Title, DataTableLib.dtTag.col.Group);
-
-            // Источники
-            treeSGT.Nodes.Clear();
-            //treeSGT = new TreeNode("Источники данных");
-            treeSGT.Tag = new TreeProjTag(TreeProjCategory.sources, 0);
-            treeSGT.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
-            //treeSGT.ImageIndex = 2;
-            //treeSGT.SelectedImageIndex = 1;
-
-            // Список источников
-            foreach (var itemSource in collectionSource)
-            {
-                TreeNode tnSource = new TreeNode($"{itemSource.Title}");
-                tnSource.Tag = new TreeProjTag(TreeProjCategory.sourceItem, itemSource.Id, itemSource.Title);
-                tnSource.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
-                tnSource.ImageIndex = 0;
-
-                // Список групп
-                foreach (var itemGroup in collectionGroup)
-                {
-                    if (itemGroup.Link != itemSource.Title)
-                        continue;
-
-                    TreeNode tnGroup = new TreeNode($"{itemGroup.Title}");
-                    tnGroup.Tag = new TreeProjTag(TreeProjCategory.groupItem, itemGroup.Id, itemGroup.Title);
-                    tnGroup.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
-                    tnGroup.ImageIndex = 0;
-
-                    // Список тегов
-                    foreach (var itemTag in collectionTag)
-                    {
-                        if (itemTag.Link != itemGroup.Title)
-                            continue;
-
-                        TreeNode tnTag = new TreeNode($"{itemTag.Title}");
-                        tnTag.Tag = new TreeProjTag(TreeProjCategory.tagItem, itemTag.Id, itemTag.Title);
-                        tnTag.NodeFont = new Font(this.Font.FontFamily, 8, FontStyle.Regular);
-                        tnTag.ImageIndex = 0;
-
-                        tnGroup.Nodes.Add(tnTag); // тег
-                    }
-
-                    tnSource.Nodes.Add(tnGroup); // группа
-                }
-
-                treeSGT.Nodes.Add(tnSource); // источник
-            }
-            //treeSGT.Text += (EditorControl.sources.Count > 0) ? $" [ {EditorControl.sources.Count} ]" : "";
-            //treeViewProject.Nodes.Add(treeSources);
-        }
-
-        // Построить дерево для Блоков
-        private void DrawTreeBlock()
-        {
-            // Получение списка путей групп из таблицы тегов
-            List<string> blocks = new List<string>();
-            foreach (DataGridViewRow row in dataGridViewTag.Rows)
-            {
-                var block = row.Cells[DataTableLib.dtTag.col.Block].Value;
-                if (block == null)
-                    continue;
-
-                if (String.IsNullOrWhiteSpace(block.ToString()))
-                    continue;
-
-                blocks.Add(block.ToString());
-            }
-            // Убираем повторения
-            blocks = blocks.Distinct().OrderBy(x => x).ToList();
-
-            // Блоки
-            treeBlock.Nodes.Clear();
-            //treeBlock = new TreeNode("Блоки");
-            treeBlock.Tag = new TreeProjTag(TreeProjCategory.blocks, 0);
-            treeBlock.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
-            //treeBlock.ImageIndex = 2;
-            //treeBlock.SelectedImageIndex = 1;
-
-            // Перебор всех путей
-            foreach (string pathBlock in blocks)
-            {
-                if (String.IsNullOrWhiteSpace(pathBlock))
-                    continue;
-
-                TreeNode tn = treeBlock;
-                string[] parts = pathBlock.Split('.'); // A.B.C.D
-                foreach (string item in parts)
-                {
-                    if (String.IsNullOrWhiteSpace(item))
-                        continue;
-
-                    var exist = tn.Nodes.Find(item, false);
-                    if (exist == null || exist.Length == 0)
-                    {
-                        TreeNode next = new TreeNode(item);
-                        next.Name = item;
-                        next.ToolTipText = pathBlock;
-                        next.Tag = new TreeProjTag(TreeProjCategory.blockItem, 0, pathBlock);
-                        next.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
-                        tn.Nodes.Add(next);
-                        tn = next;
-                    }
-                    else
-                    {
-                        tn = exist[0];
-                    }
-
-                }
-
-            }
-
-        }
-
-        // Построить дерево для Структур
-        private void DrawTreeStructure()
-        {
-            // Получить списки для дерева
-            var collectionStructure = MyTree.SetTreeCollection(dataGridViewStructure, DataTableLib.dtStructure.col.Title);
-            var collectionTarget = MyTree.SetTreeCollection(dataGridViewStructureTarget, DataTableLib.dtTarget.col.Tag, DataTableLib.dtTarget.col.Structure);
-
-            // Структуры
-            treeStructure.Nodes.Clear();
-            //treeStructure = new TreeNode("Структуры");
-            treeStructure.Tag = new TreeProjTag(TreeProjCategory.structures, 0);
-            treeStructure.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
-            //treeStructure.ImageIndex = 2;
-            //treeStructure.SelectedImageIndex = 1;
-
-            // Список структур
-            foreach (var itemStructure in collectionStructure)
-            {
-                TreeNode tnStructure = new TreeNode($"{itemStructure.Title}");
-                tnStructure.Tag = new TreeProjTag(TreeProjCategory.structureItem, itemStructure.Id);
-                tnStructure.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
-                tnStructure.ImageIndex = 0;
-
-                // Список тегов структур
-                foreach (var itemTarget in collectionTarget)
-                {
-                    if (itemTarget.Link != itemStructure.Title)
-                        continue;
-
-                    TreeNode tnTarget = new TreeNode($"{itemTarget.Title}");
-                    tnTarget.Tag = new TreeProjTag(TreeProjCategory.targetItem, itemTarget.Id);
-                    tnTarget.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
-                    tnTarget.ImageIndex = 0;
-
-                    tnStructure.Nodes.Add(tnTarget); // тег структуры
-                }
-                treeStructure.Nodes.Add(tnStructure); // структура
-            }
-
-        }
-
-        // Построить дерево для Классов
-        private void DrawTreeInclude()
-        {
-            // Получить списки для дерева
-            var collectionInclude = MyTree.SetTreeCollection(dataGridViewInclude, DataTableLib.dtInclude.col.Prefix);
-            var collectionChange = MyTree.SetTreeCollection(dataGridViewIncludeChild, DataTableLib.dtIncludeChild.col.ChangeFrom, DataTableLib.dtIncludeChild.col.Prefix);
-
-            // Классы
-            treeInclude.Nodes.Clear();
-            //treeInclude = new TreeNode("Классы");
-            treeInclude.Tag = new TreeProjTag(TreeProjCategory.includes, 0);
-            treeInclude.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
-            //treeInclude.ImageIndex = 2;
-            //treeInclude.SelectedImageIndex = 1;
-
-            // Список классов
-            foreach (var itemInclude in collectionInclude)
-            {
-                TreeNode tnInclude = new TreeNode($"{itemInclude.Title}");
-                tnInclude.Tag = new TreeProjTag(TreeProjCategory.includeItem, itemInclude.Id);
-                tnInclude.NodeFont = new Font(this.Font.FontFamily, 12, FontStyle.Regular);
-                tnInclude.ImageIndex = 0;
-
-                // Список замен
-                foreach (var itemChange in collectionChange)
-                {
-                    if (itemChange.Link != itemInclude.Title)
-                        continue;
-
-                    TreeNode tnChange = new TreeNode($"{itemChange.Title}");
-                    tnChange.Tag = new TreeProjTag(TreeProjCategory.changeItem, itemChange.Id);
-                    tnChange.NodeFont = new Font(this.Font.FontFamily, 10, FontStyle.Regular);
-                    tnChange.ImageIndex = 0;
-
-                    tnInclude.Nodes.Add(tnChange); // замена
-                }
-                treeInclude.Nodes.Add(tnInclude); // классы
-            }
-        }
 
         // Установить значения из дерева в соответствующие поля фильтра
         private void WriteTabFilter()
@@ -1454,17 +1212,13 @@ namespace WinSimpleIDriver
 
         // ================================================================================================================
 
-
-
-        // ================================================================================================================
-
         // TEST
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DrawTreeSGT(); // Построение дерева Источники/Группы/Теги
-            DrawTreeBlock(); // Построить дерево для Блоков
-            DrawTreeStructure(); // Построить дерево для Структур
-            DrawTreeInclude(); // Построить дерево для Классов
+            TreeLib.DrawTreeSGT(); // Построение дерева Источники/Группы/Теги
+            TreeLib.DrawTreeBlock(); // Построить дерево для Блоков
+            TreeLib.DrawTreeStructure(); // Построить дерево для Структур
+            TreeLib.DrawTreeInclude(); // Построить дерево для Классов
         }
 
         private void testTagSourceToolStripMenuItem_Click(object sender, EventArgs e)
