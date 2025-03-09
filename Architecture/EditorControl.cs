@@ -17,10 +17,18 @@ namespace WinSimpleIDriver
         static public List<TagEditor> tags;
         static public List<GroupEditor> groups;
 
+        static public List<StructureEditor> structures;
+        static public List<StructTargetEditor> structTargets;
+        static public List<StructTagEditor> structTags;
+
         static uint sourceId = 0;
         static uint groupId = 0;
         static uint tagId = 0;
         static uint blockUnnamedId = 0;
+
+        static uint structureId = 0;
+        static uint structTargetId = 0;
+        static uint structTagId = 0;
 
         // Очистка данных
         static public void Clear()
@@ -29,10 +37,17 @@ namespace WinSimpleIDriver
             tags = new List<TagEditor>();
             groups = new List<GroupEditor>();
 
+            structures = new List<StructureEditor>();
+            structTargets = new List<StructTargetEditor>();
+            structTags = new List<StructTagEditor>();
+
             sourceId = 0;
             groupId = 0;
             tagId = 0;
             blockUnnamedId = 0;
+            structureId = 0;
+            structTargetId = 0;
+            structTagId = 0;
         }
 
         // Распаковка проекта
@@ -69,7 +84,12 @@ namespace WinSimpleIDriver
             }
 
             // Установить ID и Title для объектов
-            CalcIdAndTitle(); 
+            CalcIdAndTitle();
+
+            // Распаковка структур
+            if (Tag.IsStructures(output))
+                ParseStructures(output.Structures);
+
 
         }
 
@@ -228,6 +248,57 @@ namespace WinSimpleIDriver
             }
         }
 
+        // Распаковка структур
+        static void ParseStructures(dynamic data)
+        {
+            if (data != null)
+            {
+                foreach (dynamic item in data)
+                {
+                    if (Tag.IsTargetTags(item))
+                    {
+                        Tag.ParseItemStructure(item, out string title, out string join, out string address, out eDataType dataType, out string source, out string group, out string[] sourceTags, out List <TargetTag> targetTags);
+                        //---
+                        StructureEditor oneStructure = new StructureEditor
+                        {
+                            Id = ++structureId,
+                            title = title,
+                            join = join,
+                            templateAddress = address,
+                            dataType = dataType,
+                            tagSource = source,
+                            group = group,
+                        };
+                        structures.Add(oneStructure);
+                        //---
+                        foreach (var target in targetTags)
+                        {
+                            StructTargetEditor oneTarget = new StructTargetEditor
+                            {
+                                Id = ++structTargetId,
+                                structureTitle = title,
+                                innerAddress = target.address,
+                                title = target.title,
+                                desc = target.desc
+                            };
+                            structTargets.Add(oneTarget);
+                        }
+                        //
+                        foreach (var tagTitle in sourceTags)
+                        {
+                            StructTagEditor oneTag = new StructTagEditor
+                            {
+                                Id = ++structTargetId,
+                                structureTitle = title,
+                                title = tagTitle,
+                            };
+                            structTags.Add(oneTag);
+                        }
+
+                    }
+                }
+            }
+        }
 
 
         // ===========================================================

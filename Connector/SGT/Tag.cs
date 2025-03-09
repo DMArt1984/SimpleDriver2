@@ -763,17 +763,17 @@ namespace WinSimpleIDriver.Connector.SGT
         }
 
         // Получение параметров структуры
-        static public void ParseItemStructure(dynamic item, out string title, out string join, out string address, out eDataType dataType, out string source, out string group, out string[] sourceTags, out List<TargetTag> targetTags)
+        static public void ParseItemStructure(dynamic item, out string title, out string join, out string templateAddress, out eDataType dataType, out string tagSource, out string group, out string[] sourceTags, out List<TargetTag> targetTags)
         {
             title = JsonControl.GetString(item, "Title", $"noname #{DateTime.Now.Millisecond}");
             join = JsonControl.GetString(item, "Join", ".");
-            address = JsonControl.GetString(item, "Address", "{#Source.[#Target]}");
+            templateAddress = JsonControl.GetString(item, "Address", "{#Source.[#Target]}");
             dataType = JsonControl.GetTypeEnum<eDataType>(item, "DataType", eDataType.Binary);
-            source = JsonControl.GetString(item, "Source", "");
+            tagSource = JsonControl.GetString(item, "Source", "");
             group = JsonControl.GetString(item, "Group", "");
             sourceTags = JsonControl.GetArrayString(item, "SourceTags");
             targetTags = new List<TargetTag>();
-            if (IsTargetTags(item) && sourceTags.Any())
+            if (IsTargetTags(item))
             {
                 foreach (var target in item.TargetTags)
                 {
@@ -1614,22 +1614,30 @@ namespace WinSimpleIDriver.Connector.SGT
 
     public class StructureEditor
     {
-        public ushort Id; // Уникальный идентификатор (0 - нет Id)
-        public string title { get; set; }
-        public string join { get; set; }
-        public string address { get; set; }
-        public string source { get; set; } // title
-        public string group { get; set; } // title
-        public eDataType dataType { get; set; }
-        public string sourceTags { get; set; } // tag1;tag2;tag3
+        public uint Id; // Уникальный идентификатор (0 - нет Id)
+        public string title { get; set; } // Название
+        public string join { get; set; } // Соединитель
+        public eDataType dataType { get; set; } // Тип данных
+        public string tagSource { get; set; } // тег-источник
+        public string templateAddress { get; set; } // шаблон адреса
+        public string group { get; set; } // группа
+        
+        //public string sourceTags { get; set; } // tag1;tag2;tag3
     }
-    public struct TargetTagEditor
+    public class StructTargetEditor
     {
-        public ushort Id; // Уникальный идентификатор (0 - нет Id)
-        public string structTitle;
-        public string title;
-        public string desc;
-        public string address;
+        public uint Id; // Уникальный идентификатор (0 - нет Id)
+        public string structureTitle { get; set; }  // Название структуры
+        public string title { get; set; }  // Название тега
+        public string innerAddress { get; set; }  // Адрес
+        public string desc { get; set; }  // Описание тега
+    }
+
+    public class StructTagEditor
+    {
+        public uint Id; // Уникальный идентификатор (0 - нет Id)
+        public string structureTitle { get; set; }  // Название структуры
+        public string title { get; set; }  // Название тега
     }
 
     #endregion
