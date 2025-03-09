@@ -98,7 +98,7 @@ namespace WinSimpleIDriver
 
             // Form: StructureTargetForm
             DataTableLib.dtStructTarget.LinkColumns(dataGridViewStructureTarget);
-            DataTableLib.dtStructTarget.tbFilter = textBoxStructureTargetFilter;
+            DataTableLib.dtStructTarget.tbFilter = textBoxStructureFilter; // textBoxStructureTargetFilter;
             DataTableLib.dtStructTarget.coFilterParent = comboBoxStructureTargetFilterParent;
 
             // Form: Include
@@ -898,14 +898,17 @@ namespace WinSimpleIDriver
         private void textBoxStructureFilter_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(textBoxStructureFilter.Text))
+            {
                 DataTableLib.dtStructure.StructureFilter();
+                //DataTableLib.dtStructTarget.StructureTargetFilter();
+            }
         }
         private void buttonStructureFilter_Click(object sender, EventArgs e)
         {
             DataTableLib.dtStructure.StructureFilter();
+            //DataTableLib.dtStructTarget.StructureTargetFilter();
         }
 
-        
 
         #endregion
         private void dataGridViewStructure_SelectionChanged(object sender, EventArgs e)
@@ -955,12 +958,6 @@ namespace WinSimpleIDriver
         {
             FormLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
             DataTableLib.dtStructTarget.StructureTargetFilter();
-        }
-
-        private void textBoxTargetFilter_TextChanged(object sender, EventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(textBoxStructureTargetFilter.Text))
-                DataTableLib.dtStructTarget.StructureTargetFilter();
         }
 
         private void dataGridViewTarget_UserAddedRow(object sender, DataGridViewRowEventArgs e)
