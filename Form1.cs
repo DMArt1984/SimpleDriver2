@@ -349,6 +349,8 @@ namespace WinSimpleIDriver
             DataTableLib.dtStructure.DrawTable(EditorControl.structures);
             DataTableLib.dtStructTarget.DrawTable(EditorControl.structTargets);
             DataTableLib.dtStructTag.DrawTable(EditorControl.structTags);
+            DataTableLib.dtInclude.DrawTable(EditorControl.includes);
+            DataTableLib.dtIncludeChild.DrawTable(EditorControl.includeChilds);
             //...
 
             // link group -> source
@@ -361,7 +363,7 @@ namespace WinSimpleIDriver
             TreeLib.DrawTreeSGT();
             TreeLib.DrawTreeBlock();
             TreeLib.DrawTreeStructure();
-            TreeLib.DrawTreeStructure();
+            TreeLib.DrawTreeInclude();
 
             //
             SetComboPlaceholder();

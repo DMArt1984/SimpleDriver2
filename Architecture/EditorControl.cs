@@ -340,8 +340,8 @@ namespace WinSimpleIDriver
                         {
                             Id = ++includeChildId,
                             prefix = prefix,
-                            valueFrom = oneChange.Key,
-                            valueTo = oneChange.Value
+                            changeFrom = oneChange.Key,
+                            changeTo = oneChange.Value
                         };
                         includeChilds.Add(ice);
                     }

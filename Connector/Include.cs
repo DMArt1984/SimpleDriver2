@@ -37,15 +37,14 @@ namespace WinSimpleIDriver.Connector
         public uint Id { get; set; }
         public string fileName { get; set; } // файл для включения в основной код
         public string prefix { get; set; } // префикс к именам
-        //public Dictionary<string, string> changes { get; set; } // подстановки
     }
 
     public class IncludeChildEditor // Редактирование дочернего элемента
     {
         public uint Id { get; set; }
         public string prefix { get; set; } // префикс к именам
-        public string valueFrom { get; set; } // что меняем
-        public string valueTo { get; set; } // на что меняем
+        public string changeFrom { get; set; } // что меняем
+        public string changeTo { get; set; } // на что меняем
 
     }
 

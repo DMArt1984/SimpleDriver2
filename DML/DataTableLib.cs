@@ -11,7 +11,79 @@ using WinSimpleIDriver.Connector.SGT;
 
 namespace DML
 {
-    
+    #region DGV
+    public struct DGVSourcesCol
+    {
+        public int Calc;
+        public int Title;
+        public int Driver;
+        public int Address;
+        public int Desc;
+        public int Status;
+        public int Message;
+        public int CountTags;
+    }
+    public struct DGVGroupsCol
+    {
+        public int Calc;
+        public int Title;
+        public int Source;
+        public int Desc;
+        public int Status;
+        public int CountTags;
+    }
+    public struct DGVTagsCol
+    {
+        public int Calc;
+        public int Title;
+        public int Value;
+        public int DataType;
+        public int Address;
+        public int Desc;
+        public int Status;
+        public int Message;
+        public int Source;
+        public int Group;
+        public int Block;
+        public int Page;
+    }
+
+
+    public struct DGVStructureCol
+    {
+        public int Title;
+        public int Join;
+        public int TemplateAddress;
+        public int Group;
+        public int DataType;
+    }
+    public struct DGVStructTargetCol
+    {
+        public int Structure;
+        public int InnerTitle;
+        public int InnerAddress;
+        public int Desc;
+    }
+    public struct DGVStructTagCol
+    {
+        public int Structure;
+        public int TagTitle;
+    }
+
+
+    public struct DGVIncludeCol
+    {
+        public int Prefix;
+        public int FileName;
+    }
+    public struct DGVChangeCol
+    {
+        public int Prefix;
+        public int ChangeFrom;
+        public int ChangeTo;
+    }
+    #endregion
+
     public struct TableIdentity
     {
         public ushort Id;
@@ -965,6 +1037,25 @@ namespace DML
             }
             #endregion
 
+            #region DGV.Add
+            static public void DrawTable(List<IncludeEditor> includes)
+            {
+                // Таблица источников
+                dgv.Rows.Clear();
+                foreach (var item in includes)
+                {
+                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                    row.Cells[0].Value = item.Id;
+
+                    row.Cells[col.Prefix].Value = item.prefix;
+                    row.Cells[col.FileName].Value = item.fileName;
+
+                    // -
+                    dgv.Rows.Add(row);
+                }
+            }
+            #endregion
+
             // Определение номеров колонок
             static public void LinkColumns(DataGridView includes)
             {
@@ -1008,6 +1099,26 @@ namespace DML
 
                 TableFilter(tbFilter.Text, dgv,
                     GetColumnIndexFilter(), GetPairFilter(text));
+            }
+            #endregion
+
+            #region DGV.Add
+            static public void DrawTable(List<IncludeChildEditor> includeChilds)
+            {
+                // Таблица источников
+                dgv.Rows.Clear();
+                foreach (var item in includeChilds)
+                {
+                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                    row.Cells[0].Value = item.Id;
+
+                    row.Cells[col.Prefix].Value = item.prefix;
+                    row.Cells[col.ChangeFrom].Value = item.changeFrom;
+                    row.Cells[col.ChangeTo].Value = item.changeTo;
+
+                    // -
+                    dgv.Rows.Add(row);
+                }
             }
             #endregion
 
