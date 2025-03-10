@@ -1283,11 +1283,15 @@ namespace DML
             if (Id > 0)
             {
                 var row = GetRowByID(dgv, Id);
+                if (row == null)
+                    return;
                 ShowRow(dgv, row);
             }
             else if (title != "" && indexTitle > 0)
             {
                 var row = GetRowByTitle(dgv, title, indexTitle);
+                if (row == null)
+                    return;
                 ShowRow(dgv, row);
             }
         }

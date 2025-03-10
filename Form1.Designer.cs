@@ -34,16 +34,16 @@ namespace WinSimpleIDriver
             System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Блоки");
             System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Структуры");
             System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Классы");
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -203,10 +203,6 @@ namespace WinSimpleIDriver
             this.changeFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.changeTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewLog = new System.Windows.Forms.DataGridView();
-            this.logID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.logDT = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.logCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.logText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainerLogMain = new System.Windows.Forms.SplitContainer();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -228,6 +224,11 @@ namespace WinSimpleIDriver
             this.buttonIncludeResult = new System.Windows.Forms.Button();
             this.buttonIncludeDel = new System.Windows.Forms.Button();
             this.buttonIncludeCopy = new System.Windows.Forms.Button();
+            this.logID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.logDT = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.logType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.logCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.logText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTreeMain)).BeginInit();
@@ -408,7 +409,7 @@ namespace WinSimpleIDriver
             // ToolStripMenuItemVer
             // 
             this.ToolStripMenuItemVer.Name = "ToolStripMenuItemVer";
-            this.ToolStripMenuItemVer.Size = new System.Drawing.Size(113, 22);
+            this.ToolStripMenuItemVer.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemVer.Text = "Версия";
             // 
             // testToolStripMenuItem
@@ -746,10 +747,10 @@ namespace WinSimpleIDriver
             // sourceID
             // 
             this.sourceID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle28.Format = "N0";
-            dataGridViewCellStyle28.NullValue = null;
-            this.sourceID.DefaultCellStyle = dataGridViewCellStyle28;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle10.Format = "N0";
+            dataGridViewCellStyle10.NullValue = null;
+            this.sourceID.DefaultCellStyle = dataGridViewCellStyle10;
             this.sourceID.HeaderText = "ID";
             this.sourceID.Name = "sourceID";
             this.sourceID.ReadOnly = true;
@@ -1016,10 +1017,10 @@ namespace WinSimpleIDriver
             // groupID
             // 
             this.groupID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle29.Format = "N0";
-            dataGridViewCellStyle29.NullValue = null;
-            this.groupID.DefaultCellStyle = dataGridViewCellStyle29;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle11.Format = "N0";
+            dataGridViewCellStyle11.NullValue = null;
+            this.groupID.DefaultCellStyle = dataGridViewCellStyle11;
             this.groupID.HeaderText = "ID";
             this.groupID.Name = "groupID";
             this.groupID.ReadOnly = true;
@@ -1367,10 +1368,10 @@ namespace WinSimpleIDriver
             // tagID
             // 
             this.tagID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle30.Format = "N0";
-            dataGridViewCellStyle30.NullValue = null;
-            this.tagID.DefaultCellStyle = dataGridViewCellStyle30;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle12.Format = "N0";
+            dataGridViewCellStyle12.NullValue = null;
+            this.tagID.DefaultCellStyle = dataGridViewCellStyle12;
             this.tagID.HeaderText = "ID";
             this.tagID.Name = "tagID";
             this.tagID.ReadOnly = true;
@@ -1623,10 +1624,10 @@ namespace WinSimpleIDriver
             // structureID
             // 
             this.structureID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle31.Format = "N0";
-            dataGridViewCellStyle31.NullValue = null;
-            this.structureID.DefaultCellStyle = dataGridViewCellStyle31;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle13.Format = "N0";
+            dataGridViewCellStyle13.NullValue = null;
+            this.structureID.DefaultCellStyle = dataGridViewCellStyle13;
             this.structureID.HeaderText = "ID";
             this.structureID.Name = "structureID";
             this.structureID.ReadOnly = true;
@@ -1864,10 +1865,10 @@ namespace WinSimpleIDriver
             // includeID
             // 
             this.includeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle32.Format = "N0";
-            dataGridViewCellStyle32.NullValue = null;
-            this.includeID.DefaultCellStyle = dataGridViewCellStyle32;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle14.Format = "N0";
+            dataGridViewCellStyle14.NullValue = null;
+            this.includeID.DefaultCellStyle = dataGridViewCellStyle14;
             this.includeID.HeaderText = "ID";
             this.includeID.Name = "includeID";
             this.includeID.ReadOnly = true;
@@ -1962,10 +1963,10 @@ namespace WinSimpleIDriver
             // changeID
             // 
             this.changeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle33.Format = "N0";
-            dataGridViewCellStyle33.NullValue = null;
-            this.changeID.DefaultCellStyle = dataGridViewCellStyle33;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle15.Format = "N0";
+            dataGridViewCellStyle15.NullValue = null;
+            this.changeID.DefaultCellStyle = dataGridViewCellStyle15;
             this.changeID.HeaderText = "ID";
             this.changeID.Name = "changeID";
             this.changeID.ReadOnly = true;
@@ -2000,43 +2001,14 @@ namespace WinSimpleIDriver
             this.dataGridViewLog.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.logID,
             this.logDT,
+            this.logType,
             this.logCategory,
             this.logText});
             this.dataGridViewLog.Location = new System.Drawing.Point(7, 0);
             this.dataGridViewLog.Name = "dataGridViewLog";
+            this.dataGridViewLog.RowHeadersVisible = false;
             this.dataGridViewLog.Size = new System.Drawing.Size(1344, 110);
             this.dataGridViewLog.TabIndex = 0;
-            // 
-            // logID
-            // 
-            this.logID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle34.Format = "N0";
-            dataGridViewCellStyle34.NullValue = null;
-            this.logID.DefaultCellStyle = dataGridViewCellStyle34;
-            this.logID.HeaderText = "ID";
-            this.logID.Name = "logID";
-            this.logID.Width = 45;
-            // 
-            // logDT
-            // 
-            this.logDT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.logDT.HeaderText = "ДатаВремя";
-            this.logDT.Name = "logDT";
-            this.logDT.Width = 103;
-            // 
-            // logCategory
-            // 
-            this.logCategory.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.logCategory.HeaderText = "Категория";
-            this.logCategory.Name = "logCategory";
-            this.logCategory.Width = 94;
-            // 
-            // logText
-            // 
-            this.logText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.logText.HeaderText = "Текст";
-            this.logText.Name = "logText";
             // 
             // splitContainerLogMain
             // 
@@ -2079,10 +2051,10 @@ namespace WinSimpleIDriver
             // targetID
             // 
             this.targetID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle35.Format = "N0";
-            dataGridViewCellStyle35.NullValue = null;
-            this.targetID.DefaultCellStyle = dataGridViewCellStyle35;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle17.Format = "N0";
+            dataGridViewCellStyle17.NullValue = null;
+            this.targetID.DefaultCellStyle = dataGridViewCellStyle17;
             this.targetID.HeaderText = "ID";
             this.targetID.Name = "targetID";
             this.targetID.ReadOnly = true;
@@ -2115,10 +2087,10 @@ namespace WinSimpleIDriver
             // targetTagID
             // 
             this.targetTagID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle36.Format = "N0";
-            dataGridViewCellStyle36.NullValue = null;
-            this.targetTagID.DefaultCellStyle = dataGridViewCellStyle36;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle18.Format = "N0";
+            dataGridViewCellStyle18.NullValue = null;
+            this.targetTagID.DefaultCellStyle = dataGridViewCellStyle18;
             this.targetTagID.HeaderText = "ID";
             this.targetTagID.Name = "targetTagID";
             this.targetTagID.ReadOnly = true;
@@ -2228,6 +2200,45 @@ namespace WinSimpleIDriver
             this.buttonIncludeCopy.TabIndex = 27;
             this.buttonIncludeCopy.Text = "Копия";
             this.buttonIncludeCopy.UseVisualStyleBackColor = true;
+            // 
+            // logID
+            // 
+            this.logID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle16.Format = "N0";
+            dataGridViewCellStyle16.NullValue = null;
+            this.logID.DefaultCellStyle = dataGridViewCellStyle16;
+            this.logID.HeaderText = "ID";
+            this.logID.Name = "logID";
+            this.logID.Width = 45;
+            // 
+            // logDT
+            // 
+            this.logDT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.logDT.HeaderText = "ДатаВремя";
+            this.logDT.Name = "logDT";
+            this.logDT.Width = 103;
+            // 
+            // logType
+            // 
+            this.logType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.logType.HeaderText = "Тип";
+            this.logType.Name = "logType";
+            this.logType.ReadOnly = true;
+            this.logType.Width = 52;
+            // 
+            // logCategory
+            // 
+            this.logCategory.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.logCategory.HeaderText = "Категория";
+            this.logCategory.Name = "logCategory";
+            this.logCategory.Width = 94;
+            // 
+            // logText
+            // 
+            this.logText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.logText.HeaderText = "Текст";
+            this.logText.Name = "logText";
             // 
             // Form1
             // 
@@ -2422,10 +2433,6 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.DataGridViewTextBoxColumn changeTo;
         private System.Windows.Forms.ToolStripMenuItem testTagSourceToolStripMenuItem;
         private System.Windows.Forms.DataGridView dataGridViewLog;
-        private System.Windows.Forms.DataGridViewTextBoxColumn logID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn logDT;
-        private System.Windows.Forms.DataGridViewTextBoxColumn logCategory;
-        private System.Windows.Forms.DataGridViewTextBoxColumn logText;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTreeProj;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopy;
         private System.Windows.Forms.SplitContainer splitContainerLogMain;
@@ -2484,6 +2491,11 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.Button buttonIncludeResult;
         private System.Windows.Forms.Button buttonIncludeDel;
         private System.Windows.Forms.Button buttonIncludeCopy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn logID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn logDT;
+        private System.Windows.Forms.DataGridViewTextBoxColumn logType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn logCategory;
+        private System.Windows.Forms.DataGridViewTextBoxColumn logText;
     }
 }
 
