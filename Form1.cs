@@ -34,7 +34,8 @@ namespace WinSimpleIDriver
         private void Form1_Load(object sender, EventArgs e)
         {
             // Заголовок
-            this.Text += $" {Settings.settingsFileName}";
+            //this.Text += $" {Settings.settingsFileName}";
+            AppTitle(Settings.settingsFileName, "");
             notifyIcon1.Text = this.Text;
 
             // Версия
@@ -158,6 +159,12 @@ namespace WinSimpleIDriver
 
         // ================================================================================================================
 
+        private void AppTitle(string settings, string fileName)
+        {
+            this.Text = ($"WinSimpleDriver {fileName} {settings}").Trim();
+            notifyIcon1.Text = this.Text;
+        }
+
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             this.WindowState = FormWindowState.Normal;
@@ -247,6 +254,7 @@ namespace WinSimpleIDriver
         {
             SetLeftLabelMessage1("Новый проект");
             FormClear();
+            AppTitle(Settings.settingsFileName, "");
         }
 
         private async void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
@@ -309,6 +317,8 @@ namespace WinSimpleIDriver
             string input = FileControl.LoadFromFile(ref fileName, out string path, select); // чтение из файла...
             if (String.IsNullOrWhiteSpace(input))
                 return;
+
+            AppTitle(Settings.settingsFileName, fileName);
 
             // Последние файлы
             string fullFileName = Path.Combine(path, fileName);
@@ -1344,5 +1354,12 @@ namespace WinSimpleIDriver
             TreeLib.DrawTreeStructure();
         }
 
+        private void checkBoxStructCol_CheckedChanged(object sender, EventArgs e)
+        {
+            var check = checkBoxStructCol.Checked;
+            dataGridViewStructureTag.Columns[DataTableLib.dtStructTag.col.Structure].Visible = check;
+            dataGridViewStructureTarget.Columns[DataTableLib.dtStructTarget.col.Structure].Visible = check;
+
+        }
     }
 }

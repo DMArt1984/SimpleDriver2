@@ -288,7 +288,7 @@ namespace WinSimpleIDriver
                         {
                             StructTagEditor oneTag = new StructTagEditor
                             {
-                                Id = ++structTargetId,
+                                Id = ++structTagId,
                                 structureTitle = title,
                                 title = tagTitle,
                             };
