@@ -777,121 +777,7 @@ namespace WinSimpleIDriver
 
         #endregion
 
-        // ================================================================================================================
-
-        #region Include
-
-        #region Include.Event
-        private void buttonIncludeLeft_Click(object sender, EventArgs e)
-        {
-            splitContainerInclude.Panel2Collapsed = !splitContainerInclude.Panel2Collapsed;
-            SetComboBoxIncludeChildFilterInclude();
-        }
-
-        private void dataGridViewInclude_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        {
-            DataTableLib.ForNewRow(dataGridViewInclude); // new ID
-        }
-        #endregion
-
-        #region Include.Filter
-
-        #region Include.TextFilter.Event
-
-        private void textBoxIncludeFilter_TextChanged(object sender, EventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(textBoxIncludeFilter.Text))
-                DataTableLib.dtInclude.IncludeFilter();
-        }
-        private void buttonIncludeFilter_Click(object sender, EventArgs e)
-        {
-            DataTableLib.dtInclude.IncludeFilter();
-        }
         
-
-        #endregion
-
-        #endregion
-
-        private void dataGridViewInclude_SelectionChanged(object sender, EventArgs e)
-        {
-            FormLib.SaveTextComboBox(comboBoxIncludeChildFilterParent);
-            SetComboBoxIncludeChildFilterInclude();
-        }
-
-
-        #region Include-Child
-
-        private void buttonIncludeRight_Click(object sender, EventArgs e)
-        {
-            splitContainerInclude.Panel1Collapsed = !splitContainerInclude.Panel1Collapsed;
-            SetComboBoxIncludeChildFilterInclude();
-        }
-
-        #region IncludeChild.Filter
-
-        #region IncludeChild.ComboFilter.Event
-        private void comboBoxChangeFilterInclude_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            DataTableLib.dtIncludeChild.IncludeChildFilter();
-        }
-        private void comboBoxChangeFilterInclude_TextChanged(object sender, EventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(comboBoxIncludeChildFilterParent.Text))
-                DataTableLib.dtIncludeChild.IncludeChildFilter();
-        }
-        #endregion
-
-        #region IncludeChild.TextFilter.Event
-
-        private void textBoxChangeFilter_TextChanged(object sender, EventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(textBoxIncludeChildFilter.Text))
-                DataTableLib.dtIncludeChild.IncludeChildFilter();
-        }
-
-        private void buttonChangeFilter_Click(object sender, EventArgs e)
-        {
-            IncludeChildFilter();
-        }
-
-        private void IncludeChildFilter()
-        {
-            FormLib.SaveTextComboBox(comboBoxIncludeChildFilterParent);
-            DataTableLib.dtIncludeChild.IncludeChildFilter();
-        }
-
-        private void SetComboBoxIncludeChildFilterInclude()
-        {
-            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewInclude, DataTableLib.dtInclude.col.Prefix));
-            comboBoxIncludeChildFilterParent.Text = text;
-            DataTableLib.dtIncludeChild.IncludeChildFilter();
-        }
-
-        
-
-        private void dataGridViewIncludeChild_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        {
-            DataTableLib.ForNewRow(dataGridViewIncludeChild); // new ID
-
-            DataTableLib.SetParentInRow(dataGridViewIncludeChild, comboBoxIncludeChildFilterParent, DataTableLib.dtIncludeChild.col.Prefix); // filter
-
-            //string text = comboBoxChangeFilterInclude.Text;
-            //if (String.IsNullOrWhiteSpace(text) == false)
-            //{
-            //    var row = dataGridViewChange.CurrentRow;
-            //    if (row != null)
-            //        row.Cells[DataTableLib.changeCol.Prefix].Value = text;
-            //}
-        }
-
-        #endregion
-
-        #endregion
-
-        #endregion
-
-        #endregion
 
         // ================================================================================================================
 
@@ -998,6 +884,138 @@ namespace WinSimpleIDriver
         #endregion
 
         #endregion
+
+
+        private void checkBoxStructCol_CheckedChanged(object sender, EventArgs e)
+        {
+            var check = checkBoxStructCol.Checked;
+            dataGridViewStructureTag.Columns[DataTableLib.dtStructTag.col.Structure].Visible = check;
+            dataGridViewStructureTarget.Columns[DataTableLib.dtStructTarget.col.Structure].Visible = check;
+
+        }
+
+
+        #endregion
+
+        // ================================================================================================================
+
+        #region Include
+
+        #region Include.Event
+        private void buttonIncludeLeft_Click(object sender, EventArgs e)
+        {
+            splitContainerInclude.Panel2Collapsed = !splitContainerInclude.Panel2Collapsed;
+            SetComboBoxIncludeChildFilterInclude();
+        }
+
+        private void dataGridViewInclude_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewInclude); // new ID
+        }
+        #endregion
+
+        #region Include.Filter
+
+        #region Include.TextFilter.Event
+
+        private void textBoxIncludeFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(textBoxIncludeFilter.Text))
+                DataTableLib.dtInclude.IncludeFilter();
+        }
+        private void buttonIncludeFilter_Click(object sender, EventArgs e)
+        {
+            DataTableLib.dtInclude.IncludeFilter();
+        }
+
+
+        #endregion
+
+        #endregion
+
+        private void dataGridViewInclude_SelectionChanged(object sender, EventArgs e)
+        {
+            FormLib.SaveTextComboBox(comboBoxIncludeChildFilterParent);
+            SetComboBoxIncludeChildFilterInclude();
+        }
+
+
+        #region Include-Child
+
+        private void buttonIncludeRight_Click(object sender, EventArgs e)
+        {
+            splitContainerInclude.Panel1Collapsed = !splitContainerInclude.Panel1Collapsed;
+            SetComboBoxIncludeChildFilterInclude();
+        }
+
+        #region IncludeChild.Filter
+
+        #region IncludeChild.ComboFilter.Event
+        private void comboBoxChangeFilterInclude_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtIncludeChild.IncludeChildFilter();
+        }
+        private void comboBoxChangeFilterInclude_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(comboBoxIncludeChildFilterParent.Text))
+                DataTableLib.dtIncludeChild.IncludeChildFilter();
+        }
+        #endregion
+
+        #region IncludeChild.TextFilter.Event
+
+        private void textBoxChangeFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(textBoxIncludeChildFilter.Text))
+                DataTableLib.dtIncludeChild.IncludeChildFilter();
+        }
+
+        private void buttonChangeFilter_Click(object sender, EventArgs e)
+        {
+            IncludeChildFilter();
+        }
+
+        private void IncludeChildFilter()
+        {
+            FormLib.SaveTextComboBox(comboBoxIncludeChildFilterParent);
+            DataTableLib.dtIncludeChild.IncludeChildFilter();
+        }
+
+        private void SetComboBoxIncludeChildFilterInclude()
+        {
+            string text = (splitContainerInclude.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewInclude, DataTableLib.dtInclude.col.Prefix));
+            comboBoxIncludeChildFilterParent.Text = text;
+            DataTableLib.dtIncludeChild.IncludeChildFilter();
+        }
+
+
+
+        private void dataGridViewIncludeChild_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewIncludeChild); // new ID
+
+            DataTableLib.SetParentInRow(dataGridViewIncludeChild, comboBoxIncludeChildFilterParent, DataTableLib.dtIncludeChild.col.Prefix); // filter
+
+            //string text = comboBoxChangeFilterInclude.Text;
+            //if (String.IsNullOrWhiteSpace(text) == false)
+            //{
+            //    var row = dataGridViewChange.CurrentRow;
+            //    if (row != null)
+            //        row.Cells[DataTableLib.changeCol.Prefix].Value = text;
+            //}
+        }
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+        private void checkBoxIncludePrefix_CheckedChanged(object sender, EventArgs e)
+        {
+            var check = checkBoxIncludePrefix.Checked;
+            dataGridViewIncludeChild.Columns[DataTableLib.dtIncludeChild.col.Prefix].Visible = check;
+        }
 
         #endregion
 
@@ -1354,12 +1372,7 @@ namespace WinSimpleIDriver
             TreeLib.DrawTreeStructure();
         }
 
-        private void checkBoxStructCol_CheckedChanged(object sender, EventArgs e)
-        {
-            var check = checkBoxStructCol.Checked;
-            dataGridViewStructureTag.Columns[DataTableLib.dtStructTag.col.Structure].Visible = check;
-            dataGridViewStructureTarget.Columns[DataTableLib.dtStructTarget.col.Structure].Visible = check;
+        
 
-        }
     }
 }
