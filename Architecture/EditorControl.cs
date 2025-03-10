@@ -21,6 +21,9 @@ namespace WinSimpleIDriver
         static public List<StructTargetEditor> structTargets;
         static public List<StructTagEditor> structTags;
 
+        static public List<IncludeEditor> includes;
+        static public List<IncludeChildEditor> includeChilds;
+
         static uint sourceId = 0;
         static uint groupId = 0;
         static uint tagId = 0;
@@ -29,6 +32,9 @@ namespace WinSimpleIDriver
         static uint structureId = 0;
         static uint structTargetId = 0;
         static uint structTagId = 0;
+
+        static uint includeId = 0;
+        static uint includeChildId = 0;
 
         // Очистка данных
         static public void Clear()
@@ -41,13 +47,20 @@ namespace WinSimpleIDriver
             structTargets = new List<StructTargetEditor>();
             structTags = new List<StructTagEditor>();
 
+            includes = new List<IncludeEditor>();
+            includeChilds = new List<IncludeChildEditor>();
+
             sourceId = 0;
             groupId = 0;
             tagId = 0;
             blockUnnamedId = 0;
+
             structureId = 0;
             structTargetId = 0;
             structTagId = 0;
+
+            includeId = 0;
+            includeChildId = 0;
         }
 
         // Распаковка проекта
@@ -89,6 +102,10 @@ namespace WinSimpleIDriver
             // Распаковка структур
             if (Tag.IsStructures(output))
                 ParseStructures(output.Structures);
+
+            // Внешние проекты
+            if (Include.InProject(output))
+                ParseIncludes(output.Includes); // Распаковка настроек внешних проектов
 
 
         }
@@ -300,6 +317,39 @@ namespace WinSimpleIDriver
             }
         }
 
+        // Распаковка внешних проектов
+        static void ParseIncludes(dynamic data)
+        {
+            if (data != null)
+            {
+                foreach (dynamic item in data)
+                {
+                    Include.ParseItemInclude(item, out string fileName, out string prefix, out Dictionary<string, string> changes);
+
+                    IncludeEditor oneInclude = new IncludeEditor
+                    {
+                        Id = ++includeId,
+                        fileName = fileName,
+                        prefix = prefix,
+                        //changes = changes
+                    };
+
+                    foreach (var oneChange in changes)
+                    {
+                        IncludeChildEditor ice = new IncludeChildEditor
+                        {
+                            Id = ++includeChildId,
+                            prefix = prefix,
+                            valueFrom = oneChange.Key,
+                            valueTo = oneChange.Value
+                        };
+                        includeChilds.Add(ice);
+                    }
+
+                    includes.Add(oneInclude);
+                }
+            }
+        }
 
         // ===========================================================
 
