@@ -168,15 +168,14 @@ namespace DML
                     DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
                     row.Cells[0].Value = item.Id;
                     row.Cells[3].Value = !item.off;
-                    row.Cells[4].Value = item.reconnect; // автоматическое переподключение
+                    row.Cells[4].Value = item.auto; // автоматический опрос
+                    row.Cells[5].Value = item.reconnect; // автоматическое переподключение
 
                     row.Cells[col.Title].Value = item.title;
                     row.Cells[col.Driver].Value = item.driver.ToString();
                     row.Cells[col.Address].Value = item.address;
                     row.Cells[col.Desc].Value = item.description;
                     row.Cells[col.CountTags].Value = EditorControl.tags.Count(x => x.sourceTitle == item.title);
-
-                    //row.Cells[0].Value = item.auto; // автоматический опрос при старте программы
 
                     row.Cells[col.Calc].Value = false;
                     row.Cells[col.Status].Value = "";
@@ -200,12 +199,12 @@ namespace DML
                     {
                          Id = Convert.ToUInt32(row.Cells[0].Value),
                          off = Convert.ToBoolean(row.Cells[3].Value),
-                         reconnect = Convert.ToBoolean(row.Cells[4].Value),
+                         auto = Convert.ToBoolean(row.Cells[4].Value),
+                         reconnect = Convert.ToBoolean(row.Cells[5].Value),
                          title = row.Cells[col.Title].Value.ToString(),
                          driver = (eDriverType)Enum.Parse(typeof(eDriverType), row.Cells[col.Driver].Value.ToString(), true),
                          address = row.Cells[col.Address].Value.ToString(),
                          description = row.Cells[col.Desc].Value.ToString(),
-                         auto = false // потом решим
                     };
                     sources.Add(se);
 
@@ -219,6 +218,7 @@ namespace DML
             {
                 bool checkE = cbEditor.Checked;
                 dgv.Columns["sourceID"].Visible = checkE;
+                dgv.Columns["sourceAutomation"].Visible = checkE;
                 dgv.Columns["sourceAutoRestart"].Visible = checkE;
                 dgv.Columns["sourceDriver"].Visible = checkE;
                 dgv.Columns["sourceAddress"].Visible = checkE;

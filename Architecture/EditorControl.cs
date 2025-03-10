@@ -121,12 +121,10 @@ namespace WinSimpleIDriver
                 
                 foreach (dynamic item in data)
                 {
-                    Source.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out string groupTitle, out bool off, out string description, out dynamic tagsInSource, out bool auto, out bool reconnect);
+                    Source.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool off, out string description, out dynamic tagsInSource, out bool auto, out bool reconnect);
                     SourceEditor rowSource = new SourceEditor
                     {
                         Id = sourceId,
-                        groupId = 0,
-                        groupTitle = groupTitle,
                         driver = driver,
                         title = title,
                         address = address,
@@ -259,13 +257,13 @@ namespace WinSimpleIDriver
                 }
             }
 
-            foreach (var source in sources)
-            {
-                if (source.groupId == 0 && !string.IsNullOrWhiteSpace(source.groupTitle) && groupDict.TryGetValue(source.groupId, out var group))
-                {
-                    source.groupId = group.Id;
-                }
-            }
+            //foreach (var source in sources)
+            //{
+            //    if (source.groupId == 0 && !string.IsNullOrWhiteSpace(source.groupTitle) && groupDict.TryGetValue(source.groupId, out var group))
+            //    {
+            //        source.groupId = group.Id;
+            //    }
+            //}
         }
 
         // Распаковка структур
