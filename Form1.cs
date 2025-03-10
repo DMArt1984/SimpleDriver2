@@ -338,22 +338,22 @@ namespace WinSimpleIDriver
 
             // Обновление UI (обновление меню и формы)
             UpdateRecentFilesMenu();
-            BuildForForm();
+            ProjectToForm();
 
             SetLeftLabelMessage1("Проект открыт!");
         }
 
         // Рисование на форме
-        private void BuildForForm()
+        private void ProjectToForm()
         {
-            DataTableLib.dtSource.DrawTable(EditorControl.sources);
-            DataTableLib.dtGroup.DrawTable(EditorControl.groups);
-            DataTableLib.dtTag.DrawTable(EditorControl.tags);
-            DataTableLib.dtStructure.DrawTable(EditorControl.structures);
-            DataTableLib.dtStructTarget.DrawTable(EditorControl.structTargets);
-            DataTableLib.dtStructTag.DrawTable(EditorControl.structTags);
-            DataTableLib.dtInclude.DrawTable(EditorControl.includes);
-            DataTableLib.dtIncludeChild.DrawTable(EditorControl.includeChilds);
+            DataTableLib.dtSource.DataToTable(EditorControl.sources);
+            DataTableLib.dtGroup.DataToTable(EditorControl.groups);
+            DataTableLib.dtTag.DataToTable(EditorControl.tags);
+            DataTableLib.dtStructure.DataToTable(EditorControl.structures);
+            DataTableLib.dtStructTarget.DataToTable(EditorControl.structTargets);
+            DataTableLib.dtStructTag.DataToTable(EditorControl.structTags);
+            DataTableLib.dtInclude.DataToTable(EditorControl.includes);
+            DataTableLib.dtIncludeChild.DataToTable(EditorControl.includeChilds);
             //...
 
             // link group -> source

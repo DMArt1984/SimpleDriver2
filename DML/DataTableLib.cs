@@ -159,7 +159,7 @@ namespace DML
             static public TextBox tbFilter;
 
             #region DGV.Add
-            static public void DrawTable(List<SourceEditor> sources)
+            static public void DataToTable(List<SourceEditor> sources)
             {
                 // Таблица источников
                 dgv.Rows.Clear();
@@ -313,7 +313,7 @@ namespace DML
             static public ComboBox coFilterSource;
 
             #region DGV.Add
-            static public void DrawTable(List<GroupEditor> groups)
+            static public void DataToTable(List<GroupEditor> groups)
             {
                 // Таблица групп
                 dgv.Rows.Clear();
@@ -467,7 +467,7 @@ namespace DML
             //        dgv.Rows.Add(row);
             //    }
             //}
-            static public void DrawTable(List<TagEditor> tags)
+            static public void DataToTable(List<TagEditor> tags)
             {
                 // Проверка на null DataGridView
                 if (dgv == null)
@@ -824,7 +824,7 @@ namespace DML
             #endregion
 
             #region DGV.Add
-            static public void DrawTable(List<StructureEditor> structures)
+            static public void DataToTable(List<StructureEditor> structures)
             {
                 // Таблица источников
                 dgv.Rows.Clear();
@@ -897,7 +897,7 @@ namespace DML
             #endregion
 
             #region DGV.Add
-            static public void DrawTable(List<StructTargetEditor> targets)
+            static public void DataToTable(List<StructTargetEditor> targets)
             {
                 // Таблица источников
                 dgv.Rows.Clear();
@@ -969,7 +969,7 @@ namespace DML
             #endregion
 
             #region DGV.Add
-            static public void DrawTable(List<StructTagEditor> tags)
+            static public void DataToTable(List<StructTagEditor> tags)
             {
                 // Таблица источников
                 dgv.Rows.Clear();
@@ -1038,7 +1038,7 @@ namespace DML
             #endregion
 
             #region DGV.Add
-            static public void DrawTable(List<IncludeEditor> includes)
+            static public void DataToTable(List<IncludeEditor> includes)
             {
                 // Таблица источников
                 dgv.Rows.Clear();
@@ -1103,7 +1103,7 @@ namespace DML
             #endregion
 
             #region DGV.Add
-            static public void DrawTable(List<IncludeChildEditor> includeChilds)
+            static public void DataToTable(List<IncludeChildEditor> includeChilds)
             {
                 // Таблица источников
                 dgv.Rows.Clear();
