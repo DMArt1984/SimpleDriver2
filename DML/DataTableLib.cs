@@ -198,7 +198,7 @@ namespace DML
                     SourceEditor se = new SourceEditor
                     {
                          Id = Convert.ToUInt32(row.Cells[0].Value),
-                         off = Convert.ToBoolean(row.Cells[3].Value),
+                         off = !Convert.ToBoolean(row.Cells[3].Value),
                          auto = Convert.ToBoolean(row.Cells[4].Value),
                          reconnect = Convert.ToBoolean(row.Cells[5].Value),
                          title = row.Cells[col.Title].Value.ToString(),
@@ -207,9 +207,7 @@ namespace DML
                          description = row.Cells[col.Desc].Value.ToString(),
                     };
                     sources.Add(se);
-
                 }
-
                 return sources;
             }
 
@@ -363,6 +361,28 @@ namespace DML
                 }
             }
             #endregion
+
+            static public List<GroupEditor> TableToData()
+            {
+                List<GroupEditor> groups = new List<GroupEditor>();
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (row.IsNewRow)
+                        continue;
+
+                    GroupEditor ge = new GroupEditor
+                    {
+                        Id = Convert.ToUInt32(row.Cells[0].Value),
+                        off = Convert.ToBoolean(row.Cells[3].Value),
+                        updateRate = Convert.ToUInt32(row.Cells[5].Value),
+                        title = row.Cells[col.Title].Value.ToString(),
+                        sourceTitle = row.Cells[col.Source].Value.ToString(),
+                        description = row.Cells[col.Desc].Value.ToString()
+                    };
+                    groups.Add(ge);
+                }
+                return groups;
+            }
 
             #region DGV.Columns
             static public void CheckColumns()
