@@ -373,7 +373,7 @@ namespace DML
                     GroupEditor ge = new GroupEditor
                     {
                         Id = Convert.ToUInt32(row.Cells[0].Value),
-                        off = Convert.ToBoolean(row.Cells[3].Value),
+                        off = !Convert.ToBoolean(row.Cells[3].Value),
                         updateRate = Convert.ToUInt32(row.Cells[5].Value),
                         title = row.Cells[col.Title].Value.ToString(),
                         sourceTitle = row.Cells[col.Source].Value.ToString(),
@@ -486,33 +486,6 @@ namespace DML
             }
 
             #region DGV.Add
-            //static public void DrawTable(List<TagEditor> tags)
-            //{
-            //    // Таблица групп
-            //    dgv.Rows.Clear();
-            //    foreach (var item in tags)
-            //    {
-            //        DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
-            //        row.Cells[0].Value = item.Id;
-            //        row.Cells[3].Value = !item.off;
-
-            //        row.Cells[col.Title].Value = item.title;
-            //        row.Cells[col.DataType].Value = item.dataType.ToString();
-            //        row.Cells[col.Group].Value = item.groupTitle;
-            //        row.Cells[col.Address].Value = item.address;
-            //        row.Cells[col.Desc].Value = item.description;
-            //        row.Cells[col.Block].Value = item.block;
-            //        row.Cells[col.Page].Value = ""; //public int Page;
-
-            //        row.Cells[col.Calc].Value = false;
-            //        row.Cells[col.Status].Value = "";
-            //        row.Cells[col.Message].Value = "";
-            //        row.Cells[col.Value].Value = "";
-
-            //        // -
-            //        dgv.Rows.Add(row);
-            //    }
-            //}
             static public void DataToTable(List<TagEditor> tags)
             {
                 // Проверка на null DataGridView
@@ -582,6 +555,32 @@ namespace DML
                 bindingSource.ResetBindings(false);
             }
             #endregion
+
+            static public List<TagEditor> TableToData()
+            {
+                List<TagEditor> tags = new List<TagEditor>();
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (row.IsNewRow)
+                        continue;
+
+                    TagEditor te = new TagEditor
+                    {
+                        Id = Convert.ToUInt32(row.Cells[0].Value),
+                        off = !Convert.ToBoolean(row.Cells[3].Value),
+                        title = row.Cells[col.Title].Value.ToString(),
+                        address = row.Cells[col.Address].Value.ToString(),
+                        dataType = (eDataType)Enum.Parse(typeof(eDataType), row.Cells[col.DataType].Value.ToString(), true),
+                        groupTitle = row.Cells[col.Group].Value.ToString(),
+                        sourceTitle = "", //row.Cells[col.Source].Value.ToString(),
+                        block = row.Cells[col.Block].Value.ToString(),
+                        description = row.Cells[col.Desc].Value.ToString(),
+                        //...
+                    };
+                    tags.Add(te);
+                }
+                return tags;
+            }
 
             #region DGV.Columns
             static public void CheckColumns()
