@@ -91,6 +91,7 @@
     <Compile Include="Connector\Driver\ModbusRTUClient.cs" />
     <Compile Include="Connector\Driver\ModbusTCPClient.cs" />
     <Compile Include="Connector\Driver\MSSQLclient.cs" />
+    <Compile Include="Connector\Include.cs" />
     <Compile Include="Connector\SGT\Group.cs" />
     <Compile Include="Connector\SGT\Interface1.cs" />
     <Compile Include="Connector\SGT\Source.cs" />
