@@ -12,6 +12,7 @@ namespace WinSimpleIDriver
 {
     static class EditorControl
     {
+        static public string fullFileName = "";
 
         static public List<SourceEditor> sources;
         static public List<TagEditor> tags;
@@ -63,32 +64,34 @@ namespace WinSimpleIDriver
             includeChildId = 0;
         }
 
+        #region Unpack
+
         // Распаковка проекта
-        static public void ParseData(dynamic output)
+        static public void UnpackProject(dynamic data)
         {
             Clear();
 
-            if (output == null)
+            if (data == null)
                 return;
 
             // Распаковка источников
-            if (Source.InProject(output))
-                ParseSources(output.Sources);
+            if (Source.InProject(data))
+                ParseSources(data.Sources);
 
             // Распаковка групп
-            if (Group.InProject(output))
-                ParseGroups(output.Groups);
+            if (Group.InProject(data))
+                ParseGroups(data.Groups);
 
             // Распаковка тегов
-            if (Tag.InProject(output))
-                ParseTags(output.Tags);
+            if (Tag.InProject(data))
+                ParseTags(data.Tags);
 
             // Блоки с тегами
-            if (Tag.IsListBlocks(output))
+            if (Tag.IsListBlocks(data))
             {
-                if (output.Blocks != null)
+                if (data.Blocks != null)
                 {
-                    foreach (var elItem in output.Blocks)
+                    foreach (var elItem in data.Blocks)
                     {
                         string nm = GetBlockName(elItem);
                         ParseTags(elItem.Tags, 0, 0, nm);
@@ -100,12 +103,12 @@ namespace WinSimpleIDriver
             CalcIdAndTitle();
 
             // Распаковка структур
-            if (Tag.IsStructures(output))
-                ParseStructures(output.Structures);
+            if (Tag.IsStructures(data))
+                ParseStructures(data.Structures);
 
             // Внешние проекты
-            if (Include.InProject(output))
-                ParseIncludes(output.Includes); // Распаковка настроек внешних проектов
+            if (Include.InProject(data))
+                ParseIncludes(data.Includes); // Распаковка настроек внешних проектов
 
 
         }
@@ -350,6 +353,19 @@ namespace WinSimpleIDriver
                 }
             }
         }
+
+        #endregion
+
+        #region Pack
+
+        // Упаковка проекта
+        static public dynamic PackProject()
+        {
+            // здесь нужен код...
+            return null; // нужно вернуть dynamic data
+        }
+
+        #endregion
 
         // ===========================================================
 

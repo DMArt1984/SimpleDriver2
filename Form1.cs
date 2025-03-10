@@ -263,16 +263,16 @@ namespace WinSimpleIDriver
             await OpenProjectAsync(true);
         }
 
-        private void ToolStripMenuItemSave_Click(object sender, EventArgs e)
+        private async void ToolStripMenuItemSave_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Сохранить проект");
-
+            await SaveProjectAsync(false, EditorControl.fullFileName);
         }
 
-        private void ToolStripMenuItemSaveAs_Click(object sender, EventArgs e)
+        private async void ToolStripMenuItemSaveAs_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Сохранить проект как...");
-
+            await SaveProjectAsync(true);
         }
 
         private void ToolStripMenuItemImport_Click(object sender, EventArgs e)
@@ -324,13 +324,16 @@ namespace WinSimpleIDriver
             string fullFileName = Path.Combine(path, fileName);
             FileControl.AddToRecentFiles(fullFileName); // Сохранение файла в истории
 
+            //
+            EditorControl.fullFileName = fullFileName;
+
             await Task.Run(() =>
             {
                 // получение JSON данных
                 dynamic output = JsonControl.Deserialize_Json_Data(input);
 
                 // распаковка проекта
-                EditorControl.ParseData(output);
+                EditorControl.UnpackProject(output);
             });
 
             // Обновление UI (обновление меню и формы)
@@ -371,6 +374,24 @@ namespace WinSimpleIDriver
         }
 
         // ---
+
+        // Открыть проект (распаковка настроек из файла)
+        private async Task SaveProjectAsync(bool select = true, string fileName = "")
+        {
+            SetLeftLabelMessage1("Сохранение проекта...");
+
+
+
+            await Task.Run(() =>
+            {
+                
+            });
+
+
+            SetLeftLabelMessage1("Проект сохранен!");
+        }
+
+
 
         #region Last open files
 
