@@ -1354,7 +1354,6 @@ namespace WinSimpleIDriver
         private void dataGridViewStructureTag_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
             DataTableLib.ForNewRow(dataGridViewStructureTag); // new ID
-
             DataTableLib.SetParentInRow(dataGridViewStructureTag, comboBoxStructureTargetFilterParent, DataTableLib.dtStructTag.col.Structure); // filter
 
         }
@@ -1374,7 +1373,14 @@ namespace WinSimpleIDriver
             TreeLib.DrawTreeStructure();
         }
 
-        
+        private void dataGridViewInclude_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeInclude();
+        }
 
+        private void dataGridViewIncludeChild_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeInclude();
+        }
     }
 }
