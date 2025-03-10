@@ -188,6 +188,32 @@ namespace DML
             }
             #endregion
 
+            static public List<SourceEditor> TableToData()
+            {
+                List<SourceEditor> sources = new List<SourceEditor>();
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (row.IsNewRow)
+                        continue;
+
+                    SourceEditor se = new SourceEditor
+                    {
+                         Id = Convert.ToUInt32(row.Cells[0].Value),
+                         off = Convert.ToBoolean(row.Cells[3].Value),
+                         reconnect = Convert.ToBoolean(row.Cells[4].Value),
+                         title = row.Cells[col.Title].Value.ToString(),
+                         driver = (eDriverType)Enum.Parse(typeof(eDriverType), row.Cells[col.Driver].Value.ToString(), true),
+                         address = row.Cells[col.Address].Value.ToString(),
+                         description = row.Cells[col.Desc].Value.ToString(),
+                         auto = false // потом решим
+                    };
+                    sources.Add(se);
+
+                }
+
+                return sources;
+            }
+
             #region DGV.Columns
             static public void CheckColumns()
             {
