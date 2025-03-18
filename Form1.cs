@@ -21,10 +21,14 @@ namespace WinSimpleIDriver
     
     public partial class Form1 : Form
     {
-        
-
         // Теги
         DataTable dtTags;
+
+        // logger 
+        ProcessMaster _master;
+        LabelLogger lLeft;
+        LabelLogger lMid;
+        LabelLogger lRight;
 
         public Form1()
         {
@@ -52,6 +56,8 @@ namespace WinSimpleIDriver
             UpdateRecentFilesMenu();
 
             // Log DGV
+            _master = new ProcessMaster(LogTarget.FileAndForm, null);
+
             LogForm.rowLong = AddRowLongLogDGV;
             LogForm.rowShort = AddRowShortLogDGV;
 
@@ -177,21 +183,24 @@ namespace WinSimpleIDriver
         private string SetLeftLabelMessage1(string message = "")
         {
             toolStripStatusLabelMessage1.Text = message;
-            LogHelper2.LogApp(message);
+            ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly, lLeft);
+            _tempLog.Info(message);
             return message;
         }
         // Установить сообщение 2
         private string SetMidLabelMessage2(string message = "")
         {
             toolStripStatusLabelMessage2.Text = message;
-            LogHelper2.LogApp(message);
+            ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly, lMid);
+            _tempLog.Info(message);
             return message;
         }
         // Установить сообщение 3
         private string SetRightLabelMessage3(string message = "")
         {
             toolStripStatusLabelMessage3.Text = message;
-            LogHelper2.LogApp(message);
+            ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly, lRight);
+            _tempLog.Info(message);
             return message;
         }
 

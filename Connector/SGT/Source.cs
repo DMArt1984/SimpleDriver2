@@ -28,38 +28,6 @@ namespace WinSimpleIDriver.Connector.SGT
         errClose = -57, // ошибка закрытия
     }
 
-    static class eSourceStatusText
-    {
-        public static String GetText(this eSourceStatus status)
-        {
-            switch (status)
-            {
-                case eSourceStatus.cycle:
-                    return "Работает";
-                case eSourceStatus.breaking:
-                    return "Закрытие по ошибке...";
-                case eSourceStatus.closed:
-                    return "Закрыто";
-                case eSourceStatus.closing:
-                    return "Закрытие...";
-                case eSourceStatus.noClient:
-                    return "Ошибка создания клиента";
-                case eSourceStatus.openedNoCycle:
-                    return "Открыто, но нет опроса";
-                case eSourceStatus.opening:
-                    return "Открытие...";
-                case eSourceStatus.wait:
-                    return "Ожидание...";
-                case eSourceStatus.errOpen:
-                    return "Ошибка открытия";
-                case eSourceStatus.errClose:
-                    return "Ошибка закрытия";
-                default:
-                    return status.ToString();
-            }
-        }
-    }
-
     interface ISource
     {
         eSourceStatus Status { get; set; }
@@ -277,12 +245,12 @@ namespace WinSimpleIDriver.Connector.SGT
         {
             Console.WriteLine($" step3: CreateClient(paramClient)");
             CodeMessage result = this.device.CreateClient(address);
-            if (result.code != 0)
+            if (result.сode != 0)
                 ActiveError = result;
-            Status = (result.code == 0) ? eSourceStatus.closed : eSourceStatus.noClient;
+            Status = (result.сode == 0) ? eSourceStatus.closed : eSourceStatus.noClient;
 
             Console.WriteLine($" step4: _disable = ");
-            _disable = _disable || result.code != 0; // new!!!
+            _disable = _disable || result.сode != 0; // new!!!
 
             //LoggerConsole.Log($"Source ID={Id} created!", log);
         }
@@ -465,7 +433,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 }
 
                 // Host
-                if (result.code == 0)
+                if (result.сode == 0)
                 {
                     // Connect
                     LogHelper2.LogApp($"Источник ID={Id} {title} > Соединение...");
@@ -476,10 +444,10 @@ namespace WinSimpleIDriver.Connector.SGT
                     //result = new CodeMessage(-404, "Нет связи с хостом");
                 }
 
-                if (result.code != 0)
+                if (result.сode != 0)
                     ActiveError = result;
 
-                if (result.code == 0)
+                if (result.сode == 0)
                 {
                     LogHelper2.LogApp($"Источник ID={Id} {title} > Открыть - успешно!");
 
@@ -495,7 +463,7 @@ namespace WinSimpleIDriver.Connector.SGT
                         CyclicRequest = true;
                 } else
                 {
-                    LogHelper2.LogApp($"Источник ID={Id} {title} > Открыть - ошибка {result.code} {result.message}");
+                    LogHelper2.LogApp($"Источник ID={Id} {title} > Открыть - ошибка {result.сode} {result.message}");
 
                     Status = eSourceStatus.breaking;
                     _fail = true;
@@ -508,7 +476,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 }
 
                 EventStatus();
-                return result.code;
+                return result.сode;
             }
             return 1;
         }
@@ -524,10 +492,10 @@ namespace WinSimpleIDriver.Connector.SGT
                 WaitProcess(); // ждем завершения текущего запроса...
 
                 CodeMessage result = this.device.Disconnect();
-                if (result.code != 0)
+                if (result.сode != 0)
                     ActiveError = result;
 
-                if (result.code == 0)
+                if (result.сode == 0)
                 {
                     LogHelper2.LogApp($"Источник ID={Id} {title} > Закрыть - успешно!");
 
@@ -549,12 +517,12 @@ namespace WinSimpleIDriver.Connector.SGT
                         OpenAfterFail();
                 } else
                 {
-                    LogHelper2.LogApp($"Источник ID={Id} {title} > Закрыть - ошибка {result.code} {result.message}");
+                    LogHelper2.LogApp($"Источник ID={Id} {title} > Закрыть - ошибка {result.сode} {result.message}");
                 }
 
                 EventStatus();
-                LogHelper2.LogApp($"Источник ID={Id} {title} > Код {result.code}");
-                return result.code;
+                LogHelper2.LogApp($"Источник ID={Id} {title} > Код {result.сode}");
+                return result.сode;
             } else
             {
                 // статусы тегов
@@ -687,10 +655,10 @@ namespace WinSimpleIDriver.Connector.SGT
             get => _activeError;
             set
             {
-                bool newCode = _activeError.code != value.code;
+                bool newCode = _activeError.сode != value.сode;
 
                 _activeError = value;
-                if (_activeError.code < 0)
+                if (_activeError.сode < 0)
                 {
                     if (Fail == false)
                     {
@@ -825,7 +793,7 @@ namespace WinSimpleIDriver.Connector.SGT
                         counterReq++;
 
                         // Анализ ответов
-                        bool breakError = clientTags.Any(x => x.codeMessage.code == (int)eTagCode.breakError);
+                        bool breakError = clientTags.Any(x => x.codeMessage.сode == (int)eTagCode.breakError);
                         bool anyGood = clientTags.Any(x => x.Good && x.Command == eCommand.None && x.WriteTagId == 0 && x.WriteTagValue == null);
                         if (breakError && anyGood == false)
                         {
@@ -953,7 +921,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
         static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Sources");
 
-        static public string StatusTextDelete(eSourceStatus status)
+        static public string StatusText(eSourceStatus status)
         {
             switch (status)
             {
@@ -977,7 +945,40 @@ namespace WinSimpleIDriver.Connector.SGT
                     return status.ToString();
             }
         }
-
+        //static public string GetText(this eSourceStatus status)
+        //{
+        //    switch (status)
+        //    {
+        //        case eSourceStatus.cycle:
+        //            return "Работает";
+        //        case eSourceStatus.breaking:
+        //            return "Закрытие по ошибке...";
+        //        case eSourceStatus.closed:
+        //            return "Закрыто";
+        //        case eSourceStatus.closing:
+        //            return "Закрытие...";
+        //        case eSourceStatus.noClient:
+        //            return "Ошибка создания клиента";
+        //        case eSourceStatus.openedNoCycle:
+        //            return "Открыто, но нет опроса";
+        //        case eSourceStatus.opening:
+        //            return "Открытие...";
+        //        case eSourceStatus.wait:
+        //            return "Ожидание...";
+        //        case eSourceStatus.errOpen:
+        //            return "Ошибка открытия";
+        //        case eSourceStatus.errClose:
+        //            return "Ошибка закрытия";
+        //        default:
+        //            return status.ToString();
+        //    }
+        //}
+        
+        static public CodeMessage CM(eSourceStatus status)
+        {
+            return new CodeMessage((int)status, StatusText(status));
+        }
+        
         static public void ActivateItems()
         {
             foreach (var item in items)

@@ -173,10 +173,10 @@ namespace WinSimpleIDriver.Connector.Driver
                                                     Value = (int)source.Status;
                                                     break;
                                                 case "infomessage":
-                                                    Value = source.Status.GetText();
+                                                    Value = Source.StatusText(source.Status);
                                                     break;
                                                 case "error":
-                                                    Value = source.ActiveError.code;
+                                                    Value = source.ActiveError.сode;
                                                     break;
                                                 case "message":
                                                     Value = source.ActiveError.message;
@@ -212,7 +212,7 @@ namespace WinSimpleIDriver.Connector.Driver
                                                     var resItems = Tag.items.Where(x => x.sourceId == source.Id).ToArray();
                                                     if (resItems != null && resItems.Any())
                                                     {
-                                                        Value = resItems.Select(x => $"{x.title}~{Tag.ValuesString(x.LastGoodValue)}~{Tag.ValuesString(x.codeMessage.code)}").ToArray();
+                                                        Value = resItems.Select(x => $"{x.title}~{Tag.ValuesString(x.LastGoodValue)}~{Tag.ValuesString(x.codeMessage.сode)}").ToArray();
                                                     }
                                                     else
                                                     {
@@ -303,7 +303,7 @@ namespace WinSimpleIDriver.Connector.Driver
                                                     var resItems = Tag.items.Where(x => x.groupId == group.Id).ToArray();
                                                     if (resItems != null && resItems.Any())
                                                     {
-                                                        Value = resItems.Select(x => $"{x.title}~{Tag.ValuesString(x.LastGoodValue)}~{x.codeMessage.code}").ToArray();
+                                                        Value = resItems.Select(x => $"{x.title}~{Tag.ValuesString(x.LastGoodValue)}~{x.codeMessage.сode}").ToArray();
                                                     } else
                                                     {
                                                         Value = new string[] { };
@@ -351,7 +351,7 @@ namespace WinSimpleIDriver.Connector.Driver
                                         Value = (short)Tag.items.Count(x => x.Good);
                                         break;
                                     case "dicvalue":
-                                        Value = Tag.items.Select(x => $"{x.title}~{Tag.ValuesString(x.LastGoodValue)}~{x.codeMessage.code}").ToArray();
+                                        Value = Tag.items.Select(x => $"{x.title}~{Tag.ValuesString(x.LastGoodValue)}~{x.codeMessage.сode}").ToArray();
                                         break;
 
                                     default:
@@ -377,19 +377,19 @@ namespace WinSimpleIDriver.Connector.Driver
                                                     Value = tag.Id;
                                                     break;
                                                 case "infocode2": // del
-                                                    Value = (tag.Good) ? 0 : (tag.LastError.code == 0) ? 255 : tag.LastError.code;
+                                                    Value = (tag.Good) ? 0 : (tag.LastError.сode == 0) ? 255 : tag.LastError.сode;
                                                     break;
                                                 case "infomessage2": // del
                                                     Value = (tag.Good) ? "" : (String.IsNullOrWhiteSpace(tag.LastError.message)) ? "нет данных" : tag.LastError.message;
                                                     break;
                                                 case "infocode":
-                                                    Value = tag.codeMessage.code;
+                                                    Value = tag.codeMessage.сode;
                                                     break;
                                                 case "infomessage":
                                                     Value = tag.codeMessage.message;
                                                     break;
                                                 case "code":
-                                                    Value = tag.LastError.code;
+                                                    Value = tag.LastError.сode;
                                                     break;
                                                 case "message":
                                                     Value = tag.LastError.message;

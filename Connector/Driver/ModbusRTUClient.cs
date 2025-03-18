@@ -108,9 +108,9 @@ namespace WinSimpleIDriver.Connector.Driver
                     UseParameters(ParamsToDic(parameters));
 
                 if (client == null)
-                    return new CodeMessage(eSourceStatus.noClient);
+                    return Source.CM(eSourceStatus.noClient);
                 client.Connect(portName, baudrate, parity, dataBits, stopBits, unitCOMidentifier, _timeout);
-                return client.connected ? new CodeMessage(0,"") : new CodeMessage(eSourceStatus.errOpen);
+                return client.connected ? new CodeMessage(0,"") : Source.CM(eSourceStatus.errOpen);
             }
             catch (Exception ex)
             {
@@ -147,9 +147,9 @@ namespace WinSimpleIDriver.Connector.Driver
             try
             {
                 if (client == null)
-                    return new CodeMessage(eSourceStatus.noClient);
+                    return Source.CM(eSourceStatus.noClient);
                 client.Disconnect();
-                return client.connected == false ? new CodeMessage(0, "") : new CodeMessage(eSourceStatus.errClose);
+                return client.connected == false ? new CodeMessage(0, "") : Source.CM(eSourceStatus.errClose);
             }
             catch (Exception ex)
             {
