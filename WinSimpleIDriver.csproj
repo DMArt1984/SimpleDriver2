@@ -93,7 +93,6 @@
     <Compile Include="Connector\Driver\MSSQLclient.cs" />
     <Compile Include="Connector\Include.cs" />
     <Compile Include="Connector\SGT\Group.cs" />
-    <Compile Include="Connector\SGT\Interface1.cs" />
     <Compile Include="Connector\SGT\Source.cs" />
     <Compile Include="Connector\SGT\Tag.cs" />
     <Compile Include="Connector\Driver\TestTable.cs" />
@@ -102,6 +101,7 @@
     <Compile Include="DML\DataTableLib.cs" />
     <Compile Include="DML\FileControl.cs" />
     <Compile Include="DML\Logger3.cs" />
+    <Compile Include="DML\ProcessMaster.cs" />
     <Compile Include="DML\TreeLib.cs" />
     <Compile Include="Editor\ControlProperties.cs" />
     <Compile Include="Editor\ElementData.cs" />

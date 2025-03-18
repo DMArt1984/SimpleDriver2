@@ -48,6 +48,13 @@ namespace DML.Log
         }
     }
 
+    public interface ICodeMessage
+    {
+        ushort Id { get; }
+        CodeMessage codeMessage { get; set; }
+        bool Good { get; }
+    }
+
     /// <summary>
     /// Интерфейс логгера.
     /// </summary>

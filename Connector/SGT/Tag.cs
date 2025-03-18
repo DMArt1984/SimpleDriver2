@@ -61,7 +61,7 @@ namespace WinSimpleIDriver.Connector.SGT
         public TagResult(dynamic value, eTagCode tagCode)
         {
             this.value = value;
-            this.codeMessage = new CodeMessage(tagCode);
+            this.codeMessage = new CodeMessage((int)tagCode);
         }
     }
 
@@ -239,7 +239,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
         public string block { get; set; } // Блок
 
-        public bool Good => codeMessage.code == (int)eTagCode.good; // Тег достоверный // _off == false && 
+        public bool Good => codeMessage.сode == (int)eTagCode.good; // Тег достоверный // _off == false && 
 
         // симуляция
         public bool SimEnable = false; // использование симуляции
@@ -587,7 +587,7 @@ namespace WinSimpleIDriver.Connector.SGT
             get => _codeMessage;
             set
             {
-                if (_codeMessage.code != value.code)
+                if (_codeMessage.сode != value.сode)
                 {
                     _codeMessage = value;
                     CheckLastError();
@@ -603,9 +603,9 @@ namespace WinSimpleIDriver.Connector.SGT
 
         private void CheckLastError()
         {
-            if (_codeMessage.code < 0)
+            if (_codeMessage.сode < 0)
             {
-                _lastError = new CodeMessage(_codeMessage.code, _codeMessage.message);
+                _lastError = new CodeMessage(_codeMessage.сode, _codeMessage.message);
             }
         }
 
@@ -879,7 +879,7 @@ namespace WinSimpleIDriver.Connector.SGT
                     string nameIndex = "{" + item.title + "["; // значение из списка
 
                     bool good = item.Good; // || item.SimEnable; // new item.SimEnable
-                    int code = item.codeMessage.code;
+                    int code = item.codeMessage.сode;
                     dynamic lastValue = item.LastGoodValue;
                     dynamic actualValue = item.Value;
 
