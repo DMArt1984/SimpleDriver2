@@ -992,7 +992,6 @@ namespace WinSimpleIDriver.Connector.SGT
             title = JsonControl.GetString(item, "Title", $"Source #{forId}");
             driver = JsonControl.GetTypeEnum<eDriverType>(item, "Driver", eDriverType.None);
             connection = JsonControl.GetString(item, "Address");
-            //groupTitle = JsonControl.GetString(item, "Group");
             off = JsonControl.GetBool(item, "Off");
             description = JsonControl.GetString(item, "Desc");
             tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;

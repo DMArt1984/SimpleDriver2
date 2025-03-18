@@ -256,14 +256,6 @@ namespace WinSimpleIDriver
                     tag.groupId = group.Id;
                 }
             }
-
-            //foreach (var source in sources)
-            //{
-            //    if (source.groupId == 0 && !string.IsNullOrWhiteSpace(source.groupTitle) && groupDict.TryGetValue(source.groupId, out var group))
-            //    {
-            //        source.groupId = group.Id;
-            //    }
-            //}
         }
 
         // Распаковка структур
