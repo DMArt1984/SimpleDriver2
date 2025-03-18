@@ -100,6 +100,7 @@
     <Compile Include="DML\ColorConverterHelper.cs" />
     <Compile Include="DML\DataTableLib.cs" />
     <Compile Include="DML\FileControl.cs" />
+    <Compile Include="DML\Logger3.cs" />
     <Compile Include="DML\TreeLib.cs" />
     <Compile Include="Editor\ControlProperties.cs" />
     <Compile Include="Editor\ElementData.cs" />
