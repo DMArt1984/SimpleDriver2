@@ -3,7 +3,6 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using FTPclientToSQL;
 
 namespace DML.Log
 {
@@ -456,7 +455,7 @@ namespace DML.Log
         // Приватный конструктор предотвращает создание экземпляров извне.
         private FileLogger()
         {
-            string settingsFileName = SettingsControl.settingsFileName;
+            string settingsFileName = "sett111.json"; // SettingsControl.settingsFileName;
             pathToLog = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Log_{settingsFileName}");
             if (!Directory.Exists(pathToLog))
                 Directory.CreateDirectory(pathToLog);

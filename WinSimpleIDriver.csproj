@@ -97,6 +97,7 @@
     <Compile Include="Connector\SGT\Source.cs" />
     <Compile Include="Connector\SGT\Tag.cs" />
     <Compile Include="Connector\Driver\TestTable.cs" />
+    <Compile Include="DML\BaseLogger.cs" />
     <Compile Include="DML\ColorConverterHelper.cs" />
     <Compile Include="DML\DataTableLib.cs" />
     <Compile Include="DML\FileControl.cs" />
@@ -132,8 +133,6 @@
     </Compile>
     <Compile Include="DML\INIfile.cs" />
     <Compile Include="DML\JsonControl.cs" />
-    <Compile Include="DML\Log\LoggerConsole.cs" />
-    <Compile Include="DML\Log\LogHelper.cs" />
     <Compile Include="FormHelp.cs">
       <SubType>Form</SubType>
     </Compile>

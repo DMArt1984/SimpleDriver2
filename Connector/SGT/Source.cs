@@ -223,7 +223,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
             SetClient(address);
 
-            LogHelper.LogApp($"new source ID{Id} {title} {driverType} {Address}");
+            LogHelper2.LogApp($"new source ID{Id} {title} {driverType} {Address}");
         }
 
         ~Source()
@@ -308,7 +308,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 return dic;
             } catch (Exception ex)
             {
-                LogHelper.LogException(ex, $"ParamsForSource = {address}");
+                LogHelper2.LogException(ex, $"ParamsForSource = {address}");
                 return new Dictionary<string, string>();
             }
         }
@@ -426,24 +426,24 @@ namespace WinSimpleIDriver.Connector.SGT
 
         public void OnControl(string newAddress)
         {
-            LogHelper.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 1");
+            LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 1");
             if (String.IsNullOrWhiteSpace(newAddress) || newAddress == Address)
             {
                 Off = false;
-                LogHelper.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено");
+                LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено");
                 return;
             }
 
             Address = newAddress; // новый адрес
 
-            LogHelper.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 2 - новые параметры");
+            LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 2 - новые параметры");
             var dic = ParamsForSource(Address);
 
-            LogHelper.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 3 - пересоздание клиента");
+            LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 3 - пересоздание клиента");
             device.CreateClient(Address); // пересоздание клиента
             Off = false; // открыть
             //...
-            LogHelper.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено");
+            LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено");
         }
 
         int Open(bool user = false)
@@ -468,11 +468,11 @@ namespace WinSimpleIDriver.Connector.SGT
                 if (result.code == 0)
                 {
                     // Connect
-                    LogHelper.LogApp($"Источник ID={Id} {title} > Соединение...");
+                    LogHelper2.LogApp($"Источник ID={Id} {title} > Соединение...");
                     result = this.device.Connect(Address);
                 } else
                 {
-                    LogHelper.LogApp($"Источник ID={Id} {title} > Нет связи с хостом/IP");
+                    LogHelper2.LogApp($"Источник ID={Id} {title} > Нет связи с хостом/IP");
                     //result = new CodeMessage(-404, "Нет связи с хостом");
                 }
 
@@ -481,7 +481,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
                 if (result.code == 0)
                 {
-                    LogHelper.LogApp($"Источник ID={Id} {title} > Открыть - успешно!");
+                    LogHelper2.LogApp($"Источник ID={Id} {title} > Открыть - успешно!");
 
                     _opened = true;
                     _fail = false;
@@ -495,7 +495,7 @@ namespace WinSimpleIDriver.Connector.SGT
                         CyclicRequest = true;
                 } else
                 {
-                    LogHelper.LogApp($"Источник ID={Id} {title} > Открыть - ошибка {result.code} {result.message}");
+                    LogHelper2.LogApp($"Источник ID={Id} {title} > Открыть - ошибка {result.code} {result.message}");
 
                     Status = eSourceStatus.breaking;
                     _fail = true;
@@ -515,12 +515,12 @@ namespace WinSimpleIDriver.Connector.SGT
 
         int Close(bool user = false)
         {
-            LogHelper.LogApp($"Источник ID={Id} {title} > Закрыть...");
+            LogHelper2.LogApp($"Источник ID={Id} {title} > Закрыть...");
             if (Status != eSourceStatus.closed)
             {
                 Status = eSourceStatus.closing;
 
-                LogHelper.LogApp($"Источник ID={Id} {title} > Ждем...");
+                LogHelper2.LogApp($"Источник ID={Id} {title} > Ждем...");
                 WaitProcess(); // ждем завершения текущего запроса...
 
                 CodeMessage result = this.device.Disconnect();
@@ -529,7 +529,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
                 if (result.code == 0)
                 {
-                    LogHelper.LogApp($"Источник ID={Id} {title} > Закрыть - успешно!");
+                    LogHelper2.LogApp($"Источник ID={Id} {title} > Закрыть - успешно!");
 
                     CyclicRequest = false;
                     //LogHelper.LogApp($"Источник ID={Id} {title} > 1...");
@@ -538,22 +538,22 @@ namespace WinSimpleIDriver.Connector.SGT
                     counterReq = 0;
                     //LogHelper.LogApp($"Источник ID={Id} {title} > 3...");
                     counterFailReq = 0;
-                    LogHelper.LogApp($"Источник ID={Id} {title} > Статусы тегов...");
+                    LogHelper2.LogApp($"Источник ID={Id} {title} > Статусы тегов...");
 
                     // статусы тегов
                     Tag.CodeMessageList(tags, new CodeMessage((int)eTagCode.sourceClosed, eTagCode.sourceClosed.GetText()));
 
-                    LogHelper.LogApp($"Источник ID={Id} {title} > 5...");
+                    LogHelper2.LogApp($"Источник ID={Id} {title} > 5...");
 
                     if (user == false)
                         OpenAfterFail();
                 } else
                 {
-                    LogHelper.LogApp($"Источник ID={Id} {title} > Закрыть - ошибка {result.code} {result.message}");
+                    LogHelper2.LogApp($"Источник ID={Id} {title} > Закрыть - ошибка {result.code} {result.message}");
                 }
 
                 EventStatus();
-                LogHelper.LogApp($"Источник ID={Id} {title} > Код {result.code}");
+                LogHelper2.LogApp($"Источник ID={Id} {title} > Код {result.code}");
                 return result.code;
             } else
             {
@@ -568,7 +568,7 @@ namespace WinSimpleIDriver.Connector.SGT
             // нужно ли переоткрытие?
             if (AutoOpenAfterFail && Fail && UserUseClosed == false && timerReopen == null)
             {
-                LogHelper.LogApp($"Source ID={Id} Reopen {stepReOpen}-{rTimeMsec[stepReOpen]}...");
+                LogHelper2.LogApp($"Source ID={Id} Reopen {stepReOpen}-{rTimeMsec[stepReOpen]}...");
 
                 try
                 {
@@ -582,11 +582,11 @@ namespace WinSimpleIDriver.Connector.SGT
                     if (stepReOpen >= rTimeMsec.Length)
                         stepReOpen = 0;
 
-                    LogHelper.LogApp($"Source ID={Id} Reopen {stepReOpen}-{rTimeMsec[stepReOpen]}, STEP={stepReOpen}");
+                    LogHelper2.LogApp($"Source ID={Id} Reopen {stepReOpen}-{rTimeMsec[stepReOpen]}, STEP={stepReOpen}");
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.LogException(ex, "OpenAfterFail()");
+                    LogHelper2.LogException(ex, "OpenAfterFail()");
                     TimerCB_Inner(); // NEW
                 }
             }
@@ -600,10 +600,10 @@ namespace WinSimpleIDriver.Connector.SGT
 
         private void TimerCB_Inner()
         {
-            LogHelper.LogApp("REOPEN: TimerCB");
+            LogHelper2.LogApp("REOPEN: TimerCB");
             if (AutoOpenAfterFail == false || UserUseClosed == true)
             {
-                LogHelper.LogApp("REOPEN: AutoOpenAfterFail == false...");
+                LogHelper2.LogApp("REOPEN: AutoOpenAfterFail == false...");
                 timerReopen?.Stop();
                 timerReopen?.Close();
                 timerReopen = null;
@@ -615,12 +615,12 @@ namespace WinSimpleIDriver.Connector.SGT
 
             if (Off == false)
             {
-                LogHelper.LogApp("REOPEN: Open()...");
+                LogHelper2.LogApp("REOPEN: Open()...");
                 Open(false);
             }
             else
             {
-                LogHelper.LogApp("REOPEN: Off = false...");
+                LogHelper2.LogApp("REOPEN: Off = false...");
                 Off = false;
             }
 
@@ -629,13 +629,13 @@ namespace WinSimpleIDriver.Connector.SGT
         void WaitProcess()
         {
             //LoggerConsole.Log("wait process [", log);
-            LogHelper.LogApp("wait process [");
+            LogHelper2.LogApp("wait process [");
             DateTime dt = DateTime.Now;
             while (_process)
             {
                 // ждем выполнение текущего запроса...
                 //LoggerConsole.Log("wait process...", log);
-                LogHelper.LogApp("wait process...");
+                LogHelper2.LogApp("wait process...");
                 Task.Delay(100);
                 TimeSpan ts = DateTime.Now.Subtract(dt);
                 if (ts.TotalMilliseconds > 5000)
@@ -643,7 +643,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 break;
             }
             //LoggerConsole.Log("wait process ]", log);
-            LogHelper.LogApp("wait process ]");
+            LogHelper2.LogApp("wait process ]");
         }
 
         public bool Opened => _opened;
@@ -731,13 +731,13 @@ namespace WinSimpleIDriver.Connector.SGT
         {
             counterBreak++; // считаем неудачные запросы для последующего перезапуска
             //Console.WriteLine($"Break = {counterBreak} / {MaxBreak}");
-            LogHelper.LogError($"NEW BREAK = {counterBreak} / {MaxBreak}");
+            LogHelper2.LogError($"NEW BREAK = {counterBreak} / {MaxBreak}");
 
             if (counterBreak >= MaxBreak)
             {
                 ClearCounterBreak();
                 ActiveError = new CodeMessage((int)eTagCode.breakError, eTagCode.breakError.GetText());
-                LogHelper.LogError($"NEW BREAK = ActiveError");
+                LogHelper2.LogError($"NEW BREAK = ActiveError");
                 //...
             }
         }

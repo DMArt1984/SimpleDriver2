@@ -177,21 +177,21 @@ namespace WinSimpleIDriver
         private string SetLeftLabelMessage1(string message = "")
         {
             toolStripStatusLabelMessage1.Text = message;
-            LogHelper.LogApp(message);
+            LogHelper2.LogApp(message);
             return message;
         }
         // Установить сообщение 2
         private string SetMidLabelMessage2(string message = "")
         {
             toolStripStatusLabelMessage2.Text = message;
-            LogHelper.LogApp(message);
+            LogHelper2.LogApp(message);
             return message;
         }
         // Установить сообщение 3
         private string SetRightLabelMessage3(string message = "")
         {
             toolStripStatusLabelMessage3.Text = message;
-            LogHelper.LogApp(message);
+            LogHelper2.LogApp(message);
             return message;
         }
 

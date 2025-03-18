@@ -227,7 +227,7 @@ namespace WinSimpleIDriver.Connector.SGT
             _disable = disable;
 
             //LoggerConsole.Log($"Group ID={Id} {title} {description} Created!", log);
-            LogHelper.LogApp($"new group ID{Id} {title} {updateRate}");
+            LogHelper2.LogApp($"new group ID{Id} {title} {updateRate}");
         }
 
         public void Activate()

@@ -81,7 +81,7 @@ namespace WinSimpleIDriver.Connector
             if (enableLog)
             {
                 eventTraffic?.Invoke(message);
-                LogHelper.LogTraffic(message);
+                LogHelper2.LogTraffic(message);
             }
         }
 

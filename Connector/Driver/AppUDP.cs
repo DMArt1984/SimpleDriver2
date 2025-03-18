@@ -381,7 +381,7 @@ namespace WinSimpleIDriver.Connector.Driver
 
             } catch (Exception ex)
             {
-                LogHelper.LogException(ex, $"new UdpClient({localPort})");
+                LogHelper2.LogException(ex, $"new UdpClient({localPort})");
             }
         }
 

@@ -32,7 +32,7 @@ namespace DML
             }
             catch (Exception ex)
             {
-                LogHelper.Log($"Ошибка распознования json строки: {input}", ex);
+                LogHelper2.Log($"Ошибка распознования json строки: {input}", ex);
                 MessageBox.Show($"Ошибка распознования json строки: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
@@ -52,7 +52,7 @@ namespace DML
             }
             catch (Exception ex)
             {
-                LogHelper.Log($"Ошибка получения json строки: {my_params}", ex);
+                LogHelper2.Log($"Ошибка получения json строки: {my_params}", ex);
                 MessageBox.Show($"Ошибка получения json строки: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return json;

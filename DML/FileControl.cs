@@ -76,7 +76,7 @@ public static class FileControl
         }
         catch (Exception ex)
         {
-            LogHelper.Log($"Ошибка чтения файла {fullFileName}", ex);
+            LogHelper2.Log($"Ошибка чтения файла {fullFileName}", ex);
             return null;
         }
     }
@@ -105,7 +105,7 @@ public static class FileControl
         }
         catch (Exception ex)
         {
-            LogHelper.Log("Ошибка сохранения списка последних файлов", ex);
+            LogHelper2.Log("Ошибка сохранения списка последних файлов", ex);
         }
     }
 
@@ -120,7 +120,7 @@ public static class FileControl
         }
         catch (Exception ex)
         {
-            LogHelper.Log("Ошибка загрузки списка последних файлов", ex);
+            LogHelper2.Log("Ошибка загрузки списка последних файлов", ex);
             return new List<string>();
         }
     }
@@ -141,7 +141,7 @@ public static class FileControl
         }
         catch (Exception ex)
         {
-            LogHelper.Log($"Ошибка открытия файла {filePath}", ex);
+            LogHelper2.Log($"Ошибка открытия файла {filePath}", ex);
             ShowError($"Ошибка открытия файла {Path.GetFileName(filePath)}: {ex.Message}");
             return null;
         }
@@ -155,7 +155,7 @@ public static class FileControl
         }
         catch (Exception ex)
         {
-            LogHelper.Log($"Ошибка сохранения файла {filePath}", ex);
+            LogHelper2.Log($"Ошибка сохранения файла {filePath}", ex);
             ShowError($"Ошибка сохранения файла {Path.GetFileName(filePath)}: {ex.Message}");
         }
     }
