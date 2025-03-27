@@ -25,7 +25,8 @@ namespace WinSimpleIDriver
         DataTable dtTags;
 
         // logger 
-        ProcessMaster _master;
+        //ProcessMaster _master;
+        public readonly ILogger logger = BaseLogger.GetLogger(LogTarget.FileConsoleForm);
         LabelLogger lLeft;
         LabelLogger lMid;
         LabelLogger lRight;
@@ -55,11 +56,26 @@ namespace WinSimpleIDriver
             // Последние файлы
             UpdateRecentFilesMenu();
 
-            // Log DGV
-            _master = new ProcessMaster(LogTarget.FileAndForm, null);
+            #region Log DGV
+            // Привязываем делегат для логирования:
+            // При поступлении лог-сообщения делегат добавляет новую строку в dataGridViewLog.
+            FormLogger.Instance.FormLogDelegate = (eMessageType mt, eMessageCategory category, int code, string message) =>
+            {
+                if (!false)
+                    return; // Логирование в таблицу отключено
 
-            LogForm.rowLong = AddRowLongLogDGV;
-            LogForm.rowShort = AddRowShortLogDGV;
+                // Так как обновление UI должно происходить в главном потоке, используем Invoke.
+                if (dataGridViewLog.InvokeRequired)
+                {
+                    dataGridViewLog.Invoke(new Action(() => AddLogRow(mt, category, code, message)));
+                }
+                else
+                {
+                    AddLogRow(mt, category, code, message);
+                }
+            };
+
+            #endregion
 
 
             // Form: Source
@@ -207,29 +223,73 @@ namespace WinSimpleIDriver
         #endregion
 
 
-        #region Log
+        #region LOG
 
-        // Дублировать лог в таблицу формы
-        private void AddRowLongLogDGV(eMessageType mtype, string category, string message)
+        /// <summary>
+        /// Добавляет строку в dataGridViewLog с информацией о логе и меняет цвет фона строки в зависимости от типа сообщения.
+        /// После добавления строки применяется текущая сортировка таблицы.
+        /// Если в таблице более 100 строк, то удаляются 10 строк с наименьшим значением logID.
+        /// </summary>
+        /// <param name="mt">Тип сообщения (например, OK, info, error).</param>
+        /// <param name="category">Категория лога.</param>
+        /// <param name="code">Код сообщения.</param>
+        /// <param name="message">Текст сообщения.</param>
+        private void AddLogRow(eMessageType mt, eMessageCategory category, int code, string message)
         {
-            if (Settings.logTable == false || String.IsNullOrWhiteSpace(message))
-                return;
+            // Добавляем новую строку в dataGridViewLog
+            int rowIndex = dataGridViewLog.Rows.Add();
+            DataGridViewRow row = dataGridViewLog.Rows[rowIndex];
 
-            if (InvokeRequired)
+            // Заполняем ячейки данными
+            row.Cells["logDT"].Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            row.Cells["logCategory"].Value = category.ToString();
+            row.Cells["logType"].Value = mt.ToString();
+            row.Cells["logCode"].Value = code.ToString();
+            row.Cells["logText"].Value = message;
+
+            // Меняем цвет фона строки в зависимости от типа сообщения
+            switch (mt)
             {
-                Invoke((Action<eMessageType, string, string>)AddRowLongLogDGV, mtype, category, message);
+                case eMessageType.OK:
+                    row.DefaultCellStyle.BackColor = System.Drawing.Color.LightGreen;
+                    break;
+                case eMessageType.ERROR:
+                    row.DefaultCellStyle.BackColor = System.Drawing.Color.LightCoral;
+                    break;
+                default:
+                    row.DefaultCellStyle.BackColor = System.Drawing.Color.White;
+                    break;
             }
-            else
+
+            // Если в таблице более 100 строк, удаляем 10 строк с наименьшим значением logID
+            int maxRows = 100;
+            int removeRows = 10;
+            if (dataGridViewLog.Rows.Count > maxRows)
             {
-                dataGridViewLog.Rows.Add(dataGridViewLog.Rows.Count + 1, DateTime.Now, category, mtype.ToString().ToUpper(), message);
+                var rowsToRemove = dataGridViewLog.Rows
+                    .Cast<DataGridViewRow>()
+                    .OrderBy(r => (r.Cells["logDT"].Value))
+                    .Take(removeRows)
+                    .ToList();
+                foreach (var r in rowsToRemove)
+                {
+                    dataGridViewLog.Rows.Remove(r);
+                }
             }
-        }
-        private void AddRowShortLogDGV(CodeMessage cm, string category)
-        {
-            AddRowLongLogDGV(LogForm.GetMessageType(cm), category, cm.message);
+
+            // Применяем текущую сортировку таблицы, если она задана
+            if (dataGridViewLog.SortedColumn != null)
+            {
+                // Определяем направление сортировки
+                ListSortDirection direction = dataGridViewLog.SortOrder == SortOrder.Ascending ?
+                                                ListSortDirection.Ascending : ListSortDirection.Descending;
+                // Сортируем по текущему отсортированному столбцу с указанным направлением
+                dataGridViewLog.Sort(dataGridViewLog.SortedColumn, direction);
+            }
         }
 
         #endregion
+
 
         // ================================================================================================================
 
@@ -1412,5 +1472,8 @@ namespace WinSimpleIDriver
         {
             TreeLib.DrawTreeInclude();
         }
+
+
+
     }
 }

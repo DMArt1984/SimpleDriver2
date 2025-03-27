@@ -207,7 +207,7 @@ namespace WinSimpleIDriver.Connector
             return tag.directFull != eDirectFull.Read && (tag.Command != eCommand.Update || (tag.Value != tag.WriteConstValue && tag.Value != tag.WriteTagValue));
         }
 
-        // ====================================================================================
+        // =====================================================================================
 
         public virtual TagResult GetValue(string address, eDataType dataType)
         {
