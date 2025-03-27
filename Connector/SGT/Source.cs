@@ -217,6 +217,7 @@ namespace WinSimpleIDriver.Connector.SGT
             bool disable, 
             bool auto, bool reopen, string address = "", string description = "") : base(LogTarget.FileConsoleForm, null)
         {
+            _driverType = driverType;
             _deviceFactory = deviceFactory;
             _device = _deviceFactory.CreateDevice(driverType, address);
 
