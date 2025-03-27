@@ -53,6 +53,9 @@ namespace WinSimpleIDriver.Connector
         public delegate void HandlerTrafficLog(string message);
         public HandlerTrafficLog logTraffic;
 
+        public delegate void HandlerLog(CodeMessage cm);
+        public HandlerLog log;
+
         // =================================================================================
 
         public Device()

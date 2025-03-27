@@ -270,7 +270,7 @@ namespace WinSimpleIDriver.Connector.Driver
             {
                 if (ex.Number == 0)
                 {
-                    LogHelper2.LogError($"Ошибка связи с SQL сервером: {ex.HResult} [{ex.Number}] {ex.Message}");
+                    log?.Invoke(new CodeMessage(ex.HResult, $"Ошибка связи с SQL сервером:[{ex.Number}] {ex.Message}"));
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} [{ex.Number}] {ex.Message}");
                 }
                 return new TagResult(Value, ex.HResult, $"[{ex.Number}] {ex.Message}");
@@ -279,7 +279,7 @@ namespace WinSimpleIDriver.Connector.Driver
             {
                 if (ex.HResult.ToString("X") == "80131904" || ex.HResult.ToString("X") == "FFFFFDA8") // ошибка сервера?
                 {
-                    LogHelper2.LogError($"Ошибка SQL сервера: {ex.HResult} {ex.Message}");
+                    log?.Invoke(new CodeMessage(ex.HResult, $"Ошибка SQL сервера: {ex.Message}"));
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} {ex.Message}");
                 }
                 return new TagResult(Value, ex.HResult, ex.Message);

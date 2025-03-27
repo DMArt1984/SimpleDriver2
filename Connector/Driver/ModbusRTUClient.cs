@@ -300,7 +300,7 @@ namespace WinSimpleIDriver.Connector.Driver
                 {
                     if (client.statusLastAnswer == ModbusRTUmaster.excExceptionConnectionLost) // если ошибка связи (порта)
                     {
-                        LogHelper2.LogError($"ModbusRTU.excExceptionConnectionLost for {address}");
+                        log?.Invoke(new CodeMessage(-1, $"ModbusRTU.excExceptionConnectionLost for {address}"));
                         return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={client.statusLastAnswer}");
                     }
                     return new TagResult(0, -client.statusLastAnswer, ModbusRTUmaster.exc[client.statusLastAnswer]);
@@ -324,7 +324,7 @@ namespace WinSimpleIDriver.Connector.Driver
                     case eDataType.Double:
                         if (bytes.Length*MBit != count * RegsInValue * MX) // <
                         {
-                            LogHelper2.LogError($"Проверка на тип данных: (bytes.Length = {bytes.Length}) != (count * RegsInValue * 2 = {count * RegsInValue * 2})");
+                            log?.Invoke(new CodeMessage(1, $"Проверка на тип данных: (bytes.Length = {bytes.Length}) != (count * RegsInValue * 2 = {count * RegsInValue * 2})"));
                             return new TagResult(0, eTagCode.inconsistency);
                         }
                         break;
@@ -595,7 +595,7 @@ namespace WinSimpleIDriver.Connector.Driver
                 {
                     if (client.statusLastAnswer == ModbusRTUmaster.excExceptionConnectionLost)
                     {
-                        LogHelper2.LogError($"Есть ошибки в ответе: ModbusRTUmaster.excExceptionConnectionLost for {address}");
+                        log?.Invoke(new CodeMessage(-1, $"Есть ошибки в ответе: ModbusRTUmaster.excExceptionConnectionLost for {address}"));
                         return new TagResult(0, eTagCode.breakError);
                     }
                     return new TagResult(0, -client.statusLastAnswer, ModbusRTUmaster.exc[client.statusLastAnswer]);

@@ -187,10 +187,11 @@ namespace WinSimpleIDriver.Connector.Driver
                 //Console.WriteLine($"Tag exeption");
                 if (ex.HResult.ToString("X") == "80131500") // Error establishing a connection OR BadConnectionClosed
                 {
-                    LogHelper2.LogError($"Ошибка связи с сервером: {ex.HResult} {ex.Message}");
+                    log?.Invoke(new CodeMessage(ex.HResult, $"Ошибка связи с сервером: {ex.Message}"));
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} {ex.Message}");
                 }
 
+                log?.Invoke(new CodeMessage(ex.HResult, ex.Message));
                 return new TagResult(Value, ex.HResult, ex.Message);
             }
 
@@ -240,9 +241,11 @@ namespace WinSimpleIDriver.Connector.Driver
             {
                 if (ex.HResult.ToString("X") == "80131500") // Error establishing a connection OR BadConnectionClosed
                 {
-                    LogHelper2.LogError($"Ошибка связи с сервером: {ex.HResult} {ex.Message}");
+                    log?.Invoke(new CodeMessage(ex.HResult, $"Ошибка связи с сервером: {ex.Message}"));
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} {ex.Message}");
                 }
+
+                log?.Invoke(new CodeMessage(ex.HResult, ex.Message));
                 return new TagResult(newValue, ex.HResult, ex.Message);
             }
         }
