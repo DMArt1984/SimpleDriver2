@@ -239,23 +239,21 @@ namespace WinSimpleIDriver.Connector.SGT
                     break;
             }
 
-            Console.WriteLine($" step1: += EventTraffic");
+            logger.Info($" step1: logTraffic", eMessageCategory.Source);
             (_device as Device).logTraffic = LogTraffic;
 
         }
 
         private void SetClient(string address)
         {
-            Console.WriteLine($" step3: CreateClient(paramClient)");
+            logger.Info($" step3: CreateClient(paramClient)", eMessageCategory.Source);
             CodeMessage result = this._device.CreateClient(address);
             if (result.сode != 0)
                 ActiveError = result;
             Status = (result.сode == 0) ? eSourceStatus.closed : eSourceStatus.noClient;
 
-            Console.WriteLine($" step4: _disable = ");
-            _disable = _disable || result.сode != 0; // new!!!
-
-            //LoggerConsole.Log($"Source ID={Id} created!", log);
+            logger.Info($" step4: _disable = ", eMessageCategory.Source);
+            _disable = _disable || result.сode != 0;
         }
 
         public void Activate()
@@ -582,7 +580,6 @@ namespace WinSimpleIDriver.Connector.SGT
                 return;
             }
 
-            //Console.WriteLine("TimerCB: Off=false");
             timerReopen = null;
 
             if (Off == false)
@@ -664,22 +661,19 @@ namespace WinSimpleIDriver.Connector.SGT
                     if (Fail == false)
                     {
                         _fail = true;
-                        //Console.WriteLine($"_fail = true;");
                         if (Off)
                         {
                             // уже закрыто...
-                            //Console.WriteLine($" -> OpenAfterFail();");
                             OpenAfterFail();
                         }
                         else
                         {
-                            Console.WriteLine($" -> Off = true;");
+                            logger.Info($" -> Off = true;", eMessageCategory.Source);
                             Off = true; // закрываем для перезапуска
                         }
                         //...
                     } else
                     {
-                        //Console.WriteLine($" ERROR: wait...");
                     }
                 }
 
@@ -780,8 +774,6 @@ namespace WinSimpleIDriver.Connector.SGT
                     _process = true;
                     groupNow = groupId;
 
-                    //LoggerConsole.Log($"Source ID={groupId} for group={groupId}...", log);
-
                     // Выбор тегов для опроса
                     List<Tag> clientTags = tags.Where(x => (x.groupId == groupId) && x.Off == false).ToList();
 
@@ -844,7 +836,6 @@ namespace WinSimpleIDriver.Connector.SGT
                     var next = roll.FirstOrDefault(x => x.Value == true);
                     if (next.Key > 0)
                     {
-                        //Console.WriteLine($"source ID {Id} group ID {next.Key} recalc");
                         EventRequestRUN(next.Key);
                     }
                 }
@@ -852,11 +843,9 @@ namespace WinSimpleIDriver.Connector.SGT
             }
             else
             {
-                //Console.WriteLine($"source ID {Id} group ID {groupId} lock...");
                 // там занято, ставим в очередь
                 if (groupId != groupNow)
                 {
-                    //Console.WriteLine($"source ID {Id} group ID {groupId} add roll");
                     roll[Id] = true;
                 }
             }
