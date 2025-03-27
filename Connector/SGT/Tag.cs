@@ -270,8 +270,6 @@ namespace WinSimpleIDriver.Connector.SGT
             this.description = description;
             _dataType = dataType;
             _address = address;
-
-            //LoggerConsole.Log($"Tag ID={Id} created!", log);
         }
 
         public Tag(ushort Id, string title, eDataType dataType, string address, string sourceTitle, string groupTitle, ushort sourceId, ushort groupId, string description = "") : this (Id, title, dataType, address, description)

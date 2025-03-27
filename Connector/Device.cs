@@ -60,7 +60,7 @@ namespace WinSimpleIDriver.Connector
 
         public Device()
         {
-            Console.WriteLine("Device created!");
+            log?.Invoke(new CodeMessage(0, "Device created!"));
         }
 
         ~Device() { } // ничего не делает
