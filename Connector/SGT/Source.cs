@@ -69,6 +69,37 @@ namespace WinSimpleIDriver.Connector.SGT
         public DataGridViewCell statistic;
     }
 
+    public interface IDeviceFactory
+    {
+        IRealDevice CreateDevice(eDriverType driverType, string address);
+    }
+
+    public class DeviceFactory : IDeviceFactory
+    {
+        public IRealDevice CreateDevice(eDriverType driverType, string address)
+        {
+            switch (driverType)
+            {
+                case eDriverType.Formula:
+                    return new Formula();
+                case eDriverType.Application:
+                    return new AppDevice();
+                case eDriverType.ModbusTCPclient:
+                    return new ModbusTCPClient();
+                case eDriverType.ModbusRTUclient:
+                    return new ModbusRTUClient();
+                case eDriverType.AppUDP:
+                    return new AppUDP(address);
+                case eDriverType.MSSQLclient:
+                    return new MSSQLclient();
+                case eDriverType.OPCUAclient:
+                    return new HylasoftOPCUA();
+                default:
+                    return new Device();
+            }
+        }
+    }
+
     public class Source : BaseLogger, ISource
     {
         public ushort Id { get; } // ID источника данных
@@ -116,8 +147,6 @@ namespace WinSimpleIDriver.Connector.SGT
         // Устройство
         private eDriverType _driverType;
         public eDriverType driverType => _driverType;
-
-        IRealDevice _device;
 
         // строка подключения
         public string Address {
@@ -177,14 +206,22 @@ namespace WinSimpleIDriver.Connector.SGT
         int counterReq = 0;
         int counterFailReq = 0;
 
+        private readonly IRealDevice _device;
+        private readonly IDeviceFactory _deviceFactory;
+
         // Конструкторы
         public Source(ushort Id, string title, 
-            eDriverType driverType, bool disable, 
+            eDriverType driverType, IDeviceFactory deviceFactory,
+            bool disable, 
             bool auto, bool reopen, string address = "", string description = "") : base(LogTarget.FileConsoleForm, null)
         {
             logger.Info($"Source ID={Id} {title}", eMessageCategory.Source);
 
-            ChangeDriver(driverType, address);
+            _deviceFactory = deviceFactory;
+            _device = _deviceFactory.CreateDevice(driverType, address);
+            logger.Info($" step1: log(Traffic)", eMessageCategory.Source);
+            (_device as Device).logTraffic = LogTraffic;
+            (_device as Device).log = Log;
 
             logger.Info($" step2: this...", eMessageCategory.Source);
 
@@ -204,52 +241,6 @@ namespace WinSimpleIDriver.Connector.SGT
         {
             (_device as Device).logTraffic = null;
             (_device as Device).log = null;
-        }
-
-        // Переназначить драйвер
-        private void ChangeDriver(eDriverType driverType, string address)
-        {
-            if (_device != null)
-            {
-                (_device as Device).logTraffic = null;
-                (_device as Device).log = null;
-            }
-
-            this._driverType = driverType;
-            string paramClient = address;
-
-            switch (this._driverType)
-            {
-                case eDriverType.Formula:
-                    _device = new Formula();
-                    break;
-                case eDriverType.Application:
-                    _device = new AppDevice();
-                    break;
-                case eDriverType.ModbusTCPclient:
-                    _device = new ModbusTCPClient();
-                    break;
-                case eDriverType.ModbusRTUclient:
-                    _device = new ModbusRTUClient();
-                    break;
-                case eDriverType.AppUDP:
-                    _device = new AppUDP(address);
-                    break;
-                case eDriverType.MSSQLclient:
-                    _device = new MSSQLclient();
-                    break;
-                case eDriverType.OPCUAclient:
-                    _device = new HylasoftOPCUA();
-                    break;
-                default:
-                    this._device = new Device();
-                    break;
-            }
-
-            logger.Info($" step1: log(Traffic)", eMessageCategory.Source);
-            (_device as Device).logTraffic = LogTraffic;
-            (_device as Device).log = Log;
-
         }
 
         private void SetClient(string address)
