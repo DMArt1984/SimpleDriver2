@@ -108,6 +108,9 @@ namespace WinSimpleIDriver.Connector.SGT
 
         public delegate void HandlerTrafficLog(ushort Id, string message);
         public HandlerTrafficLog logTraffic;
+
+        public delegate void HandlerLog(CodeMessage cm);
+        public HandlerLog log;
         #endregion
 
         // Устройство
@@ -243,7 +246,7 @@ namespace WinSimpleIDriver.Connector.SGT
                     break;
             }
 
-            logger.Info($" step1: logTraffic", eMessageCategory.Source);
+            logger.Info($" step1: log(Traffic)", eMessageCategory.Source);
             (_device as Device).logTraffic = LogTraffic;
             (_device as Device).log = Log;
 
@@ -860,9 +863,9 @@ namespace WinSimpleIDriver.Connector.SGT
         {
             logTraffic?.Invoke(Id, message);
         }
-        void Log(CodeMessage cm) // ???
+        void Log(CodeMessage cm)
         {
-            
+            log?.Invoke(cm);
         }
 
         // --------------------------------------------------------------------------------------------------
@@ -906,7 +909,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
         static public List<Source> items = new List<Source>(); // все группы
         static public ushort lastId = 0;
-        static public bool log = false;
+        //static public bool log = false;
 
         static public void Clear()
         {
