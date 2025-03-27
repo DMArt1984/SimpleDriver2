@@ -85,36 +85,36 @@ namespace WinSimpleIDriver.Connector.SGT
         public int TagsCountGood => tags.Count(x => x.Good);
 
         // Справка
-        public Dictionary<string, string> helpSource => HelpDicSource(driverType);
-        public Dictionary<string, string> helpTag => HelpDicTag(driverType);
+        public Dictionary<string, string> helpSource => HelpDicSource(_driverType);
+        public Dictionary<string, string> helpTag => HelpDicTag(_driverType);
         static public Dictionary<string, string> GetHelpSource(eDriverType type)
         {
             return HelpDicSource(type);
         }
 
         // события
-        #region Event
+        #region Delegate
         public delegate void HandlerError(ushort Id, CodeMessage activeError);
-        public event HandlerError eventError;
+        public HandlerError eventError;
 
         public delegate void HandlerStatus(ushort Id, eSourceStatus status);
-        public event HandlerStatus eventStatus;
+        public HandlerStatus eventStatus;
 
         public delegate void HandlerInfo(SourceParam info);
-        public event HandlerInfo eventParams;
+        public HandlerInfo eventParams;
 
         public delegate void HandlerReq(ushort sourceId, ushort groupId, List<ITagResult> results, int counter, int fails, int all, int good);
-        public event HandlerReq eventReq;
+        public HandlerReq eventReq;
 
         public delegate void HandlerTrafficLog(ushort Id, string message);
-        public event HandlerTrafficLog eventTraffic;
+        public HandlerTrafficLog logTraffic;
         #endregion
 
         // Устройство
-        private eDriverType driverType;
-        public eDriverType xdriverType => driverType;
+        private eDriverType _driverType;
+        public eDriverType driverType => _driverType;
 
-        IRealDevice device;
+        IRealDevice _device;
 
         // строка подключения
         public string Address {
@@ -196,55 +196,55 @@ namespace WinSimpleIDriver.Connector.SGT
 
         ~Source()
         {
-            (device as Device).eventTraffic -= EventTraffic;
+            (_device as Device).logTraffic = null;
         }
 
         // Переназначить драйвер
         private void ChangeDriver(eDriverType driverType, string address)
         {
-            if (device != null)
-                (device as Device).eventTraffic -= EventTraffic;
+            if (_device != null)
+                (_device as Device).logTraffic = null;
 
-            this.driverType = driverType;
+            this._driverType = driverType;
             string paramClient = address;
 
-            switch (this.driverType)
+            switch (this._driverType)
             {
                 case eDriverType.Formula:
-                    device = new Formula();
+                    _device = new Formula();
                     break;
                 case eDriverType.Application:
-                    device = new AppDevice();
+                    _device = new AppDevice();
                     break;
                 case eDriverType.ModbusTCPclient:
-                    device = new ModbusTCPClient();
+                    _device = new ModbusTCPClient();
                     break;
                 case eDriverType.ModbusRTUclient:
-                    device = new ModbusRTUClient();
+                    _device = new ModbusRTUClient();
                     break;
                 case eDriverType.AppUDP:
-                    device = new AppUDP(address);
+                    _device = new AppUDP(address);
                     break;
                 case eDriverType.MSSQLclient:
-                    device = new MSSQLclient();
+                    _device = new MSSQLclient();
                     break;
                 case eDriverType.OPCUAclient:
-                    device = new HylasoftOPCUA();
+                    _device = new HylasoftOPCUA();
                     break;
                 default:
-                    this.device = new Device();
+                    this._device = new Device();
                     break;
             }
 
             Console.WriteLine($" step1: += EventTraffic");
-            (device as Device).eventTraffic += EventTraffic;
+            (_device as Device).logTraffic = LogTraffic;
 
         }
 
         private void SetClient(string address)
         {
             Console.WriteLine($" step3: CreateClient(paramClient)");
-            CodeMessage result = this.device.CreateClient(address);
+            CodeMessage result = this._device.CreateClient(address);
             if (result.сode != 0)
                 ActiveError = result;
             Status = (result.сode == 0) ? eSourceStatus.closed : eSourceStatus.noClient;
@@ -348,17 +348,17 @@ namespace WinSimpleIDriver.Connector.SGT
 
         public void SetLogTraffic(bool enable)
         {
-            (device as ITrafficLog).enableTLog = enable;
+            (_device as ITrafficLog).enableTLog = enable;
         }
 
         public bool IsLogTraffic()
         {
-            return (device as ITrafficLog).enableTLog;
+            return (_device as ITrafficLog).enableTLog;
         }
 
         public bool IsSupportLog()
         {
-            return (device as ITrafficLog).supportTLog;
+            return (_device as ITrafficLog).supportTLog;
         }
 
         // ========================================================================
@@ -408,7 +408,7 @@ namespace WinSimpleIDriver.Connector.SGT
             var dic = ParamsForSource(Address);
 
             LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 3 - пересоздание клиента");
-            device.CreateClient(Address); // пересоздание клиента
+            _device.CreateClient(Address); // пересоздание клиента
             Off = false; // открыть
             //...
             LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено");
@@ -422,7 +422,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 Status = eSourceStatus.opening;
                 CodeMessage result = new CodeMessage(0);
 
-                if (device is INetDevice && (device as DeviceNet).disableHostForOpen)
+                if (_device is INetDevice && (_device as DeviceNet).disableHostForOpen)
                 {
                     var retval = IsPing();
                     if (retval == false)
@@ -437,7 +437,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 {
                     // Connect
                     LogHelper2.LogApp($"Источник ID={Id} {title} > Соединение...");
-                    result = this.device.Connect(Address);
+                    result = this._device.Connect(Address);
                 } else
                 {
                     LogHelper2.LogApp($"Источник ID={Id} {title} > Нет связи с хостом/IP");
@@ -491,7 +491,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 LogHelper2.LogApp($"Источник ID={Id} {title} > Ждем...");
                 WaitProcess(); // ждем завершения текущего запроса...
 
-                CodeMessage result = this.device.Disconnect();
+                CodeMessage result = this._device.Disconnect();
                 if (result.сode != 0)
                     ActiveError = result;
 
@@ -789,7 +789,7 @@ namespace WinSimpleIDriver.Connector.SGT
                     {
 
                         // Запрос к устройству...
-                        device.Request(clientTags);
+                        _device.Request(clientTags);
                         counterReq++;
 
                         // Анализ ответов
@@ -862,9 +862,9 @@ namespace WinSimpleIDriver.Connector.SGT
             }
         }
 
-        void EventTraffic(string message)
+        void LogTraffic(string message)
         {
-            eventTraffic?.Invoke(Id, message);
+            logTraffic?.Invoke(Id, message);
         }
 
         // --------------------------------------------------------------------------------------------------
@@ -872,7 +872,7 @@ namespace WinSimpleIDriver.Connector.SGT
         // is NetDevice?
         public bool IsNet()
         {
-            return (device is INetDevice);
+            return (_device is INetDevice);
         }
 
         // Есть ли ping?
@@ -881,7 +881,7 @@ namespace WinSimpleIDriver.Connector.SGT
             if (IsNet() == false)
                 return true;
 
-            return (device as INetDevice).IsHostReachable("", 0);
+            return (_device as INetDevice).IsHostReachable("", 0);
         }
 
         // Есть ли host?
@@ -890,10 +890,10 @@ namespace WinSimpleIDriver.Connector.SGT
             if (IsNet() == false)
                 return new CodeMessage(0,"");
 
-            if ((device as DeviceNet).disableHostForOpen)
+            if ((_device as DeviceNet).disableHostForOpen)
                 return (IsPing()) ? new CodeMessage(0, "") : new CodeMessage((int)eTagCode.noPing, "No ping");
 
-            return (device as INetDevice).TryTcpConnect("", 0);
+            return (_device as INetDevice).TryTcpConnect("", 0, 0);
         }
 
         public void Link()

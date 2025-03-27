@@ -167,7 +167,7 @@ namespace WinSimpleIDriver.Connector.Driver
                                                     Value = source.Id;
                                                     break;
                                                 case "driver":
-                                                    Value = source.xdriverType.ToString();
+                                                    Value = source.driverType.ToString();
                                                     break;
                                                 case "code":
                                                     Value = (int)source.Status;
