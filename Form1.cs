@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 using WinSimpleIDriver.Connector;
 using WinSimpleIDriver.Connector.SGT;
 using DML.Log;
@@ -26,9 +25,9 @@ namespace WinSimpleIDriver
 
         // logger 
         //ProcessMaster _master;
-        public readonly ILogger logger = BaseLogger.GetLogger(LogTarget.FileConsoleForm);
+        public readonly ILogger loggerA = BaseLogger.GetLogger(LogTarget.FileConsoleForm);
+        public readonly ILogger loggerB = BaseLogger.GetLogger(LogTarget.FileOnly);
         LabelLogger lLeft;
-        LabelLogger lMid;
         LabelLogger lRight;
 
         public Form1()
@@ -57,6 +56,10 @@ namespace WinSimpleIDriver
             UpdateRecentFilesMenu();
 
             #region Log DGV
+            // Для вывода в toolStripStatusLabel
+            lLeft = new LabelLogger(DrawLabelLeft);
+            lRight = new LabelLogger(DrawLabelRight);
+
             // Привязываем делегат для логирования:
             // При поступлении лог-сообщения делегат добавляет новую строку в dataGridViewLog.
             FormLogger.Instance.FormLogDelegate = (eMessageType mt, eMessageCategory category, int code, string message) =>
@@ -199,24 +202,27 @@ namespace WinSimpleIDriver
         private string SetLeftLabelMessage1(string message = "")
         {
             toolStripStatusLabelMessage1.Text = message;
-            ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly, lLeft);
-            _tempLog.Info(message);
+            //ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly);
+            //_tempLog.Info(message);
+            loggerB.Info(message);
             return message;
         }
         // Установить сообщение 2
         private string SetMidLabelMessage2(string message = "")
         {
             toolStripStatusLabelMessage2.Text = message;
-            ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly, lMid);
-            _tempLog.Info(message);
+            //ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly);
+            //_tempLog.Info(message);
+            loggerB.Info(message);
             return message;
         }
         // Установить сообщение 3
         private string SetRightLabelMessage3(string message = "")
         {
             toolStripStatusLabelMessage3.Text = message;
-            ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly, lRight);
-            _tempLog.Info(message);
+            //ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly);
+            //_tempLog.Info(message);
+            loggerB.Info(message);
             return message;
         }
 
@@ -1473,7 +1479,45 @@ namespace WinSimpleIDriver
             TreeLib.DrawTreeInclude();
         }
 
+        // ====================================================================================================
 
+        #region LabelAndText
+        private void OnlyLabel(eMessageType mtype, string message, ToolStripStatusLabel labelType = null, ToolStripStatusLabel labelMessage = null)
+        {
+            if (labelType != null)
+            {
+                labelType.ForeColor = LogHelper.GetColorForMessage(mtype);
+                labelType.Text = FormText(LogHelper.TypeMessage(mtype));
+            }
+
+            if (labelMessage != null)
+            {
+                if (labelType == null)
+                    labelMessage.ForeColor = LogHelper.GetColorForMessage(mtype);
+                labelMessage.Text = FormText(message);
+            }
+        }
+
+        private string FormText(string value)
+        {
+            int w = this.Width / 8;
+            if (value.Length > w)
+                return value.Substring(0, w) + "...";
+
+            return value;
+        }
+        #endregion
+        #region Draw Label
+        private void DrawLabelLeft(eMessageType messageType, string message)
+        {
+            OnlyLabel(messageType, message, toolStripStatusLabelMessage1, null);
+        }
+        private void DrawLabelRight(eMessageType messageType, string message)
+        {
+            OnlyLabel(messageType, message, toolStripStatusLabelMessage2, toolStripStatusLabelMessage3);
+        }
+
+        #endregion
 
     }
 }
