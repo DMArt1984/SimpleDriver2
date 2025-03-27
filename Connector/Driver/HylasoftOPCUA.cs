@@ -65,7 +65,7 @@ namespace WinSimpleIDriver.Connector.Driver
             try
             {
                 client = new UaClient(new Uri(SrvURL));
-                IP = FindIP(SrvURL, IP);
+                host = FindIP(SrvURL, host);
                 port = FindPort(SrvURL, port);
                 return new CodeMessage(0,"");
             }
@@ -84,7 +84,7 @@ namespace WinSimpleIDriver.Connector.Driver
                 if (String.IsNullOrWhiteSpace(SrvURL) == false)
                     client = new UaClient(new Uri(SrvURL));
 
-                IP = FindIP(SrvURL, IP);
+                host = FindIP(SrvURL, host);
                 port = FindPort(SrvURL, port);
                 client.Connect();
                 IEnumerable<UaNode> UaNodes = client.ExploreFolder("");

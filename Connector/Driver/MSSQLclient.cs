@@ -69,7 +69,7 @@ namespace WinSimpleIDriver.Connector.Driver
             try
             {
                 client = new SqlConnection(connectionString);
-                IP = FindIP(connectionString, IP);
+                host = FindIP(connectionString, host);
                 timeout = FindTimeout(connectionString, timeout);
                 return new CodeMessage(0,"");
             }
@@ -88,7 +88,7 @@ namespace WinSimpleIDriver.Connector.Driver
                 if (String.IsNullOrWhiteSpace(connectionString) == false)
                     client = new SqlConnection(connectionString);
 
-                IP = FindIP(connectionString, IP);
+                host = FindIP(connectionString, host);
                 timeout = FindTimeout(connectionString, timeout);
                 client.Open();
 

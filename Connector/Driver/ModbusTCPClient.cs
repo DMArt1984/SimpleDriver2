@@ -105,7 +105,7 @@ namespace WinSimpleIDriver.Connector.Driver
 
                 if (client == null)
                     return Source.CM(eSourceStatus.noClient);
-                client.Connect(IP, port, (ushort)timeout);
+                client.Connect(host, port, (ushort)timeout);
                 return client.connected ? new CodeMessage(0,"") : Source.CM(eSourceStatus.errOpen);
             }
             catch (Exception ex)

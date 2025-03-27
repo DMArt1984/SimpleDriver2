@@ -19,11 +19,11 @@ namespace WinSimpleIDriver.Connector
 
     class DeviceNet : Device, INetDevice
     {
-        const string DefaultHost = "localhost";
+        const string DEFAULTHOST = "localhost";
 
         protected int timeout = 100; // время ожидания ответа
 
-        protected string IP = "localhost"; // host
+        protected string host = DEFAULTHOST; // host/ip
 
         protected int port = 502;
 
@@ -32,18 +32,16 @@ namespace WinSimpleIDriver.Connector
         public bool disableHostForOpen = false;
 
         // Проверка общей доступности хоста
-        //
-        // Проверяет доступность хоста на уровне ICMP(сетевого уровня).
-        // Быстрая проверка: работает даже без открытого порта.
-        // Не требует "слушающего" сервера на удалённой стороне.
-        // Полезно для:
-        //  - базовой диагностики сети;
-        //  - определения "жив ли хост вообще";
-        //  - выявления проблем маршрутизации.
-        public virtual bool IsHostReachable(string IP = "", int timeout = 0)
+        public virtual bool IsHostReachable(string ip = "", int timeout = 0)
         {
-            bool ping = (String.IsNullOrWhiteSpace(IP)) ? Pinger.PingHost(this.IP, (timeout > 0) ? timeout : this.timeout) : Pinger.PingHost(IP, (timeout > 0) ? timeout : this.timeout);
-            return ping;
+            if (string.IsNullOrWhiteSpace(ip))
+                ip = this.host;
+
+            if (timeout <= 0)
+                timeout = this.timeout;
+
+            var result = Pinger.IsHostReachable(ip, timeout);
+            return result;
         }
 
         // Проверка нужного сервиса
@@ -51,72 +49,64 @@ namespace WinSimpleIDriver.Connector
         // Проверяет, открыт ли конкретный порт(например, 502 для Modbus TCP).
         // Использует TCP-соединение.
         // Выявляет не только доступность хоста, но и то, что служба(сервер) работает.
-        public CodeMessage TryTcpConnect(string hostUri = "", int portNumber = 0, int timeout = 3000)
+        public CodeMessage TryTcpConnect(string host = "", int port = 0, int timeout = 0)
         {
-            if (string.IsNullOrWhiteSpace(hostUri))
-                hostUri = this.IP;
+            if (string.IsNullOrWhiteSpace(host))
+                host = this.host;
 
-            if (portNumber <= 0)
-                portNumber = this.port;
+            if (timeout <= 0)
+                timeout = this.timeout;
 
-            TcpClient client = null;
+            if (port <= 0)
+                port = this.port;
 
-            try
-            {
-                client = new TcpClient();
-
-                var result = client.BeginConnect(hostUri, portNumber, null, null);
-                bool success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(timeout));
-
-                if (!success)
-                {
-                    return new CodeMessage(-1, $"Connection timeout after {timeout} ms");
-                }
-
-                client.EndConnect(result);
-                return new CodeMessage(0, "Connected successfully");
-            }
-            catch (SocketException ex)
-            {
-                return new CodeMessage(ex.HResult, $"Socket error: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                return new CodeMessage(-2, $"Unexpected error: {ex.Message}");
-            }
-            finally
-            {
-                if (client != null)
-                {
-                    client.Close(); // Закрываем соединение, даже если подключение не удалось
-                }
-            }
+            var result = Pinger.TryTcpConnect(host, port, timeout);
+            return result;
         }
 
+        // Нормализация IP
         protected string NormalizeIP(string ip)
         {
             if (string.IsNullOrWhiteSpace(ip))
-                return DefaultHost;
+                return DEFAULTHOST;
 
             // Простая проверка: IPv4 состоит из 4 чисел от 0 до 255
             var parts = ip.Split('.');
             if (parts.Length == 4 && parts.All(p => byte.TryParse(p, out _)))
                 return ip;
 
-            return DefaultHost;
+            return DEFAULTHOST;
         }
 
+        // Получение произвольных параметров
         protected virtual bool UseParameters(Dictionary<string, string> dic)
         {
+            if (dic == null)
+                return false;
+
             try
             {
-                IP = (dic.ContainsKey("ip")) ? dic["ip"] : (dic.ContainsKey("host")) ? dic["host"] : IP;
-                port = (dic.ContainsKey("port")) ? int.Parse(dic["port"]) : 502;
-                unitIdentifier = (dic.ContainsKey("id")) ? byte.Parse(dic["id"]) : (byte)1;
-                timeout = (dic.ContainsKey("timeout")) ? int.Parse(dic["timeout"]) : (int)100;
+                if (dic.TryGetValue("ip", out string ip) || dic.TryGetValue("host", out ip))
+                    host = ip;
+
+                if (dic.TryGetValue("port", out string portStr) && int.TryParse(portStr, out int parsedPort))
+                    port = parsedPort;
+                else
+                    port = 502;
+
+                if (dic.TryGetValue("id", out string idStr) && byte.TryParse(idStr, out byte parsedId))
+                    unitIdentifier = parsedId;
+                else
+                    unitIdentifier = 1;
+
+                if (dic.TryGetValue("timeout", out string timeoutStr) && int.TryParse(timeoutStr, out int parsedTimeout))
+                    timeout = parsedTimeout;
+                else
+                    timeout = 100;
+
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

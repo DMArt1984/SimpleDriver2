@@ -131,7 +131,7 @@ namespace WinSimpleIDriver.Connector.Driver
         {
             try
             {
-                IP = (dic.ContainsKey("ip")) ? NormalizeIP(dic["ip"]) : IP; // если IP еще не был получен
+                host = (dic.ContainsKey("ip")) ? NormalizeIP(dic["ip"]) : host; // если IP еще не был получен
                 remotePort = (dic.ContainsKey("remotePort")) ? int.Parse(dic["remotePort"]) : remotePort;
                 localPort = (dic.ContainsKey("localPort")) ? int.Parse(dic["localPort"]) : localPort;
                 port = remotePort; // для проверки соединения (IsPing, IsHost)
@@ -397,7 +397,7 @@ namespace WinSimpleIDriver.Connector.Driver
                     byte[] data = Encoding.Unicode.GetBytes(message);
                     if (String.IsNullOrWhiteSpace(targetIP))
                     {
-                        sender.Send(data, data.Length, IP, remotePort); // отправка
+                        sender.Send(data, data.Length, host, remotePort); // отправка
                     } else
                     {
                         sender.Send(data, data.Length, targetIP, remotePort); // отправка
