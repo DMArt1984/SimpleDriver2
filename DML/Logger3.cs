@@ -20,7 +20,8 @@ namespace DML.Log
         FILE = 16,
         DATA = 32,
         SYNC = 64,
-        SQL = 128
+        SQL = 128,
+        Source = 256
     }
 
     /// <summary>
@@ -536,7 +537,7 @@ namespace DML.Log
 
         private string GetPrefix(eMessageCategory mcategory, eMessageType mtype)
         {
-            return $"[{mtype.ToString().ToUpper()}] \t ({mcategory.ToString().ToUpper()}) ";
+            return $"[{mtype.ToString().ToUpper()}] \t <{mcategory.ToString().ToUpper()}> ";
             
             switch (mcategory)
             {
@@ -548,15 +549,17 @@ namespace DML.Log
                     return "[EXCEPTION]";
                 case eMessageCategory.Traffic:
                     return "[TRAFFIC]";
+                case eMessageCategory.Source:
+                    return "[SOURCE]";
                 default:
                     switch (mtype)
                     {
                         case eMessageType.OK:
-                            return "[OK]";
+                            return "<OK>";
                         case eMessageType.INFO:
-                            return "[INFO]";
+                            return "<INFO>";
                         case eMessageType.ERROR:
-                            return "[ERROR]";
+                            return "<ERROR>";
                         default:
                             return "";
                     }

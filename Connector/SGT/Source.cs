@@ -69,7 +69,7 @@ namespace WinSimpleIDriver.Connector.SGT
         public DataGridViewCell statistic;
     }
 
-    public class Source : ISource
+    public class Source : BaseLogger, ISource
     {
         public ushort Id { get; } // ID источника данных
         public string title { get; } // Название источника
@@ -175,13 +175,16 @@ namespace WinSimpleIDriver.Connector.SGT
         int counterFailReq = 0;
 
         // Конструкторы
-        public Source(ushort Id, string title, eDriverType driverType, bool disable, bool auto, bool reopen, string address = "", string description = "")
+        public Source(ushort Id, string title, 
+            eDriverType driverType, bool disable, 
+            bool auto, bool reopen, string address = "", string description = "") : base(LogTarget.FileConsoleForm, null)
         {
-            Console.WriteLine($"Source ID={Id} {title}");
+            logger.Info($"Source ID={Id} {title}", eMessageCategory.Source);
 
             ChangeDriver(driverType, address);
 
-            Console.WriteLine($" step2: this...");
+            logger.Info($" step2: this...", eMessageCategory.Source);
+
             this.Id = Id;
             this.title = title;
             this.description = description;
@@ -191,7 +194,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
             SetClient(address);
 
-            LogHelper2.LogApp($"new source ID{Id} {title} {driverType} {Address}");
+            logger.Info($"new source ID{Id} {title} {driverType} {Address}", eMessageCategory.Source);
         }
 
         ~Source()
@@ -276,7 +279,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 return dic;
             } catch (Exception ex)
             {
-                LogHelper2.LogException(ex, $"ParamsForSource = {address}");
+                logger.Error(ex.HResult, $"ParamsForSource = {address}: {ex.Message}", eMessageCategory.Source);
                 return new Dictionary<string, string>();
             }
         }
@@ -394,24 +397,25 @@ namespace WinSimpleIDriver.Connector.SGT
 
         public void OnControl(string newAddress)
         {
-            LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 1");
+            logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 1", eMessageCategory.Source);
+
             if (String.IsNullOrWhiteSpace(newAddress) || newAddress == Address)
             {
                 Off = false;
-                LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено");
+                logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено", eMessageCategory.Source);
                 return;
             }
 
             Address = newAddress; // новый адрес
 
-            LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 2 - новые параметры");
+            logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 2 - новые параметры", eMessageCategory.Source);
             var dic = ParamsForSource(Address);
 
-            LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 3 - пересоздание клиента");
+            logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 3 - пересоздание клиента", eMessageCategory.Source);
             _device.CreateClient(Address); // пересоздание клиента
             Off = false; // открыть
             //...
-            LogHelper2.LogUser($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено");
+            logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено", eMessageCategory.Source);
         }
 
         int Open(bool user = false)
@@ -436,11 +440,11 @@ namespace WinSimpleIDriver.Connector.SGT
                 if (result.сode == 0)
                 {
                     // Connect
-                    LogHelper2.LogApp($"Источник ID={Id} {title} > Соединение...");
+                    logger.Info($"Источник ID={Id} {title} > Соединение...", eMessageCategory.Source);
                     result = this._device.Connect(Address);
                 } else
                 {
-                    LogHelper2.LogApp($"Источник ID={Id} {title} > Нет связи с хостом/IP");
+                    logger.Info($"Источник ID={Id} {title} > Нет связи с хостом/IP", eMessageCategory.Source);
                     //result = new CodeMessage(-404, "Нет связи с хостом");
                 }
 
@@ -449,7 +453,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
                 if (result.сode == 0)
                 {
-                    LogHelper2.LogApp($"Источник ID={Id} {title} > Открыть - успешно!");
+                    logger.Info($"Источник ID={Id} {title} > Открыть - успешно!", eMessageCategory.Source);
 
                     _opened = true;
                     _fail = false;
@@ -463,7 +467,7 @@ namespace WinSimpleIDriver.Connector.SGT
                         CyclicRequest = true;
                 } else
                 {
-                    LogHelper2.LogApp($"Источник ID={Id} {title} > Открыть - ошибка {result.сode} {result.message}");
+                    logger.Info($"Источник ID={Id} {title} > Открыть - ошибка {result.сode} {result.message}", eMessageCategory.Source);
 
                     Status = eSourceStatus.breaking;
                     _fail = true;
@@ -483,12 +487,12 @@ namespace WinSimpleIDriver.Connector.SGT
 
         int Close(bool user = false)
         {
-            LogHelper2.LogApp($"Источник ID={Id} {title} > Закрыть...");
+            logger.Info($"Источник ID={Id} {title} > Закрыть...", eMessageCategory.Source);
             if (Status != eSourceStatus.closed)
             {
                 Status = eSourceStatus.closing;
 
-                LogHelper2.LogApp($"Источник ID={Id} {title} > Ждем...");
+                logger.Info($"Источник ID={Id} {title} > Ждем...", eMessageCategory.Source);
                 WaitProcess(); // ждем завершения текущего запроса...
 
                 CodeMessage result = this._device.Disconnect();
@@ -497,7 +501,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
                 if (result.сode == 0)
                 {
-                    LogHelper2.LogApp($"Источник ID={Id} {title} > Закрыть - успешно!");
+                    logger.Info($"Источник ID={Id} {title} > Закрыть - успешно!", eMessageCategory.Source);
 
                     CyclicRequest = false;
                     //LogHelper.LogApp($"Источник ID={Id} {title} > 1...");
@@ -506,22 +510,22 @@ namespace WinSimpleIDriver.Connector.SGT
                     counterReq = 0;
                     //LogHelper.LogApp($"Источник ID={Id} {title} > 3...");
                     counterFailReq = 0;
-                    LogHelper2.LogApp($"Источник ID={Id} {title} > Статусы тегов...");
+                    logger.Info($"Источник ID={Id} {title} > Статусы тегов...", eMessageCategory.Source);
 
                     // статусы тегов
                     Tag.CodeMessageList(tags, new CodeMessage((int)eTagCode.sourceClosed, eTagCode.sourceClosed.GetText()));
 
-                    LogHelper2.LogApp($"Источник ID={Id} {title} > 5...");
+                    logger.Info($"Источник ID={Id} {title} > 5...", eMessageCategory.Source);
 
                     if (user == false)
                         OpenAfterFail();
                 } else
                 {
-                    LogHelper2.LogApp($"Источник ID={Id} {title} > Закрыть - ошибка {result.сode} {result.message}");
+                    logger.Info($"Источник ID={Id} {title} > Закрыть - ошибка {result.сode} {result.message}", eMessageCategory.Source);
                 }
 
                 EventStatus();
-                LogHelper2.LogApp($"Источник ID={Id} {title} > Код {result.сode}");
+                logger.Info($"Источник ID={Id} {title} > Код {result.сode}", eMessageCategory.Source);
                 return result.сode;
             } else
             {
@@ -536,7 +540,7 @@ namespace WinSimpleIDriver.Connector.SGT
             // нужно ли переоткрытие?
             if (AutoOpenAfterFail && Fail && UserUseClosed == false && timerReopen == null)
             {
-                LogHelper2.LogApp($"Source ID={Id} Reopen {stepReOpen}-{rTimeMsec[stepReOpen]}...");
+                logger.Info($"Source ID={Id} Reopen {stepReOpen}-{rTimeMsec[stepReOpen]}...", eMessageCategory.App);
 
                 try
                 {
@@ -550,11 +554,11 @@ namespace WinSimpleIDriver.Connector.SGT
                     if (stepReOpen >= rTimeMsec.Length)
                         stepReOpen = 0;
 
-                    LogHelper2.LogApp($"Source ID={Id} Reopen {stepReOpen}-{rTimeMsec[stepReOpen]}, STEP={stepReOpen}");
+                    logger.Info($"Source ID={Id} Reopen {stepReOpen}-{rTimeMsec[stepReOpen]}, STEP={stepReOpen}", eMessageCategory.App);
                 }
                 catch (Exception ex)
                 {
-                    LogHelper2.LogException(ex, "OpenAfterFail()");
+                    logger.Error(ex.HResult, $"OpenAfterFail(): {ex.Message}", eMessageCategory.Source);
                     TimerCB_Inner(); // NEW
                 }
             }
@@ -568,10 +572,10 @@ namespace WinSimpleIDriver.Connector.SGT
 
         private void TimerCB_Inner()
         {
-            LogHelper2.LogApp("REOPEN: TimerCB");
+            logger.Info("REOPEN: TimerCB", eMessageCategory.Source);
             if (AutoOpenAfterFail == false || UserUseClosed == true)
             {
-                LogHelper2.LogApp("REOPEN: AutoOpenAfterFail == false...");
+                logger.Info("REOPEN: AutoOpenAfterFail == false...", eMessageCategory.Source);
                 timerReopen?.Stop();
                 timerReopen?.Close();
                 timerReopen = null;
@@ -583,12 +587,12 @@ namespace WinSimpleIDriver.Connector.SGT
 
             if (Off == false)
             {
-                LogHelper2.LogApp("REOPEN: Open()...");
+                logger.Info("REOPEN: Open()...", eMessageCategory.Source);
                 Open(false);
             }
             else
             {
-                LogHelper2.LogApp("REOPEN: Off = false...");
+                logger.Info("REOPEN: Off = false...", eMessageCategory.Source);
                 Off = false;
             }
 
@@ -596,22 +600,19 @@ namespace WinSimpleIDriver.Connector.SGT
 
         void WaitProcess()
         {
-            //LoggerConsole.Log("wait process [", log);
-            LogHelper2.LogApp("wait process [");
+            logger.Info("wait process [", eMessageCategory.Source);
             DateTime dt = DateTime.Now;
             while (_process)
             {
                 // ждем выполнение текущего запроса...
-                //LoggerConsole.Log("wait process...", log);
-                LogHelper2.LogApp("wait process...");
+                logger.Info("wait process...", eMessageCategory.Source);
                 Task.Delay(100);
                 TimeSpan ts = DateTime.Now.Subtract(dt);
                 if (ts.TotalMilliseconds > 5000)
                     break;
                 break;
             }
-            //LoggerConsole.Log("wait process ]", log);
-            LogHelper2.LogApp("wait process ]");
+            logger.Info("wait process ]", eMessageCategory.Source);
         }
 
         public bool Opened => _opened;
@@ -698,14 +699,13 @@ namespace WinSimpleIDriver.Connector.SGT
         public void NewBreak()
         {
             counterBreak++; // считаем неудачные запросы для последующего перезапуска
-            //Console.WriteLine($"Break = {counterBreak} / {MaxBreak}");
-            LogHelper2.LogError($"NEW BREAK = {counterBreak} / {MaxBreak}");
+            logger.Info($"NEW BREAK = {counterBreak} / {MaxBreak}", eMessageCategory.Source);
 
             if (counterBreak >= MaxBreak)
             {
                 ClearCounterBreak();
                 ActiveError = new CodeMessage((int)eTagCode.breakError, eTagCode.breakError.GetText());
-                LogHelper2.LogError($"NEW BREAK = ActiveError");
+                logger.Info($"NEW BREAK = ActiveError", eMessageCategory.Source);
                 //...
             }
         }
