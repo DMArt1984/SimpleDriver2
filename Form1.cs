@@ -64,8 +64,8 @@ namespace WinSimpleIDriver
             // При поступлении лог-сообщения делегат добавляет новую строку в dataGridViewLog.
             FormLogger.Instance.FormLogDelegate = (eMessageType mt, eMessageCategory category, int code, string message) =>
             {
-                if (!false)
-                    return; // Логирование в таблицу отключено
+                //if (!true)
+                //    return; // Логирование в таблицу отключено
 
                 // Так как обновление UI должно происходить в главном потоке, используем Invoke.
                 if (dataGridViewLog.InvokeRequired)
@@ -1383,7 +1383,7 @@ namespace WinSimpleIDriver
         }
         #endregion
 
-        // ======================================================================
+        // ================================================================================================================
 
         private void SetComboPlaceholder()
         {

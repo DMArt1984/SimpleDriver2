@@ -203,10 +203,10 @@ namespace WinSimpleIDriver.Connector.Driver
                                                     Value = source.Address;
                                                     break;
                                                 case "ping":
-                                                    Value = source.IsPing();
+                                                    Value = source.IsHostReachable();
                                                     break;
                                                 case "host":
-                                                    Value = source.IsHost();
+                                                    Value = source.TryTcpConnect();
                                                     break;
                                                 case "dicvalue":
                                                     var resItems = Tag.items.Where(x => x.sourceId == source.Id).ToArray();

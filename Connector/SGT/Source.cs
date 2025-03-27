@@ -200,13 +200,17 @@ namespace WinSimpleIDriver.Connector.SGT
         ~Source()
         {
             (_device as Device).logTraffic = null;
+            (_device as Device).log = null;
         }
 
         // Переназначить драйвер
         private void ChangeDriver(eDriverType driverType, string address)
         {
             if (_device != null)
+            {
                 (_device as Device).logTraffic = null;
+                (_device as Device).log = null;
+            }
 
             this._driverType = driverType;
             string paramClient = address;
@@ -241,6 +245,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
             logger.Info($" step1: logTraffic", eMessageCategory.Source);
             (_device as Device).logTraffic = LogTraffic;
+            (_device as Device).log = Log;
 
         }
 
@@ -426,12 +431,12 @@ namespace WinSimpleIDriver.Connector.SGT
 
                 if (_device is INetDevice && (_device as DeviceNet).disableHostForOpen)
                 {
-                    var retval = IsPing();
+                    var retval = IsHostReachable();
                     if (retval == false)
                         result = new CodeMessage((int)eTagCode.noPing, eTagCode.noPing.GetText());
                 } else
                 {
-                    result = IsHost();
+                    result = TryTcpConnect();
                 }
 
                 // Host
@@ -855,6 +860,10 @@ namespace WinSimpleIDriver.Connector.SGT
         {
             logTraffic?.Invoke(Id, message);
         }
+        void Log(CodeMessage cm) // ???
+        {
+            
+        }
 
         // --------------------------------------------------------------------------------------------------
 
@@ -864,8 +873,8 @@ namespace WinSimpleIDriver.Connector.SGT
             return (_device is INetDevice);
         }
 
-        // Есть ли ping?
-        public bool IsPing()
+        // Проверка общей доступности хоста
+        public bool IsHostReachable()
         {
             if (IsNet() == false)
                 return true;
@@ -873,14 +882,14 @@ namespace WinSimpleIDriver.Connector.SGT
             return (_device as INetDevice).IsHostReachable("", 0);
         }
 
-        // Есть ли host?
-        public CodeMessage IsHost()
+        // Проверка нужного сервиса
+        public CodeMessage TryTcpConnect()
         {
             if (IsNet() == false)
                 return new CodeMessage(0,"");
 
             if ((_device as DeviceNet).disableHostForOpen)
-                return (IsPing()) ? new CodeMessage(0, "") : new CodeMessage((int)eTagCode.noPing, "No ping");
+                return (IsHostReachable()) ? new CodeMessage(0, "") : new CodeMessage((int)eTagCode.noPing, "No ping");
 
             return (_device as INetDevice).TryTcpConnect("", 0, 0);
         }
