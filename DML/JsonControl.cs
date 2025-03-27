@@ -18,6 +18,14 @@ namespace DML
     {
         const int version = 1000; // Версия
 
+        public static readonly ILogger logger;
+
+        static JsonControl()
+        {
+            // Получаем логгер на основе нужного лог-таргета
+            logger = BaseLogger.GetLogger(LogTarget.FileConsoleForm);
+        }
+
         #region Convert From/To Json
         // Строка в Json данные
         static public dynamic Deserialize_Json_Data(string input = "")
@@ -32,7 +40,7 @@ namespace DML
             }
             catch (Exception ex)
             {
-                LogHelper2.Log($"Ошибка распознования json строки: {input}", ex);
+                logger.Error(ex.HResult, $"Ошибка распознования json строки: {input}: {ex.Message}", eMessageCategory.Json);
                 MessageBox.Show($"Ошибка распознования json строки: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
@@ -52,7 +60,7 @@ namespace DML
             }
             catch (Exception ex)
             {
-                LogHelper2.Log($"Ошибка получения json строки: {my_params}", ex);
+                logger.Error(ex.HResult, $"Ошибка получения json строки: {my_params}: {ex.Message}", eMessageCategory.Json);
                 MessageBox.Show($"Ошибка получения json строки: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return json;

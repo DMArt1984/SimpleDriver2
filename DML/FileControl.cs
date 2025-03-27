@@ -8,10 +8,18 @@ using System.Windows.Forms;
 
 public static class FileControl
 {
-    static int ver = 100; // версия
+    const int version = 1000; // версия
+
+    public static readonly ILogger logger;
 
     private static readonly string RecentFilesPath = Path.Combine(Application.StartupPath, "files.txt");
     private static readonly int MaxRecentFiles = 10; // Храним до 10 последних файлов
+
+    static FileControl()
+    {
+        // Получаем логгер на основе нужного лог-таргета
+        logger = BaseLogger.GetLogger(LogTarget.FileConsoleForm);
+    }
 
     // Прочитать JSON-файл
     public static string LoadFromFile(ref string fileName, out string path, bool select = false, bool showNotFound = true, string filter = @"JSON-файл (*.json)|*.json")
@@ -76,7 +84,7 @@ public static class FileControl
         }
         catch (Exception ex)
         {
-            LogHelper2.Log($"Ошибка чтения файла {fullFileName}", ex);
+            logger.Error(ex.HResult, $"Ошибка чтения файла {fullFileName}: {ex.Message}", eMessageCategory.FILE);
             return null;
         }
     }
@@ -105,7 +113,7 @@ public static class FileControl
         }
         catch (Exception ex)
         {
-            LogHelper2.Log("Ошибка сохранения списка последних файлов", ex);
+            logger.Error(ex.HResult, $"Ошибка сохранения списка последних файлов: {ex.Message}", eMessageCategory.FILE);
         }
     }
 
@@ -120,7 +128,7 @@ public static class FileControl
         }
         catch (Exception ex)
         {
-            LogHelper2.Log("Ошибка загрузки списка последних файлов", ex);
+            logger.Error(ex.HResult, $"Ошибка загрузки списка последних файлов: {ex.Message}", eMessageCategory.FILE);
             return new List<string>();
         }
     }
@@ -141,7 +149,7 @@ public static class FileControl
         }
         catch (Exception ex)
         {
-            LogHelper2.Log($"Ошибка открытия файла {filePath}", ex);
+            logger.Error(ex.HResult, $"Ошибка открытия файла {filePath}: {ex.Message}", eMessageCategory.FILE);
             ShowError($"Ошибка открытия файла {Path.GetFileName(filePath)}: {ex.Message}");
             return null;
         }
@@ -155,7 +163,7 @@ public static class FileControl
         }
         catch (Exception ex)
         {
-            LogHelper2.Log($"Ошибка сохранения файла {filePath}", ex);
+            logger.Error(ex.HResult, $"Ошибка сохранения файла {filePath}: {ex.Message}", eMessageCategory.FILE);
             ShowError($"Ошибка сохранения файла {Path.GetFileName(filePath)}: {ex.Message}");
         }
     }

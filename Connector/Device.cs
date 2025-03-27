@@ -39,6 +39,8 @@ namespace WinSimpleIDriver.Connector
 
     class Device : IRealDevice, ITrafficLog
     {
+        const int version = 1000; // Версия
+
         public bool Connected => _connected;
         bool _connected = false;
 

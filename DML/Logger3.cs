@@ -21,7 +21,8 @@ namespace DML.Log
         DATA = 32,
         SYNC = 64,
         SQL = 128,
-        Source = 256
+        Source = 256,
+        Json = 512
     }
 
     /// <summary>

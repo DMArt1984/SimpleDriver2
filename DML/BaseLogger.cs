@@ -41,7 +41,7 @@ namespace DML.Log
         /// </summary>
         /// <param name="logTarget">Тип логгирования, определяющий, какой логгер вернуть.</param>
         /// <returns>Инстанс, реализующий интерфейс <see cref="ILogger"/>.</returns>
-        protected ILogger GetLogger(LogTarget logTarget)
+        public static ILogger GetLogger(LogTarget logTarget)
         {
             // Используем конструкцию switch для выбора логгера по типу.
             switch (logTarget)

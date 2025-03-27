@@ -19,6 +19,7 @@ namespace WinSimpleIDriver.Connector
 
     class DeviceNet : Device, INetDevice
     {
+        const int version = 1000; // Версия
         const string DEFAULTHOST = "localhost";
 
         protected int timeout = 100; // время ожидания ответа
