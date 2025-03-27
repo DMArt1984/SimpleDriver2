@@ -61,7 +61,7 @@ namespace WinSimpleIDriver.Connector.Driver
             }
         }
 
-        // -----------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------------------
 
         // Создание подключения
         public override CodeMessage CreateClient(string connectionString)
@@ -100,7 +100,7 @@ namespace WinSimpleIDriver.Connector.Driver
             }
         }
 
-        //-------------------------------------------------------
+        //----------------------------------------------------------------------------------------------
 
         private string FindIP (string connectionString, string defaultIP = "")
         {
@@ -140,7 +140,7 @@ namespace WinSimpleIDriver.Connector.Driver
             return Convert.ToInt32(parts2b[0]);
         }
 
-        // -------------------------------------------------------
+        // ----------------------------------------------------------------------------------------------
         public override CodeMessage Disconnect()
         {
             try

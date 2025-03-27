@@ -118,7 +118,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
     }
 
-    public class Group : IGroupOff
+    public class Group : BaseLogger, IGroupOff
     {
         public ushort Id { get; } // ID группы
         public string title { get; } // Название тега
@@ -218,7 +218,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
         //int counter = 0;
 
-        public Group(ushort Id, string title, uint updateRate = 100, bool disable = false, string description = "")
+        public Group(ushort Id, string title, uint updateRate = 100, bool disable = false, string description = "") : base(LogTarget.FileConsoleForm, null)
         {
             this.Id = Id;
             this.title = title;
@@ -226,8 +226,7 @@ namespace WinSimpleIDriver.Connector.SGT
             UpdateRate = updateRate;
             _disable = disable;
 
-            //LoggerConsole.Log($"Group ID={Id} {title} {description} Created!", log);
-            LogHelper2.LogApp($"new group ID{Id} {title} {updateRate}");
+            logger.Info($"new group ID{Id} {title} {updateRate}", eMessageCategory.Source);
         }
 
         public void Activate()
