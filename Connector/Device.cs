@@ -33,8 +33,8 @@ namespace WinSimpleIDriver.Connector
 
     interface ITrafficLog
     {
-        bool enableLog { get; set; }
-        bool supportLog { get; }
+        bool enableTLog { get; set; }
+        bool supportTLog { get; }
     }
 
     class Device : IRealDevice, ITrafficLog
@@ -42,23 +42,29 @@ namespace WinSimpleIDriver.Connector
         public bool Connected => _connected;
         bool _connected = false;
 
-        public bool enableLog { get; set; } = false; // разрешить вести лог
-        public virtual bool supportLog { get; } = false;
+        public bool enableTLog { get; set; } = false; // разрешить вести лог
+        public virtual bool supportTLog { get; } = false;
 
         List<ITagClient> tags = new List<ITagClient>(); // for parallel 
 
-        // события
+        // делегаты
         public delegate void HandlerTrafficLog(string message);
-        public event HandlerTrafficLog eventTraffic;
+        public HandlerTrafficLog logTraffic;
+
+        // =================================================================================
 
         public Device()
         {
             Console.WriteLine("Device created!");
         }
 
-        ~Device()
-        {
+        ~Device() { } // ничего не делает
 
+        // Лучше:
+        public void Dispose()
+        {
+            Disconnect();
+            RemoveClient();
         }
 
         // ==================================================================================
@@ -75,13 +81,14 @@ namespace WinSimpleIDriver.Connector
 
         }
 
-        public void InnerLog(string message)
+        // ------------------------------------------------------------------------
+
+        public void InnerTrafficLog(string message)
         {
             // лог сообщений от драйвера
-            if (enableLog)
+            if (enableTLog)
             {
-                eventTraffic?.Invoke(message);
-                LogHelper2.LogTraffic(message);
+                logTraffic?.Invoke(message);
             }
         }
 
@@ -123,7 +130,7 @@ namespace WinSimpleIDriver.Connector
                 return;
 
             this.tags = tags.Select( x => x as ITagClient).ToList();
-            Parallel.For(0, tags.Count(), ItemParallel);
+            Parallel.For(0, tags.Count, ItemParallel);
         }
 
         void ItemParallel(int index)
@@ -133,39 +140,40 @@ namespace WinSimpleIDriver.Connector
 
         protected virtual void WorkTag(ITagClient tag)
         {
-            //Console.WriteLine("========> workTag");
             string raddress = Tag.ExpTagAddress(tag.Address, out bool success, tag);
+            logTraffic?.Invoke($"{tag.title}: {raddress}");
+
             if (success == false)
             {
                 tag.SetResult(new TagResult(null, eTagCode.notReliableA));
                 return;
             }
 
-            // Читаем ЕСЛИ
-            bool read = (tag.directFull == eDirectFull.Read && tag.Command != eCommand.Wait) || // (направление чтения И нет ожидания) ИЛИ
-                (tag.directFull != eDirectFull.Read && tag.Command == eCommand.Wait); // (направление запись И ожидание)
-
-            // Пишем ЕСЛИ не читаем И ( нет команды обновления ИЛИ изменилось число записи )
-            bool write = tag.directFull != eDirectFull.Read && (tag.Command != eCommand.Update || (tag.Value != tag.WriteConstValue && tag.Value != tag.WriteTagValue));
+            // Читаем
+            bool read = IsRead(tag);
+            // Пишем
+            bool write = IsWrite(tag);
 
             if (tag.Command != eCommand.None)
                 tag.Command = eCommand.Wait;
 
             if (read) // чтение
             {
+                logTraffic?.Invoke("READ");
                 tag.SetResult(GetValue(raddress, tag.DataType));
             } else if (write) // запись
             {
+                logTraffic?.Invoke("WRITE");
                 if (tag.directFull == eDirectFull.WriteTagValue) // запись из другого тега
                 {
-                    var wtId = tag.WriteTagId;
-                    var wt = (wtId > 0) ? Tag.items.FirstOrDefault(x => x.Id == wtId) : null;
-                    if (wt == null)
+                    var writeTagId = tag.WriteTagId;
+                    var writeTag = (writeTagId > 0) ? Tag.items.FirstOrDefault(x => x.Id == writeTagId) : null;
+                    if (writeTag == null)
                     {
                         tag.SetResult(new TagResult(null, eTagCode.noTagForWrite));
                         return;
                     }
-                    if (wt.codeMessage.сode != 0 && wt.codeMessage.сode != (int)eTagCode.tagOn)
+                    if (writeTag.codeMessage.сode != 0 && writeTag.codeMessage.сode != (int)eTagCode.tagOn)
                     {
                         tag.SetResult(new TagResult(null, eTagCode.notReliableTW));
                         return;
@@ -183,6 +191,17 @@ namespace WinSimpleIDriver.Connector
 
         }
 
+        private bool IsRead(ITagClient tag)
+        {
+            return (tag.directFull == eDirectFull.Read && tag.Command != eCommand.Wait) || // (направление чтения И нет ожидания) ИЛИ
+                (tag.directFull != eDirectFull.Read && tag.Command == eCommand.Wait); // (направление запись И ожидание)
+        }
+
+        private bool IsWrite(ITagClient tag)
+        {
+            return tag.directFull != eDirectFull.Read && (tag.Command != eCommand.Update || (tag.Value != tag.WriteConstValue && tag.Value != tag.WriteTagValue));
+        }
+
         // ====================================================================================
 
         public virtual TagResult GetValue(string address, eDataType dataType)
@@ -195,8 +214,6 @@ namespace WinSimpleIDriver.Connector
         }
 
         // ======================================================================================
-
-
 
         #region Lib: convertor
         // Раскидать строку параметров в словарь

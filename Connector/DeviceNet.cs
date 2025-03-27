@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WinSimpleIDriver.Connector.Driver.Component;
 using WinSimpleIDriver.Connector.SGT;
@@ -12,12 +13,14 @@ namespace WinSimpleIDriver.Connector
 {
     public interface INetDevice
     {
-        bool IsPing(string hostUri, int timeout);
-        CodeMessage IsHost(string hostUri, int portNumber);
+        bool IsHostReachable(string hostUri, int timeout);
+        CodeMessage TryTcpConnect(string hostUri, int portNumber, int timeoutMs);
     }
 
     class DeviceNet : Device, INetDevice
     {
+        const string DefaultHost = "localhost";
+
         protected int timeout = 100; // время ожидания ответа
 
         protected string IP = "localhost"; // host
@@ -28,63 +31,79 @@ namespace WinSimpleIDriver.Connector
 
         public bool disableHostForOpen = false;
 
-        // Есть ли связь по Ethernet
-        public virtual bool IsPing(string IP = "", int timeout = 0)
+        // Проверка общей доступности хоста
+        //
+        // Проверяет доступность хоста на уровне ICMP(сетевого уровня).
+        // Быстрая проверка: работает даже без открытого порта.
+        // Не требует "слушающего" сервера на удалённой стороне.
+        // Полезно для:
+        //  - базовой диагностики сети;
+        //  - определения "жив ли хост вообще";
+        //  - выявления проблем маршрутизации.
+        public virtual bool IsHostReachable(string IP = "", int timeout = 0)
         {
             bool ping = (String.IsNullOrWhiteSpace(IP)) ? Pinger.PingHost(this.IP, (timeout > 0) ? timeout : this.timeout) : Pinger.PingHost(IP, (timeout > 0) ? timeout : this.timeout);
             return ping;
         }
 
-        public CodeMessage IsHost(string hostUri = "", int portNumber = 0)
+        // Проверка нужного сервиса
+        //
+        // Проверяет, открыт ли конкретный порт(например, 502 для Modbus TCP).
+        // Использует TCP-соединение.
+        // Выявляет не только доступность хоста, но и то, что служба(сервер) работает.
+        public CodeMessage TryTcpConnect(string hostUri = "", int portNumber = 0, int timeout = 3000)
         {
-            if (String.IsNullOrWhiteSpace(hostUri))
+            if (string.IsNullOrWhiteSpace(hostUri))
                 hostUri = this.IP;
 
             if (portNumber <= 0)
                 portNumber = this.port;
 
+            TcpClient client = null;
+
             try
             {
-                var client = new TcpClient();
-                var result = client.BeginConnect(hostUri, this.port, null, null);
-                var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(3));
+                client = new TcpClient();
+
+                var result = client.BeginConnect(hostUri, portNumber, null, null);
+                bool success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(timeout));
+
                 if (!success)
                 {
-                    return new CodeMessage(-404, "Connection timeout (3sec)");
+                    return new CodeMessage(-1, $"Connection timeout after {timeout} ms");
                 }
-                // we have connected
+
                 client.EndConnect(result);
-                return new CodeMessage(0, "");
-
+                return new CodeMessage(0, "Connected successfully");
             }
             catch (SocketException ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return new CodeMessage(ex.HResult, $"Socket error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return new CodeMessage(-2, $"Unexpected error: {ex.Message}");
+            }
+            finally
+            {
+                if (client != null)
+                {
+                    client.Close(); // Закрываем соединение, даже если подключение не удалось
+                }
             }
         }
 
-        public CodeMessage IsHost2(string hostUri = "", int portNumber = 0)
+        protected string NormalizeIP(string ip)
         {
-            if (String.IsNullOrWhiteSpace(hostUri))
-                hostUri = this.IP;
+            if (string.IsNullOrWhiteSpace(ip))
+                return DefaultHost;
 
-            if (portNumber <= 0)
-                portNumber = this.port;
+            // Простая проверка: IPv4 состоит из 4 чисел от 0 до 255
+            var parts = ip.Split('.');
+            if (parts.Length == 4 && parts.All(p => byte.TryParse(p, out _)))
+                return ip;
 
-            try
-            {
-                using (var client = new TcpClient(hostUri, portNumber))
-                    return new CodeMessage(0, "");
-            }
-            catch (SocketException ex)
-            {
-                return new CodeMessage(ex.HResult, ex.Message);
-            }
-        }
-
-        protected string NormalIP(string IP)
-        {
-            return (!String.IsNullOrWhiteSpace(IP) && IP.Split('.').Length == 4) ? IP : "localhost";
+            return DefaultHost;
         }
 
         protected virtual bool UseParameters(Dictionary<string, string> dic)

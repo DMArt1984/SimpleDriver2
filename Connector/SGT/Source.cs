@@ -348,17 +348,17 @@ namespace WinSimpleIDriver.Connector.SGT
 
         public void SetLogTraffic(bool enable)
         {
-            (device as ITrafficLog).enableLog = enable;
+            (device as ITrafficLog).enableTLog = enable;
         }
 
         public bool IsLogTraffic()
         {
-            return (device as ITrafficLog).enableLog;
+            return (device as ITrafficLog).enableTLog;
         }
 
         public bool IsSupportLog()
         {
-            return (device as ITrafficLog).supportLog;
+            return (device as ITrafficLog).supportTLog;
         }
 
         // ========================================================================
@@ -881,7 +881,7 @@ namespace WinSimpleIDriver.Connector.SGT
             if (IsNet() == false)
                 return true;
 
-            return (device as INetDevice).IsPing("", 0);
+            return (device as INetDevice).IsHostReachable("", 0);
         }
 
         // Есть ли host?
@@ -893,7 +893,7 @@ namespace WinSimpleIDriver.Connector.SGT
             if ((device as DeviceNet).disableHostForOpen)
                 return (IsPing()) ? new CodeMessage(0, "") : new CodeMessage((int)eTagCode.noPing, "No ping");
 
-            return (device as INetDevice).IsHost("", 0);
+            return (device as INetDevice).TryTcpConnect("", 0);
         }
 
         public void Link()

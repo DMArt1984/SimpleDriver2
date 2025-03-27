@@ -65,7 +65,7 @@ namespace WinSimpleIDriver.Connector.Driver
         private object sync = new object();
 
         // Лог
-        public override bool supportLog { get; } = true;
+        public override bool supportTLog { get; } = true;
 
         // ===================================================================================================
 
@@ -131,7 +131,7 @@ namespace WinSimpleIDriver.Connector.Driver
         {
             try
             {
-                IP = (dic.ContainsKey("ip")) ? NormalIP(dic["ip"]) : IP; // если IP еще не был получен
+                IP = (dic.ContainsKey("ip")) ? NormalizeIP(dic["ip"]) : IP; // если IP еще не был получен
                 remotePort = (dic.ContainsKey("remotePort")) ? int.Parse(dic["remotePort"]) : remotePort;
                 localPort = (dic.ContainsKey("localPort")) ? int.Parse(dic["localPort"]) : localPort;
                 port = remotePort; // для проверки соединения (IsPing, IsHost)
@@ -189,7 +189,7 @@ namespace WinSimpleIDriver.Connector.Driver
         // Получить значение тега (ждать ответ)
         public override TagResult GetValue(string command, eDataType dataType)
         {
-            InnerLog($"GetValue = {command}");
+            InnerTrafficLog($"GetValue = {command}");
             dynamic Value = null; // итоговое значение
 
             try
@@ -198,7 +198,7 @@ namespace WinSimpleIDriver.Connector.Driver
                 var hash = Convert.ToString(command.GetHashCode());
                 command = "C" + hash + (char)13 + dataType.ToString() + (char)13 + command;
 
-                InnerLog($" ... {command}");
+                InnerTrafficLog($" ... {command}");
 
                 // отправка запроса
                 var exeption = SendMessage(command);
@@ -208,7 +208,7 @@ namespace WinSimpleIDriver.Connector.Driver
                     if (recData.ContainsKey(hash))
                     {
                         Value = recData[hash]; // нашел!
-                        InnerLog($" Result = {Value}");
+                        InnerTrafficLog($" Result = {Value}");
  
                     } else
                     {
@@ -226,19 +226,19 @@ namespace WinSimpleIDriver.Connector.Driver
                         TimeSpan ts = DateTime.Now.Subtract(recTime[hash]);
                         if (ts.TotalMilliseconds <= wait)
                         {
-                            InnerLog($" {ts.TotalMilliseconds} мсек");
+                            InnerTrafficLog($" {ts.TotalMilliseconds} мсек");
                         }
                         else
                         {
-                            InnerLog($" Error: {ts.TotalMilliseconds} мсек > Limit; last result = {Value}");
-                            InnerLog($"  now = {DateTime.Now}; last = {recTime[hash]}");
+                            InnerTrafficLog($" Error: {ts.TotalMilliseconds} мсек > Limit; last result = {Value}");
+                            InnerTrafficLog($"  now = {DateTime.Now}; last = {recTime[hash]}");
                             return new TagResult(Value, eTagCode.tagTimeout);
                         }
                     }
 
                 } else
                 {
-                    InnerLog($" Exeption = {exeption.HResult} {exeption.Message}");
+                    InnerTrafficLog($" Exeption = {exeption.HResult} {exeption.Message}");
                     return new TagResult(Value, exeption.HResult, exeption.Message);
                 }
 
@@ -289,7 +289,7 @@ namespace WinSimpleIDriver.Connector.Driver
 
                                     Notify_Receive?.Invoke(message); // событие...
 
-                                    InnerLog($"receive: {message}");
+                                    InnerTrafficLog($"receive: {message}");
 
                                     // Разбива сообщения на части
                                     string[] partsMessages = message.Split((char)13);
@@ -308,7 +308,7 @@ namespace WinSimpleIDriver.Connector.Driver
 
                                             eDataType datatType = (eDataType)System.Enum.Parse(typeof(eDataType), strDataType, true);
 
-                                            InnerLog($" cmd = {cmd}; answer = {answer}; key = {key}; dataType = {datatType}; content = {content}");
+                                            InnerTrafficLog($" cmd = {cmd}; answer = {answer}; key = {key}; dataType = {datatType}; content = {content}");
 
                                             if (cmd)
                                             {
@@ -324,7 +324,7 @@ namespace WinSimpleIDriver.Connector.Driver
                                                 var hash = Convert.ToString(content.GetHashCode());
                                                 content = "A" + hash + (char)13 + strDataType + (char)13 + strValue;
 
-                                                InnerLog($" CMD: result = {tagResult.value}; code = {tagResult.codeMessage}; content = {content}");
+                                                InnerTrafficLog($" CMD: result = {tagResult.value}; code = {tagResult.codeMessage}; content = {content}");
 
                                                 // отправка ответа клиенту
                                                 var exeption = SendMessage(content); //SendMessage(content, remoteIp.Address.ToString());
@@ -341,13 +341,13 @@ namespace WinSimpleIDriver.Connector.Driver
                                                 {
                                                     recData[key] = value;
                                                     recTime[key] = DateTime.Now;
-                                                    InnerLog($" ANSWER: change");
+                                                    InnerTrafficLog($" ANSWER: change");
                                                 }
                                                 else
                                                 {
                                                     recData.Add(key, value);
                                                     recTime.Add(key, DateTime.Now);
-                                                    InnerLog($" ANSWER: add");
+                                                    InnerTrafficLog($" ANSWER: add");
                                                 }
                                             }
                                         }

@@ -59,7 +59,7 @@ namespace WinSimpleIDriver.Connector.Driver
         public int baseAddress = 0; // 0 или 1
         ushort IdTrans = 1; // идентификатор сообщения
 
-        public override bool supportLog { get; } = true;
+        public override bool supportTLog { get; } = true;
         
         public ModbusRTUClient()
         {
@@ -89,7 +89,7 @@ namespace WinSimpleIDriver.Connector.Driver
                     UseParameters(ParamsToDic(parameters));
 
                 client = new ModbusRTUmaster();
-                client.log = InnerLog;
+                client.log = InnerTrafficLog;
                 return new CodeMessage(0,"");
             }
             catch (Exception ex)

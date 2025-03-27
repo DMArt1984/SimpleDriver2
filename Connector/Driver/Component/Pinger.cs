@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net.NetworkInformation;
 
 namespace WinSimpleIDriver.Connector.Driver.Component
@@ -11,27 +7,24 @@ namespace WinSimpleIDriver.Connector.Driver.Component
     {
         public static bool PingHost(string nameOrAddress, int timeout = 50)
         {
-            bool pingable = false;
-            Ping pinger = null;
-
             try
             {
-                pinger = new Ping();
-                PingReply reply = pinger.Send(nameOrAddress, timeout);
-                pingable = reply.Status == IPStatus.Success;
+                using (var pinger = new Ping())
+                {
+                    var reply = pinger.Send(nameOrAddress, timeout);
+                    return reply.Status == IPStatus.Success;
+                }
             }
             catch (PingException)
             {
-                // Ничего не делаем
+                // Пинг не удался — просто возвращаем false
+                return false;
             }
-            finally
+            catch (Exception)
             {
-                if (pinger != null)
-                {
-                    pinger.Dispose();
-                }
+                // Для безопасности — ловим другие исключения, если вдруг возникнут
+                return false;
             }
-            return pingable;
         }
     }
 }
