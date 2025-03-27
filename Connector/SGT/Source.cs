@@ -144,9 +144,7 @@ namespace WinSimpleIDriver.Connector.SGT
         public HandlerLog log;
         #endregion
 
-        // Устройство
-        private eDriverType _driverType;
-        public eDriverType driverType => _driverType;
+        
 
         // строка подключения
         public string Address {
@@ -206,8 +204,12 @@ namespace WinSimpleIDriver.Connector.SGT
         int counterReq = 0;
         int counterFailReq = 0;
 
+        // Устройство
         private readonly IRealDevice _device;
         private readonly IDeviceFactory _deviceFactory;
+
+        private eDriverType _driverType;
+        public eDriverType driverType => _driverType;
 
         // Конструкторы
         public Source(ushort Id, string title, 
@@ -215,15 +217,11 @@ namespace WinSimpleIDriver.Connector.SGT
             bool disable, 
             bool auto, bool reopen, string address = "", string description = "") : base(LogTarget.FileConsoleForm, null)
         {
-            logger.Info($"Source ID={Id} {title}", eMessageCategory.Source);
-
             _deviceFactory = deviceFactory;
             _device = _deviceFactory.CreateDevice(driverType, address);
-            logger.Info($" step1: log(Traffic)", eMessageCategory.Source);
+
             (_device as Device).logTraffic = LogTraffic;
             (_device as Device).log = Log;
-
-            logger.Info($" step2: this...", eMessageCategory.Source);
 
             this.Id = Id;
             this.title = title;
@@ -234,7 +232,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
             SetClient(address);
 
-            logger.Info($"new source ID{Id} {title} {driverType} {Address}", eMessageCategory.Source);
+            logger.Info($"new SOURCE ID {Id} {title} {driverType} {address}", eMessageCategory.Source);
         }
 
         ~Source()
@@ -342,23 +340,6 @@ namespace WinSimpleIDriver.Connector.SGT
         public void OneRequest()
         {
             EventRequest(new Group(0, ""));
-        }
-
-        // =======================================================================
-
-        public void SetLogTraffic(bool enable)
-        {
-            (_device as ITrafficLog).enableTLog = enable;
-        }
-
-        public bool IsLogTraffic()
-        {
-            return (_device as ITrafficLog).enableTLog;
-        }
-
-        public bool IsSupportLog()
-        {
-            return (_device as ITrafficLog).supportTLog;
         }
 
         // ========================================================================
@@ -850,6 +831,23 @@ namespace WinSimpleIDriver.Connector.SGT
             }
         }
 
+        // --------------------------------------------------------------------------------------------------
+
+        public void SetLogTraffic(bool enable)
+        {
+            (_device as ITrafficLog).enableTLog = enable;
+        }
+
+        public bool IsLogTraffic()
+        {
+            return (_device as ITrafficLog).enableTLog;
+        }
+
+        public bool IsSupportLog()
+        {
+            return (_device as ITrafficLog).supportTLog;
+        }
+
         void LogTraffic(string message)
         {
             logTraffic?.Invoke(Id, message);
@@ -888,6 +886,8 @@ namespace WinSimpleIDriver.Connector.SGT
             return (_device as INetDevice).TryTcpConnect("", 0, 0);
         }
 
+        // ------------------------------------------------------------------------------------------------------
+
         public void Link()
         {
             var useTags = Tag.items.Where(x => x.sourceId == this.Id).ToList();
@@ -896,11 +896,12 @@ namespace WinSimpleIDriver.Connector.SGT
             this.UseGroups(Group.items.Where(x => useTags.Select(y => y.groupId).Contains(x.Id)).ToList());
         }
 
-        // ================================================================================================
+        // ======================================================================================================
+
+        #region Static
 
         static public List<Source> items = new List<Source>(); // все группы
         static public ushort lastId = 0;
-        //static public bool log = false;
 
         static public void Clear()
         {
@@ -1067,9 +1068,11 @@ namespace WinSimpleIDriver.Connector.SGT
             }
             return new Dictionary<string, string>();
         }
+        #endregion
 
     }
 
+    #region Editor
     public class SourceEditor // Редактирование
     {
         public uint Id; // Уникальный идентификатор (0 - нет Id)
@@ -1081,4 +1084,6 @@ namespace WinSimpleIDriver.Connector.SGT
         public bool auto; // Запуск опроса после открытия файла
         public bool reconnect; // Автоматическое переподключение
     }
+    #endregion
+
 }
