@@ -15,9 +15,9 @@ namespace Connector.Driver
         public const string driverName = "Modbus TCP Client";
 
         // Справка
-        public static Dictionary<string, string> GetHelpSource()
-        {
-            return new Dictionary<string, string> {
+        // Описание адреса устройства
+        public override Dictionary<string, string> HelpSource
+            => new Dictionary<string, string> {
                         { "Пример", "ip=127.0.0.2;port=502;id=1;timeout=500;fails=10" },
                         { "ip", "сетевой адрес (=127.0.0.2)" },
                         { "port", "номер порта (=502)" },
@@ -25,11 +25,9 @@ namespace Connector.Driver
                         { "timeout", "время (мсек) ожидания ответа (=500)" },
                         { "fails", "количество ошибочных запросов перед отключением (переподключением) драйвера (=10)" }
                     };
-        } // Описание адреса устройства
-
-        public static Dictionary<string, string> GetHelpTag()
-        {
-            return new Dictionary<string, string> {
+        // Описание адреса тега для данного устройства
+        public override Dictionary<string, string> HelpTag
+            => new Dictionary<string, string> {
                         { "Адрес Holding Register", "HR-3-1 = 40003 Order HighLow (read-write)" },
                         { "Адрес Input Register", "IR-1-0 = 30001 Order LowHigh" },
                         { "Адрес Coil Status", "CO-10 = 00010 (read-write)" },
@@ -38,7 +36,6 @@ namespace Connector.Driver
                         { "Пример №2", "HR-8" },
                         { "Пример №3", "40003" }
                     };
-        } // Описание адреса тега для данного устройства
 
         // Клиент
         public SocetModbusTCPmaster client;

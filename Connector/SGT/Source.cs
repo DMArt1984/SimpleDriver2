@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Timers;
 using System.Threading.Tasks;
 using DML.Log;
-using System.Windows.Forms;
 using System.Threading;
 using System.Collections.Concurrent;
 using DML;
@@ -43,22 +41,8 @@ namespace Connector.SGT
         }
     }
 
-    public struct cellSource
-    {
-        //ED public ushort Id;
-        public DataGridViewRow row;
-        public DataGridViewCell connection;
-        public DataGridViewCell opened;
-        public DataGridViewCell code;
-        public DataGridViewCell message;
-        public DataGridViewCell comment;
-        public DataGridViewCell step;
-        public DataGridViewCell statistic;
-    }
-
     class Source : BaseLogger, ISource
     {
-
         public ushort Id { get; } // ID источника данных
         public string title { get; } // Название источника
         public string description { get; } // Описание источника
@@ -73,11 +57,11 @@ namespace Connector.SGT
         public int TagsCountGood => tags.Count(x => x.Good);
 
         // Справка
-        public Dictionary<string, string> helpSource => HelpDicSource(_driverType);
-        public Dictionary<string, string> helpTag => HelpDicTag(_driverType);
+        public Dictionary<string, string> helpSource => SourceHelp.HelpDicSource(_driverType);
+        public Dictionary<string, string> helpTag => SourceHelp.HelpDicTag(_driverType);
         static public Dictionary<string, string> GetHelpSource(eDriverType type)
         {
-            return HelpDicSource(type);
+            return SourceHelp.HelpDicSource(type);
         }
 
         // события
@@ -101,7 +85,6 @@ namespace Connector.SGT
         public HandlerLog log;
         #endregion
 
-        
 
         // строка подключения
         public string Address {
@@ -154,7 +137,7 @@ namespace Connector.SGT
         bool _fail = false; // была ошибка с последующим закрытием
 
         // Переподключения устройства
-        private System.Timers.Timer timerReopen;
+        private System.Threading.Timer timerReopen;
         private int stepReOpen = 0;
         private int[] rTimeMsec = new[] { 5000, 6000, 7000, 8000, 9000, 10000};
 
@@ -501,11 +484,7 @@ namespace Connector.SGT
 
                 try
                 {
-                    timerReopen = null; // new
-                    timerReopen = new System.Timers.Timer(rTimeMsec[stepReOpen]);
-                    timerReopen.Elapsed += new ElapsedEventHandler(TimerCB);
-                    timerReopen.AutoReset = false;
-                    timerReopen.Enabled = true;
+                    StartReopenTimer(rTimeMsec[stepReOpen]);
 
                     stepReOpen++;
                     if (stepReOpen >= rTimeMsec.Length)
@@ -523,10 +502,15 @@ namespace Connector.SGT
 
         // Таймер переоткытия
 
-
-        private void TimerCB(object source, ElapsedEventArgs e)
+        private void StartReopenTimer(int delayMs)
         {
-            TimerCB_Inner();
+            var local = Interlocked.Exchange(ref timerReopen, null);
+            local?.Dispose();
+
+            timerReopen = new System.Threading.Timer(_ =>
+            {
+                TimerCB_Inner(); // вызывается на threadpool потоке
+            }, null, delayMs, Timeout.Infinite);
         }
 
         private void TimerCB_Inner()
@@ -534,19 +518,15 @@ namespace Connector.SGT
             logger.Info("REOPEN: TimerCB", eMessageCategory.Source);
 
             var localTimer = Interlocked.Exchange(ref timerReopen, null);
-            if (localTimer != null)
-            {
-                localTimer.Stop();
-                localTimer.Dispose();
-            }
+            localTimer?.Dispose();
 
-            if (AutoOpenAfterFail == false || UserUseClosed == true)
+            if (!AutoOpenAfterFail || UserUseClosed)
             {
                 logger.Info("REOPEN: AutoOpenAfterFail == false...", eMessageCategory.Source);
                 return;
             }
 
-            if (Off == false)
+            if (!Off)
             {
                 logger.Info("REOPEN: Open()...", eMessageCategory.Source);
                 Open(false);
@@ -930,85 +910,8 @@ namespace Connector.SGT
             }
         }
 
-        // -----------------------------------------------------------------------------------------------------------
-
-        // Справки
-        static public Dictionary<string, string> HelpDicSource(eDriverType driverType)
-        {
-            switch (driverType)
-            {
-                case eDriverType.None:
-                    break;
-
-                case eDriverType.Formula:
-                    return FormulaAdapter.GetHelpSource();
-
-                case eDriverType.Application:
-                    return AppDevice.GetHelpSource();
-
-                case eDriverType.ModbusTCPclient:
-                    return ModbusTCPAdapter.GetHelpSource();
-
-                case eDriverType.ModbusRTUclient:
-                    return ModbusRTUAdapter.GetHelpSource();
-
-                case eDriverType.AppUDP:
-                    return AppUDP.GetHelpSource();
-
-                case eDriverType.MSSQLclient:
-                    return MSSQLAdapter.GetHelpSource();
-
-                case eDriverType.OPCUAclient:
-                    return HylasoftOPCUAAdapter.GetHelpSource();
-            }
-            return new Dictionary<string, string>();
-        }
-        static public Dictionary<string, string> HelpDicTag(eDriverType driverType)
-        {
-            switch (driverType)
-            {
-                case eDriverType.None:
-                    break;
-
-                case eDriverType.Formula:
-                    return FormulaAdapter.GetHelpTag();
-
-                case eDriverType.Application:
-                    return AppDevice.GetHelpTag();
-
-                case eDriverType.ModbusTCPclient:
-                    return ModbusTCPAdapter.GetHelpTag();
-
-                case eDriverType.ModbusRTUclient:
-                    return ModbusRTUAdapter.GetHelpTag();
-
-                case eDriverType.AppUDP:
-                    return AppUDP.GetHelpTag();
-
-                case eDriverType.MSSQLclient:
-                    return MSSQLAdapter.GetHelpTag();
-
-                case eDriverType.OPCUAclient:
-                    return HylasoftOPCUAAdapter.GetHelpTag();
-            }
-            return new Dictionary<string, string>();
-        }
         #endregion
 
     }
-
-    #region Editor
-    public class SourceEditor // Редактирование
-    {
-        public uint Id; // Уникальный идентификатор (0 - нет Id)
-        public eDriverType driver; // Тип драйвера
-        public string title; // Название драйвера
-        public string address; // Строка подключения
-        public bool off; // Отключение
-        public string description; // Описание
-        public bool auto; // Запуск опроса после открытия файла
-        public bool reconnect; // Автоматическое переподключение
-    }
-    #endregion
 
 }

@@ -303,7 +303,7 @@ namespace DML
                 if (!Enum.TryParse(typeName, out eDriverType est))
                     return; // Если строка не соответствует enum, просто выходим
 
-                var dic = Source.HelpDicSource(est);
+                var dic = SourceHelp.HelpDicSource(est);
                 if (dic == null || dic.Count == 0)
                     return; // Не открываем форму, если нет данных
 
@@ -752,7 +752,7 @@ namespace DML
                 if (!Enum.TryParse(driverTitle, out eDriverType est))
                     return; // Если строка не соответствует enum, просто выходим
 
-                var dic = Source.HelpDicTag(est);
+                var dic = SourceHelp.HelpDicTag(est);
                 if (dic == null || dic.Count == 0)
                     return; // Не создаем окно, если данных нет
 

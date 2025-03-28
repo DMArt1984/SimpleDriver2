@@ -38,7 +38,6 @@ namespace Connector
     {
         const int version = 1000; // Версия
 
-
         public bool EnableTLog { get; set; } = false; // разрешить вести лог
         public virtual bool SupportTLog { get; } = false;
 
@@ -50,6 +49,18 @@ namespace Connector
 
         public delegate void HandlerLog(CodeMessage cm);
         public HandlerLog log;
+
+        // IHelp Реализация
+
+        public virtual Dictionary<string, string> HelpSource
+        {
+            get { return new Dictionary<string, string>(); }
+        }
+
+        public virtual Dictionary<string, string> HelpTag
+        {
+            get { return new Dictionary<string, string>(); }
+        }
 
         // =================================================================================
 
@@ -63,7 +74,7 @@ namespace Connector
             RemoveClient();
         }
 
-        // ==================================================================================
+        // =================================================================================
 
         // Создание клиента
         public virtual CodeMessage CreateClient(string parameters = "")

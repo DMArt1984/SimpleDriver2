@@ -12,19 +12,16 @@ namespace Connector.Driver
         public const string driverName = "TestTable";
 
         // Справка
-        public static Dictionary<string, string> GetHelpSource()
-        {
-            return new Dictionary<string, string> {
+        // Описание адреса устройства
+        public override Dictionary<string, string> HelpSource
+            => new Dictionary<string, string> {
                         { "Адрес", "Адресом должна быть пустая строка" }
                     };
-        } // Описание адреса устройства
-
-        public static Dictionary<string, string> GetHelpTag()
-        {
-            return new Dictionary<string, string> {
-                        { "Заголовок", "Описание" },
+        // Описание адреса тега для данного устройства
+        public override Dictionary<string, string> HelpTag
+            => new Dictionary<string, string> {
+                         { "Заголовок", "Описание" },
                     };
-        } // Описание адреса тега для данного устройства
 
         public TestTable()
         {

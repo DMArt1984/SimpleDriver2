@@ -22,17 +22,14 @@ namespace Connector.Driver
         public static Dictionary<string, DMTimer> Timers = new Dictionary<string, DMTimer>();
 
         // Справка
-        public static Dictionary<string, string> GetHelpSource()
-        {
-            return new Dictionary<string, string> {
+        // Описание адреса устройства
+        public override Dictionary<string, string> HelpSource
+            => new Dictionary<string, string> {
                         { "Адрес", "Адресом должна быть пустая строка" }
-
                     };
-        } // Описание адреса устройства
-
-        public static Dictionary<string, string> GetHelpTag()
-        {
-            return new Dictionary<string, string> {
+        // Описание адреса тега для данного устройства
+        public override Dictionary<string, string> HelpTag
+            => new Dictionary<string, string> {
                         { "app@title", "Название файла" },
                         { "source@count", "Количество источников" },
                         { "source@list", "Список источников" },
@@ -42,11 +39,7 @@ namespace Connector.Driver
                         { "source@Segnetics@id", "ID источника с названием Segnetics" },
                         { "source@...@Свойства:", "id - ID источника \r\ntitle - Название источника \r\ndriver - Название драйвера источника \r\ncode - Код состояния источника \r\nmessage - Описание кода источника \r\ndescription - Описание источника \r\nlasterrorcode - Код последней ошибки \r\nlasterrormessage - Описание последней ошибки \r\ntagscount - Количество тегов источника \r\ntagsgood - Количество тегов источника хорошего качества \r\non - Включен ли источник \r\naddress - Адрес источника" },
                         { "Продолжение следует", "" }
-
-
                     };
-        } // Описание адреса тега для данного устройства
-
 
         private Dictionary<string, bool> fronts = new Dictionary<string, bool>(); // фронт для записи тегов один раз
 

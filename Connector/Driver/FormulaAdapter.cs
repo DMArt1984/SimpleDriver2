@@ -14,16 +14,14 @@ namespace Connector.Driver
         public const string driverName = "Formula";
 
         // Справка
-        public static Dictionary<string, string> GetHelpSource()
-        {
-            return new Dictionary<string, string> {
+        // Описание адреса устройства
+        public override Dictionary<string, string> HelpSource
+            => new Dictionary<string, string> {
                         { "Адрес", "Адресом должна быть пустая строка" }
                     };
-        } // Описание адреса устройства
-
-        public static Dictionary<string, string> GetHelpTag()
-        {
-            return new Dictionary<string, string> {
+        // Описание адреса тега для данного устройства
+        public override Dictionary<string, string> HelpTag
+            => new Dictionary<string, string> {
                         { "Операторы", " ( ) ^ * / % + - > < = OR AND NOT" },
                         { "Логика", "true = 1, false = 0" },
                         { "Дата и время", "NOW, NOW_MSECOND, NOW_SECOND, NOW_MINUTE, NOW_HOUR, NOW_DAY, NOW_DAYWEEK, NOW_DAYYEAR, NOW_MONTH, NOW_YEAR" },
@@ -41,10 +39,8 @@ namespace Connector.Driver
                         { "Пример №9 Ограничение = 100", "LIM(108;15;100)" },
                         { "Пример №10 Сдвиг числа = 97", "ROLL(-3;0;100)" },
                         { "Важно", "Если в функции используется сивол ; или |, то вложенность таких функций запрещена!" }
-
                     };
-        } // Описание адреса тега для данного устройства
-
+        
         // Клиент
         public StringFormula2 client;
 

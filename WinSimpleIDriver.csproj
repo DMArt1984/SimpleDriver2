@@ -100,6 +100,8 @@
     <Compile Include="Connector\SGT\forTag.cs" />
     <Compile Include="Connector\SGT\Group.cs" />
     <Compile Include="Connector\SGT\Source.cs" />
+    <Compile Include="Connector\SGT\SourceEditor.cs" />
+    <Compile Include="Connector\SGT\SourceHelp.cs" />
     <Compile Include="Connector\SGT\Tag.cs" />
     <Compile Include="Connector\Driver\TestTable.cs" />
     <Compile Include="DML\BaseLogger.cs" />

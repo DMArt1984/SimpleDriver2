@@ -16,10 +16,10 @@ namespace Connector.Driver
         public const string driverName = "Modbus RTU Client";
 
         // Справка
-        public static Dictionary<string, string> GetHelpSource()
-        {
-            return new Dictionary<string, string> {
-                        { "Пример", "port=COM1;baudrate=9600;parity=None;dataBits=8;stopBits=2;timeout=500;unit=1;fails=10" },
+        // Описание адреса устройства
+        public override Dictionary<string, string> HelpSource
+            => new Dictionary<string, string> {
+                       { "Пример", "port=COM1;baudrate=9600;parity=None;dataBits=8;stopBits=2;timeout=500;unit=1;fails=10" },
                         { "port", "номер порта (COM1)" },
                         { "baudrate", "Скорость (300, 9600, 19200, 115200 и др.)" },
                         { "parity", "Контроль четности (None, Odd, Even, Mark, Space)" },
@@ -29,11 +29,9 @@ namespace Connector.Driver
                         { "timeout", "время (мсек) ожидания ответа (500)" },
                         { "fails", "количество ошибочных запросов перед отключением (переподключением) драйвера (=10)" }
                     };
-        } // Описание адреса устройства
-
-        public static Dictionary<string, string> GetHelpTag()
-        {
-            return new Dictionary<string, string> {
+        // Описание адреса тега для данного устройства
+        public override Dictionary<string, string> HelpTag
+            => new Dictionary<string, string> {
                         { "Адрес Holding Register", "HR-3-1 = 40003 Order HighLow (read-write)" },
                         { "Адрес Input Register", "IR-1-0 = 30001 Order LowHigh (read)" },
                         { "Адрес Coil Status", "CO-10 = 00010 (read-write)" },
@@ -44,8 +42,7 @@ namespace Connector.Driver
                         { "Пример №3", "40003" },
                         { "Пример №4", "1:40003" }
                     };
-        } // Описание адреса тега для данного устройства
-
+        
         // Клиент
         public ModbusRTUmaster client;
         private string portName = "COM1";      // имя порта для подключения

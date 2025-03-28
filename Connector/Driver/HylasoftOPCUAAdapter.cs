@@ -18,21 +18,18 @@ namespace Connector.Driver
         public const string driverName = "Hylasoft OPC UA Client";
 
         // Справка
-        public static Dictionary<string, string> GetHelpSource()
-        {
-            return new Dictionary<string, string> {
+        // Описание адреса устройства
+        public override Dictionary<string, string> HelpSource
+            => new Dictionary<string, string> {
                         { "Пример 1", "opc.tcp://10.0.130.240:4840"},
                         { "Пример 2", "opc.tcp://127.0.0.1:62547/DataAccessServer"},
                         { "Пример 3", "opc.tcp://127.0.0.1:49320"}
                     };
-        } // Описание адреса устройства
-
-        public static Dictionary<string, string> GetHelpTag()
-        {
-            return new Dictionary<string, string> {
+        // Описание адреса тега для данного устройства
+        public override Dictionary<string, string> HelpTag
+            => new Dictionary<string, string> {
                         { "Чтение данных 1", "Simulation Examples.Functions.Ramp1" }
                     };
-        } // Описание адреса тега для данного устройства
 
         // UA client подключение
         private UaClient client;
