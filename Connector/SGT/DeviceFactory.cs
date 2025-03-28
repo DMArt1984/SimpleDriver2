@@ -19,7 +19,7 @@ namespace Connector.SGT
             switch (driverType)
             {
                 case eDriverType.Formula:
-                    return new Formula();
+                    return new FormulaAdapter();
                 case eDriverType.Application:
                     return new AppDevice();
                 case eDriverType.ModbusTCPclient:

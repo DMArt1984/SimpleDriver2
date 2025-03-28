@@ -917,7 +917,7 @@ namespace Connector.SGT
                     break;
 
                 case eDriverType.Formula:
-                    return Formula.GetHelpSource();
+                    return FormulaAdapter.GetHelpSource();
 
                 case eDriverType.Application:
                     return AppDevice.GetHelpSource();
@@ -947,7 +947,7 @@ namespace Connector.SGT
                     break;
 
                 case eDriverType.Formula:
-                    return Formula.GetHelpTag();
+                    return FormulaAdapter.GetHelpTag();
 
                 case eDriverType.Application:
                     return AppDevice.GetHelpTag();

@@ -9,7 +9,7 @@ using Connector.Driver.Component;
 
 namespace Connector.Driver
 {
-    class Formula : Device
+    class FormulaAdapter : Device
     {
         public const string driverName = "Formula";
 
@@ -53,12 +53,12 @@ namespace Connector.Driver
         public int value_Angle = 0; // 0 - 359
         public bool value_Bool = false; // true, false
 
-        public Formula()
+        public FormulaAdapter()
         {
             client = new StringFormula2();
         }
 
-        ~Formula()
+        ~FormulaAdapter()
         {
             client = null;
         }
@@ -886,7 +886,6 @@ namespace Connector.Driver
             }
 
         }
-
 
 
     }
