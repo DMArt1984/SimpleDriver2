@@ -87,6 +87,7 @@
     <Compile Include="Connector\Driver\Component\StringFormula.cs" />
     <Compile Include="Connector\Device.cs" />
     <Compile Include="Connector\DeviceNet.cs" />
+    <Compile Include="Connector\Driver\Component\StringUnpack.cs" />
     <Compile Include="Connector\Driver\FormulaAdapter.cs" />
     <Compile Include="Connector\Driver\HylasoftOPCUAAdapter.cs" />
     <Compile Include="Connector\Driver\ModbusRTUAdapter.cs" />

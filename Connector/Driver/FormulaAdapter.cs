@@ -65,6 +65,8 @@ namespace Connector.Driver
 
         // ---------------------------------------------------------------------------------------------
 
+        #region GET/SET
+
         // Получить значение тега (с типом)
         public override TagResult GetValue(string address, eDataType DataType)
         {
@@ -76,11 +78,11 @@ namespace Connector.Driver
                 Value = Calculation(address, DataType);
 
                 // Вернуть тег
-                return new TagResult(Value, eTagCode.good);
+                return new TagResult(Value);
             }
             catch (Exception ex)
             {
-                return new TagResult(Value, ex.HResult, ex.Message);
+                return new TagResult(Value, ex);
             }
 
         }
@@ -88,76 +90,13 @@ namespace Connector.Driver
         // Записать значение тега
         public override TagResult SetValue(string address, eDataType DataType, dynamic newValue = null)
         {
-            return new TagResult(Tag.ConvertValueWithArray(newValue, DataType), eTagCode.good);
+            return new TagResult(Tag.ConvertValueWithArray(newValue, DataType));
         }
-
+        #endregion
 
         // ---------------------------------------------------------------------------------------------
 
-        // Получить параметры функции из строки ...Name(p1;p2;p3)...
-        public string[] Parse_ParamsString(string address, string nameFunc, char delim = ';')
-        {
-            string[] result = { };
-            int index1 = address.IndexOf($"{nameFunc}("); // начало функции
-            int index2 = 0;
-            int index3 = 0;
-            if (index1 >= 0)
-            {
-                index3 = index1;
-                index1 += nameFunc.Length + 1;
-
-                // конец функции
-                int nx = 1;
-                for (var i = index1 + 1; i < address.Length; i++)
-                {
-                    if (address[i] == '(')
-                        nx++;
-
-                    if (address[i] == ')')
-                    {
-                        nx--;
-                        if (nx == 0)
-                        {
-                            index2 = i;
-                            break;
-                        }
-                    }
-
-                }
-                //index2 = address.IndexOf(")", index1); // конец функции
-
-                if (index2 > index1)
-                {
-                    Array.Resize(ref result, 1);
-                    result[0] = address.Substring(index3, index2 - index3 + 1);
-                    string[] arrayParams = address.Substring(index1, index2 - index1).Split(delim);
-                    Array.Resize(ref result, 1 + arrayParams.Length);
-                    arrayParams.CopyTo(result, 1);
-                    return result;
-                }
-            }
-            return result;
-        }
-
-        // Получить массив байт из параметров
-        public byte[] Parse_ParamsByte(string[] Params)
-        {
-            byte[] BT = new byte[Params.Length];
-            for (int i = 1; i <= Params.Length; i++)
-            {
-                try
-                {
-                    BT[i - 1] = Convert.ToByte(Params[i - 1]);
-                }
-                catch
-                {
-                    BT[i - 1] = 0;
-                }
-            }
-            return BT;
-        }
-
-        // ---------------------------------------------------------------------------------------------
+        #region LIB
 
         // Расчет значения...
         public dynamic Calculation(string address, eDataType DataType)
@@ -233,7 +172,7 @@ namespace Connector.Driver
                     // Словарь
                     while (true) // DICT
                     {
-                        string[] result = Parse_ParamsString(address, "DICT", '|');
+                        string[] result = StringUnpack.Parse_ParamsString(address, "DICT", '|');
                         if (result.Length != 4) break;
                         // 0 = DICT(a;b;c|8;9;10|b)
                         // 1 = a;b;c
@@ -266,7 +205,7 @@ namespace Connector.Driver
                     // Список
                     while (true) // LIST
                     {
-                        string[] result = Parse_ParamsString(address, "LIST", '|');
+                        string[] result = StringUnpack.Parse_ParamsString(address, "LIST", '|');
                         if (result.Length != 3) break;
                         // 0 = LIST(А;Б;В;Г;Д|4)
                         // 1 = 10;20;30;40;50
@@ -288,7 +227,7 @@ namespace Connector.Driver
                     }
                     while (true) // LISTB
                     {
-                        string[] result = Parse_ParamsString(address, "LISTB", '|');
+                        string[] result = StringUnpack.Parse_ParamsString(address, "LISTB", '|');
                         if (result.Length != 3) break;
                         // 0 = LISTB(А Б В Г Д|4)
                         // 1 = А Б В Г Д
@@ -310,7 +249,7 @@ namespace Connector.Driver
                     }
                     while (true) // LISTC
                     {
-                        string[] result = Parse_ParamsString(address, "LISTC", '|');
+                        string[] result = StringUnpack.Parse_ParamsString(address, "LISTC", '|');
                         if (result.Length != 3) break;
                         // 0 = LISTC(А~Б~В~Г~Д|4)
                         // 1 = А~Б~В~Г~Д
@@ -333,7 +272,7 @@ namespace Connector.Driver
                     // Двоичный селектор
                     while (true) // SEL
                     {
-                        string[] result = Parse_ParamsString(address, "SEL", ';');
+                        string[] result = StringUnpack.Parse_ParamsString(address, "SEL", ';');
                         if (result.Length != 4) break;
                         // 0 = SEL(true;Start;End)
                         // 1 = bool value = true
@@ -357,7 +296,7 @@ namespace Connector.Driver
                     // Диапазон
                     while (true) // RANGE
                     {
-                        string[] result = Parse_ParamsString(address, "RANGE", ';');
+                        string[] result = StringUnpack.Parse_ParamsString(address, "RANGE", ';');
                         if (result.Length != 6) break;
                         // 0 = RANGE(50;0;100;200;400)
                         // 1 = value = 50
@@ -386,7 +325,7 @@ namespace Connector.Driver
                     // Получить значение между символами
                     while (true) // INSIDE
                     {
-                        string[] result = Parse_ParamsString(address, "INSIDE", ';');
+                        string[] result = StringUnpack.Parse_ParamsString(address, "INSIDE", ';');
                         if (result.Length != 4) break;
                         // 0 = INSIDE(value[501];[;])
                         // 1 = value[]
@@ -427,7 +366,7 @@ namespace Connector.Driver
                     // Сдвиг
                     while (true) // ROLL
                     {
-                        string[] result = Parse_ParamsString(address, "ROLL", ';');
+                        string[] result = StringUnpack.Parse_ParamsString(address, "ROLL", ';');
                         if (result.Length != 4) break;
                         // 0 = ROLL(1200;0;1000)
                         // 1 = 1200
@@ -457,7 +396,7 @@ namespace Connector.Driver
                     // Ограничение
                     while (true) // LIM
                     {
-                        string[] result = Parse_ParamsString(address, "LIM", ';');
+                        string[] result = StringUnpack.Parse_ParamsString(address, "LIM", ';');
                         if (result.Length != 4) break;
                         // 0 = LIM(1100;0;1000)
                         // 1 = 1100
@@ -487,7 +426,7 @@ namespace Connector.Driver
                     // Замена символов
                     while (true) // CHANGE({%rec2_Volume}/,/.)
                     {
-                        string[] result = Parse_ParamsString(address, "CHANGE", ';');
+                        string[] result = StringUnpack.Parse_ParamsString(address, "CHANGE", ';');
                         if (result.Length != 4) break;
 
                         dynamic CValue;
@@ -511,7 +450,7 @@ namespace Connector.Driver
                     // Конвертация
                     while (true) // DEC в HEX
                     {
-                        string[] result = Parse_ParamsString(address, "DHEX");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "DHEX");
                         if (result.Length != 2) break;
                         long LValue = Convert.ToInt32(Calculation(result[1], eDataType.Long)); // ...
                         string SValue = LValue.ToString("X");
@@ -519,7 +458,7 @@ namespace Connector.Driver
                     }
                     while (true) // HEX в DEC
                     {
-                        string[] result = Parse_ParamsString(address, "HDEC");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "HDEC");
                         if (result.Length != 2) break;
                         string SValue = Convert.ToString(Calculation(result[1], eDataType.STRING)); // ...
                         long LValue = Convert.ToInt32(SValue, 16);
@@ -527,7 +466,7 @@ namespace Connector.Driver
                     }
                     while (true) // DEC в BIN
                     {
-                        string[] result = Parse_ParamsString(address, "DBIN");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "DBIN");
                         if (result.Length != 2) break;
 
                         string s = Convert.ToString(Calculation(result[1], eDataType.Long), 2); //Convert to binary in a string
@@ -535,7 +474,7 @@ namespace Connector.Driver
                     }
                     while (true) // BIN в DEC
                     {
-                        string[] result = Parse_ParamsString(address, "BDEC");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BDEC");
                         if (result.Length != 2) break;
 
                         long LValue = Convert.ToInt64(Calculation(result[1], eDataType.STRING), 2);
@@ -543,7 +482,7 @@ namespace Connector.Driver
                     }
                     while (true) // SBYTE
                     {
-                        string[] result = Parse_ParamsString(address, "SBYTE");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "SBYTE");
                         if (result.Length != 2) break;
                         result[1] = Calculation(result[1], eDataType.Int); // ...
                         sbyte CValue = Convert.ToSByte(Convert.ToByte(result[1]));
@@ -551,7 +490,7 @@ namespace Connector.Driver
                     }
                     while (true) // UBYTE
                     {
-                        string[] result = Parse_ParamsString(address, "UBYTE");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "UBYTE");
                         if (result.Length != 2) break;
                         result[1] = Calculation(result[1], eDataType.Int); // ...
                         byte CValue = Convert.ToByte(Convert.ToSByte(result[1]));
@@ -559,7 +498,7 @@ namespace Connector.Driver
                     }
                     while (true) // SINT
                     {
-                        string[] result = Parse_ParamsString(address, "SINT");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "SINT");
                         if (result.Length != 2) break;
                         result[1] = Calculation(result[1], eDataType.Int); // ...
                         Int16 CValue = Convert.ToInt16(Convert.ToUInt16(result[1]));
@@ -567,7 +506,7 @@ namespace Connector.Driver
                     }
                     while (true) // UINT
                     {
-                        string[] result = Parse_ParamsString(address, "UINT");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "UINT");
                         if (result.Length != 2) break;
                         result[1] = Calculation(result[1], eDataType.Int); // ...
                         UInt16 CValue = Convert.ToUInt16(Convert.ToInt16(result[1]));
@@ -575,7 +514,7 @@ namespace Connector.Driver
                     }
                     while (true) // SDINT
                     {
-                        string[] result = Parse_ParamsString(address, "SDINT");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "SDINT");
                         if (result.Length != 2) break;
                         result[1] = Calculation(result[1], eDataType.Long); // ...
                         Int32 CValue = Convert.ToInt32(Convert.ToUInt32(result[1]));
@@ -583,7 +522,7 @@ namespace Connector.Driver
                     }
                     while (true) // UDINT
                     {
-                        string[] result = Parse_ParamsString(address, "UDINT");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "UDINT");
                         if (result.Length != 2) break;
                         result[1] = Calculation(result[1], eDataType.Long); // ...
                         UInt32 CValue = Convert.ToUInt32(Convert.ToInt32(result[1]));
@@ -592,22 +531,22 @@ namespace Connector.Driver
 
                     while (true) // BYTES_TO_W
                     {
-                        string[] result = Parse_ParamsString(address, "BYTES_TO_W");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTES_TO_W");
                         if (result.Length != 3) break;
-                        byte[] bytes = Parse_ParamsByte(new string[] { result[1], result[2] });
+                        byte[] bytes = StringUnpack.Parse_ParamsByte(new string[] { result[1], result[2] });
                         ushort CValue = BitConverter.ToUInt16(bytes, 0);
                         address = address.Replace(result[0], Convert.ToString(CValue));
                     }
                     while (true) // BYTES_FROM_W
                     {
-                        string[] result = Parse_ParamsString(address, "BYTES_FROM_W");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTES_FROM_W");
                         if (result.Length != 2) break;
                         byte[] bytes = BitConverter.GetBytes(Convert.ToInt16(result[1]));
                         address = address.Replace(result[0], String.Join(";", bytes));
                     }
                     while (true) // BYTE_FROM_W
                     {
-                        string[] result = Parse_ParamsString(address, "BYTE_FROM_W");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTE_FROM_W");
                         if (result.Length != 3) break;
                         byte CValue = BitConverter.GetBytes(Convert.ToInt16(result[1]))[Convert.ToInt16(result[2])];
                         address = address.Replace(result[0], Convert.ToString(CValue));
@@ -615,21 +554,21 @@ namespace Connector.Driver
 
                     while (true) // BYTES_TO_DW
                     {
-                        string[] result = Parse_ParamsString(address, "BYTES_TO_DW");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTES_TO_DW");
                         if (result.Length != 5) break;
-                        int CValue = BitConverter.ToInt32(Parse_ParamsByte(new string[] { result[1], result[2], result[3], result[4] }), 0);
+                        int CValue = BitConverter.ToInt32(StringUnpack.Parse_ParamsByte(new string[] { result[1], result[2], result[3], result[4] }), 0);
                         address = address.Replace(result[0], Convert.ToString(CValue));
                     }
                     while (true) // BYTE_FROM_DW
                     {
-                        string[] result = Parse_ParamsString(address, "BYTE_FROM_DW");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTE_FROM_DW");
                         if (result.Length != 3) break;
                         byte CValue = BitConverter.GetBytes(Convert.ToInt32(result[1]))[Convert.ToInt16(result[2])];
                         address = address.Replace(result[0], Convert.ToString(CValue));
                     }
                     while (true) // BYTES_FROM_DW
                     {
-                        string[] result = Parse_ParamsString(address, "BYTES_FROM_DW");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTES_FROM_DW");
                         if (result.Length != 2) break;
                         byte[] bytes = BitConverter.GetBytes(Convert.ToInt32(result[1]));
                         address = address.Replace(result[0], String.Join(";", bytes));
@@ -637,15 +576,15 @@ namespace Connector.Driver
 
                     while (true) // BYTES_TO_FLOAT
                     {
-                        string[] result = Parse_ParamsString(address, "BYTES_TO_FLOAT");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTES_TO_FLOAT");
                         if (result.Length != 5) break;
-                        double CValue = BitConverter.ToSingle(Parse_ParamsByte(new string[] { result[1], result[2], result[3], result[4] }), 0);
+                        double CValue = BitConverter.ToSingle(StringUnpack.Parse_ParamsByte(new string[] { result[1], result[2], result[3], result[4] }), 0);
                         CValue = Math.Round(CValue, 4);
                         address = address.Replace(result[0], CValue.ToString("#.####"));
                     }
                     while (true) // BYTES_FROM_FLOAT
                     {
-                        string[] result = Parse_ParamsString(address, "BYTES_FROM_FLOAT");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTES_FROM_FLOAT");
                         if (result.Length != 2) break;
                         byte[] bytes = BitConverter.GetBytes(Convert.ToSingle(result[1]));
                         address = address.Replace(result[0], String.Join(";", bytes));
@@ -653,14 +592,14 @@ namespace Connector.Driver
 
                     while (true) // BYTES_TO_LONG
                     {
-                        string[] result = Parse_ParamsString(address, "BYTES_TO_LONG");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTES_TO_LONG");
                         if (result.Length != 9) break;
-                        Int64 CValue = BitConverter.ToInt64(Parse_ParamsByte(new string[] { result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8] }), 0);
+                        Int64 CValue = BitConverter.ToInt64(StringUnpack.Parse_ParamsByte(new string[] { result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8] }), 0);
                         address = address.Replace(result[0], Convert.ToString(CValue));
                     }
                     while (true) // BYTES_FROM_LONG
                     {
-                        string[] result = Parse_ParamsString(address, "BYTES_FROM_LONG");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTES_FROM_LONG");
                         if (result.Length != 2) break;
                         byte[] bytes = BitConverter.GetBytes(Convert.ToInt64(result[1]));
                         address = address.Replace(result[0], String.Join(";", bytes));
@@ -668,21 +607,21 @@ namespace Connector.Driver
 
                     while (true) // BYTES_TO_DOUBLE
                     {
-                        string[] result = Parse_ParamsString(address, "BYTES_TO_DOUBLE");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTES_TO_DOUBLE");
                         if (result.Length != 9) break;
-                        double CValue = BitConverter.ToDouble(Parse_ParamsByte(new string[] { result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8] }), 0);
+                        double CValue = BitConverter.ToDouble(StringUnpack.Parse_ParamsByte(new string[] { result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8] }), 0);
                         address = address.Replace(result[0], Convert.ToString(CValue));
                     }
                     while (true) // BYTES_FROM_DOUBLE
                     {
-                        string[] result = Parse_ParamsString(address, "BYTES_FROM_DOUBLE");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "BYTES_FROM_DOUBLE");
                         if (result.Length != 2) break;
                         byte[] bytes = BitConverter.GetBytes(Convert.ToDouble(result[1]));
                         address = address.Replace(result[0], String.Join(";", bytes));
                     }
                     while (true) // DW_TO_FLOAT
                     {
-                        string[] result = Parse_ParamsString(address, "DW_TO_FLOAT"); // байты без знака
+                        string[] result = StringUnpack.Parse_ParamsString(address, "DW_TO_FLOAT"); // байты без знака
                         if (result.Length != 2) break;
                         double CValue = 0;
                         try
@@ -702,7 +641,7 @@ namespace Connector.Driver
                     }
                     while (true) // DW_FROM_FLOAT
                     {
-                        string[] result = Parse_ParamsString(address, "DW_FROM_FLOAT"); // байты без знака
+                        string[] result = StringUnpack.Parse_ParamsString(address, "DW_FROM_FLOAT"); // байты без знака
                         if (result.Length != 2) break;
                         uint CValue = 0;
                         try
@@ -723,7 +662,7 @@ namespace Connector.Driver
                     // Длина
                     while (true) // LEN
                     {
-                        string[] result = Parse_ParamsString(address, "LEN");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "LEN");
                         if (result.Length != 2) break;
                         int CValue = result[1].Length;
                         address = address.Replace(result[0], Convert.ToString(CValue));
@@ -732,7 +671,7 @@ namespace Connector.Driver
                     // Работа с аналоговым сигналом (массив)
                     while (true) // HL_AI (Value, Good, LoLo, Lo, Hi, HiHi)
                     {
-                        string[] result = Parse_ParamsString(address, "HL_AI");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "HL_AI");
                         if (result.Length != 7) break;
                         float Value = Convert.ToSingle(Calculation(result[1], eDataType.Float)); // аналоговое значение
                         bool Good = Convert.ToBoolean(Calculation(result[2], eDataType.Bool)); // качество тега
@@ -756,7 +695,7 @@ namespace Connector.Driver
                     // Работа с аналоговым сигналом (число)
                     while (true) // STATUS_AI (Value, Good, LoLo, Lo, Hi, HiHi)
                     {
-                        string[] result = Parse_ParamsString(address, "STATUS_AI");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "STATUS_AI");
                         if (result.Length != 7) break;
                         float Value = Convert.ToSingle(Calculation(result[1], eDataType.Float)); // аналоговое значение
                         bool Good = Convert.ToBoolean(Calculation(result[2], eDataType.Bool)); // качество тега
@@ -793,7 +732,7 @@ namespace Connector.Driver
                     // Только статусы сигналом (число)
                     while (true) // STATUS_5 (Good, LoLo, Lo, Hi, HiHi)
                     {
-                        string[] result = Parse_ParamsString(address, "STATUS_5");
+                        string[] result = StringUnpack.Parse_ParamsString(address, "STATUS_5");
                         if (result.Length != 6) break;
                         bool Good = Convert.ToBoolean(Calculation(result[1], eDataType.Bool)); // качество тега
                         bool LoLo = Convert.ToBoolean(Calculation(result[2], eDataType.Bool)); // LoLo
@@ -887,6 +826,7 @@ namespace Connector.Driver
 
         }
 
+        #endregion
 
     }
 }

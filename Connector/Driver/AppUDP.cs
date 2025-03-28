@@ -240,18 +240,18 @@ namespace Connector.Driver
                 } else
                 {
                     InnerTrafficLog($" Exeption = {exeption.HResult} {exeption.Message}");
-                    return new TagResult(Value, exeption.HResult, exeption.Message);
+                    return new TagResult(Value, exeption);
                 }
 
                 // -------
                 Value = Tag.ConvertValueWithArray(Value, dataType);
 
                 // -------
-                return new TagResult(Value, eTagCode.good);
+                return new TagResult(Value);
             }
             catch (Exception ex)
             {
-                return new TagResult(Value, ex.HResult, ex.Message);
+                return new TagResult(Value, ex);
             }
 
         }

@@ -181,7 +181,7 @@ namespace Connector.Driver
                 }
 
                 // Вернуть тег
-                return new TagResult(Value, eTagCode.good);
+                return new TagResult(Value);
             }
             catch (Exception ex)
             {
@@ -193,7 +193,7 @@ namespace Connector.Driver
                 }
 
                 log?.Invoke(CodeMessageFactory.FromException(ex));
-                return new TagResult(Value, ex.HResult, ex.Message);
+                return new TagResult(Value, ex);
             }
 
         }
@@ -236,7 +236,7 @@ namespace Connector.Driver
                         break;
                 }
 
-                return new TagResult(newValue, eTagCode.good);
+                return new TagResult(newValue);
             }
             catch (Exception ex)
             {
@@ -247,7 +247,7 @@ namespace Connector.Driver
                 }
 
                 log?.Invoke(CodeMessageFactory.FromException(ex));
-                return new TagResult(newValue, ex.HResult, ex.Message);
+                return new TagResult(newValue, ex);
             }
         }
 

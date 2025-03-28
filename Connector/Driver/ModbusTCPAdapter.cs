@@ -367,12 +367,11 @@ namespace Connector.Driver
                 OneArrayToValue(ref Value);
 
                 // Вернуть тег
-                return new TagResult(Value, eTagCode.good);
+                return new TagResult(Value);
             }
             catch (Exception ex)
             {
-                //Console.WriteLine($"Tag exeption");
-                return new TagResult(Value, ex.HResult, ex.Message);
+                return new TagResult(Value, ex);
             }
 
         }
@@ -572,11 +571,11 @@ namespace Connector.Driver
                     return new TagResult(0, -client.statusLastAnswer, SocetModbusTCPmaster.exc[client.statusLastAnswer]);
                 }
 
-                return new TagResult(newValue, eTagCode.good);
+                return new TagResult(newValue);
             }
             catch (Exception ex)
             {
-                return new TagResult(newValue, ex.HResult, ex.Message);
+                return new TagResult(newValue, ex);
             }
         }
 

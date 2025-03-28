@@ -633,11 +633,11 @@ namespace Connector.Driver
                 }
 
                 // Вернуть тег
-                return new TagResult(Value, eTagCode.good);
+                return new TagResult(Value);
             }
             catch (Exception ex)
             {
-                return new TagResult(Value, ex.HResult, ex.Message);
+                return new TagResult(Value, ex);
             }
         }
 
@@ -655,7 +655,7 @@ namespace Connector.Driver
             if (Tag.ConvertValue(newValue, eDataType.Bool) == false)
             {
                 fronts[address] = false;
-                return new TagResult(newValue, eTagCode.good);
+                return new TagResult(newValue);
             }
 
             // записываем по положительному фронту
@@ -669,7 +669,7 @@ namespace Connector.Driver
                 }
                 else
                 {
-                    return new TagResult(newValue, eTagCode.good);
+                    return new TagResult(newValue);
                 }
             }
 

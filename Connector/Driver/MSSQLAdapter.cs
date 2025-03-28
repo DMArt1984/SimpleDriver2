@@ -265,7 +265,7 @@ namespace Connector.Driver
                 OneArrayToValue(ref Value);
 
                 // Вернуть тег
-                return new TagResult(Value, eTagCode.good);
+                return new TagResult(Value);
             }
             catch (SqlException ex)
             {
@@ -283,7 +283,7 @@ namespace Connector.Driver
                     log?.Invoke(new CodeMessage(ex.HResult, $"Ошибка SQL сервера: {ex.Message}"));
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} {ex.Message}");
                 }
-                return new TagResult(Value, ex.HResult, ex.Message);
+                return new TagResult(Value, ex);
             }
 
         }
@@ -302,7 +302,7 @@ namespace Connector.Driver
             if (Tag.ConvertValue(newValue, eDataType.Bool) == false)
             {
                 fronts[address] = false;
-                return new TagResult(newValue, eTagCode.good);
+                return new TagResult(newValue);
             }
             else
             {
@@ -314,7 +314,7 @@ namespace Connector.Driver
                     return result2;
                 } else
                 {
-                    return new TagResult(newValue, eTagCode.good);
+                    return new TagResult(newValue);
                 }
             }
 

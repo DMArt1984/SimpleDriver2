@@ -134,6 +134,16 @@ namespace Connector.SGT
             this.value = value;
             this.codeMessage = new CodeMessage((int)tagCode);
         }
+        public TagResult(dynamic value)
+        {
+            this.value = value;
+            this.codeMessage = CodeMessageFactory.FromEnumX(eTagCode.good);
+        }
+        public TagResult(dynamic value, Exception ex)
+        {
+            this.value = value;
+            this.codeMessage = CodeMessageFactory.FromException(ex);
+        }
     }
 
     
