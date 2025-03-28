@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Connector.SGT
 {
-
     static class SourceHelp
     {
         // Справки

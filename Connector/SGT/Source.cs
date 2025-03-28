@@ -137,8 +137,8 @@ namespace Connector.SGT
         bool _fail = false; // была ошибка с последующим закрытием
 
         // Переподключения устройства
-        private System.Threading.Timer timerReopen;
         private int stepReOpen = 0;
+        private readonly ReconnectTimer _reconnectTimer = new ReconnectTimer();
         private int[] rTimeMsec = new[] { 5000, 6000, 7000, 8000, 9000, 10000};
 
         int counterReq = 0;
@@ -475,68 +475,60 @@ namespace Connector.SGT
             return 1;
         }
 
-        void OpenAfterFail()
+        private void OpenAfterFail()
         {
-            // нужно ли переоткрытие?
-            if (AutoOpenAfterFail && Fail && UserUseClosed == false && timerReopen == null)
+            if (!AutoOpenAfterFail || !Fail || UserUseClosed)
+                return;
+
+            logger.Info($"Source ID={Id} Reopen: delay = {rTimeMsec[stepReOpen]} ms", eMessageCategory.App);
+
+            try
             {
-                logger.Info($"Source ID={Id} Reopen {stepReOpen}-{rTimeMsec[stepReOpen]}...", eMessageCategory.App);
+                // Запускаем таймер с задержкой
+                _reconnectTimer.Start(rTimeMsec[stepReOpen], TimerCB_Inner);
 
-                try
-                {
-                    StartReopenTimer(rTimeMsec[stepReOpen]);
+                stepReOpen++;
+                if (stepReOpen >= rTimeMsec.Length)
+                    stepReOpen = 0;
 
-                    stepReOpen++;
-                    if (stepReOpen >= rTimeMsec.Length)
-                        stepReOpen = 0;
-
-                    logger.Info($"Source ID={Id} Reopen {stepReOpen}-{rTimeMsec[stepReOpen]}, STEP={stepReOpen}", eMessageCategory.App);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex.HResult, $"OpenAfterFail(): {ex.Message}", eMessageCategory.Source);
-                    TimerCB_Inner(); // NEW
-                }
+                logger.Info($"Source ID={Id} Reconnect step = {stepReOpen}", eMessageCategory.App);
             }
-        }
-
-        // Таймер переоткытия
-
-        private void StartReopenTimer(int delayMs)
-        {
-            var local = Interlocked.Exchange(ref timerReopen, null);
-            local?.Dispose();
-
-            timerReopen = new System.Threading.Timer(_ =>
+            catch (Exception ex)
             {
-                TimerCB_Inner(); // вызывается на threadpool потоке
-            }, null, delayMs, Timeout.Infinite);
+                logger.Error(ex.HResult, $"OpenAfterFail() error: {ex.Message}", eMessageCategory.Source);
+                TimerCB_Inner(); // fallback – сразу вызываем
+            }
         }
 
         private void TimerCB_Inner()
         {
             logger.Info("REOPEN: TimerCB", eMessageCategory.Source);
 
-            var localTimer = Interlocked.Exchange(ref timerReopen, null);
-            localTimer?.Dispose();
-
-            if (!AutoOpenAfterFail || UserUseClosed)
+            // Проверяем флаги перед попыткой переоткрытия
+            if (!AutoOpenAfterFail)
             {
-                logger.Info("REOPEN: AutoOpenAfterFail == false...", eMessageCategory.Source);
+                logger.Info("REOPEN: AutoOpenAfterFail == false — отмена", eMessageCategory.Source);
+                return;
+            }
+
+            if (UserUseClosed)
+            {
+                logger.Info("REOPEN: Закрытие выполнено пользователем — отмена", eMessageCategory.Source);
                 return;
             }
 
             if (!Off)
             {
-                logger.Info("REOPEN: Open()...", eMessageCategory.Source);
+                logger.Info("REOPEN: Повторная попытка Open()", eMessageCategory.Source);
                 Open(false);
             }
             else
             {
-                logger.Info("REOPEN: Off = false...", eMessageCategory.Source);
+                logger.Info("REOPEN: Установка Off = false (будет вызван Open через set)", eMessageCategory.Source);
                 Off = false;
             }
         }
+
 
         void WaitProcess()
         {
@@ -550,7 +542,6 @@ namespace Connector.SGT
                 TimeSpan ts = DateTime.Now.Subtract(dt);
                 if (ts.TotalMilliseconds > 5000)
                     break;
-                break;
             }
             logger.Info("wait process ]", eMessageCategory.Source);
         }
@@ -753,7 +744,7 @@ namespace Connector.SGT
                     //Tag.CodeMessageList(tags.Where(x => x.Off).ToList(), new CodeMessage((int)eTagCode.tagOff, Tag.CodeText(eTagCode.tagOff)));
 
                     // Вывод
-                    Task.Delay(10);
+                    Thread.Sleep(10);
 
                     int all = tags.Count();
                     int good = tags.Count(x => x.Good == true);

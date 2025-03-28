@@ -33,7 +33,7 @@ namespace Connector.SGT
                 case eDriverType.OPCUAclient:
                     return new HylasoftOPCUAAdapter();
                 default:
-                    return new DeviceReal();
+                    return new Device();
             }
         }
     }
