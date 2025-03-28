@@ -235,54 +235,23 @@ namespace Connector.SGT
             _tagsCount = this.tags.Count();
         }
 
-        // Использовать группы
-        public void UseGroups(List<Group> groups)
-        {
-            if (groups == null)
-                return;
 
-            foreach (var item in groups)
-            {
-                AppendGroup(item);
-            }
+        public void AppendGroup(Group group)
+        {
+            SourceGroupsHelper.AddGroup(this, group, roll);
         }
 
-        // Добавить группу
-        public void AppendGroup (Group group)
-        {
-            // v1
-            //group.tikTakReq += EventRequest;
-
-            // v2
-            //var gm = new GroupManager(this.Id, group);
-            //group.managers.Add(gm);
-
-            //if (group.AddManager(gm))
-            if (group.AddManager(this.Id, out GroupManager gm))
-            {
-                gm.tikTakReq += EventRequest;
-                //
-                roll.TryAdd(group.Id, false);
-            }
-
-        }
-
-        // Убрать группу
         public void RemoveGroup(Group group)
         {
-            // v1
-            //group.tikTakReq -= EventRequest;
-
-            // v2
-            //...
-
-            // отключить события
-            group.RemoveManagers(EventRequest);
-
-            // убравть из опроса
-            roll.TryRemove(group.Id, out bool retval);
+            SourceGroupsHelper.RemoveGroup(this, group, roll);
         }
-        
+
+        public void UseGroups(List<Group> groups)
+        {
+            SourceGroupsHelper.UseGroups(this, groups, roll);
+        }
+
+
         // Одиночный запрос
         public void OneRequest()
         {
@@ -682,7 +651,7 @@ namespace Connector.SGT
         ushort groupNow = 0;
 
         // Запросы
-        void EventRequest(IGroupOff group)
+        internal void EventRequest(IGroupOff group)
         {
             if (group == null)
                 return;
