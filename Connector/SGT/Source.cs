@@ -74,6 +74,38 @@ namespace WinSimpleIDriver.Connector.SGT
         IRealDevice CreateDevice(eDriverType driverType, string address);
     }
 
+    public static class eSourceStatusExtensions
+    {
+        public static string GetText(this eSourceStatus status)
+        {
+            switch (status)
+            {
+                case eSourceStatus.cycle:
+                    return "Работает";
+                case eSourceStatus.breaking:
+                    return "Закрытие по ошибке...";
+                case eSourceStatus.closed:
+                    return "Закрыто";
+                case eSourceStatus.closing:
+                    return "Закрытие...";
+                case eSourceStatus.noClient:
+                    return "Ошибка создания клиента";
+                case eSourceStatus.openedNoCycle:
+                    return "Открыто, но нет опроса";
+                case eSourceStatus.opening:
+                    return "Открытие...";
+                case eSourceStatus.wait:
+                    return "Ожидание...";
+                case eSourceStatus.errOpen:
+                    return "Ошибка открытия";
+                case eSourceStatus.errClose:
+                    return "Ошибка закрытия";
+                default:
+                    return status.ToString();
+            }
+        }
+    }
+
     public class DeviceFactory : IDeviceFactory
     {
         public IRealDevice CreateDevice(eDriverType driverType, string address)
@@ -915,64 +947,6 @@ namespace WinSimpleIDriver.Connector.SGT
 
         static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Sources");
 
-        static public string StatusText(eSourceStatus status)
-        {
-            switch (status)
-            {
-                case eSourceStatus.cycle:
-                    return "Работает";
-                case eSourceStatus.breaking:
-                    return "Закрытие по ошибке...";
-                case eSourceStatus.closed:
-                    return "Закрыто";
-                case eSourceStatus.closing:
-                    return "Закрытие...";
-                case eSourceStatus.noClient:
-                    return "Ошибка создания клиента";
-                case eSourceStatus.openedNoCycle:
-                    return "Открыто, но нет опроса";
-                case eSourceStatus.opening:
-                    return "Открытие...";
-                case eSourceStatus.wait:
-                    return "Ожидание...";
-                default:
-                    return status.ToString();
-            }
-        }
-        //static public string GetText(this eSourceStatus status)
-        //{
-        //    switch (status)
-        //    {
-        //        case eSourceStatus.cycle:
-        //            return "Работает";
-        //        case eSourceStatus.breaking:
-        //            return "Закрытие по ошибке...";
-        //        case eSourceStatus.closed:
-        //            return "Закрыто";
-        //        case eSourceStatus.closing:
-        //            return "Закрытие...";
-        //        case eSourceStatus.noClient:
-        //            return "Ошибка создания клиента";
-        //        case eSourceStatus.openedNoCycle:
-        //            return "Открыто, но нет опроса";
-        //        case eSourceStatus.opening:
-        //            return "Открытие...";
-        //        case eSourceStatus.wait:
-        //            return "Ожидание...";
-        //        case eSourceStatus.errOpen:
-        //            return "Ошибка открытия";
-        //        case eSourceStatus.errClose:
-        //            return "Ошибка закрытия";
-        //        default:
-        //            return status.ToString();
-        //    }
-        //}
-        
-        static public CodeMessage CM(eSourceStatus status)
-        {
-            return new CodeMessage((int)status, StatusText(status));
-        }
-        
         static public void ActivateItems()
         {
             foreach (var item in items)

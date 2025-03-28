@@ -49,23 +49,34 @@ namespace WinSimpleIDriver.Connector.SGT
         WriteTagValue = 12
     }
 
-    public struct TagResult // Возвращаемое значение
+    public enum eTagCode // Коды тегов
     {
-        public dynamic value; // Значение
-        public CodeMessage codeMessage; // Код и Сообщение
-        public TagResult(dynamic value, int code, string message)
-        {
-            this.value = value;
-            this.codeMessage = new CodeMessage(code, message);
-        }
-        public TagResult(dynamic value, eTagCode tagCode)
-        {
-            this.value = value;
-            this.codeMessage = new CodeMessage((int)tagCode);
-        }
+        good = 0,
+        created = 1, // новый тег
+        sourceOpened = 100,
+        sourceClosed = 200,
+
+        sourceFail = -200,
+        groupOff = 300,
+        groupOn = 301,
+        noPing = -400,
+        newValueIsNull = 404,
+        tagOff = 50,
+        tagOn = 51,
+        IsNotSupport = -60, // тип данных не поддерживается
+        connectionTimedOut = -70,
+        tagTimeout = -71,
+        noWrite = -80,
+        noData = -30,
+        breakError = -600, // возможно ошибка источника
+        inconsistency = -90, // не соответствие типа данных
+
+        notReliableA = -700, // нет достоверных данных в адресе
+        notReliableTW = -701, // нет достоверных данных в теге для записи
+        noTagForWrite = -702 // нет тега для записи
+
     }
 
-    
 
     public interface ITagClient
     {
@@ -101,6 +112,7 @@ namespace WinSimpleIDriver.Connector.SGT
         dynamic LastGoodValue { get; }
     }
 
+
     public struct TagParam
     {
         public readonly ushort Id;
@@ -133,37 +145,25 @@ namespace WinSimpleIDriver.Connector.SGT
         public DataGridViewCell comment;
 
     }
-
-    public enum eTagCode // Коды тегов
+    public struct TagResult // Возвращаемое значение
     {
-        good = 0,
-        created = 1, // новый тег
-        sourceOpened = 100,
-        sourceClosed = 200,
-
-        sourceFail = -200,
-        groupOff = 300,
-        groupOn = 301,
-        noPing = -400,
-        newValueIsNull = 404,
-        tagOff = 50,
-        tagOn = 51,
-        IsNotSupport = -60, // тип данных не поддерживается
-        connectionTimedOut = -70,
-        tagTimeout = -71,
-        noWrite = -80,
-        noData = -30,
-        breakError = -600, // возможно ошибка источника
-        inconsistency = -90, // не соответствие типа данных
-
-        notReliableA = -700, // нет достоверных данных в адресе
-        notReliableTW = -701, // нет достоверных данных в теге для записи
-        noTagForWrite = -702 // нет тега для записи
-
+        public dynamic value; // Значение
+        public CodeMessage codeMessage; // Код и Сообщение
+        public TagResult(dynamic value, int code, string message)
+        {
+            this.value = value;
+            this.codeMessage = new CodeMessage(code, message);
+        }
+        public TagResult(dynamic value, eTagCode tagCode)
+        {
+            this.value = value;
+            this.codeMessage = new CodeMessage((int)tagCode);
+        }
     }
-    static class eTagCodeText
+
+    public static class eTagCodeExtensions
     {
-        public static String GetText(this eTagCode code)
+        public static string GetText(this eTagCode code)
         {
             switch (code)
             {
@@ -618,10 +618,10 @@ namespace WinSimpleIDriver.Connector.SGT
         {
             if (Off)
             {
-                codeMessage = new CodeMessage((int)eTagCode.tagOff, eTagCode.tagOff.GetText());
+                codeMessage = CodeMessageFactory.FromEnum(eTagCode.tagOff);
             } else if (noSetTagON == false)
             {
-                codeMessage = new CodeMessage((int)eTagCode.tagOn, eTagCode.tagOn.GetText());
+                codeMessage = CodeMessageFactory.FromEnum(eTagCode.tagOn);
             }
             eventParams?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
         }
@@ -655,11 +655,11 @@ namespace WinSimpleIDriver.Connector.SGT
             SimValue = value;
             if (SimEnable)
             {
-                codeMessage = new CodeMessage((int)eTagCode.good, eTagCode.good.GetText());
+                codeMessage = CodeMessageFactory.FromEnum(eTagCode.good);
                 Value = value;
             } else
             {
-                codeMessage = new CodeMessage((int)eTagCode.created, eTagCode.created.GetText()); // может быть это убрать
+                codeMessage = CodeMessageFactory.FromEnum(eTagCode.created);
             }
         }
 

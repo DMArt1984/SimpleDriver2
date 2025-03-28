@@ -175,8 +175,7 @@ namespace WinSimpleIDriver
 
             SetLeftLabelMessage1();
 
-            
-
+            //var codeMessage = CodeMessageFactory.FromEnum(eSourceStatus.closed);
             //MessageBox.Show(Settings.x);
         }
 

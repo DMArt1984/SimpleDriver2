@@ -146,11 +146,11 @@ namespace WinSimpleIDriver.Connector.Driver
             try
             {
                 if (client == null)
-                    return Source.CM(eSourceStatus.noClient);
+                    return CodeMessageFactory.FromEnum(eSourceStatus.noClient);
 
                 fronts = new Dictionary<string, bool>();
                 client.Close();
-                return client.State == System.Data.ConnectionState.Closed ? new CodeMessage(0, "") : Source.CM(eSourceStatus.errClose);
+                return client.State == System.Data.ConnectionState.Closed ? new CodeMessage(0, "") : CodeMessageFactory.FromEnum(eSourceStatus.errClose);
             }
             catch (Exception ex)
             {

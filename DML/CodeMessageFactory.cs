@@ -1,0 +1,29 @@
+﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WinSimpleIDriver.Connector.SGT;
+
+namespace DML.Log
+{
+    public static class CodeMessageFactory
+    {
+        public static CodeMessage FromEnum(Enum value)
+        {
+            int code = Convert.ToInt32(value);
+            string message = value.ToString();
+
+            if (value is eTagCode tagCode)
+            {
+                message = tagCode.GetText();
+            } else if (value is eSourceStatus sourceStatus)
+            {
+                message = sourceStatus.GetText();
+            }
+
+            return new CodeMessage(code, message);
+        }
+    }
+}

@@ -173,7 +173,7 @@ namespace WinSimpleIDriver.Connector.Driver
                                                     Value = (int)source.Status;
                                                     break;
                                                 case "infomessage":
-                                                    Value = Source.StatusText(source.Status);
+                                                    Value = source.Status.GetText();
                                                     break;
                                                 case "error":
                                                     Value = source.ActiveError.сode;

@@ -128,10 +128,10 @@ namespace WinSimpleIDriver.Connector.Driver
             try
             {
                 if (client == null)
-                    return Source.CM(eSourceStatus.noClient);
+                    return CodeMessageFactory.FromEnum(eSourceStatus.noClient);
 
                 client.Dispose();
-                return client.Status == OpcStatus.NotConnected ? new CodeMessage(0, "") : Source.CM(eSourceStatus.errClose);
+                return client.Status == OpcStatus.NotConnected ? new CodeMessage(0, "") : CodeMessageFactory.FromEnum(eSourceStatus.errClose);
             }
             catch (Exception ex)
             {
