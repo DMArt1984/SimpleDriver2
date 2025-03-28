@@ -9,6 +9,7 @@ namespace DML.Log
 {
     public static class CodeMessageFactory
     {
+        const int version = 1100;
         public static CodeMessage FromEnum(Enum value)
         {
             int code = Convert.ToInt32(value);

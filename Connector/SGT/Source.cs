@@ -278,12 +278,12 @@ namespace WinSimpleIDriver.Connector.SGT
         {
             logger.Info($" step3: CreateClient(paramClient)", eMessageCategory.Source);
             CodeMessage result = this._device.CreateClient(address);
-            if (result.сode != 0)
+            if (result.code != 0)
                 ActiveError = result;
-            Status = (result.сode == 0) ? eSourceStatus.closed : eSourceStatus.noClient;
+            Status = (result.code == 0) ? eSourceStatus.closed : eSourceStatus.noClient;
 
             logger.Info($" step4: _disable = ", eMessageCategory.Source);
-            _disable = _disable || result.сode != 0;
+            _disable = _disable || result.code != 0;
         }
 
         public void Activate()
@@ -448,7 +448,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 }
 
                 // Host
-                if (result.сode == 0)
+                if (result.code == 0)
                 {
                     // Connect
                     logger.Info($"Источник ID={Id} {title} > Соединение...", eMessageCategory.Source);
@@ -459,10 +459,10 @@ namespace WinSimpleIDriver.Connector.SGT
                     //result = new CodeMessage(-404, "Нет связи с хостом");
                 }
 
-                if (result.сode != 0)
+                if (result.code != 0)
                     ActiveError = result;
 
-                if (result.сode == 0)
+                if (result.code == 0)
                 {
                     logger.Info($"Источник ID={Id} {title} > Открыть - успешно!", eMessageCategory.Source);
 
@@ -478,7 +478,7 @@ namespace WinSimpleIDriver.Connector.SGT
                         CyclicRequest = true;
                 } else
                 {
-                    logger.Info($"Источник ID={Id} {title} > Открыть - ошибка {result.сode} {result.message}", eMessageCategory.Source);
+                    logger.Info($"Источник ID={Id} {title} > Открыть - ошибка {result.code} {result.message}", eMessageCategory.Source);
 
                     Status = eSourceStatus.breaking;
                     _fail = true;
@@ -491,7 +491,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 }
 
                 EventStatus();
-                return result.сode;
+                return result.code;
             }
             return 1;
         }
@@ -507,10 +507,10 @@ namespace WinSimpleIDriver.Connector.SGT
                 WaitProcess(); // ждем завершения текущего запроса...
 
                 CodeMessage result = this._device.Disconnect();
-                if (result.сode != 0)
+                if (result.code != 0)
                     ActiveError = result;
 
-                if (result.сode == 0)
+                if (result.code == 0)
                 {
                     logger.Info($"Источник ID={Id} {title} > Закрыть - успешно!", eMessageCategory.Source);
 
@@ -532,12 +532,12 @@ namespace WinSimpleIDriver.Connector.SGT
                         OpenAfterFail();
                 } else
                 {
-                    logger.Info($"Источник ID={Id} {title} > Закрыть - ошибка {result.сode} {result.message}", eMessageCategory.Source);
+                    logger.Info($"Источник ID={Id} {title} > Закрыть - ошибка {result.code} {result.message}", eMessageCategory.Source);
                 }
 
                 EventStatus();
-                logger.Info($"Источник ID={Id} {title} > Код {result.сode}", eMessageCategory.Source);
-                return result.сode;
+                logger.Info($"Источник ID={Id} {title} > Код {result.code}", eMessageCategory.Source);
+                return result.code;
             } else
             {
                 // статусы тегов
@@ -666,10 +666,10 @@ namespace WinSimpleIDriver.Connector.SGT
             get => _activeError;
             set
             {
-                bool newCode = _activeError.сode != value.сode;
+                bool newCode = _activeError.code != value.code;
 
                 _activeError = value;
-                if (_activeError.сode < 0)
+                if (_activeError.code < 0)
                 {
                     if (Fail == false)
                     {
@@ -798,7 +798,7 @@ namespace WinSimpleIDriver.Connector.SGT
                         counterReq++;
 
                         // Анализ ответов
-                        bool breakError = clientTags.Any(x => x.codeMessage.сode == (int)eTagCode.breakError);
+                        bool breakError = clientTags.Any(x => x.codeMessage.code == (int)eTagCode.breakError);
                         bool anyGood = clientTags.Any(x => x.Good && x.Command == eCommand.None && x.WriteTagId == 0 && x.WriteTagValue == null);
                         if (breakError && anyGood == false)
                         {

@@ -178,7 +178,7 @@ namespace WinSimpleIDriver.Connector
                         tag.SetResult(new TagResult(null, eTagCode.noTagForWrite));
                         return;
                     }
-                    if (writeTag.codeMessage.сode != 0 && writeTag.codeMessage.сode != (int)eTagCode.tagOn)
+                    if (writeTag.codeMessage.code != 0 && writeTag.codeMessage.code != (int)eTagCode.tagOn)
                     {
                         tag.SetResult(new TagResult(null, eTagCode.notReliableTW));
                         return;

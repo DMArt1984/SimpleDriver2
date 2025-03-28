@@ -239,7 +239,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
         public string block { get; set; } // Блок
 
-        public bool Good => codeMessage.сode == (int)eTagCode.good; // Тег достоверный // _off == false && 
+        public bool Good => codeMessage.code == (int)eTagCode.good; // Тег достоверный // _off == false && 
 
         // симуляция
         public bool SimEnable = false; // использование симуляции
@@ -585,7 +585,7 @@ namespace WinSimpleIDriver.Connector.SGT
             get => _codeMessage;
             set
             {
-                if (_codeMessage.сode != value.сode)
+                if (_codeMessage.code != value.code)
                 {
                     _codeMessage = value;
                     CheckLastError();
@@ -601,9 +601,9 @@ namespace WinSimpleIDriver.Connector.SGT
 
         private void CheckLastError()
         {
-            if (_codeMessage.сode < 0)
+            if (_codeMessage.code < 0)
             {
-                _lastError = new CodeMessage(_codeMessage.сode, _codeMessage.message);
+                _lastError = new CodeMessage(_codeMessage.code, _codeMessage.message);
             }
         }
 
@@ -877,7 +877,7 @@ namespace WinSimpleIDriver.Connector.SGT
                     string nameIndex = "{" + item.title + "["; // значение из списка
 
                     bool good = item.Good; // || item.SimEnable; // new item.SimEnable
-                    int code = item.codeMessage.сode;
+                    int code = item.codeMessage.code;
                     dynamic lastValue = item.LastGoodValue;
                     dynamic actualValue = item.Value;
 

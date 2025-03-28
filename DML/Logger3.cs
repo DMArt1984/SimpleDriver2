@@ -86,7 +86,7 @@ namespace DML.Log
 
         static public string GetExceptionMessage(CodeMessage cm)
         {
-            return $"{cm.сode}= {cm.message}";
+            return $"{cm.code}= {cm.message}";
         }
 
         static public string TypeMessage(eMessageType mtype)
@@ -101,10 +101,10 @@ namespace DML.Log
         }
         static public eMessageType TypeMessage(CodeMessage cm)
         {
-            if (cm.сode < 0)
+            if (cm.code < 0)
                 return eMessageType.ERROR;
 
-            if (cm.сode > 0)
+            if (cm.code > 0)
                 return eMessageType.INFO;
 
             return eMessageType.OK;
@@ -281,8 +281,8 @@ namespace DML.Log
         /// <param name="mcategory">Категория сообщения. По умолчанию: <see cref="eMessageCategory.none"/>.</param>
         public void CodeMessage(CodeMessage cm, eMessageCategory mcategory = eMessageCategory.none)
         {
-            string formattedMessage = cm.сode != 0 ? $"{cm.сode} {cm.message}" : cm.message;
-            eMessageType mt = LogHelper.GetMessageType(cm.сode);
+            string formattedMessage = cm.code != 0 ? $"{cm.code} {cm.message}" : cm.message;
+            eMessageType mt = LogHelper.GetMessageType(cm.code);
             switch (mt)
             {
                 case eMessageType.OK:
@@ -292,7 +292,7 @@ namespace DML.Log
                     Info(formattedMessage, mcategory);
                     break;
                 case eMessageType.ERROR:
-                    Error(cm.сode, formattedMessage, mcategory);
+                    Error(cm.code, formattedMessage, mcategory);
                     break;
             }
         }
@@ -394,11 +394,11 @@ namespace DML.Log
         /// </summary>
         public string CodeMessage(CodeMessage cm, eMessageCategory mcategory = eMessageCategory.none)
         {
-            eMessageType mt = LogHelper.GetMessageType(cm.сode);
-            string formattedMessage = cm.сode != 0 ? $"{cm.сode} {cm.message}" : cm.message;
+            eMessageType mt = LogHelper.GetMessageType(cm.code);
+            string formattedMessage = cm.code != 0 ? $"{cm.code} {cm.message}" : cm.message;
             if (ShouldLog(mt, mcategory))
             {
-                InvokeDelegate(mt, mcategory, cm.сode, formattedMessage);
+                InvokeDelegate(mt, mcategory, cm.code, formattedMessage);
             }
             return formattedMessage;
         }
@@ -591,8 +591,8 @@ namespace DML.Log
         /// </summary>
         public string CodeMessage(CodeMessage cm, eMessageCategory mcategory = eMessageCategory.none)
         {
-            string formattedMessage = cm.сode != 0 ? $"{cm.сode} {cm.message}" : cm.message;
-            eMessageType mt = LogHelper.GetMessageType(cm.сode);
+            string formattedMessage = cm.code != 0 ? $"{cm.code} {cm.message}" : cm.message;
+            eMessageType mt = LogHelper.GetMessageType(cm.code);
             switch (mt)
             {
                 case eMessageType.OK:
@@ -600,7 +600,7 @@ namespace DML.Log
                 case eMessageType.INFO:
                     return Info(formattedMessage, mcategory);
                 case eMessageType.ERROR:
-                    return Error(cm.сode, formattedMessage, mcategory);
+                    return Error(cm.code, formattedMessage, mcategory);
                 default:
                     return Info(formattedMessage, mcategory);
             }
@@ -710,7 +710,7 @@ namespace DML.Log
         /// <returns>Возвращает текст сообщения, содержащийся в <paramref name="cm"/>.</returns>
         public string CodeMessage(CodeMessage cm)
         {
-            eMessageType mtype = LogHelper.GetMessageType(cm.сode);
+            eMessageType mtype = LogHelper.GetMessageType(cm.code);
             Log(mtype, cm.message);
             return cm.message;
         }

@@ -11,14 +11,16 @@ namespace DML.Log
     /// </summary>
     public struct CodeMessage
     {
-        public readonly int сode;
+        public readonly int code;
         public readonly string message;
 
         public CodeMessage(int code = 0, string message = "")
         {
-            сode = code;
+            this.code = code;
             this.message = message;
         }
+
+        public bool OK => code == 0;
     }
 
     public interface ICodeMessage
