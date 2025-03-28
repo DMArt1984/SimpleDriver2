@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using WinSimpleIDriver.Connector.SGT;
 using WinSimpleIDriver.Connector.Driver.Component;
+using Connector.SGT;
 
 namespace WinSimpleIDriver.Connector.Driver
 {

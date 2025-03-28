@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WinSimpleIDriver.Connector.SGT;
 using DML.Log;
+using Connector.SGT;
 
 namespace WinSimpleIDriver.Connector
 {

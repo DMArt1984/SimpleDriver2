@@ -1,4 +1,5 @@
-﻿using DML.Log;
+﻿using Connector.SGT;
+using DML.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;
