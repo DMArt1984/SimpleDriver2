@@ -23,15 +23,15 @@ namespace Connector.SGT
                 case eDriverType.Application:
                     return new AppDevice();
                 case eDriverType.ModbusTCPclient:
-                    return new ModbusTCPClient();
+                    return new ModbusTCPAdapter();
                 case eDriverType.ModbusRTUclient:
-                    return new ModbusRTUClient();
+                    return new ModbusRTUAdapter();
                 case eDriverType.AppUDP:
                     return new AppUDP(address);
                 case eDriverType.MSSQLclient:
-                    return new MSSQLclient();
+                    return new MSSQLAdapter();
                 case eDriverType.OPCUAclient:
-                    return new HylasoftOPCUA();
+                    return new HylasoftOPCUAAdapter();
                 default:
                     return new Device();
             }

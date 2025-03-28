@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Connector.Driver
 {
-    class MSSQLclient : DeviceNet
+    class MSSQLAdapter : DeviceNet
     {
         public const string driverName = "Microsoft SQL Client";
 
@@ -43,13 +43,13 @@ namespace Connector.Driver
         // Настройки клиента
         // ...
 
-        public MSSQLclient()
+        public MSSQLAdapter()
         {
             disableHostForOpen = true;
             //...
         }
 
-        ~MSSQLclient()
+        ~MSSQLAdapter()
         {
             try
             {

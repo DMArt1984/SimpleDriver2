@@ -13,7 +13,7 @@ using LogCodeMessage;
 
 namespace Connector.Driver
 {
-    class HylasoftOPCUA : DeviceNet
+    class HylasoftOPCUAAdapter : DeviceNet
     {
         public const string driverName = "Hylasoft OPC UA Client";
 
@@ -40,13 +40,13 @@ namespace Connector.Driver
         // Настройки клиента
         // ...
 
-        public HylasoftOPCUA()
+        public HylasoftOPCUAAdapter()
         {
             //disableHostForOpen = true;
             //...
         }
 
-        ~HylasoftOPCUA()
+        ~HylasoftOPCUAAdapter()
         {
             try
             {

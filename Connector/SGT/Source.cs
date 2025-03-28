@@ -923,19 +923,19 @@ namespace Connector.SGT
                     return AppDevice.GetHelpSource();
 
                 case eDriverType.ModbusTCPclient:
-                    return ModbusTCPClient.GetHelpSource();
+                    return ModbusTCPAdapter.GetHelpSource();
 
                 case eDriverType.ModbusRTUclient:
-                    return ModbusRTUClient.GetHelpSource();
+                    return ModbusRTUAdapter.GetHelpSource();
 
                 case eDriverType.AppUDP:
                     return AppUDP.GetHelpSource();
 
                 case eDriverType.MSSQLclient:
-                    return MSSQLclient.GetHelpSource();
+                    return MSSQLAdapter.GetHelpSource();
 
                 case eDriverType.OPCUAclient:
-                    return HylasoftOPCUA.GetHelpSource();
+                    return HylasoftOPCUAAdapter.GetHelpSource();
             }
             return new Dictionary<string, string>();
         }
@@ -953,19 +953,19 @@ namespace Connector.SGT
                     return AppDevice.GetHelpTag();
 
                 case eDriverType.ModbusTCPclient:
-                    return ModbusTCPClient.GetHelpTag();
+                    return ModbusTCPAdapter.GetHelpTag();
 
                 case eDriverType.ModbusRTUclient:
-                    return ModbusRTUClient.GetHelpTag();
+                    return ModbusRTUAdapter.GetHelpTag();
 
                 case eDriverType.AppUDP:
                     return AppUDP.GetHelpTag();
 
                 case eDriverType.MSSQLclient:
-                    return MSSQLclient.GetHelpTag();
+                    return MSSQLAdapter.GetHelpTag();
 
                 case eDriverType.OPCUAclient:
-                    return HylasoftOPCUA.GetHelpTag();
+                    return HylasoftOPCUAAdapter.GetHelpTag();
             }
             return new Dictionary<string, string>();
         }

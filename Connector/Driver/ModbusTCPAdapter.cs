@@ -4,29 +4,25 @@ using DML.Log;
 using LogCodeMessage;
 using System;
 using System.Collections.Generic;
-using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Connector.Driver
 {
-    class ModbusRTUClient : Device
+    class ModbusTCPAdapter : DeviceNet
     {
-        public const string driverName = "Modbus RTU Client";
+        public const string driverName = "Modbus TCP Client";
 
         // Справка
         public static Dictionary<string, string> GetHelpSource()
         {
             return new Dictionary<string, string> {
-                        { "Пример", "port=COM1;baudrate=9600;parity=None;dataBits=8;stopBits=2;timeout=500;unit=1;fails=10" },
-                        { "port", "номер порта (COM1)" },
-                        { "baudrate", "Скорость (300, 9600, 19200, 115200 и др.)" },
-                        { "parity", "Контроль четности (None, Odd, Even, Mark, Space)" },
-                        { "dataBits", "Биты данных (7, 8)" },
-                        { "stopBits", "Стоповые биты (1, 2)" },
-                        { "unit", "адрес/ID устройства (1...255)" },
-                        { "timeout", "время (мсек) ожидания ответа (500)" },
+                        { "Пример", "ip=127.0.0.2;port=502;id=1;timeout=500;fails=10" },
+                        { "ip", "сетевой адрес (=127.0.0.2)" },
+                        { "port", "номер порта (=502)" },
+                        { "id", "номер устройства (=1)" },
+                        { "timeout", "время (мсек) ожидания ответа (=500)" },
                         { "fails", "количество ошибочных запросов перед отключением (переподключением) драйвера (=10)" }
                     };
         } // Описание адреса устройства
@@ -35,26 +31,18 @@ namespace Connector.Driver
         {
             return new Dictionary<string, string> {
                         { "Адрес Holding Register", "HR-3-1 = 40003 Order HighLow (read-write)" },
-                        { "Адрес Input Register", "IR-1-0 = 30001 Order LowHigh (read)" },
+                        { "Адрес Input Register", "IR-1-0 = 30001 Order LowHigh" },
                         { "Адрес Coil Status", "CO-10 = 00010 (read-write)" },
-                        { "Адрес Input Status", "IN-7 = 10007 (read)" },
-                        { "ID устройства в адресе", "10:IN-7 = адрес 10007 и ID устр. 10" },
+                        { "Адрес Input Status", "IN-7 = 10007" },
                         { "Пример №1 четыре регистра начиная с первого", "HR-1>4" },
                         { "Пример №2", "HR-8" },
-                        { "Пример №3", "40003" },
-                        { "Пример №4", "1:40003" }
+                        { "Пример №3", "40003" }
                     };
         } // Описание адреса тега для данного устройства
 
         // Клиент
-        public ModbusRTUmaster client;
-        private string portName = "COM1";      // имя порта для подключения
-        private int baudrate = 9600;    // скорость передачи
-        private Parity parity = Parity.None;   // контроль четности
-        private int dataBits = 8;   //  кол-во бит данных
-        private StopBits stopBits = StopBits.One;  //кол-во стоп битов
-        private byte unitCOMidentifier = 1; // Not necessary since default slaveID = 1;
-        private static int _timeout = 500;
+        public SocetModbusTCPmaster client;
+        //private byte unitIdentifier = 1; // Not necessary since default slaveID = 1;
 
         // Настройки клиента
         public int baseAddress = 0; // 0 или 1
@@ -62,12 +50,20 @@ namespace Connector.Driver
 
         public override bool supportTLog { get; } = true;
         
-        public ModbusRTUClient()
+        //public ModbusTCPClient(string Host, int port = 502, byte slaveID = 1, int timeout = 100)
+        //{
+            //this.IP = Host;
+            //this.port = port;
+            //this.unitIdentifier = slaveID;
+            //this.timeout = timeout;
+        //}
+
+        public ModbusTCPAdapter()
         {
             //...
         }
 
-        ~ModbusRTUClient()
+        ~ModbusTCPAdapter()
         {
             try
             {
@@ -89,7 +85,7 @@ namespace Connector.Driver
                 if (String.IsNullOrWhiteSpace(parameters) == false)
                     UseParameters(ParamsToDic(parameters));
 
-                client = new ModbusRTUmaster();
+                client = new SocetModbusTCPmaster();
                 client.log = InnerTrafficLog;
                 return new CodeMessage();
             }
@@ -110,38 +106,14 @@ namespace Connector.Driver
 
                 if (client == null)
                     return CodeMessageFactory.FromEnumX(eSourceStatus.noClient);
-                client.Connect(portName, baudrate, parity, dataBits, stopBits, unitCOMidentifier, _timeout);
-                return client.connected ? new CodeMessage(0,"") : CodeMessageFactory.FromEnumX(eSourceStatus.errOpen);
+                client.Connect(host, port, (ushort)timeout);
+                return client.connected ? new CodeMessage() : CodeMessageFactory.FromEnumX(eSourceStatus.errOpen);
             }
             catch (Exception ex)
             {
                 return CodeMessageFactory.FromException(ex);
             }
         }
-
-        // Разбор строки подключения
-        public bool UseParameters(Dictionary<string, string> dic)
-        {
-            try
-            {
-                unitCOMidentifier = (dic.ContainsKey("unit")) ? byte.Parse(dic["unit"]) : (dic.ContainsKey("id")) ? byte.Parse(dic["id"]) : (byte)1;
-                portName = (dic.ContainsKey("port")) ? dic["port"] : (dic.ContainsKey("com")) ? "COM"+dic["com"] : "COM1";
-                baudrate = (dic.ContainsKey("baudrate")) ? int.Parse(dic["baudrate"]) : 9600;
-                parity = (dic.ContainsKey("parity")) ? (System.IO.Ports.Parity)Enum.Parse(typeof(System.IO.Ports.Parity), dic["parity"]) : System.IO.Ports.Parity.None;
-                dataBits = (dic.ContainsKey("dataBits")) ? int.Parse(dic["dataBits"]) : 8;
-                stopBits = (dic.ContainsKey("stopBits")) ? (System.IO.Ports.StopBits)int.Parse(dic["stopBits"]) : System.IO.Ports.StopBits.Two;
-                _timeout = (dic.ContainsKey("timeout")) ? int.Parse(dic["timeout"]) : 500;
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-
-        }
-
-        // -----------------------------------------------------------------------------------------------
 
         public override CodeMessage Disconnect()
         {
@@ -243,11 +215,9 @@ namespace Connector.Driver
                 ParsingAddress(address, out string addrArea, out int addrStart, out int addrOrder, out int count, out byte unit);
 
                 if (unit == 0)
-                    unit = unitCOMidentifier;
+                    unit = unitIdentifier;
 
-                //Console.WriteLine($"GetValue(address={address}) -> count={count}");
-
-                    // количество регистров в значении
+                // количество регистров в значении
                 ushort RegsInValue = 1;
                 switch (DataType)
                 {
@@ -299,12 +269,12 @@ namespace Connector.Driver
                 // Есть ли ошибки в ответе?
                 if (client.statusLastAnswer != 0)
                 {
-                    if (client.statusLastAnswer == ModbusRTUmaster.excExceptionConnectionLost) // если ошибка связи (порта)
+                    if (client.statusLastAnswer == SocetModbusTCPmaster.excExceptionConnectionLost)
                     {
-                        log?.Invoke(new CodeMessage(-1, $"ModbusRTU.excExceptionConnectionLost for {address}"));
+                        log?.Invoke(new CodeMessage(-1, $"Есть ошибки в ответе: SocetModbusTCP.excExceptionConnectionLost for {address}"));
                         return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={client.statusLastAnswer}");
                     }
-                    return new TagResult(0, -client.statusLastAnswer, ModbusRTUmaster.exc[client.statusLastAnswer]);
+                    return new TagResult(0, -client.statusLastAnswer, SocetModbusTCPmaster.exc[client.statusLastAnswer]);
                 }
 
                 if (bytes == null || bytes.Any() == false)
@@ -323,7 +293,7 @@ namespace Connector.Driver
                     case eDataType.Int:
                     case eDataType.UInt:
                     case eDataType.Double:
-                        if (bytes.Length*MBit != count * RegsInValue * MX) // <
+                        if (bytes.Length * MBit != count * RegsInValue * MX) // <
                         {
                             log?.Invoke(new CodeMessage(1, $"Проверка на тип данных: (bytes.Length = {bytes.Length}) != (count * RegsInValue * 2 = {count * RegsInValue * 2})"));
                             return new TagResult(0, eTagCode.inconsistency);
@@ -336,11 +306,11 @@ namespace Connector.Driver
                 switch (DataType)
                 {
                     case eDataType.Bool:
-                        Value = ModbusRTUmaster.GetBoolFromBytes(bytes, (ushort)count);
+                        Value = SocetModbusTCPmaster.GetBoolFromBytes(bytes, (ushort)count);
                         break;
 
                     case eDataType.Binary:
-                        Value = ModbusRTUmaster.GetBinaryFromBytes(bytes);
+                        Value = SocetModbusTCPmaster.GetBinaryFromBytes(bytes);
                         break;
 
                     case eDataType.Byte:
@@ -348,21 +318,21 @@ namespace Connector.Driver
                         break;
 
                     case eDataType.Short:
-                        Value = ModbusRTUmaster.GetInt16FromBytes(bytes);
+                        Value = SocetModbusTCPmaster.GetInt16FromBytes(bytes);
                         break;
 
                     case eDataType.UShort:
-                        Value = ModbusRTUmaster.GetUInt16FromBytes(bytes);
+                        Value = SocetModbusTCPmaster.GetUInt16FromBytes(bytes);
                         break;
 
                     case eDataType.Float:
                         if (addrOrder == 0)
                         {
-                            Value = ModbusRTUmaster.GetFloatFromBytes(bytes);
+                            Value = SocetModbusTCPmaster.GetFloatFromBytes(bytes);
                         }
                         else
                         {
-                            Value = ModbusRTUmaster.GetFloatInverseFromBytes(bytes);
+                            Value = SocetModbusTCPmaster.GetFloatInverseFromBytes(bytes);
                         }
                         break;
 
@@ -370,22 +340,22 @@ namespace Connector.Driver
                     case eDataType.UInt:
                         if (addrOrder == 0)
                         {
-                            Value = ModbusRTUmaster.GetInt32FromBytes(bytes);
+                            Value = SocetModbusTCPmaster.GetInt32FromBytes(bytes);
                         }
                         else
                         {
-                            Value = ModbusRTUmaster.GetInt32InverseFromBytes(bytes);
+                            Value = SocetModbusTCPmaster.GetInt32InverseFromBytes(bytes);
                         }
                         break;
 
                     case eDataType.Double:
                         if (addrOrder == 0)
                         {
-                            Value = ModbusRTUmaster.GetDoubleFromBytes(bytes);
+                            Value = SocetModbusTCPmaster.GetDoubleFromBytes(bytes);
                         }
                         else
                         {
-                            Value = ModbusRTUmaster.GetDoubleInverseFromBytes(bytes);
+                            Value = SocetModbusTCPmaster.GetDoubleInverseFromBytes(bytes);
                         }
                         break;
 
@@ -424,7 +394,7 @@ namespace Connector.Driver
                 ParsingAddress(address, out string addrArea, out int addrStart, out int addrOrder, out int count, out byte unit);
 
                 if (unit == 0)
-                    unit = unitCOMidentifier;
+                    unit = unitIdentifier;
 
                 for (int i = 0; i < newValues.Length; i++)
                     newValues[i] = (newValues[i].ToUpper() == "TRUE") ? "1" : ((newValues[i].ToUpper() == "FALSE") ? "0" : newValues[i]);
@@ -453,7 +423,7 @@ namespace Connector.Driver
                                     }
                                     else
                                     {
-                                        byte[] bytes = ModbusRTUmaster.ValToBytes(bools);
+                                        byte[] bytes = SocetModbusTCPmaster.ValToBytes(bools);
                                         client.WriteMultipleCoils(IdTrans, unit, (ushort)addrStart, (ushort)count, bytes, ref result);
                                     }
                                 }
@@ -475,7 +445,7 @@ namespace Connector.Driver
                                     }
                                     else
                                     {
-                                        byte[] bytes = ModbusRTUmaster.ValToBytes(bools);
+                                        byte[] bytes = SocetModbusTCPmaster.ValToBytes(bools);
                                         client.WriteMultipleCoils(IdTrans, unit, (ushort)addrStart, (ushort)count, bytes, ref result);
                                     }
                                 }
@@ -496,7 +466,7 @@ namespace Connector.Driver
                                     short[] shorts = newValues.Select(x => short.Parse(x)).ToArray();
                                     List<byte> bytes = new List<byte>();
                                     foreach (var item in shorts)
-                                        bytes.AddRange(ModbusRTUmaster.ValToBytes(item));
+                                        bytes.AddRange(SocetModbusTCPmaster.ValToBytes(item));
 
                                     if (count > bytes.Count * 8)
                                         count = bytes.Count * 8;
@@ -519,7 +489,7 @@ namespace Connector.Driver
                             case eDataType.Short:
                                 if (count == 1)
                                 {
-                                    byte[] bytes = ModbusRTUmaster.ValToBytes(short.Parse(newValues[0]));
+                                    byte[] bytes = SocetModbusTCPmaster.ValToBytes(short.Parse(newValues[0]));
                                     client.WriteSingleRegister(IdTrans, unit, (ushort)addrStart, bytes, ref result);
                                 }
                                 else
@@ -527,7 +497,7 @@ namespace Connector.Driver
                                     short[] shorts = newValues.Select(x => short.Parse(x)).ToArray();
                                     List<byte> bytes = new List<byte>();
                                     foreach (var item in shorts)
-                                        bytes.AddRange(ModbusRTUmaster.ValToBytes(item));
+                                        bytes.AddRange(SocetModbusTCPmaster.ValToBytes(item));
 
                                     client.WriteMultipleRegister(IdTrans, unit, (ushort)addrStart, bytes.ToArray(), ref result);
                                 }
@@ -536,7 +506,7 @@ namespace Connector.Driver
                             case eDataType.UShort:
                                 if (count == 1)
                                 {
-                                    byte[] bytes = ModbusRTUmaster.ValToBytes(ushort.Parse(newValues[0]));
+                                    byte[] bytes = SocetModbusTCPmaster.ValToBytes(ushort.Parse(newValues[0]));
                                     client.WriteSingleRegister(IdTrans, unit, (ushort)addrStart, bytes, ref result);
                                 }
                                 else
@@ -544,7 +514,7 @@ namespace Connector.Driver
                                     ushort[] shorts = newValues.Select(x => ushort.Parse(x)).ToArray();
                                     List<byte> bytes = new List<byte>();
                                     foreach (var item in shorts)
-                                        bytes.AddRange(ModbusRTUmaster.ValToBytes(item));
+                                        bytes.AddRange(SocetModbusTCPmaster.ValToBytes(item));
 
                                     client.WriteMultipleRegister(IdTrans, unit, (ushort)addrStart, bytes.ToArray(), ref result);
                                 }
@@ -555,7 +525,7 @@ namespace Connector.Driver
                                     int[] ints = newValues.Select(x => int.Parse(x)).ToArray();
                                     List<byte> bytes = new List<byte>();
                                     foreach (var item in ints)
-                                        bytes.AddRange(ModbusRTUmaster.ValToBytes(item, addrOrder != 0));
+                                        bytes.AddRange(SocetModbusTCPmaster.ValToBytes(item, addrOrder != 0));
 
                                     client.WriteMultipleRegister(IdTrans, unit, (ushort)addrStart, bytes.ToArray(), ref result);
                                 }
@@ -563,10 +533,10 @@ namespace Connector.Driver
 
                             case eDataType.Float:
                                 {
-                                    float[] floats = newValues.Select(x => ModbusRTUmaster.FloatFromString(x)).ToArray();
+                                    float[] floats = newValues.Select(x => SocetModbusTCPmaster.FloatFromString(x)).ToArray();
                                     List<byte> bytes = new List<byte>();
                                     foreach (var item in floats)
-                                        bytes.AddRange(ModbusRTUmaster.ValToBytes(item, addrOrder != 0));
+                                        bytes.AddRange(SocetModbusTCPmaster.ValToBytes(item, addrOrder != 0));
 
                                     client.WriteMultipleRegister(IdTrans, unit, (ushort)addrStart, bytes.ToArray(), ref result);
                                 }
@@ -574,10 +544,10 @@ namespace Connector.Driver
 
                             case eDataType.Double:
                                 {
-                                    double[] doubles = newValues.Select(x => ModbusRTUmaster.DoubleFromString(x)).ToArray();
+                                    double[] doubles = newValues.Select(x => SocetModbusTCPmaster.DoubleFromString(x)).ToArray();
                                     List<byte> bytes = new List<byte>();
                                     foreach (var item in doubles)
-                                        bytes.AddRange(ModbusRTUmaster.ValToBytes(item, addrOrder != 0));
+                                        bytes.AddRange(SocetModbusTCPmaster.ValToBytes(item, addrOrder != 0));
 
                                     client.WriteMultipleRegister(IdTrans, unit, (ushort)addrStart, bytes.ToArray(), ref result);
                                 }
@@ -594,12 +564,12 @@ namespace Connector.Driver
                 // Есть ли ошибки в ответе?
                 if (client.statusLastAnswer != 0)
                 {
-                    if (client.statusLastAnswer == ModbusRTUmaster.excExceptionConnectionLost)
+                    if (client.statusLastAnswer == SocetModbusTCPmaster.excExceptionConnectionLost)
                     {
-                        log?.Invoke(new CodeMessage(-1, $"Есть ошибки в ответе: ModbusRTUmaster.excExceptionConnectionLost for {address}"));
+                        log?.Invoke(new CodeMessage(-1, $"Есть ошибки в ответе: SocetModbusTCP.excExceptionConnectionLost for {address}"));
                         return new TagResult(0, eTagCode.breakError);
                     }
-                    return new TagResult(0, -client.statusLastAnswer, ModbusRTUmaster.exc[client.statusLastAnswer]);
+                    return new TagResult(0, -client.statusLastAnswer, SocetModbusTCPmaster.exc[client.statusLastAnswer]);
                 }
 
                 return new TagResult(newValue, eTagCode.good);

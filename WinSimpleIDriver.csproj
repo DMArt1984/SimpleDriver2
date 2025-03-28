@@ -87,10 +87,10 @@
     <Compile Include="Connector\Device.cs" />
     <Compile Include="Connector\DeviceNet.cs" />
     <Compile Include="Connector\Driver\Formula.cs" />
-    <Compile Include="Connector\Driver\HylasoftOPCUA.cs" />
-    <Compile Include="Connector\Driver\ModbusRTUClient.cs" />
-    <Compile Include="Connector\Driver\ModbusTCPClient.cs" />
-    <Compile Include="Connector\Driver\MSSQLclient.cs" />
+    <Compile Include="Connector\Driver\HylasoftOPCUAAdapter.cs" />
+    <Compile Include="Connector\Driver\ModbusRTUAdapter.cs" />
+    <Compile Include="Connector\Driver\ModbusTCPAdapter.cs" />
+    <Compile Include="Connector\Driver\MSSQLAdapter.cs" />
     <Compile Include="Connector\Include.cs" />
     <Compile Include="Connector\SGT\DeviceFactory.cs" />
     <Compile Include="Connector\SGT\forSource.cs" />
@@ -149,7 +149,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DML\Settings.cs" />
-    <Compile Include="DML\SimpleConverter.cs" />
+    <Compile Include="Connector\Driver\Component\SimpleConverter.cs" />
     <EmbeddedResource Include="Editor\FormDesign.resx">
       <DependentUpon>FormDesign.cs</DependentUpon>
     </EmbeddedResource>
