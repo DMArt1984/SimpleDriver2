@@ -83,7 +83,7 @@ namespace Connector.Driver
             try
             {
                 if (String.IsNullOrWhiteSpace(parameters) == false)
-                    UseParameters(ParamsToDic(parameters));
+                    UseNetParameters(ParamsToDic(parameters));
 
                 client = new SocetModbusTCPmaster();
                 client.log = InnerTrafficLog;
@@ -102,7 +102,7 @@ namespace Connector.Driver
             try
             {
                 if (String.IsNullOrWhiteSpace(parameters) == false)
-                    UseParameters(ParamsToDic(parameters));
+                    UseNetParameters(ParamsToDic(parameters));
 
                 if (client == null)
                     return CodeMessageFactory.FromEnumX(eSQLStatus.noClient);

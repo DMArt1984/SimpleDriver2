@@ -23,18 +23,6 @@ namespace Connector.SGT
         public bool Connected => _connected;
         bool _connected = false;
 
-        //List<ITagClient> tags = new List<ITagClient>(); // for parallel 
-
-        // =================================================================================
-
-        //public DeviceReal()
-        //{
-        //    log?.Invoke(new CodeMessage(0, "Real Device created!"));
-        //}
-
-        //~DeviceReal() { } // ничего не делает
-
-        // Лучше:
         public override void Dispose()
         {
             Disconnect();
@@ -54,10 +42,6 @@ namespace Connector.SGT
             _connected = false;
             return new CodeMessage();
         }
-
-        // ===================================================================================
-
-        //object locker = new object();
 
     }
 }

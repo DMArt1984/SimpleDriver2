@@ -24,17 +24,17 @@ namespace Connector
     interface IDevice
     {
         CodeMessage CreateClient(string parameters);
-        void RemoveClient();
+        CodeMessage RemoveClient();
         void Request<T>(List<T> tags) where T : ITagClient;
     }
 
-    interface ITrafficLog
+    interface IControlTrafficLog
     {
         bool EnableTLog { get; set; }
         bool SupportTLog { get; }
     }
 
-    class Device : IDevice, ITrafficLog
+    class Device : IDevice, IControlTrafficLog
     {
         const int version = 1000; // Версия
 
@@ -58,9 +58,6 @@ namespace Connector
             log?.Invoke(new CodeMessage(0, "Device created!"));
         }
 
-        ~Device() { } // ничего не делает
-
-        // Лучше:
         public virtual void Dispose()
         {
             RemoveClient();
@@ -75,9 +72,9 @@ namespace Connector
         }
 
         // Удаление клиента
-        public virtual void RemoveClient()
+        public virtual CodeMessage RemoveClient()
         {
-
+            return new CodeMessage();
         }
 
         // ------------------------------------------------------------------------
@@ -175,6 +172,8 @@ namespace Connector
             //...
 
         }
+
+        // =====================================================================================
 
         private bool IsRead(ITagClient tag)
         {

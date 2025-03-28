@@ -58,6 +58,7 @@ namespace Connector.SGT
 
     class Source : BaseLogger, ISource
     {
+
         public ushort Id { get; } // ID источника данных
         public string title { get; } // Название источника
         public string description { get; } // Описание источника
@@ -177,8 +178,11 @@ namespace Connector.SGT
             _deviceFactory = deviceFactory;
             _device = _deviceFactory.CreateDevice(driverType, address);
 
-            (_device as DeviceReal).logTraffic = LogTraffic;
-            (_device as DeviceReal).log = Log;
+            if (_device is Device dr)
+            {
+                dr.logTraffic = LogTraffic;
+                dr.log = Log;
+            }
 
             this.Id = Id;
             this.title = title;
@@ -194,14 +198,17 @@ namespace Connector.SGT
 
         ~Source()
         {
-            (_device as DeviceReal).logTraffic = null;
-            (_device as DeviceReal).log = null;
+            if (_device is Device dr)
+            {
+                dr.logTraffic = null;
+                dr.log = null;
+            }
         }
 
         private void SetClient(string address)
         {
             logger.Info($" step3: CreateClient(paramClient)", eMessageCategory.Source);
-            CodeMessage result = this._device.CreateClient(address);
+            CodeMessage result = (_device as Device)?.CreateClient(address) ?? new CodeMessage(-1, "Invalid device");
             if (result.code != 0)
                 ActiveError = result;
             Status = (result.code == 0) ? eSourceStatus.closed : eSourceStatus.noClient;
@@ -515,6 +522,8 @@ namespace Connector.SGT
         }
 
         // Таймер переоткытия
+
+
         private void TimerCB(object source, ElapsedEventArgs e)
         {
             TimerCB_Inner();
@@ -523,16 +532,19 @@ namespace Connector.SGT
         private void TimerCB_Inner()
         {
             logger.Info("REOPEN: TimerCB", eMessageCategory.Source);
+
+            var localTimer = Interlocked.Exchange(ref timerReopen, null);
+            if (localTimer != null)
+            {
+                localTimer.Stop();
+                localTimer.Dispose();
+            }
+
             if (AutoOpenAfterFail == false || UserUseClosed == true)
             {
                 logger.Info("REOPEN: AutoOpenAfterFail == false...", eMessageCategory.Source);
-                timerReopen?.Stop();
-                timerReopen?.Close();
-                timerReopen = null;
                 return;
             }
-
-            timerReopen = null;
 
             if (Off == false)
             {
@@ -544,7 +556,6 @@ namespace Connector.SGT
                 logger.Info("REOPEN: Off = false...", eMessageCategory.Source);
                 Off = false;
             }
-
         }
 
         void WaitProcess()
@@ -555,7 +566,7 @@ namespace Connector.SGT
             {
                 // ждем выполнение текущего запроса...
                 logger.Info("wait process...", eMessageCategory.Source);
-                Task.Delay(100);
+                Thread.Sleep(100);
                 TimeSpan ts = DateTime.Now.Subtract(dt);
                 if (ts.TotalMilliseconds > 5000)
                     break;
@@ -807,17 +818,17 @@ namespace Connector.SGT
 
         public void SetLogTraffic(bool enable)
         {
-            (_device as ITrafficLog).EnableTLog = enable;
+            (_device as IControlTrafficLog).EnableTLog = enable;
         }
 
         public bool IsLogTraffic()
         {
-            return (_device as ITrafficLog).EnableTLog;
+            return (_device as IControlTrafficLog).EnableTLog;
         }
 
         public bool IsSupportLog()
         {
-            return (_device as ITrafficLog).SupportTLog;
+            return (_device as IControlTrafficLog).SupportTLog;
         }
 
         void LogTraffic(string message)

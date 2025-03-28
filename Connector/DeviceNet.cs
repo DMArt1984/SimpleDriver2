@@ -20,14 +20,12 @@ namespace Connector.SGT
     class DeviceNet : DeviceReal, INetDevice
     {
         const int version = 1000; // Версия
+
         const string DEFAULTHOST = "localhost";
 
         protected int timeout = 100; // время ожидания ответа
-
         protected string host = DEFAULTHOST; // host/ip
-
         protected int port = 502;
-
         protected byte unitIdentifier = 1;
 
         public bool disableHostForOpen = false;
@@ -46,10 +44,6 @@ namespace Connector.SGT
         }
 
         // Проверка нужного сервиса
-        //
-        // Проверяет, открыт ли конкретный порт(например, 502 для Modbus TCP).
-        // Использует TCP-соединение.
-        // Выявляет не только доступность хоста, но и то, что служба(сервер) работает.
         public CodeMessage TryTcpConnect(string host = "", int port = 0, int timeout = 0)
         {
             if (string.IsNullOrWhiteSpace(host))
@@ -80,7 +74,7 @@ namespace Connector.SGT
         }
 
         // Получение произвольных параметров
-        protected virtual bool UseParameters(Dictionary<string, string> dic)
+        protected virtual bool UseNetParameters(Dictionary<string, string> dic)
         {
             if (dic == null)
                 return false;

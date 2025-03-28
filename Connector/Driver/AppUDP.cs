@@ -112,7 +112,7 @@ namespace Connector.Driver
             try
             {
                 if (String.IsNullOrWhiteSpace(parameters) == false)
-                    UseParameters(ParamsToDic(parameters));
+                    UseNetParameters(ParamsToDic(parameters));
 
                 //receiveThread = new Thread(new ThreadStart(ReceiveMessage));
                 //receiveThread.IsBackground = true;
@@ -128,7 +128,7 @@ namespace Connector.Driver
             }
         }
 
-        protected override bool UseParameters(Dictionary<string, string> dic)
+        protected override bool UseNetParameters(Dictionary<string, string> dic)
         {
             try
             {
@@ -155,7 +155,7 @@ namespace Connector.Driver
             try
             {
                 if (String.IsNullOrWhiteSpace(parameters) == false)
-                    UseParameters(ParamsToDic(parameters));
+                    UseNetParameters(ParamsToDic(parameters));
 
                 if (cmd == UDPcommand.Run)
                 {
