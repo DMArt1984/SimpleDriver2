@@ -13,6 +13,8 @@ namespace Connector.SGT
         sourceOpened = 100,
         sourceClosed = 200,
 
+        emptyRequest = -30, // пустой запрос
+
         sourceFail = -200,
         groupOff = 300,
         groupOn = 301,
@@ -24,7 +26,7 @@ namespace Connector.SGT
         connectionTimedOut = -70,
         tagTimeout = -71,
         noWrite = -80,
-        noData = -30,
+        noData = -31,
         breakError = -600, // возможно ошибка источника
         inconsistency = -90, // не соответствие типа данных
 
@@ -45,6 +47,9 @@ namespace Connector.SGT
 
                 case eTagCode.created:
                     return "Создан";
+
+                case eTagCode.emptyRequest:
+                    return "Пустой запрос";
 
                 case eTagCode.tagOff:
                     return "Тег отключен";

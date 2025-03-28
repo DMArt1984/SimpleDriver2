@@ -83,6 +83,7 @@
     <Compile Include="Connector\Driver\Component\ModbusRTUmaster.cs" />
     <Compile Include="Connector\Driver\Component\Pinger.cs" />
     <Compile Include="Connector\Driver\Component\SocetModbusTCPmaster.cs" />
+    <Compile Include="Connector\Driver\Component\SQLClient.cs" />
     <Compile Include="Connector\Driver\Component\StringFormula.cs" />
     <Compile Include="Connector\Device.cs" />
     <Compile Include="Connector\DeviceNet.cs" />

@@ -109,9 +109,9 @@ namespace Connector.Driver
                     UseParameters(ParamsToDic(parameters));
 
                 if (client == null)
-                    return CodeMessageFactory.FromEnumX(eSourceStatus.noClient);
+                    return CodeMessageFactory.FromEnumX(eSQLStatus.noClient);
                 client.Connect(portName, baudrate, parity, dataBits, stopBits, unitCOMidentifier, _timeout);
-                return client.connected ? new CodeMessage(0,"") : CodeMessageFactory.FromEnumX(eSourceStatus.errOpen);
+                return client.connected ? new CodeMessage(0,"") : CodeMessageFactory.FromEnumX(eSQLStatus.errOpen);
             }
             catch (Exception ex)
             {
@@ -148,9 +148,9 @@ namespace Connector.Driver
             try
             {
                 if (client == null)
-                    return CodeMessageFactory.FromEnumX(eSourceStatus.noClient);
+                    return CodeMessageFactory.FromEnumX(eSQLStatus.noClient);
                 client.Disconnect();
-                return client.connected == false ? new CodeMessage() : CodeMessageFactory.FromEnumX(eSourceStatus.errClose);
+                return client.connected == false ? new CodeMessage() : CodeMessageFactory.FromEnumX(eSQLStatus.errClose);
             }
             catch (Exception ex)
             {

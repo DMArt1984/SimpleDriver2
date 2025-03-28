@@ -129,10 +129,10 @@ namespace Connector.Driver
             try
             {
                 if (client == null)
-                    return CodeMessageFactory.FromEnumX(eSourceStatus.noClient);
+                    return CodeMessageFactory.FromEnumX(eSQLStatus.noClient);
 
                 client.Dispose();
-                return client.Status == OpcStatus.NotConnected ? new CodeMessage(0, "") : CodeMessageFactory.FromEnumX(eSourceStatus.errClose);
+                return client.Status == OpcStatus.NotConnected ? new CodeMessage(0, "") : CodeMessageFactory.FromEnumX(eSQLStatus.errClose);
             }
             catch (Exception ex)
             {

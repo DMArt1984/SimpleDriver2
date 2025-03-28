@@ -147,11 +147,11 @@ namespace Connector.Driver
             try
             {
                 if (client == null)
-                    return CodeMessageFactory.FromEnumX(eSourceStatus.noClient);
+                    return CodeMessageFactory.FromEnumX(eSQLStatus.noClient);
 
                 fronts = new Dictionary<string, bool>();
                 client.Close();
-                return client.State == System.Data.ConnectionState.Closed ? new CodeMessage() : CodeMessageFactory.FromEnumX(eSourceStatus.errClose);
+                return client.State == System.Data.ConnectionState.Closed ? new CodeMessage() : CodeMessageFactory.FromEnumX(eSQLStatus.errClose);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using Connector.SGT;
+﻿using Connector.Driver;
+using Connector.SGT;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace LogCodeMessage
 {
     public static class CodeMessageFactory
     {
-        const int version = 1100;
+        const int version = 1120;
         public static CodeMessage FromEnum(Enum value)
         {
             int code = Convert.ToInt32(value);
@@ -28,6 +29,10 @@ namespace LogCodeMessage
             } else if (value is eSourceStatus sourceStatus)
             {
                 message = sourceStatus.GetText();
+            }
+            else if (value is eSQLStatus sqlStatus)
+            {
+                message = sqlStatus.GetText();
             }
 
             return new CodeMessage(code, message);
