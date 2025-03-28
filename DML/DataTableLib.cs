@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Connector;
+using Connector.SGT;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -7,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinSimpleIDriver;
 using WinSimpleIDriver.Connector;
-using WinSimpleIDriver.Connector.SGT;
 
 namespace DML
 {

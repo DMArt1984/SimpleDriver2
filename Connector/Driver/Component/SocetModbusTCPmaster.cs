@@ -10,7 +10,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WinSimpleIDriver.Connector.Driver.Component
+namespace Connector.Driver.Component
 {
     enum MBDisplayFormat
     {

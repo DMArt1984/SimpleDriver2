@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WinSimpleIDriver.Connector.SGT;
 using WinSimpleIDriver.DML;
 
 namespace WinSimpleIDriver.Editor

@@ -92,6 +92,7 @@
     <Compile Include="Connector\Driver\ModbusTCPClient.cs" />
     <Compile Include="Connector\Driver\MSSQLclient.cs" />
     <Compile Include="Connector\Include.cs" />
+    <Compile Include="Connector\SGT\DeviceFactory.cs" />
     <Compile Include="Connector\SGT\forSource.cs" />
     <Compile Include="Connector\SGT\forTag.cs" />
     <Compile Include="Connector\SGT\Group.cs" />
@@ -99,8 +100,8 @@
     <Compile Include="Connector\SGT\Tag.cs" />
     <Compile Include="Connector\Driver\TestTable.cs" />
     <Compile Include="DML\BaseLogger.cs" />
-    <Compile Include="DML\CodeMessage.cs" />
-    <Compile Include="DML\CodeMessageFactory.cs" />
+    <Compile Include="LogCodeMessage\CodeMessage.cs" />
+    <Compile Include="LogCodeMessage\CodeMessageFactory.cs" />
     <Compile Include="DML\ColorConverterHelper.cs" />
     <Compile Include="DML\DataTableLib.cs" />
     <Compile Include="DML\FileControl.cs" />

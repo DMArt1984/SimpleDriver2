@@ -1,15 +1,15 @@
-﻿using Connector.SGT;
+﻿using Connector.Driver.Component;
+using Connector.SGT;
 using DML.Log;
+using LogCodeMessage;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WinSimpleIDriver.Connector.Driver.Component;
-using WinSimpleIDriver.Connector.SGT;
 
-namespace WinSimpleIDriver.Connector.Driver
+namespace Connector.Driver
 {
     class ModbusRTUClient : Device
     {

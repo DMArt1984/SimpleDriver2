@@ -1,14 +1,14 @@
 ﻿using Connector.SGT;
 using DML.Log;
+using LogCodeMessage;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WinSimpleIDriver.Connector.SGT;
 
-namespace WinSimpleIDriver.Connector.Driver
+namespace Connector.Driver
 {
     class MSSQLclient : DeviceNet
     {

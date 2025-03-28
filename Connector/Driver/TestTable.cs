@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WinSimpleIDriver.Connector.Driver
+namespace Connector.Driver
 {
     class TestTable : Device
     {

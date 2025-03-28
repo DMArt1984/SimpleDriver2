@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using WinSimpleIDriver.Connector.SGT;
-using WinSimpleIDriver.Connector.Driver.Component;
 using Connector.SGT;
+using Connector.Driver.Component;
 
-namespace WinSimpleIDriver.Connector.Driver
+namespace Connector.Driver
 {
     class Formula : Device
     {

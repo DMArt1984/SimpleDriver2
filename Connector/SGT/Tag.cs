@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Connector.SGT;
 using DML;
 using DML.Log;
+using LogCodeMessage;
 
-namespace WinSimpleIDriver.Connector.SGT
+namespace Connector.SGT
 {
     public enum eDataType // типы данных
     {

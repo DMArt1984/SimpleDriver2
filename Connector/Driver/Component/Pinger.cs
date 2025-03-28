@@ -1,9 +1,10 @@
 ﻿using DML.Log;
+using LogCodeMessage;
 using System;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace WinSimpleIDriver.Connector.Driver.Component
+namespace Connector.Driver.Component
 {
     class Pinger
     {

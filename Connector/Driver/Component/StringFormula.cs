@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WinSimpleIDriver.Connector.Driver.Component
+namespace Connector.Driver.Component
 {
     class StringFormula
     {

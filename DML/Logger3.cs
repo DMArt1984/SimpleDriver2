@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogCodeMessage;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Text;

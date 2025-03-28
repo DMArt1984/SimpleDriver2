@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WinSimpleIDriver.Connector.SGT;
 
-namespace WinSimpleIDriver.Connector.Driver
+namespace Connector.Driver
 {
     class AppDevice : Device
     {

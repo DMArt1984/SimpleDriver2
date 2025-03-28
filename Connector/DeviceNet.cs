@@ -1,4 +1,6 @@
-﻿using DML.Log;
+﻿using Connector.Driver.Component;
+using DML.Log;
+using LogCodeMessage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +8,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WinSimpleIDriver.Connector.Driver.Component;
-using WinSimpleIDriver.Connector.SGT;
 
-namespace WinSimpleIDriver.Connector
+namespace Connector
 {
     public interface INetDevice
     {

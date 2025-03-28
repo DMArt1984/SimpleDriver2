@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WinSimpleIDriver.Connector.SGT;
 using DML.Log;
 using Connector.SGT;
+using LogCodeMessage;
 
-namespace WinSimpleIDriver.Connector
+namespace Connector
 {
     public enum eDriverType // тип драйвера
     {

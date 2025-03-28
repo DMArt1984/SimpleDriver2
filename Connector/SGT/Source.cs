@@ -6,15 +6,14 @@ using System.Timers;
 using System.Threading.Tasks;
 using DML.Log;
 using System.Windows.Forms;
-using WinSimpleIDriver.Connector.Driver;
 using System.Threading;
 using System.Collections.Concurrent;
 using DML;
-using Connector.SGT;
+using Connector.Driver;
+using LogCodeMessage;
 
-namespace WinSimpleIDriver.Connector.SGT
+namespace Connector.SGT
 {
-    
 
     interface ISource
     {
@@ -57,38 +56,7 @@ namespace WinSimpleIDriver.Connector.SGT
         public DataGridViewCell statistic;
     }
 
-    public interface IDeviceFactory
-    {
-        IRealDevice CreateDevice(eDriverType driverType, string address);
-    }
-
     
-
-    public class DeviceFactory : IDeviceFactory
-    {
-        public IRealDevice CreateDevice(eDriverType driverType, string address)
-        {
-            switch (driverType)
-            {
-                case eDriverType.Formula:
-                    return new Formula();
-                case eDriverType.Application:
-                    return new AppDevice();
-                case eDriverType.ModbusTCPclient:
-                    return new ModbusTCPClient();
-                case eDriverType.ModbusRTUclient:
-                    return new ModbusRTUClient();
-                case eDriverType.AppUDP:
-                    return new AppUDP(address);
-                case eDriverType.MSSQLclient:
-                    return new MSSQLclient();
-                case eDriverType.OPCUAclient:
-                    return new HylasoftOPCUA();
-                default:
-                    return new Device();
-            }
-        }
-    }
 
     public class Source : BaseLogger, ISource
     {

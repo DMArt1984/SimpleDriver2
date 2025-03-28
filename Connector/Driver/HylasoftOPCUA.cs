@@ -9,9 +9,9 @@ using DML.Log;
 using Hylasoft.Opc.Common;
 using Hylasoft.Opc.Da;
 using Hylasoft.Opc.Ua;
-using WinSimpleIDriver.Connector.SGT;
+using LogCodeMessage;
 
-namespace WinSimpleIDriver.Connector.Driver
+namespace Connector.Driver
 {
     class HylasoftOPCUA : DeviceNet
     {

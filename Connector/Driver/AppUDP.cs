@@ -8,11 +8,11 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WinSimpleIDriver.Connector.SGT;
 using DML.Log;
 using Connector.SGT;
+using LogCodeMessage;
 
-namespace WinSimpleIDriver.Connector.Driver
+namespace Connector.Driver
 {
     class AppUDP: DeviceNet
     {

@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinSimpleIDriver.Connector;
-using WinSimpleIDriver.Connector.SGT;
 using DML.Log;
 using DML;
 using System.IO;

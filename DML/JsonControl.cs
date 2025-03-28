@@ -10,7 +10,7 @@ using System.IO;
 using System.Windows.Forms;
 using DML.Log;
 using WinSimpleIDriver.Connector;
-
+using Connector;
 
 namespace DML
 {

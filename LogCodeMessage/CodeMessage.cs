@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DML.Log
+namespace LogCodeMessage
 {
     /// <summary>
     /// Структура, содержащая код и сообщение
@@ -19,8 +19,6 @@ namespace DML.Log
             this.code = code;
             this.message = message;
         }
-
-        public bool OK => code == 0;
     }
 
     public interface ICodeMessage
