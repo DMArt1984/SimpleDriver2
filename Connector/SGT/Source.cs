@@ -441,7 +441,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 {
                     var retval = IsHostReachable();
                     if (retval == false)
-                        result = new CodeMessage((int)eTagCode.noPing, eTagCode.noPing.GetText());
+                        result = CodeMessageFactory.FromEnum(eTagCode.noPing);
                 } else
                 {
                     result = TryTcpConnect();
@@ -472,7 +472,7 @@ namespace WinSimpleIDriver.Connector.SGT
                     ClearCounterBreak(); // сброс неудачных запросов
 
                     // статусы тегов
-                    Tag.CodeMessageList(tags, new CodeMessage((int)eTagCode.sourceOpened, eTagCode.sourceOpened.GetText()));
+                    Tag.CodeMessageList(tags, CodeMessageFactory.FromEnum(eTagCode.sourceOpened));
 
                     if (AutoRequestAftereOpen) // автоматический запуск опроса
                         CyclicRequest = true;
@@ -485,7 +485,7 @@ namespace WinSimpleIDriver.Connector.SGT
                     ClearCounterBreak(); // сброс неудачных запросов
 
                     // статусы тегов
-                    Tag.CodeMessageList(tags, new CodeMessage((int)eTagCode.sourceFail, eTagCode.sourceFail.GetText()));
+                    Tag.CodeMessageList(tags, CodeMessageFactory.FromEnum(eTagCode.sourceFail));
 
                     OpenAfterFail();
                 }
@@ -524,7 +524,7 @@ namespace WinSimpleIDriver.Connector.SGT
                     logger.Info($"Источник ID={Id} {title} > Статусы тегов...", eMessageCategory.Source);
 
                     // статусы тегов
-                    Tag.CodeMessageList(tags, new CodeMessage((int)eTagCode.sourceClosed, eTagCode.sourceClosed.GetText()));
+                    Tag.CodeMessageList(tags, CodeMessageFactory.FromEnum(eTagCode.sourceClosed));
 
                     logger.Info($"Источник ID={Id} {title} > 5...", eMessageCategory.Source);
 
@@ -541,7 +541,7 @@ namespace WinSimpleIDriver.Connector.SGT
             } else
             {
                 // статусы тегов
-                Tag.CodeMessageList(tags, new CodeMessage((int)eTagCode.sourceClosed, eTagCode.sourceClosed.GetText()));
+                Tag.CodeMessageList(tags, CodeMessageFactory.FromEnum(eTagCode.sourceClosed));
             }
             return 1;
         }
@@ -641,7 +641,7 @@ namespace WinSimpleIDriver.Connector.SGT
                         WaitProcess(); // ждем завершения текущего запроса...
 
                         // статусы тегов
-                        Tag.CodeMessageList(tags, new CodeMessage((int)eTagCode.sourceOpened, eTagCode.sourceOpened.GetText()));
+                        Tag.CodeMessageList(tags, CodeMessageFactory.FromEnum(eTagCode.sourceOpened));
                     }
                     EventStatus();
                 }
@@ -711,7 +711,7 @@ namespace WinSimpleIDriver.Connector.SGT
             if (counterBreak >= MaxBreak)
             {
                 ClearCounterBreak();
-                ActiveError = new CodeMessage((int)eTagCode.breakError, eTagCode.breakError.GetText());
+                ActiveError = CodeMessageFactory.FromEnum(eTagCode.breakError);
                 logger.Info($"NEW BREAK = ActiveError", eMessageCategory.Source);
                 //...
             }
@@ -914,7 +914,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 return new CodeMessage(0,"");
 
             if ((_device as DeviceNet).disableHostForOpen)
-                return (IsHostReachable()) ? new CodeMessage(0, "") : new CodeMessage((int)eTagCode.noPing, "No ping");
+                return (IsHostReachable()) ? new CodeMessage(0, "") : CodeMessageFactory.FromEnum(eTagCode.noPing);
 
             return (_device as INetDevice).TryTcpConnect("", 0, 0);
         }

@@ -278,13 +278,13 @@ namespace WinSimpleIDriver.Connector.SGT
         public void SendOn()
         {
             // статусы тегов
-            Tag.CodeMessageList(tags, new CodeMessage((int)eTagCode.groupOn, eTagCode.groupOn.GetText()));
+            Tag.CodeMessageList(tags, CodeMessageFactory.FromEnum(eTagCode.groupOn));
         }
 
         public void SendOff()
         {
             // статусы тегов
-            Tag.CodeMessageList(tags, new CodeMessage((int)eTagCode.groupOff, eTagCode.groupOff.GetText()));
+            Tag.CodeMessageList(tags, CodeMessageFactory.FromEnum(eTagCode.groupOff));
         }
 
         // ===============================================================================

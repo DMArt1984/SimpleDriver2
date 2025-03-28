@@ -594,7 +594,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 
             }
         }
-        CodeMessage _codeMessage = new CodeMessage((int)eTagCode.created, eTagCode.created.GetText());
+        CodeMessage _codeMessage = CodeMessageFactory.FromEnum(eTagCode.created);
 
         public CodeMessage LastError => _lastError;
         CodeMessage _lastError;
