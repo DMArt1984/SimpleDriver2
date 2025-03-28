@@ -594,7 +594,7 @@ namespace WinSimpleIDriver.Connector.SGT
                 
             }
         }
-        CodeMessage _codeMessage = CodeMessageFactory.FromEnum(eTagCode.created);
+        CodeMessage _codeMessage = CodeMessageFactory.FromEnumX(eTagCode.created);
 
         public CodeMessage LastError => _lastError;
         CodeMessage _lastError;
@@ -618,10 +618,10 @@ namespace WinSimpleIDriver.Connector.SGT
         {
             if (Off)
             {
-                codeMessage = CodeMessageFactory.FromEnum(eTagCode.tagOff);
+                codeMessage = CodeMessageFactory.FromEnumX(eTagCode.tagOff);
             } else if (noSetTagON == false)
             {
-                codeMessage = CodeMessageFactory.FromEnum(eTagCode.tagOn);
+                codeMessage = CodeMessageFactory.FromEnumX(eTagCode.tagOn);
             }
             eventParams?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
         }
@@ -655,11 +655,11 @@ namespace WinSimpleIDriver.Connector.SGT
             SimValue = value;
             if (SimEnable)
             {
-                codeMessage = CodeMessageFactory.FromEnum(eTagCode.good);
+                codeMessage = CodeMessageFactory.FromEnumX(eTagCode.good);
                 Value = value;
             } else
             {
-                codeMessage = CodeMessageFactory.FromEnum(eTagCode.created);
+                codeMessage = CodeMessageFactory.FromEnumX(eTagCode.created);
             }
         }
 

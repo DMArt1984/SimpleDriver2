@@ -15,6 +15,13 @@ namespace DML.Log
             int code = Convert.ToInt32(value);
             string message = value.ToString();
 
+            return new CodeMessage(code, message);
+        }
+        public static CodeMessage FromEnumX(Enum value)
+        {
+            int code = Convert.ToInt32(value);
+            string message = value.ToString();
+
             if (value is eTagCode tagCode)
             {
                 message = tagCode.GetText();

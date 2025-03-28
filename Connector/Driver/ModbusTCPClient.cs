@@ -104,9 +104,9 @@ namespace WinSimpleIDriver.Connector.Driver
                     UseParameters(ParamsToDic(parameters));
 
                 if (client == null)
-                    return CodeMessageFactory.FromEnum(eSourceStatus.noClient);
+                    return CodeMessageFactory.FromEnumX(eSourceStatus.noClient);
                 client.Connect(host, port, (ushort)timeout);
-                return client.connected ? new CodeMessage() : CodeMessageFactory.FromEnum(eSourceStatus.errOpen);
+                return client.connected ? new CodeMessage() : CodeMessageFactory.FromEnumX(eSourceStatus.errOpen);
             }
             catch (Exception ex)
             {
@@ -119,9 +119,9 @@ namespace WinSimpleIDriver.Connector.Driver
             try
             {
                 if (client == null)
-                    return CodeMessageFactory.FromEnum(eSourceStatus.noClient);
+                    return CodeMessageFactory.FromEnumX(eSourceStatus.noClient);
                 client.Disconnect();
-                return client.connected == false ? new CodeMessage() : CodeMessageFactory.FromEnum(eSourceStatus.errClose);
+                return client.connected == false ? new CodeMessage() : CodeMessageFactory.FromEnumX(eSourceStatus.errClose);
             }
             catch (Exception ex)
             {
