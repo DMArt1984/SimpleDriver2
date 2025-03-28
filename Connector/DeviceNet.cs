@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Connector
+namespace Connector.SGT
 {
     public interface INetDevice
     {
@@ -17,7 +17,7 @@ namespace Connector
         CodeMessage TryTcpConnect(string hostUri, int portNumber, int timeoutMs);
     }
 
-    class DeviceNet : Device, INetDevice
+    class DeviceNet : DeviceReal, INetDevice
     {
         const int version = 1000; // Версия
         const string DEFAULTHOST = "localhost";

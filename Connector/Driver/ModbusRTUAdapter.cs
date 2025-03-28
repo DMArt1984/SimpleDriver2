@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Connector.Driver
 {
-    class ModbusRTUAdapter : Device
+    class ModbusRTUAdapter : DeviceReal
     {
         public const string driverName = "Modbus RTU Client";
 
@@ -60,7 +60,7 @@ namespace Connector.Driver
         public int baseAddress = 0; // 0 или 1
         ushort IdTrans = 1; // идентификатор сообщения
 
-        public override bool supportTLog { get; } = true;
+        public override bool SupportTLog { get; } = true;
         
         public ModbusRTUAdapter()
         {

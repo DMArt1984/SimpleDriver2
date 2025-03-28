@@ -50,7 +50,7 @@ namespace Connector.Driver
         }
     }
 
-    public class MSSQLclient : IDisposable
+    class MSSQLclient : IDisposable
     {
         public const int ver = 1057; // номер версии
         public const string defaultDataType = "[nchar](10) NULL";

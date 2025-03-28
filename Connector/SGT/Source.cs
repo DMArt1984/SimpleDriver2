@@ -56,9 +56,7 @@ namespace Connector.SGT
         public DataGridViewCell statistic;
     }
 
-    
-
-    public class Source : BaseLogger, ISource
+    class Source : BaseLogger, ISource
     {
         public ushort Id { get; } // ID источника данных
         public string title { get; } // Название источника
@@ -163,7 +161,7 @@ namespace Connector.SGT
         int counterFailReq = 0;
 
         // Устройство
-        private readonly IRealDevice _device;
+        private readonly IDevice _device;
         private readonly IDeviceFactory _deviceFactory;
 
         private eDriverType _driverType;
@@ -179,8 +177,8 @@ namespace Connector.SGT
             _deviceFactory = deviceFactory;
             _device = _deviceFactory.CreateDevice(driverType, address);
 
-            (_device as Device).logTraffic = LogTraffic;
-            (_device as Device).log = Log;
+            (_device as DeviceReal).logTraffic = LogTraffic;
+            (_device as DeviceReal).log = Log;
 
             this.Id = Id;
             this.title = title;
@@ -196,8 +194,8 @@ namespace Connector.SGT
 
         ~Source()
         {
-            (_device as Device).logTraffic = null;
-            (_device as Device).log = null;
+            (_device as DeviceReal).logTraffic = null;
+            (_device as DeviceReal).log = null;
         }
 
         private void SetClient(string address)
@@ -222,7 +220,7 @@ namespace Connector.SGT
         {
             try
             {
-                var dic = Device.ParamsToDic(address);
+                var dic = DeviceReal.ParamsToDic(address);
                 if (dic.ContainsKey("fails"))
                 {
                     MaxBreak = byte.Parse(dic["fails"]);
@@ -378,7 +376,14 @@ namespace Connector.SGT
                 {
                     // Connect
                     logger.Info($"Источник ID={Id} {title} > Соединение...", eMessageCategory.Source);
-                    result = this._device.Connect(Address);
+                    var xdevice = _device as IRealDevice;
+                    if (xdevice != null)
+                    {
+                        result = xdevice.Connect(Address);
+                    } else
+                    {
+                        result = new CodeMessage();
+                    }
                 } else
                 {
                     logger.Info($"Источник ID={Id} {title} > Нет связи с хостом/IP", eMessageCategory.Source);
@@ -432,7 +437,15 @@ namespace Connector.SGT
                 logger.Info($"Источник ID={Id} {title} > Ждем...", eMessageCategory.Source);
                 WaitProcess(); // ждем завершения текущего запроса...
 
-                CodeMessage result = this._device.Disconnect();
+                var xdevice = _device as IRealDevice;
+                CodeMessage result = new CodeMessage();
+                if (xdevice != null)
+                {
+                    result = xdevice.Disconnect();
+                } else
+                {
+
+                }
                 if (result.code != 0)
                     ActiveError = result;
 
@@ -794,17 +807,17 @@ namespace Connector.SGT
 
         public void SetLogTraffic(bool enable)
         {
-            (_device as ITrafficLog).enableTLog = enable;
+            (_device as ITrafficLog).EnableTLog = enable;
         }
 
         public bool IsLogTraffic()
         {
-            return (_device as ITrafficLog).enableTLog;
+            return (_device as ITrafficLog).EnableTLog;
         }
 
         public bool IsSupportLog()
         {
-            return (_device as ITrafficLog).supportTLog;
+            return (_device as ITrafficLog).SupportTLog;
         }
 
         void LogTraffic(string message)

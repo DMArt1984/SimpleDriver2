@@ -48,7 +48,7 @@ namespace Connector.Driver
         public int baseAddress = 0; // 0 или 1
         ushort IdTrans = 1; // идентификатор сообщения
 
-        public override bool supportTLog { get; } = true;
+        public override bool SupportTLog { get; } = true;
         
         //public ModbusTCPClient(string Host, int port = 502, byte slaveID = 1, int timeout = 100)
         //{

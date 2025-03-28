@@ -66,7 +66,7 @@ namespace Connector.Driver
         private object sync = new object();
 
         // Лог
-        public override bool supportTLog { get; } = true;
+        public override bool SupportTLog { get; } = true;
 
         // ===================================================================================================
 

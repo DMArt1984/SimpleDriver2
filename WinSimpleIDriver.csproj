@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Architecture\EditorControl.cs" />
+    <Compile Include="Connector\Device.cs" />
     <Compile Include="Connector\Driver\AppDevice.cs" />
     <Compile Include="Connector\Driver\AppUDP.cs" />
     <Compile Include="Connector\Driver\Component\ModbusRTUmaster.cs" />
@@ -85,7 +86,7 @@
     <Compile Include="Connector\Driver\Component\SocetModbusTCPmaster.cs" />
     <Compile Include="Connector\Driver\Component\SQLClient.cs" />
     <Compile Include="Connector\Driver\Component\StringFormula.cs" />
-    <Compile Include="Connector\Device.cs" />
+    <Compile Include="Connector\DeviceReal.cs" />
     <Compile Include="Connector\DeviceNet.cs" />
     <Compile Include="Connector\Driver\Component\StringUnpack.cs" />
     <Compile Include="Connector\Driver\FormulaAdapter.cs" />

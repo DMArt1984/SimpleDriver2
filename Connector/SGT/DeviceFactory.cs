@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Connector.SGT
 {
-    public interface IDeviceFactory
+    interface IDeviceFactory
     {
-        IRealDevice CreateDevice(eDriverType driverType, string address);
+        IDevice CreateDevice(eDriverType driverType, string address);
     }
 
-    public class DeviceFactory : IDeviceFactory
+    class DeviceFactory : IDeviceFactory
     {
-        public IRealDevice CreateDevice(eDriverType driverType, string address)
+        public IDevice CreateDevice(eDriverType driverType, string address)
         {
             switch (driverType)
             {
@@ -33,7 +33,7 @@ namespace Connector.SGT
                 case eDriverType.OPCUAclient:
                     return new HylasoftOPCUAAdapter();
                 default:
-                    return new Device();
+                    return new DeviceReal();
             }
         }
     }

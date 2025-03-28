@@ -21,32 +21,26 @@ namespace Connector
         OPCUAclient = 40
     }
 
-    public interface IRealDevice
+    interface IDevice
     {
         CodeMessage CreateClient(string parameters);
         void RemoveClient();
-        CodeMessage Connect(string parameters);
-        CodeMessage Disconnect();
-        bool Connected { get; }
         void Request<T>(List<T> tags) where T : ITagClient;
-
     }
 
     interface ITrafficLog
     {
-        bool enableTLog { get; set; }
-        bool supportTLog { get; }
+        bool EnableTLog { get; set; }
+        bool SupportTLog { get; }
     }
 
-    class Device : IRealDevice, ITrafficLog
+    class Device : IDevice, ITrafficLog
     {
         const int version = 1000; // Версия
 
-        public bool Connected => _connected;
-        bool _connected = false;
 
-        public bool enableTLog { get; set; } = false; // разрешить вести лог
-        public virtual bool supportTLog { get; } = false;
+        public bool EnableTLog { get; set; } = false; // разрешить вести лог
+        public virtual bool SupportTLog { get; } = false;
 
         List<ITagClient> tags = new List<ITagClient>(); // for parallel 
 
@@ -67,9 +61,8 @@ namespace Connector
         ~Device() { } // ничего не делает
 
         // Лучше:
-        public void Dispose()
+        public virtual void Dispose()
         {
-            Disconnect();
             RemoveClient();
         }
 
@@ -92,24 +85,10 @@ namespace Connector
         public void InnerTrafficLog(string message)
         {
             // лог сообщений от драйвера
-            if (enableTLog)
+            if (EnableTLog)
             {
                 logTraffic?.Invoke(message);
             }
-        }
-
-        // ------------------------------------------------------------------------
-
-        public virtual CodeMessage Connect(string parameters)
-        {
-            _connected = true;
-            return new CodeMessage();
-        }
-
-        public virtual CodeMessage Disconnect()
-        {
-            _connected = false;
-            return new CodeMessage();
         }
 
         // ===================================================================================
