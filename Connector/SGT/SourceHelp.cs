@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Connector.SGT
 {
+
     static class SourceHelp
     {
         // Справки
@@ -18,25 +19,25 @@ namespace Connector.SGT
                     break;
 
                 case eDriverType.Formula:
-                    return FormulaAdapter.GetHelpSource();
+                    return FormulaAdapter.HelpSource;
 
                 case eDriverType.Application:
-                    return AppDevice.GetHelpSource();
+                    return AppDevice.HelpSource;
 
                 case eDriverType.ModbusTCPclient:
-                    return ModbusTCPAdapter.GetHelpSource();
+                    return ModbusTCPAdapter.HelpSource;
 
                 case eDriverType.ModbusRTUclient:
-                    return ModbusRTUAdapter.GetHelpSource();
+                    return ModbusRTUAdapter.HelpSource;
 
                 case eDriverType.AppUDP:
-                    return AppUDP.GetHelpSource();
+                    return AppUDP.HelpSource;
 
                 case eDriverType.MSSQLclient:
-                    return MSSQLAdapter.GetHelpSource();
+                    return MSSQLAdapter.HelpSource;
 
                 case eDriverType.OPCUAclient:
-                    return HylasoftOPCUAAdapter.GetHelpSource();
+                    return HylasoftOPCUAAdapter.HelpSource;
             }
             return new Dictionary<string, string>();
         }
@@ -48,25 +49,25 @@ namespace Connector.SGT
                     break;
 
                 case eDriverType.Formula:
-                    return FormulaAdapter.GetHelpTag();
+                    return FormulaAdapter.HelpTag;
 
                 case eDriverType.Application:
-                    return AppDevice.GetHelpTag();
+                    return AppDevice.HelpTag;
 
                 case eDriverType.ModbusTCPclient:
-                    return ModbusTCPAdapter.GetHelpTag();
+                    return ModbusTCPAdapter.HelpTag;
 
                 case eDriverType.ModbusRTUclient:
-                    return ModbusRTUAdapter.GetHelpTag();
+                    return ModbusRTUAdapter.HelpTag;
 
                 case eDriverType.AppUDP:
-                    return AppUDP.GetHelpTag();
+                    return AppUDP.HelpTag;
 
                 case eDriverType.MSSQLclient:
-                    return MSSQLAdapter.GetHelpTag();
+                    return MSSQLAdapter.HelpTag;
 
                 case eDriverType.OPCUAclient:
-                    return HylasoftOPCUAAdapter.GetHelpTag();
+                    return HylasoftOPCUAAdapter.HelpTag;
             }
             return new Dictionary<string, string>();
         }

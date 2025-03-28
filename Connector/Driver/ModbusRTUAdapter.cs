@@ -17,7 +17,7 @@ namespace Connector.Driver
 
         // Справка
         // Описание адреса устройства
-        public override Dictionary<string, string> HelpSource
+        public static Dictionary<string, string> HelpSource
             => new Dictionary<string, string> {
                        { "Пример", "port=COM1;baudrate=9600;parity=None;dataBits=8;stopBits=2;timeout=500;unit=1;fails=10" },
                         { "port", "номер порта (COM1)" },
@@ -30,7 +30,7 @@ namespace Connector.Driver
                         { "fails", "количество ошибочных запросов перед отключением (переподключением) драйвера (=10)" }
                     };
         // Описание адреса тега для данного устройства
-        public override Dictionary<string, string> HelpTag
+        public static Dictionary<string, string> HelpTag
             => new Dictionary<string, string> {
                         { "Адрес Holding Register", "HR-3-1 = 40003 Order HighLow (read-write)" },
                         { "Адрес Input Register", "IR-1-0 = 30001 Order LowHigh (read)" },

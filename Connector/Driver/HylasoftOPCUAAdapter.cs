@@ -19,14 +19,14 @@ namespace Connector.Driver
 
         // Справка
         // Описание адреса устройства
-        public override Dictionary<string, string> HelpSource
+        public static Dictionary<string, string> HelpSource
             => new Dictionary<string, string> {
                         { "Пример 1", "opc.tcp://10.0.130.240:4840"},
                         { "Пример 2", "opc.tcp://127.0.0.1:62547/DataAccessServer"},
                         { "Пример 3", "opc.tcp://127.0.0.1:49320"}
                     };
         // Описание адреса тега для данного устройства
-        public override Dictionary<string, string> HelpTag
+        public static Dictionary<string, string> HelpTag
             => new Dictionary<string, string> {
                         { "Чтение данных 1", "Simulation Examples.Functions.Ramp1" }
                     };

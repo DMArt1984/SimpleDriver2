@@ -16,7 +16,7 @@ namespace Connector.Driver
 
         // Справка
         // Описание адреса устройства
-        public override Dictionary<string, string> HelpSource
+        public static Dictionary<string, string> HelpSource
             => new Dictionary<string, string> {
                         { "Пример", "ip=127.0.0.2;port=502;id=1;timeout=500;fails=10" },
                         { "ip", "сетевой адрес (=127.0.0.2)" },
@@ -26,7 +26,7 @@ namespace Connector.Driver
                         { "fails", "количество ошибочных запросов перед отключением (переподключением) драйвера (=10)" }
                     };
         // Описание адреса тега для данного устройства
-        public override Dictionary<string, string> HelpTag
+        public static Dictionary<string, string> HelpTag
             => new Dictionary<string, string> {
                         { "Адрес Holding Register", "HR-3-1 = 40003 Order HighLow (read-write)" },
                         { "Адрес Input Register", "IR-1-0 = 30001 Order LowHigh" },

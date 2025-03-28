@@ -28,6 +28,12 @@ namespace Connector
         void Request<T>(List<T> tags) where T : ITagClient;
     }
 
+    //public interface IHelp
+    //{
+    //    Dictionary<string, string> HelpSource { get; }
+    //    Dictionary<string, string> HelpTag { get; }
+    //}
+
     interface IControlTrafficLog
     {
         bool EnableTLog { get; set; }
@@ -52,15 +58,15 @@ namespace Connector
 
         // IHelp Реализация
 
-        public virtual Dictionary<string, string> HelpSource
-        {
-            get { return new Dictionary<string, string>(); }
-        }
+        //public virtual Dictionary<string, string> HelpSource
+        //{
+        //    get { return new Dictionary<string, string>(); }
+        //}
 
-        public virtual Dictionary<string, string> HelpTag
-        {
-            get { return new Dictionary<string, string>(); }
-        }
+        //public virtual Dictionary<string, string> HelpTag
+        //{
+        //    get { return new Dictionary<string, string>(); }
+        //}
 
         // =================================================================================
 

@@ -20,12 +20,12 @@ namespace Connector.Driver
 
         // Справка
         // Описание адреса устройства
-        public override Dictionary<string, string> HelpSource
+        public static Dictionary<string, string> HelpSource
             => new Dictionary<string, string> {
                         { "Пример", "ip=127.0.0.1;remotePort=8002;localPort=8001;timeout=500;wait=500" },
                     };
         // Описание адреса тега для данного устройства
-        public override Dictionary<string, string> HelpTag
+        public static Dictionary<string, string> HelpTag
             => new Dictionary<string, string> {
                         { "Пример", "ip=127.0.0.1;remotePort=8002;localPort=8001;timeout=500;wait=500" },
                     };

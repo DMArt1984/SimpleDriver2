@@ -23,12 +23,12 @@ namespace Connector.Driver
 
         // Справка
         // Описание адреса устройства
-        public override Dictionary<string, string> HelpSource
+        public static Dictionary<string, string> HelpSource
             => new Dictionary<string, string> {
                         { "Адрес", "Адресом должна быть пустая строка" }
                     };
         // Описание адреса тега для данного устройства
-        public override Dictionary<string, string> HelpTag
+        public static Dictionary<string, string> HelpTag
             => new Dictionary<string, string> {
                         { "app@title", "Название файла" },
                         { "source@count", "Количество источников" },

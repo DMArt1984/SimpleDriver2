@@ -16,7 +16,7 @@ namespace Connector.Driver
 
         // Справка
         // Описание адреса устройства
-        public override Dictionary<string, string> HelpSource
+        public static Dictionary<string, string> HelpSource
             => new Dictionary<string, string> {
                         { "Пример 1",  "user id=DM;" +
                                        "password=65536;server=WIN-6D9BE2IKJQB\\SQLEXPRESS;" +
@@ -26,7 +26,7 @@ namespace Connector.Driver
                         { "Пример 2", "Data Source=localhost\\SQLEXPRESS01;Initial Catalog=dbLkzPremix_ARH;User Id = Tech; Password = 123456"}
                     };
         // Описание адреса тега для данного устройства
-        public override Dictionary<string, string> HelpTag
+        public static Dictionary<string, string> HelpTag
             => new Dictionary<string, string> {
                         { "Чтение данных", "SELECT COUNT(*) FROM DRIVE" },
                         { "Обновление данных", "UPDATE DRIVE SET Text = 'Changed' WHERE ID=1" }
