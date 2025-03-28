@@ -609,7 +609,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
         public void ClearLastError()
         {
-            _lastError = new CodeMessage(0, "");
+            _lastError = new CodeMessage();
             CheckLastError();
             EventChangeCodeMessage();
         }

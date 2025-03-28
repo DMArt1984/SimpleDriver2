@@ -90,11 +90,11 @@ namespace WinSimpleIDriver.Connector.Driver
 
                 client = new ModbusRTUmaster();
                 client.log = InnerTrafficLog;
-                return new CodeMessage(0,"");
+                return new CodeMessage();
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -114,7 +114,7 @@ namespace WinSimpleIDriver.Connector.Driver
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -149,11 +149,11 @@ namespace WinSimpleIDriver.Connector.Driver
                 if (client == null)
                     return CodeMessageFactory.FromEnum(eSourceStatus.noClient);
                 client.Disconnect();
-                return client.connected == false ? new CodeMessage(0, "") : CodeMessageFactory.FromEnum(eSourceStatus.errClose);
+                return client.connected == false ? new CodeMessage() : CodeMessageFactory.FromEnum(eSourceStatus.errClose);
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 

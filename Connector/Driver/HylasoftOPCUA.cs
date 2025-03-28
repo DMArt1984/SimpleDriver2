@@ -67,11 +67,11 @@ namespace WinSimpleIDriver.Connector.Driver
                 client = new UaClient(new Uri(SrvURL));
                 host = FindIP(SrvURL, host);
                 port = FindPort(SrvURL, port);
-                return new CodeMessage(0,"");
+                return new CodeMessage();
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -93,7 +93,7 @@ namespace WinSimpleIDriver.Connector.Driver
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -135,7 +135,7 @@ namespace WinSimpleIDriver.Connector.Driver
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -191,7 +191,7 @@ namespace WinSimpleIDriver.Connector.Driver
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} {ex.Message}");
                 }
 
-                log?.Invoke(new CodeMessage(ex.HResult, ex.Message));
+                log?.Invoke(CodeMessageFactory.FromException(ex));
                 return new TagResult(Value, ex.HResult, ex.Message);
             }
 
@@ -245,7 +245,7 @@ namespace WinSimpleIDriver.Connector.Driver
                     return new TagResult(0, (int)eTagCode.breakError, $"{eTagCode.breakError.GetText()} ={ex.HResult} {ex.Message}");
                 }
 
-                log?.Invoke(new CodeMessage(ex.HResult, ex.Message));
+                log?.Invoke(CodeMessageFactory.FromException(ex));
                 return new TagResult(newValue, ex.HResult, ex.Message);
             }
         }

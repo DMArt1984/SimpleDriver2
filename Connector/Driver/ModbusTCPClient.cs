@@ -86,11 +86,11 @@ namespace WinSimpleIDriver.Connector.Driver
 
                 client = new SocetModbusTCPmaster();
                 client.log = InnerTrafficLog;
-                return new CodeMessage(0,"");
+                return new CodeMessage();
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -106,11 +106,11 @@ namespace WinSimpleIDriver.Connector.Driver
                 if (client == null)
                     return CodeMessageFactory.FromEnum(eSourceStatus.noClient);
                 client.Connect(host, port, (ushort)timeout);
-                return client.connected ? new CodeMessage(0,"") : CodeMessageFactory.FromEnum(eSourceStatus.errOpen);
+                return client.connected ? new CodeMessage() : CodeMessageFactory.FromEnum(eSourceStatus.errOpen);
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -121,11 +121,11 @@ namespace WinSimpleIDriver.Connector.Driver
                 if (client == null)
                     return CodeMessageFactory.FromEnum(eSourceStatus.noClient);
                 client.Disconnect();
-                return client.connected == false ? new CodeMessage(0, "") : CodeMessageFactory.FromEnum(eSourceStatus.errClose);
+                return client.connected == false ? new CodeMessage() : CodeMessageFactory.FromEnum(eSourceStatus.errClose);
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 

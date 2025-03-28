@@ -71,11 +71,11 @@ namespace WinSimpleIDriver.Connector.Driver
                 client = new SqlConnection(connectionString);
                 host = FindIP(connectionString, host);
                 timeout = FindTimeout(connectionString, timeout);
-                return new CodeMessage(0,"");
+                return new CodeMessage();
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -92,11 +92,11 @@ namespace WinSimpleIDriver.Connector.Driver
                 timeout = FindTimeout(connectionString, timeout);
                 client.Open();
 
-                return client.State == System.Data.ConnectionState.Open ? new CodeMessage(0,"") : new CodeMessage(-56, "Ошибка открытия");
+                return client.State == System.Data.ConnectionState.Open ? new CodeMessage() : new CodeMessage(-56, "Ошибка открытия");
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -150,11 +150,11 @@ namespace WinSimpleIDriver.Connector.Driver
 
                 fronts = new Dictionary<string, bool>();
                 client.Close();
-                return client.State == System.Data.ConnectionState.Closed ? new CodeMessage(0, "") : CodeMessageFactory.FromEnum(eSourceStatus.errClose);
+                return client.State == System.Data.ConnectionState.Closed ? new CodeMessage() : CodeMessageFactory.FromEnum(eSourceStatus.errClose);
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 

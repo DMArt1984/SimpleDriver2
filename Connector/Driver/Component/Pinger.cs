@@ -64,11 +64,11 @@ namespace WinSimpleIDriver.Connector.Driver.Component
             }
             catch (SocketException ex)
             {
-                return new CodeMessage(ex.HResult, $"Socket error: {ex.Message}");
+                return CodeMessageFactory.FromException(ex, "Socket error: #");
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, $"Unexpected error: {ex.Message}");
+                return CodeMessageFactory.FromException(ex, "Unexpected error: #");
             }
             finally
             {

@@ -435,7 +435,7 @@ namespace WinSimpleIDriver.Connector.SGT
             if (Status == eSourceStatus.closed)
             {
                 Status = eSourceStatus.opening;
-                CodeMessage result = new CodeMessage(0);
+                CodeMessage result = new CodeMessage();
 
                 if (_device is INetDevice && (_device as DeviceNet).disableHostForOpen)
                 {
@@ -700,7 +700,7 @@ namespace WinSimpleIDriver.Connector.SGT
 
         public void ClearError()
         {
-            ActiveError = new CodeMessage(0, "");
+            ActiveError = new CodeMessage();
         }
 
         public void NewBreak()
@@ -911,10 +911,10 @@ namespace WinSimpleIDriver.Connector.SGT
         public CodeMessage TryTcpConnect()
         {
             if (IsNet() == false)
-                return new CodeMessage(0,"");
+                return new CodeMessage();
 
             if ((_device as DeviceNet).disableHostForOpen)
-                return (IsHostReachable()) ? new CodeMessage(0, "") : CodeMessageFactory.FromEnum(eTagCode.noPing);
+                return (IsHostReachable()) ? new CodeMessage() : CodeMessageFactory.FromEnum(eTagCode.noPing);
 
             return (_device as INetDevice).TryTcpConnect("", 0, 0);
         }

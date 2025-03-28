@@ -119,11 +119,11 @@ namespace WinSimpleIDriver.Connector.Driver
 
                 //cmd = UDPcommand.Restart;
 
-                return new CodeMessage(0, "");
+                return new CodeMessage();
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -163,11 +163,11 @@ namespace WinSimpleIDriver.Connector.Driver
                 {
                     cmd = UDPcommand.Run;
                 }
-                return new CodeMessage(0, "");
+                return new CodeMessage();
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -176,11 +176,11 @@ namespace WinSimpleIDriver.Connector.Driver
             try
             {
                 cmd = UDPcommand.Stop;
-                return new CodeMessage(0, "");
+                return new CodeMessage();
             }
             catch (Exception ex)
             {
-                return new CodeMessage(ex.HResult, ex.Message);
+                return CodeMessageFactory.FromException(ex);
             }
         }
 
@@ -381,7 +381,7 @@ namespace WinSimpleIDriver.Connector.Driver
 
             } catch (Exception ex)
             {
-                log?.Invoke(new CodeMessage(ex.HResult, $"new UdpClient({localPort}): {ex.Message}"));
+                log?.Invoke(CodeMessageFactory.FromException(ex, $"new UdpClient({localPort}): #"));
             }
         }
 

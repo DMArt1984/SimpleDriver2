@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,5 +24,13 @@ namespace DML.Log
 
             return new CodeMessage(code, message);
         }
+
+        public static CodeMessage FromException(Exception ex, string template = "")
+        {
+            int code = ex.HResult;
+            string message = (String.IsNullOrWhiteSpace(template)) ? ex.Message : template.Replace("#", ex.Message);
+            return new CodeMessage(code, message);
+        }
+
     }
 }

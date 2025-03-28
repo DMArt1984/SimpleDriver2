@@ -77,7 +77,7 @@ namespace WinSimpleIDriver.Connector
         // Создание клиента
         public virtual CodeMessage CreateClient(string parameters = "")
         {
-            return new CodeMessage(0,"");
+            return new CodeMessage();
         }
 
         // Удаление клиента
@@ -102,13 +102,13 @@ namespace WinSimpleIDriver.Connector
         public virtual CodeMessage Connect(string parameters)
         {
             _connected = true;
-            return new CodeMessage(0, "");
+            return new CodeMessage();
         }
 
         public virtual CodeMessage Disconnect()
         {
             _connected = false;
-            return new CodeMessage(0, "");
+            return new CodeMessage();
         }
 
         // ===================================================================================
