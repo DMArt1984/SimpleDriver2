@@ -235,7 +235,7 @@ namespace Connector.SGT
             _tagsCount = this.tags.Count();
         }
 
-
+        // ----------------------------------------------------------------------------
         public void AppendGroup(Group group)
         {
             SourceGroupsHelper.AddGroup(this, group, roll);
@@ -250,6 +250,7 @@ namespace Connector.SGT
         {
             SourceGroupsHelper.UseGroups(this, groups, roll);
         }
+        // ---------------------------------------------------------------------------
 
 
         // Одиночный запрос
