@@ -99,6 +99,7 @@
     <Compile Include="Connector\SGT\forSource.cs" />
     <Compile Include="Connector\SGT\forTag.cs" />
     <Compile Include="Connector\SGT\Group.cs" />
+    <Compile Include="Connector\SGT\GroupEditor.cs" />
     <Compile Include="Connector\SGT\ReconnectTimer.cs" />
     <Compile Include="Connector\SGT\Source.cs" />
     <Compile Include="Connector\SGT\SourceEditor.cs" />

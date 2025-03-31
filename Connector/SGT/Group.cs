@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Windows.Forms;
 using DML;
 using DML.Log;
 using LogCodeMessage;
@@ -28,17 +27,6 @@ namespace Connector
             this.off = off;
             this.isStop = isStop;
         }
-    }
-
-    public struct cellGroup
-    {
-        public ushort Id;
-        public DataGridViewRow row;
-        public DataGridViewCell updateRate;
-        public DataGridViewCell on;
-        public DataGridViewCell description;
-        public DataGridViewCell step;
-        public DataGridViewCell statistic;
     }
 
     public class GroupManager
@@ -337,13 +325,5 @@ namespace Connector
         }
     }
 
-    public class GroupEditor // Редактирование
-    {
-        public uint Id; // Уникальный идентификатор (0 - нет Id)
-        public string title; // Название
-        public bool off; // Отключение
-        public uint updateRate; // Период опроса (мсек)
-        public string description; // Описание
-        public string sourceTitle; // Название источника
-    }
+    
 }
