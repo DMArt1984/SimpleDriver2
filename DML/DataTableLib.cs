@@ -1,5 +1,4 @@
 ﻿using Connector;
-using Connector.SGT;
 using System;
 using System.Collections.Generic;
 using System.Data;

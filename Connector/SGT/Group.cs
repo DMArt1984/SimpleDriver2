@@ -6,7 +6,7 @@ using DML;
 using DML.Log;
 using LogCodeMessage;
 
-namespace Connector.SGT
+namespace Connector
 {
     public interface IGroupOff
     {

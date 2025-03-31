@@ -6,10 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DML;
-using DML.Log;
 using LogCodeMessage;
 
-namespace Connector.SGT
+namespace Connector
 {
     public enum eDataType // типы данных
     {

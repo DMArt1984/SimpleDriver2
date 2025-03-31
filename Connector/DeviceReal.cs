@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DML.Log;
-using Connector.SGT;
 using LogCodeMessage;
 
-namespace Connector.SGT
+namespace Connector
 {
     public interface IRealDevice
     {

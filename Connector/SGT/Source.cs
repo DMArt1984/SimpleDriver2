@@ -7,10 +7,9 @@ using DML.Log;
 using System.Threading;
 using System.Collections.Concurrent;
 using DML;
-using Connector.Driver;
 using LogCodeMessage;
 
-namespace Connector.SGT
+namespace Connector
 {
 
     interface ISource

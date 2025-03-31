@@ -1,5 +1,4 @@
 ﻿using Connector.Driver.Component;
-using DML.Log;
 using LogCodeMessage;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Connector.SGT
+namespace Connector
 {
     public interface INetDevice
     {

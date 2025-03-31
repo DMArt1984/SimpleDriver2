@@ -1,6 +1,5 @@
 ﻿using Connector.Driver.Component;
-using Connector.SGT;
-using DML.Log;
+
 using LogCodeMessage;
 using System;
 using System.Collections.Generic;

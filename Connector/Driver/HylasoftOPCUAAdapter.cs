@@ -4,8 +4,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Connector.SGT;
-using DML.Log;
 using Hylasoft.Opc.Common;
 using Hylasoft.Opc.Da;
 using Hylasoft.Opc.Ua;
