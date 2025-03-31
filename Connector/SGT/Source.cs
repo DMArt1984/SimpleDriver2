@@ -22,7 +22,6 @@ namespace Connector.SGT
 
         byte MaxBreak { get; set; }
         byte counterBreak { get; set; }
-
     }
 
     public struct SourceParam
@@ -49,7 +48,7 @@ namespace Connector.SGT
 
         object locker = new object();
 
-        // теги для источника
+        // Теги для источника
         List<Tag> tags = new List<Tag>();
         Dictionary<ushort, List<Tag>> dicTagGroup = new Dictionary<ushort, List<Tag>>();
         public int TagsCount => _tagsCount;
@@ -64,7 +63,6 @@ namespace Connector.SGT
             return SourceHelp.HelpDicSource(type);
         }
 
-        // события
         #region Delegate
         public delegate void HandlerError(ushort Id, CodeMessage activeError);
         public HandlerError eventError;
@@ -85,9 +83,9 @@ namespace Connector.SGT
         public HandlerLog log;
         #endregion
 
-
-        // строка подключения
-        public string Address {
+        // Строка подключения
+        public string Address
+        {
             get => _address;
             set
             {
@@ -97,13 +95,13 @@ namespace Connector.SGT
                     EventChangeParam();
                 }
             }
-        } 
+        }
         string _address = "";
 
         public bool Process => _process;
         bool _process = false; // выполняется запрос...
 
-        // автоматический запуск циклического опроса после открытия
+        // Автоматический запуск циклического опроса после открытия
         public bool AutoRequestAftereOpen
         {
             get => _autoRequestAftereOpen;
@@ -118,7 +116,7 @@ namespace Connector.SGT
         }
         bool _autoRequestAftereOpen;
 
-        // автоматическое переоткрытие после ошибки
+        // Автоматическое переоткрытие после ошибки
         public bool AutoOpenAfterFail
         {
             get => _autoOpenAfterFail;
@@ -133,13 +131,13 @@ namespace Connector.SGT
         }
         bool _autoOpenAfterFail;
 
-        public bool Fail => _fail; 
+        public bool Fail => _fail;
         bool _fail = false; // была ошибка с последующим закрытием
 
         // Переподключения устройства
         private int stepReOpen = 0;
         private readonly ReconnectTimer _reconnectTimer = new ReconnectTimer();
-        private int[] rTimeMsec = new[] { 5000, 6000, 7000, 8000, 9000, 10000};
+        private int[] rTimeMsec = new[] { 5000, 6000, 7000, 8000, 9000, 10000 };
 
         int counterReq = 0;
         int counterFailReq = 0;
@@ -152,9 +150,9 @@ namespace Connector.SGT
         public eDriverType driverType => _driverType;
 
         // Конструкторы
-        public Source(ushort Id, string title, 
+        public Source(ushort Id, string title,
             eDriverType driverType, IDeviceFactory deviceFactory,
-            bool disable, 
+            bool disable,
             bool auto, bool reopen, string address = "", string description = "") : base(LogTarget.FileConsoleForm, null)
         {
             _driverType = driverType;
@@ -219,7 +217,8 @@ namespace Connector.SGT
                     dic.Remove("fails");
                 }
                 return dic;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 logger.Error(ex.HResult, $"ParamsForSource = {address}: {ex.Message}", eMessageCategory.Source);
                 return new Dictionary<string, string>();
@@ -238,20 +237,19 @@ namespace Connector.SGT
         // ----------------------------------------------------------------------------
         public void AppendGroup(Group group)
         {
-            SourceGroupsHelper.AddGroup(this, group, roll);
+            SourceGroupsHelper.AddGroup(this, group, null);
         }
 
         public void RemoveGroup(Group group)
         {
-            SourceGroupsHelper.RemoveGroup(this, group, roll);
+            SourceGroupsHelper.RemoveGroup(this, group, null);
         }
 
         public void UseGroups(List<Group> groups)
         {
-            SourceGroupsHelper.UseGroups(this, groups, roll);
+            SourceGroupsHelper.UseGroups(this, groups, null);
         }
         // ---------------------------------------------------------------------------
-
 
         // Одиночный запрос
         public void OneRequest()
@@ -276,11 +274,9 @@ namespace Connector.SGT
                 }
                 else // отключить
                 {
-                    //AutoOpenAfterFail = false;
                     if (Status != eSourceStatus.closed && Status != eSourceStatus.closing)
                     {
                         UserUseClosed = true;
-                        //await Task.Run(() => Close(true));
                         Close(true);
                     }
                 }
@@ -309,13 +305,11 @@ namespace Connector.SGT
             logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 3 - пересоздание клиента", eMessageCategory.Source);
             _device.CreateClient(Address); // пересоздание клиента
             Off = false; // открыть
-            //...
             logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено", eMessageCategory.Source);
         }
 
         int Open(bool user = false)
         {
-            //LogHelper.LogApp($"Источник ID={Id} {title} > Открыть...");
             if (Status == eSourceStatus.closed)
             {
                 Status = eSourceStatus.opening;
@@ -326,28 +320,28 @@ namespace Connector.SGT
                     var retval = IsHostReachable();
                     if (retval == false)
                         result = CodeMessageFactory.FromEnumX(eTagCode.noPing);
-                } else
+                }
+                else
                 {
                     result = TryTcpConnect();
                 }
 
-                // Host
                 if (result.code == 0)
                 {
-                    // Connect
                     logger.Info($"Источник ID={Id} {title} > Соединение...", eMessageCategory.Source);
                     var xdevice = _device as IRealDevice;
                     if (xdevice != null)
                     {
                         result = xdevice.Connect(Address);
-                    } else
+                    }
+                    else
                     {
                         result = new CodeMessage();
                     }
-                } else
+                }
+                else
                 {
                     logger.Info($"Источник ID={Id} {title} > Нет связи с хостом/IP", eMessageCategory.Source);
-                    //result = new CodeMessage(-404, "Нет связи с хостом");
                 }
 
                 if (result.code != 0)
@@ -356,28 +350,22 @@ namespace Connector.SGT
                 if (result.code == 0)
                 {
                     logger.Info($"Источник ID={Id} {title} > Открыть - успешно!", eMessageCategory.Source);
-
                     _opened = true;
                     _fail = false;
                     stepReOpen = 0;
-                    ClearCounterBreak(); // сброс неудачных запросов
-
-                    // статусы тегов
+                    ClearCounterBreak();
                     Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.sourceOpened));
 
-                    if (AutoRequestAftereOpen) // автоматический запуск опроса
+                    if (AutoRequestAftereOpen)
                         CyclicRequest = true;
-                } else
+                }
+                else
                 {
                     logger.Info($"Источник ID={Id} {title} > Открыть - ошибка {result.code} {result.message}", eMessageCategory.Source);
-
                     Status = eSourceStatus.breaking;
                     _fail = true;
-                    ClearCounterBreak(); // сброс неудачных запросов
-
-                    // статусы тегов
+                    ClearCounterBreak();
                     Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.sourceFail));
-
                     OpenAfterFail();
                 }
 
@@ -393,18 +381,13 @@ namespace Connector.SGT
             if (Status != eSourceStatus.closed)
             {
                 Status = eSourceStatus.closing;
-
                 logger.Info($"Источник ID={Id} {title} > Ждем...", eMessageCategory.Source);
-                WaitProcess(); // ждем завершения текущего запроса...
-
+                WaitProcess();
                 var xdevice = _device as IRealDevice;
                 CodeMessage result = new CodeMessage();
                 if (xdevice != null)
                 {
                     result = xdevice.Disconnect();
-                } else
-                {
-
                 }
                 if (result.code != 0)
                     ActiveError = result;
@@ -412,24 +395,18 @@ namespace Connector.SGT
                 if (result.code == 0)
                 {
                     logger.Info($"Источник ID={Id} {title} > Закрыть - успешно!", eMessageCategory.Source);
-
                     CyclicRequest = false;
-                    //LogHelper.LogApp($"Источник ID={Id} {title} > 1...");
                     _opened = false;
-                    //LogHelper.LogApp($"Источник ID={Id} {title} > 2...");
                     counterReq = 0;
-                    //LogHelper.LogApp($"Источник ID={Id} {title} > 3...");
                     counterFailReq = 0;
                     logger.Info($"Источник ID={Id} {title} > Статусы тегов...", eMessageCategory.Source);
-
-                    // статусы тегов
                     Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.sourceClosed));
-
                     logger.Info($"Источник ID={Id} {title} > 5...", eMessageCategory.Source);
 
                     if (user == false)
                         OpenAfterFail();
-                } else
+                }
+                else
                 {
                     logger.Info($"Источник ID={Id} {title} > Закрыть - ошибка {result.code} {result.message}", eMessageCategory.Source);
                 }
@@ -437,9 +414,9 @@ namespace Connector.SGT
                 EventStatus();
                 logger.Info($"Источник ID={Id} {title} > Код {result.code}", eMessageCategory.Source);
                 return result.code;
-            } else
+            }
+            else
             {
-                // статусы тегов
                 Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.sourceClosed));
             }
             return 1;
@@ -454,9 +431,7 @@ namespace Connector.SGT
 
             try
             {
-                // Запускаем таймер с задержкой
                 _reconnectTimer.Start(rTimeMsec[stepReOpen], TimerCB_Inner);
-
                 stepReOpen++;
                 if (stepReOpen >= rTimeMsec.Length)
                     stepReOpen = 0;
@@ -466,7 +441,7 @@ namespace Connector.SGT
             catch (Exception ex)
             {
                 logger.Error(ex.HResult, $"OpenAfterFail() error: {ex.Message}", eMessageCategory.Source);
-                TimerCB_Inner(); // fallback – сразу вызываем
+                TimerCB_Inner();
             }
         }
 
@@ -474,7 +449,6 @@ namespace Connector.SGT
         {
             logger.Info("REOPEN: TimerCB", eMessageCategory.Source);
 
-            // Проверяем флаги перед попыткой переоткрытия
             if (!AutoOpenAfterFail)
             {
                 logger.Info("REOPEN: AutoOpenAfterFail == false — отмена", eMessageCategory.Source);
@@ -499,14 +473,12 @@ namespace Connector.SGT
             }
         }
 
-
         void WaitProcess()
         {
             logger.Info("wait process [", eMessageCategory.Source);
             DateTime dt = DateTime.Now;
             while (_process)
             {
-                // ждем выполнение текущего запроса...
                 logger.Info("wait process...", eMessageCategory.Source);
                 Thread.Sleep(100);
                 TimeSpan ts = DateTime.Now.Subtract(dt);
@@ -529,9 +501,7 @@ namespace Connector.SGT
                     _cyclicRequest = value;
                     if (value == false)
                     {
-                        WaitProcess(); // ждем завершения текущего запроса...
-
-                        // статусы тегов
+                        WaitProcess();
                         Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.sourceOpened));
                     }
                     EventStatus();
@@ -540,15 +510,17 @@ namespace Connector.SGT
         }
         bool _cyclicRequest = false;
 
-        public eSourceStatus Status { 
+        public eSourceStatus Status
+        {
             get => _status;
-            set {
+            set
+            {
                 if (_status != value)
                 {
                     _status = value;
                     eventStatus?.Invoke(Id, value);
                 }
-            } 
+            }
         }
         eSourceStatus _status = eSourceStatus.created;
 
@@ -558,7 +530,6 @@ namespace Connector.SGT
             set
             {
                 bool newCode = _activeError.code != value.code;
-
                 _activeError = value;
                 if (_activeError.code < 0)
                 {
@@ -567,20 +538,15 @@ namespace Connector.SGT
                         _fail = true;
                         if (Off)
                         {
-                            // уже закрыто...
                             OpenAfterFail();
                         }
                         else
                         {
                             logger.Info($" -> Off = true;", eMessageCategory.Source);
-                            Off = true; // закрываем для перезапуска
+                            Off = true;
                         }
-                        //...
-                    } else
-                    {
                     }
                 }
-
                 if (newCode)
                 {
                     eventError?.Invoke(Id, _activeError);
@@ -596,15 +562,13 @@ namespace Connector.SGT
 
         public void NewBreak()
         {
-            counterBreak++; // считаем неудачные запросы для последующего перезапуска
+            counterBreak++;
             logger.Info($"NEW BREAK = {counterBreak} / {MaxBreak}", eMessageCategory.Source);
-
             if (counterBreak >= MaxBreak)
             {
                 ClearCounterBreak();
                 ActiveError = CodeMessageFactory.FromEnumX(eTagCode.breakError);
                 logger.Info($"NEW BREAK = ActiveError", eMessageCategory.Source);
-                //...
             }
         }
 
@@ -638,116 +602,100 @@ namespace Connector.SGT
                 if (CyclicRequest)
                 {
                     Status = eSourceStatus.cycle;
-                } else
+                }
+                else
                 {
                     Status = eSourceStatus.openedNoCycle;
                 }
-            } else
+            }
+            else
             {
                 Status = eSourceStatus.closed;
             }
         }
 
-        ConcurrentDictionary<ushort, bool> roll = new ConcurrentDictionary<ushort, bool>();
-        ushort groupNow = 0;
+        // ======= Новая реализация очереди запросов =============
+
+        private ConcurrentQueue<ushort> _requestQueue = new ConcurrentQueue<ushort>();
+        private int _processing = 0; // 0 - не обрабатывается, 1 - идет обработка
 
         // Запросы
         internal void EventRequest(IGroupOff group)
         {
-            if (group == null)
+            if (group == null || group.Off || !Opened || (!CyclicRequest && group.Id > 0))
                 return;
-
-            if (group.Off)
-                return;
-
-            if (Opened == false)
-                return;
-
-            if (CyclicRequest == false && group.Id > 0)
-                return;
-
-            EventRequestRUNAsync(group.Id);
+            _requestQueue.Enqueue(group.Id);
+            ProcessQueue();
         }
 
-        // Добавьте это поле в класс Source (например, в начале класса):
-        private SemaphoreSlim _requestSemaphore = new SemaphoreSlim(1, 1);
+        private async void ProcessQueue()
+        {
+            if (Interlocked.CompareExchange(ref _processing, 1, 0) != 0)
+                return; // уже обрабатывается
+            try
+            {
+                while (_requestQueue.TryDequeue(out ushort groupId))
+                {
+                    await EventRequestRUNAsync(groupId);
+                }
+            }
+            finally
+            {
+                Interlocked.Exchange(ref _processing, 0);
+            }
+        }
 
-        // Асинхронная версия метода
+        // Асинхронная версия метода обработки запроса
+        private SemaphoreSlim _requestSemaphore = new SemaphoreSlim(1, 1);
         public async Task EventRequestRUNAsync(ushort groupId)
         {
-            // Пытаемся получить семафор с таймаутом 10 секунд
-            if (await _requestSemaphore.WaitAsync(TimeSpan.FromSeconds(10)))
+            if (!await _requestSemaphore.WaitAsync(TimeSpan.FromSeconds(10)))
             {
-                try
+                // Если не удалось получить семафор, повторно ставим запрос в очередь
+                _requestQueue.Enqueue(groupId);
+                return;
+            }
+            try
+            {
+                _process = true;
+                groupNow = groupId;
+
+                // Выбираем теги для опроса
+                List<Tag> clientTags = tags.Where(x => x.groupId == groupId && !x.Off).ToList();
+                if (clientTags.Any())
                 {
-                    _process = true;
-                    groupNow = groupId;
+                    await Task.Run(() => _device.Request(clientTags));
+                    counterReq++;
 
-                    // Выбираем теги для опроса
-                    List<Tag> clientTags = tags.Where(x => x.groupId == groupId && !x.Off).ToList();
-
-                    if (clientTags.Any())
+                    bool breakError = clientTags.Any(x => x.codeMessage.code == (int)eTagCode.breakError);
+                    bool anyGood = clientTags.Any(x => x.Good && x.Command == eCommand.None && x.WriteTagId == 0 && x.WriteTagValue == null);
+                    if (breakError && !anyGood)
                     {
-                        // Выполняем запрос к устройству.
-                        // Если _device.Request не является асинхронным, его можно обернуть в Task.Run.
-                        await Task.Run(() => _device.Request(clientTags));
-                        counterReq++;
-
-                        // Анализ ответов
-                        bool breakError = clientTags.Any(x => x.codeMessage.code == (int)eTagCode.breakError);
-                        bool anyGood = clientTags.Any(x => x.Good && x.Command == eCommand.None && x.WriteTagId == 0 && x.WriteTagValue == null);
-                        if (breakError && !anyGood)
-                        {
-                            counterFailReq++;
-                            NewBreak();
-                        }
-                        else
-                        {
-                            ClearCounterBreak();
-                        }
+                        counterFailReq++;
+                        NewBreak();
                     }
-
-                    // Вместо Thread.Sleep используем асинхронную задержку
-                    await Task.Delay(10);
-
-                    int all = tags.Count;
-                    int good = tags.Count(x => x.Good);
-                    eventReq?.Invoke(Id, groupId, clientTags.Select(x => (ITagResult)x).ToList(), counterReq, counterFailReq, all, good);
-                }
-                finally
-                {
-                    _requestSemaphore.Release();
+                    else
+                    {
+                        ClearCounterBreak();
+                    }
                 }
 
-                // Если запрос был поставлен в очередь, удаляем его
-                if (roll[groupId])
-                {
-                    roll[groupId] = false;
-                }
+                await Task.Delay(10);
 
+                int all = tags.Count;
+                int good = tags.Count(x => x.Good);
+                eventReq?.Invoke(Id, groupId, clientTags.Select(x => (ITagResult)x).ToList(), counterReq, counterFailReq, all, good);
+            }
+            finally
+            {
+                _requestSemaphore.Release();
                 _process = false;
                 groupNow = 0;
-
-                // Если в очереди есть другие запросы, обрабатываем следующий
-                if (roll.Count > 0)
-                {
-                    var next = roll.FirstOrDefault(x => x.Value == true);
-                    if (next.Key > 0)
-                    {
-                        await EventRequestRUNAsync(next.Key);
-                    }
-                }
-            }
-            else
-            {
-                // Если не удалось получить семафор – ставим запрос в очередь (логика может быть доработана)
-                if (groupId != groupNow)
-                {
-                    roll[Id] = true;
-                }
             }
         }
 
+        ushort groupNow = 0;
+        // ======= Конец новой реализации очереди запросов =============
 
         // --------------------------------------------------------------------------------------------------
 
@@ -783,24 +731,19 @@ namespace Connector.SGT
             return (_device is INetDevice);
         }
 
-        // Проверка общей доступности хоста
         public bool IsHostReachable()
         {
             if (IsNet() == false)
                 return true;
-
             return (_device as INetDevice).IsHostReachable("", 0);
         }
 
-        // Проверка нужного сервиса
         public CodeMessage TryTcpConnect()
         {
             if (IsNet() == false)
                 return new CodeMessage();
-
             if ((_device as DeviceNet).disableHostForOpen)
                 return (IsHostReachable()) ? new CodeMessage() : CodeMessageFactory.FromEnumX(eTagCode.noPing);
-
             return (_device as INetDevice).TryTcpConnect("", 0, 0);
         }
 
@@ -809,7 +752,6 @@ namespace Connector.SGT
         public void Link()
         {
             var useTags = Tag.items.Where(x => x.sourceId == this.Id).ToList();
-
             this.UseTags(useTags);
             this.UseGroups(Group.items.Where(x => useTags.Select(y => y.groupId).Contains(x.Id)).ToList());
         }
@@ -818,7 +760,7 @@ namespace Connector.SGT
 
         #region Static
 
-        static public List<Source> items = new List<Source>(); // все группы
+        static public List<Source> items = new List<Source>(); // все источники
         static public ushort lastId = 0;
 
         static public void Clear()
@@ -840,7 +782,6 @@ namespace Connector.SGT
             }
         }
 
-        // Получение параметров источника
         static public void ParseItemSource(dynamic item, uint forId, out string title, out eDriverType driver, out string connection, out bool off, out string description, out dynamic tags, out bool auto, out bool reopen)
         {
             title = JsonControl.GetString(item, "Title", $"Source #{forId}");
@@ -853,13 +794,11 @@ namespace Connector.SGT
             reopen = JsonControl.GetBool(item, "Reconnect");
         }
 
-        // Привязки драйверов
         static public void LinkSources()
         {
             foreach (var item in Source.items)
             {
                 var useTags = Tag.items.Where(x => x.sourceId == item.Id).ToList();
-
                 item.UseTags(useTags);
                 item.UseGroups(Group.items.Where(x => useTags.Select(y => y.groupId).Contains(x.Id)).ToList());
             }
