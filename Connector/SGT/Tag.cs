@@ -193,7 +193,7 @@ namespace Connector
             // source ID and title
             if (String.IsNullOrWhiteSpace(_sourceTitle) == false)
             {
-                var source = Source.Item(_sourceTitle); //.items.FirstOrDefault(x => x.title == _sourceTitle);
+                var source = Source.Item(_sourceTitle);
                 if (source != null)
                 {
                     _sourceId = source.Id;
@@ -205,7 +205,7 @@ namespace Connector
             }
             else if (_sourceId > 0)
             {
-                var source = Source.Item(_sourceId); //.items.FirstOrDefault(x => x.Id == _sourceId);
+                var source = Source.Item(_sourceId);
                 if (source != null)
                 {
                     _sourceTitle = source.title;
@@ -582,9 +582,6 @@ namespace Connector
             Tag.items = new List<Tag>();
         }
 
-        
-        
-
         static public Tag Item(ushort Id) => items.FirstOrDefault(x => x.Id == Id);
         static public Tag Item(string title) => items.FirstOrDefault(x => x.title == title);
 
@@ -661,7 +658,6 @@ namespace Connector
             }
             return;
         }
-
 
         // Запомнить теги для подстановок
         public void SetInnerTagsForOneTag()
