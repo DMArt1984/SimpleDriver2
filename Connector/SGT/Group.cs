@@ -46,6 +46,8 @@ namespace Connector
         // Единая коллекция тегов; если Tag реализует ICodeMessage, ее можно использовать для обновления статусов
         public List<Tag> Tags { get; } = new List<Tag>();
 
+        public int TagsCountGood => Tags.Count(tag => tag.Good);
+
         // События для оповещения об изменениях параметров и статистике
         public delegate void HandlerParam(GroupParamStatus info);
         public event HandlerParam eventParams;
@@ -124,6 +126,13 @@ namespace Connector
             if (tag != null && !Tags.Contains(tag))
             {
                 Tags.Add(tag);
+            }
+        }
+        public void RemoveTag(Tag tag)
+        {
+            if (tag != null && Tags.Contains(tag))
+            {
+                Tags.Remove(tag);
             }
         }
 

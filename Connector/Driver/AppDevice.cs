@@ -279,7 +279,7 @@ namespace Connector.Driver
                                                     Value = group.description;
                                                     break;
                                                 case "tagscount":
-                                                    Value = group.TagsCount;
+                                                    Value = group.Tags.Count;
                                                     break;
                                                 case "tagsgood":
                                                     Value = group.TagsCountGood;
