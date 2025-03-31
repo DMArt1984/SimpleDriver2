@@ -200,28 +200,6 @@ namespace Connector
             Off = _disable;
         }
 
-        // Методы регистрации групп.
-        // Вместо добавления группы в локальное хранилище, мы регистрируем группу в глобальном списке,
-        // устанавливая для неё ParentSource и подписывая событие тикания.
-        public void RegisterGroup(Group group)
-        {
-            if (group == null) return;
-            // Устанавливаем связь
-            group.ParentSource = this;
-            // Обязательно отписываем, чтобы избежать дублирования обработчиков, и затем подписываем.
-            group.tikTakReq -= this.EventRequest;
-            group.tikTakReq += this.EventRequest;
-        }
-
-        public void UnregisterGroup(Group group)
-        {
-            if (group == null) return;
-            if (group.ParentSource == this)
-            {
-                group.tikTakReq -= this.EventRequest;
-                group.ParentSource = null; // Или присваиваем другое значение по логике приложения.
-            }
-        }
         // ---------------------------------------------------------------------------
 
         // Одиночный запрос

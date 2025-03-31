@@ -40,7 +40,21 @@ namespace Connector
         public Source ParentSource
         {
             get => _parentSource;
-            set => _parentSource = value;
+            set
+            {
+                // Если ранее был назначен родитель, отписываем обработчик
+                if (_parentSource != null)
+                {
+                    tikTakReq -= _parentSource.EventRequest;
+                }
+                _parentSource = value;
+                // Если новый родитель назначен, подписываем его обработчик
+                if (_parentSource != null)
+                {
+                    tikTakReq -= _parentSource.EventRequest; // чтобы избежать дублирования
+                    tikTakReq += _parentSource.EventRequest;
+                }
+            }
         }
 
         // Единая коллекция тегов; если Tag реализует ICodeMessage, ее можно использовать для обновления статусов
