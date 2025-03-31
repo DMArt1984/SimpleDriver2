@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DML.Log;
 using System.Threading;
@@ -10,7 +9,6 @@ using LogCodeMessage;
 
 namespace Connector
 {
-
     interface ISource
     {
         eSourceStatus Status { get; set; }
@@ -50,7 +48,7 @@ namespace Connector
 
         // Теги для источника
         List<Tag> tags = new List<Tag>();
-        //Dictionary<ushort, List<Tag>> dicTagGroup = new Dictionary<ushort, List<Tag>>();
+
         public int TagsCount => _tagsCount;
         int _tagsCount = 0;
         public int TagsCountGood => tags.Count(x => x.Good);
@@ -226,27 +224,36 @@ namespace Connector
         }
 
         // ----------------------------------------------------------------------------
+        // Методы работы с группами напрямую
+
         public void AddGroup(Group group)
         {
             if (!Groups.Contains(group))
             {
                 Groups.Add(group);
+                // Подписываем обработчик события тикания группы на метод запроса
+                group.tikTakReq += this.EventRequest;
             }
-        }
-
-        public void AppendGroup(Group group)
-        {
-            SourceGroupsHelper.AddGroup(this, group, null);
         }
 
         public void RemoveGroup(Group group)
         {
-            SourceGroupsHelper.RemoveGroup(this, group, null);
+            if (Groups.Contains(group))
+            {
+                Groups.Remove(group);
+                // Отписываем обработчик
+                group.tikTakReq -= this.EventRequest;
+            }
         }
 
         public void UseGroups(List<Group> groups)
         {
-            SourceGroupsHelper.UseGroups(this, groups, null);
+            if (groups == null)
+                return;
+            foreach (var group in groups)
+            {
+                AddGroup(group);
+            }
         }
         // ---------------------------------------------------------------------------
 

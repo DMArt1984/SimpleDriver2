@@ -103,7 +103,6 @@
     <Compile Include="Connector\SGT\ReconnectTimer.cs" />
     <Compile Include="Connector\SGT\Source.cs" />
     <Compile Include="Connector\SGT\SourceEditor.cs" />
-    <Compile Include="Connector\SGT\SourceGroupsHelper.cs" />
     <Compile Include="Connector\SGT\Tag.cs" />
     <Compile Include="Connector\Driver\TestTable.cs" />
     <Compile Include="Connector\SGT\TagEditor.cs" />
