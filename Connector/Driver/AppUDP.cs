@@ -239,7 +239,7 @@ namespace Connector.Driver
                 }
 
                 // -------
-                Value = Tag.ConvertValueWithArray(Value, dataType);
+                Value = TagLib.ConvertValueWithArray(Value, dataType);
 
                 // -------
                 return new TagResult(Value);

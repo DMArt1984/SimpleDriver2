@@ -14,7 +14,7 @@ namespace Connector
         bool Connected { get; }
     }
 
-    class DeviceReal : Device, IRealDevice
+    public class DeviceReal : Device, IRealDevice
     {
         const int version = 1000; // Версия
 

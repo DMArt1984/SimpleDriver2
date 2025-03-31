@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Connector;
 
 namespace Connector.Driver
 {
-    class AppDevice : Device
+    public class AppDevice : Device
     {
         public const string driverName = "Application";
 
@@ -205,7 +206,7 @@ namespace Connector.Driver
                                                     var resItems = Tag.items.Where(x => x.sourceId == source.Id).ToArray();
                                                     if (resItems != null && resItems.Any())
                                                     {
-                                                        Value = resItems.Select(x => $"{x.title}~{Tag.ValuesString(x.LastGoodValue)}~{Tag.ValuesString(x.codeMessage.code)}").ToArray();
+                                                        Value = resItems.Select(x => $"{x.title}~{TagLib.ValuesString(x.LastGoodValue)}~{TagLib.ValuesString(x.codeMessage.code)}").ToArray();
                                                     }
                                                     else
                                                     {
@@ -296,7 +297,7 @@ namespace Connector.Driver
                                                     var resItems = Tag.items.Where(x => x.groupId == group.Id).ToArray();
                                                     if (resItems != null && resItems.Any())
                                                     {
-                                                        Value = resItems.Select(x => $"{x.title}~{Tag.ValuesString(x.LastGoodValue)}~{x.codeMessage.code}").ToArray();
+                                                        Value = resItems.Select(x => $"{x.title}~{TagLib.ValuesString(x.LastGoodValue)}~{x.codeMessage.code}").ToArray();
                                                     } else
                                                     {
                                                         Value = new string[] { };
@@ -344,7 +345,7 @@ namespace Connector.Driver
                                         Value = (short)Tag.items.Count(x => x.Good);
                                         break;
                                     case "dicvalue":
-                                        Value = Tag.items.Select(x => $"{x.title}~{Tag.ValuesString(x.LastGoodValue)}~{x.codeMessage.code}").ToArray();
+                                        Value = Tag.items.Select(x => $"{x.title}~{TagLib.ValuesString(x.LastGoodValue)}~{x.codeMessage.code}").ToArray();
                                         break;
 
                                     default:
@@ -420,7 +421,7 @@ namespace Connector.Driver
                                                 case "cmdplay":
                                                     if (part.Length >= 4)
                                                     {
-                                                        bool B = Tag.ConvertValue(part[3], eDataType.Bool);
+                                                        bool B = TagLib.ConvertValue(part[3], eDataType.Bool);
                                                         if (B && tag.Command == eCommand.Wait)
                                                             tag.Command = eCommand.Play;
                                                         Value = B;
@@ -645,7 +646,7 @@ namespace Connector.Driver
                 fronts.Add(address, false);
 
             // newValue
-            if (Tag.ConvertValue(newValue, eDataType.Bool) == false)
+            if (TagLib.ConvertValue(newValue, eDataType.Bool) == false)
             {
                 fronts[address] = false;
                 return new TagResult(newValue);

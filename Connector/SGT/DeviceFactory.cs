@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Connector
 {
-    interface IDeviceFactory
+    public interface IDeviceFactory
     {
         IDevice CreateDevice(eDriverType driverType, string address);
     }
 
-    class DeviceFactory : IDeviceFactory
+    public class DeviceFactory : IDeviceFactory
     {
         public IDevice CreateDevice(eDriverType driverType, string address)
         {
@@ -38,7 +38,7 @@ namespace Connector
         }
     }
 
-    static class SourceHelp
+    static public class SourceHelp
     {
         // Справки
         static public Dictionary<string, string> HelpDicSource(eDriverType driverType)

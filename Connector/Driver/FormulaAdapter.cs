@@ -85,7 +85,7 @@ namespace Connector.Driver
         // Записать значение тега
         public override TagResult SetValue(string address, eDataType DataType, dynamic newValue = null)
         {
-            return new TagResult(Tag.ConvertValueWithArray(newValue, DataType));
+            return new TagResult(TagLib.ConvertValueWithArray(newValue, DataType));
         }
         #endregion
 
@@ -816,7 +816,7 @@ namespace Connector.Driver
                     }
 
                 }
-                return Tag.ConvertValue(Value, DataType);
+                return TagLib.ConvertValue(Value, DataType);
             }
 
         }

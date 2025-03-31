@@ -16,7 +16,7 @@ namespace Connector
         CodeMessage TryTcpConnect(string hostUri, int portNumber, int timeoutMs);
     }
 
-    class DeviceNet : DeviceReal, INetDevice
+    public class DeviceNet : DeviceReal, INetDevice
     {
         const int version = 1000; // Версия
 

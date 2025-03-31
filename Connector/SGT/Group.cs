@@ -36,6 +36,9 @@ namespace Connector
         public string title { get; } // Название группы
         public string description { get; } // Описание группы
 
+        public Source ParentSource { get; }
+        public List<Tag> Tags { get; } = new List<Tag>();
+
         // Теги для группы
         private List<ICodeMessage> tags = new List<ICodeMessage>();
         private int _tagsCount = 0;
@@ -103,7 +106,7 @@ namespace Connector
         private bool _disable = false;
         public string sourceTitle = ""; // Название источника (если необходимо)
 
-        public Group(ushort id, string title, uint updateRate = 100, bool disable = false, string description = "")
+        public Group(ushort id, string title, Source parentSource, uint updateRate = 100, bool disable = false, string description = "")
             : base(LogTarget.FileConsoleForm, null)
         {
             Id = id;
@@ -111,7 +114,19 @@ namespace Connector
             this.description = description;
             UpdateRate = updateRate;
             _disable = disable;
+
+            ParentSource = parentSource;
+            ParentSource.AddGroup(this);
+
             logger.Info($"new group ID {Id} {title} {updateRate}", eMessageCategory.Source);
+        }
+
+        public void AddTag(Tag tag)
+        {
+            if (!Tags.Contains(tag))
+            {
+                Tags.Add(tag);
+            }
         }
 
         public void Activate()

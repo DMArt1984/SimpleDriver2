@@ -296,7 +296,7 @@ namespace Connector.Driver
                 fronts.Add(address, false);
 
             // newValue
-            if (Tag.ConvertValue(newValue, eDataType.Bool) == false)
+            if (TagLib.ConvertValue(newValue, eDataType.Bool) == false)
             {
                 fronts[address] = false;
                 return new TagResult(newValue);

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using DML.Log;
 using System.Threading;
 using System.Collections.Concurrent;
-using DML;
 using LogCodeMessage;
 
 namespace Connector
@@ -39,13 +38,15 @@ namespace Connector
         }
     }
 
-    class Source : BaseLogger, ISource
+    public class Source : BaseLogger, ISource
     {
         public ushort Id { get; } // ID источника данных
         public string title { get; } // Название источника
         public string description { get; } // Описание источника
 
         object locker = new object();
+
+        public List<Group> Groups { get; } = new List<Group>();
 
         // Теги для источника
         List<Tag> tags = new List<Tag>();
@@ -234,6 +235,14 @@ namespace Connector
         }
 
         // ----------------------------------------------------------------------------
+        public void AddGroup(Group group)
+        {
+            if (!Groups.Contains(group))
+            {
+                Groups.Add(group);
+            }
+        }
+
         public void AppendGroup(Group group)
         {
             SourceGroupsHelper.AddGroup(this, group, null);
@@ -253,7 +262,7 @@ namespace Connector
         // Одиночный запрос
         public void OneRequest()
         {
-            EventRequest(new Group(0, ""));
+            EventRequest(new Group(0, "", this));
         }
 
         // ========================================================================

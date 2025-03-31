@@ -19,7 +19,7 @@ namespace Connector
         OPCUAclient = 40
     }
 
-    interface IDevice
+    public interface IDevice
     {
         CodeMessage CreateClient(string parameters);
         CodeMessage RemoveClient();
@@ -38,7 +38,7 @@ namespace Connector
         bool SupportTLog { get; }
     }
 
-    class Device : IDevice, IControlTrafficLog
+    public class Device : IDevice, IControlTrafficLog
     {
         const int version = 1000; // Версия
 
@@ -137,7 +137,7 @@ namespace Connector
 
         protected virtual void WorkTag(ITagClient tag)
         {
-            string raddress = Tag.ExpTagAddress(tag.Address, out bool success, tag);
+            string raddress = TagLib.ExpTagAddress(tag.Address, out bool success, Tag.items, tag);
             logTraffic?.Invoke($"{tag.title}: {raddress}");
 
             if (success == false)
