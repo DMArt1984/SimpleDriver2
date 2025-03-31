@@ -75,19 +75,19 @@ namespace WinSimpleIDriver
                 return;
 
             // Распаковка источников
-            if (Source.InProject(data))
+            if (SourceLib.InProject(data))
                 ParseSources(data.Sources);
 
             // Распаковка групп
-            if (Group.InProject(data))
+            if (GroupLib.InProject(data))
                 ParseGroups(data.Groups);
 
             // Распаковка тегов
-            if (Tag.InProject(data))
+            if (TagLib.InProject(data))
                 ParseTags(data.Tags);
 
             // Блоки с тегами
-            if (Tag.IsListBlocks(data))
+            if (TagLib.IsListBlocks(data))
             {
                 if (data.Blocks != null)
                 {
@@ -103,7 +103,7 @@ namespace WinSimpleIDriver
             CalcIdAndTitle();
 
             // Распаковка структур
-            if (Tag.IsStructures(data))
+            if (TagLib.IsStructures(data))
                 ParseStructures(data.Structures);
 
             // Внешние проекты
@@ -121,7 +121,7 @@ namespace WinSimpleIDriver
                 
                 foreach (dynamic item in data)
                 {
-                    Source.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool off, out string description, out dynamic tagsInSource, out bool auto, out bool reconnect);
+                    SourceLib.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool off, out string description, out dynamic tagsInSource, out bool auto, out bool reconnect);
                     SourceEditor rowSource = new SourceEditor
                     {
                         Id = sourceId,
@@ -140,7 +140,7 @@ namespace WinSimpleIDriver
                         ParseTags(tagsInSource, sourceId, 0);
 
                     // Блоки с тегами
-                    if (Tag.IsListBlocks(item))
+                    if (TagLib.IsListBlocks(item))
                     {
                         if (item.Blocks != null)
                         {
@@ -170,7 +170,7 @@ namespace WinSimpleIDriver
                 
                 foreach (dynamic item in data)
                 {
-                    Group.ParseItemGroup(item, ++groupId, out string title, out uint updateRate, out bool off, out string description, out string sourceTitle, out dynamic tagsInSource);
+                    GroupLib.ParseItemGroup(item, ++groupId, out string title, out uint updateRate, out bool off, out string description, out string sourceTitle, out dynamic tagsInSource);
                     GroupEditor rowGroup = new GroupEditor
                     {
                         Id = groupId,
@@ -187,7 +187,7 @@ namespace WinSimpleIDriver
                         ParseTags(tagsInSource, 0, groupId);
 
                     // Блоки с тегами
-                    if (Tag.IsListBlocks(item))
+                    if (TagLib.IsListBlocks(item))
                     {
                         if (item.Blocks != null)
                         {
@@ -214,7 +214,7 @@ namespace WinSimpleIDriver
                 
                 foreach (dynamic item in data)
                 {
-                    Tag.ParseItemTag(item, ++tagId, out string title, out string sourceTitle, out eDataType dataType, out bool off, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand);
+                    TagLib.ParseItemTag(item, ++tagId, out string title, out string sourceTitle, out eDataType dataType, out bool off, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand);
                     TagEditor oneTag = new TagEditor
                     {
                         Id = tagId,
@@ -265,9 +265,9 @@ namespace WinSimpleIDriver
             {
                 foreach (dynamic item in data)
                 {
-                    if (Tag.IsTargetTags(item))
+                    if (TagLib.IsTargetTags(item))
                     {
-                        Tag.ParseItemStructure(item, out string title, out string join, out string address, out eDataType dataType, out string source, out string group, out string[] sourceTags, out List <TargetTag> targetTags);
+                        TagLib.ParseItemStructure(item, out string title, out string join, out string address, out eDataType dataType, out string source, out string group, out string[] sourceTags, out List <TargetTag> targetTags);
                         //---
                         StructureEditor oneStructure = new StructureEditor
                         {

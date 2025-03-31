@@ -212,12 +212,20 @@ namespace Connector
             Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.groupOff));
         }
 
+        // ==========================================================================================================================
+
+        #region Statuc
+
         // Статические методы для работы со списком групп (оставляем без изменений или оптимизируем отдельно)
         static public List<Group> items = new List<Group>(); // Все группы
         static public ushort lastId = 0;
         static public bool log = false;
 
         static public bool Exist(Group group) => items.Count(x => x.Equals(group)) > 0;
+        public bool Equals(Group group)
+        {
+            return this.Id == group.Id || this.title == group.title;
+        }
 
         static public void Clear()
         {
@@ -228,7 +236,7 @@ namespace Connector
         static public Group Item(ushort id) => items.FirstOrDefault(x => x.Id == id);
         static public Group Item(string title) => items.FirstOrDefault(x => x.title == title);
 
-        static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Groups");
+       
 
         // Привязка тегов к группам
         static public void LinkGroups()
@@ -249,23 +257,7 @@ namespace Connector
             }
         }
 
-        // Переопределяем Equals для сравнения групп
-        public bool Equals(Group group)
-        {
-            return this.Id == group.Id || this.title == group.title;
-        }
+        #endregion
 
-        // Получение параметров группы
-        static public void ParseItemGroup(dynamic item, uint forindex, out string title, out uint updateRate, out bool off, out string description, out string sourceTitle, out dynamic tags)
-        {
-            title = JsonControl.GetString(item, "Title", $"Group #{forindex}");
-            updateRate = (uint)JsonControl.GetInt(item, "UpdateRate");
-            off = JsonControl.GetBool(item, "Off");
-            description = JsonControl.GetString(item, "Desc");
-            sourceTitle = JsonControl.GetString(item, "Source");
-            tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;
-        }
-
-
-}
+    }
 }

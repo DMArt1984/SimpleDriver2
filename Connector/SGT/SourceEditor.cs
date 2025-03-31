@@ -1,4 +1,5 @@
 ﻿
+using DML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,6 @@ namespace Connector
         public DataGridViewCell statistic;
     }
 
-    #region Editor
-
     public class SourceEditor // Редактирование
     {
         public uint Id; // Уникальный идентификатор (0 - нет Id)
@@ -34,6 +33,21 @@ namespace Connector
         public bool auto; // Запуск опроса после открытия файла
         public bool reconnect; // Автоматическое переподключение
     }
-    #endregion
+    
+    static public class SourceLib
+    {
+        static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Sources");
+        static public void ParseItemSource(dynamic item, uint forId, out string title, out eDriverType driver, out string connection, out bool off, out string description, out dynamic tags, out bool auto, out bool reopen)
+        {
+            title = JsonControl.GetString(item, "Title", $"Source #{forId}");
+            driver = JsonControl.GetTypeEnum<eDriverType>(item, "Driver", eDriverType.None);
+            connection = JsonControl.GetString(item, "Address");
+            off = JsonControl.GetBool(item, "Off");
+            description = JsonControl.GetString(item, "Desc");
+            tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;
+            auto = JsonControl.GetBool(item, "Auto");
+            reopen = JsonControl.GetBool(item, "Reconnect");
+        }
+    }
 
 }

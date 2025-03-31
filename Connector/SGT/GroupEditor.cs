@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DML;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,4 +28,19 @@ namespace Connector
         public string description; // Описание
         public string sourceTitle; // Название источника
     }
+
+    static public class GroupLib {
+        static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Groups");
+        // Получение параметров группы
+        static public void ParseItemGroup(dynamic item, uint forindex, out string title, out uint updateRate, out bool off, out string description, out string sourceTitle, out dynamic tags)
+        {
+            title = JsonControl.GetString(item, "Title", $"Group #{forindex}");
+            updateRate = (uint)JsonControl.GetInt(item, "UpdateRate");
+            off = JsonControl.GetBool(item, "Off");
+            description = JsonControl.GetString(item, "Desc");
+            sourceTitle = JsonControl.GetString(item, "Source");
+            tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;
+        }
+    }
+
 }

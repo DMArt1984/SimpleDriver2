@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DML;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,6 +76,60 @@ namespace Connector
         public uint Id; // Уникальный идентификатор (0 - нет Id)
         public string structureTitle { get; set; }  // Название структуры
         public string title { get; set; }  // Название тега
+    }
+
+    static public class TagLib
+    {
+        static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Tags");
+        static public bool IsStructures(dynamic output) => JsonControl.IsProp(output, "Structures");
+        static public bool IsTargetTags(dynamic output) => JsonControl.IsProp(output, "TargetTags");
+        static public bool IsListBlocks(dynamic output) => JsonControl.IsProp(output, "Blocks");
+
+        // Получение параметров тега
+        static public void ParseItemTag(dynamic item, uint forId, out string title, out string source, out eDataType dataType, out bool off, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand)
+        {
+            title = JsonControl.GetString(item, "Title", $"Tag #{forId}");
+            source = JsonControl.GetString(item, "Source");
+            groupTitle = JsonControl.GetString(item, "Group");
+            dataType = JsonControl.GetTypeEnum<eDataType>(item, "DataType", eDataType.Binary);
+            address = JsonControl.GetString(item, "Addr");
+            off = JsonControl.GetBool(item, "Off");
+            description = JsonControl.GetString(item, "Desc");
+            writeTitle = JsonControl.GetString(item, "Write");
+            constValue = JsonControl.GetString(item, "Value", null);
+            isCommand = JsonControl.GetBool(item, "Command");
+        }
+
+        // Получение параметров структуры
+        static public void ParseItemStructure(dynamic item, out string title, out string join, out string templateAddress, out eDataType dataType, out string tagSource, out string group, out string[] sourceTags, out List<TargetTag> targetTags)
+        {
+            title = JsonControl.GetString(item, "Title", $"noname #{DateTime.Now.Millisecond}");
+            join = JsonControl.GetString(item, "Join", ".");
+            templateAddress = JsonControl.GetString(item, "Address", "{#Source.[#Target]}");
+            dataType = JsonControl.GetTypeEnum<eDataType>(item, "DataType", eDataType.Binary);
+            tagSource = JsonControl.GetString(item, "Source", "");
+            group = JsonControl.GetString(item, "Group", "");
+            sourceTags = JsonControl.GetArrayString(item, "SourceTags");
+            targetTags = new List<TargetTag>();
+            if (IsTargetTags(item))
+            {
+                foreach (var target in item.TargetTags)
+                {
+                    ParseTargetTag(target, out string ttitle, out string taddress, out string tdesc);
+                    if (String.IsNullOrWhiteSpace(taddress) == false)
+                    {
+                        targetTags.Add(new TargetTag { title = ttitle, address = taddress, desc = tdesc });
+                    }
+                }
+            }
+        }
+        static public void ParseTargetTag(dynamic item, out string title, out string address, out string desc)
+        {
+            address = JsonControl.GetString(item, "Address", "");
+            title = JsonControl.GetString(item, "Title", $"index{address}");
+            desc = JsonControl.GetString(item, "Desc", title);
+        }
+
     }
 
     #endregion
