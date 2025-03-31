@@ -666,32 +666,37 @@ namespace Connector.SGT
             if (CyclicRequest == false && group.Id > 0)
                 return;
 
-            EventRequestRUN(group.Id);
+            EventRequestRUNAsync(group.Id);
         }
 
-        void EventRequestRUN(ushort groupId)
+        // Добавьте это поле в класс Source (например, в начале класса):
+        private SemaphoreSlim _requestSemaphore = new SemaphoreSlim(1, 1);
+
+        // Асинхронная версия метода
+        public async Task EventRequestRUNAsync(ushort groupId)
         {
-            if (Monitor.TryEnter(locker, new TimeSpan(0, 0, 10)))
+            // Пытаемся получить семафор с таймаутом 10 секунд
+            if (await _requestSemaphore.WaitAsync(TimeSpan.FromSeconds(10)))
             {
                 try
                 {
                     _process = true;
                     groupNow = groupId;
 
-                    // Выбор тегов для опроса
-                    List<Tag> clientTags = tags.Where(x => (x.groupId == groupId) && x.Off == false).ToList();
+                    // Выбираем теги для опроса
+                    List<Tag> clientTags = tags.Where(x => x.groupId == groupId && !x.Off).ToList();
 
                     if (clientTags.Any())
                     {
-
-                        // Запрос к устройству...
-                        _device.Request(clientTags);
+                        // Выполняем запрос к устройству.
+                        // Если _device.Request не является асинхронным, его можно обернуть в Task.Run.
+                        await Task.Run(() => _device.Request(clientTags));
                         counterReq++;
 
                         // Анализ ответов
                         bool breakError = clientTags.Any(x => x.codeMessage.code == (int)eTagCode.breakError);
                         bool anyGood = clientTags.Any(x => x.Good && x.Command == eCommand.None && x.WriteTagId == 0 && x.WriteTagValue == null);
-                        if (breakError && anyGood == false)
+                        if (breakError && !anyGood)
                         {
                             counterFailReq++;
                             NewBreak();
@@ -700,32 +705,21 @@ namespace Connector.SGT
                         {
                             ClearCounterBreak();
                         }
-                        //...
                     }
 
-                    // Дополнительный контроль:
-                    // источник отключен
-                    //if (Opened == false)
-                    //    Tag.CodeMessageList(tags, new CodeMessage((int)eTagCode.sourceClosed, Tag.CodeText(eTagCode.sourceClosed)));
-                    // группа отключена
-                    //if (group.Off)
-                    //    Tag.CodeMessageList(tags.Where(x => x.groupId == group.Id).ToList(), new CodeMessage((int)eTagCode.groupOff, Tag.CodeText(eTagCode.groupOff)));
-                    // теги отключены
-                    //Tag.CodeMessageList(tags.Where(x => x.Off).ToList(), new CodeMessage((int)eTagCode.tagOff, Tag.CodeText(eTagCode.tagOff)));
+                    // Вместо Thread.Sleep используем асинхронную задержку
+                    await Task.Delay(10);
 
-                    // Вывод
-                    Thread.Sleep(10);
-
-                    int all = tags.Count();
-                    int good = tags.Count(x => x.Good == true);
-                    eventReq?.Invoke(Id, groupId, clientTags.Select(x => x as ITagResult).ToList(), counterReq, counterFailReq, all, good);
+                    int all = tags.Count;
+                    int good = tags.Count(x => x.Good);
+                    eventReq?.Invoke(Id, groupId, clientTags.Select(x => (ITagResult)x).ToList(), counterReq, counterFailReq, all, good);
                 }
                 finally
                 {
-                    Monitor.Exit(locker);
+                    _requestSemaphore.Release();
                 }
 
-                // если это было в очереди то удаляем из очереди
+                // Если запрос был поставлен в очередь, удаляем его
                 if (roll[groupId])
                 {
                     roll[groupId] = false;
@@ -734,26 +728,26 @@ namespace Connector.SGT
                 _process = false;
                 groupNow = 0;
 
-                // смотрим, что еще есть в очереди
+                // Если в очереди есть другие запросы, обрабатываем следующий
                 if (roll.Count > 0)
                 {
                     var next = roll.FirstOrDefault(x => x.Value == true);
                     if (next.Key > 0)
                     {
-                        EventRequestRUN(next.Key);
+                        await EventRequestRUNAsync(next.Key);
                     }
                 }
-
             }
             else
             {
-                // там занято, ставим в очередь
+                // Если не удалось получить семафор – ставим запрос в очередь (логика может быть доработана)
                 if (groupId != groupNow)
                 {
                     roll[Id] = true;
                 }
             }
         }
+
 
         // --------------------------------------------------------------------------------------------------
 
