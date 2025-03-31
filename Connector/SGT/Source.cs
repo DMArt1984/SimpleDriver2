@@ -42,16 +42,12 @@ namespace Connector
         public string title { get; } // Название источника
         public string description { get; } // Описание источника
 
-        //object locker = new object();
-
+        // Группы источника (каждая группа содержит свои теги)
         public List<Group> Groups { get; } = new List<Group>();
 
-        // Теги для источника
-        List<Tag> tags = new List<Tag>();
-
-        public int TagsCount => _tagsCount;
-        int _tagsCount = 0;
-        public int TagsCountGood => tags.Count(x => x.Good);
+        // Теги больше не хранятся локально, их можно вычислить через группы
+        public int TagsCount => Groups.Sum(g => g.Tags.Count);
+        public int TagsCountGood => Groups.Sum(g => g.Tags.Count(x => x.Good));
 
         // Справка
         public Dictionary<string, string> helpSource => SourceHelp.HelpDicSource(_driverType);
@@ -201,29 +197,6 @@ namespace Connector
             Off = _disable;
         }
 
-        // Параметры для Source из адреса
-        private Dictionary<string, string> ParamsForSource(string address)
-        {
-            try
-            {
-                var dic = DeviceReal.ParamsToDic(address);
-                if (dic.ContainsKey("fails"))
-                {
-                    MaxBreak = byte.Parse(dic["fails"]);
-                    if (MaxBreak < 1)
-                        MaxBreak = 1;
-                    dic.Remove("fails");
-                }
-                return dic;
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex.HResult, $"ParamsForSource = {address}: {ex.Message}", eMessageCategory.Source);
-                return new Dictionary<string, string>();
-            }
-        }
-
-        // ----------------------------------------------------------------------------
         // Методы работы с группами напрямую
 
         public void AddGroup(Group group)
@@ -260,6 +233,7 @@ namespace Connector
         // Одиночный запрос
         public void OneRequest()
         {
+            // Для запроса со всеми тегами передаем специальный идентификатор (например, 0)
             EventRequest(new Group(0, "", this));
         }
 
@@ -306,7 +280,7 @@ namespace Connector
             Address = newAddress; // новый адрес
 
             logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 2 - новые параметры", eMessageCategory.Source);
-            var dic = ParamsForSource(Address);
+           //var dic = ParamsForSource(Address);
 
             logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 3 - пересоздание клиента", eMessageCategory.Source);
             _device.CreateClient(Address); // пересоздание клиента
@@ -360,7 +334,9 @@ namespace Connector
                     _fail = false;
                     stepReOpen = 0;
                     ClearCounterBreak();
-                    Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.sourceOpened));
+                    // Обновляем статус тегов во всех группах
+                    var allTags = Groups.SelectMany(g => g.Tags).ToList();
+                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagCode.sourceOpened));
 
                     if (AutoRequestAftereOpen)
                         CyclicRequest = true;
@@ -371,7 +347,8 @@ namespace Connector
                     Status = eSourceStatus.breaking;
                     _fail = true;
                     ClearCounterBreak();
-                    Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.sourceFail));
+                    var allTags = Groups.SelectMany(g => g.Tags).ToList();
+                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagCode.sourceFail));
                     OpenAfterFail();
                 }
 
@@ -406,7 +383,8 @@ namespace Connector
                     counterReq = 0;
                     counterFailReq = 0;
                     logger.Info($"Источник ID={Id} {title} > Статусы тегов...", eMessageCategory.Source);
-                    Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.sourceClosed));
+                    var allTags = Groups.SelectMany(g => g.Tags).ToList();
+                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagCode.sourceClosed));
                     logger.Info($"Источник ID={Id} {title} > 5...", eMessageCategory.Source);
 
                     if (user == false)
@@ -423,7 +401,8 @@ namespace Connector
             }
             else
             {
-                Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.sourceClosed));
+                var allTags = Groups.SelectMany(g => g.Tags).ToList();
+                Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagCode.sourceClosed));
             }
             return 1;
         }
@@ -508,7 +487,8 @@ namespace Connector
                     if (value == false)
                     {
                         WaitProcess();
-                        Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.sourceOpened));
+                        var allTags = Groups.SelectMany(g => g.Tags).ToList();
+                        Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagCode.sourceOpened));
                     }
                     EventStatus();
                 }
@@ -621,7 +601,6 @@ namespace Connector
         }
 
         // ======= Новая реализация очереди запросов =============
-
         private ConcurrentQueue<ushort> _requestQueue = new ConcurrentQueue<ushort>();
         private int _processing = 0; // 0 - не обрабатывается, 1 - идет обработка
 
@@ -657,7 +636,6 @@ namespace Connector
         {
             if (!await _requestSemaphore.WaitAsync(TimeSpan.FromSeconds(10)))
             {
-                // Если не удалось получить семафор, повторно ставим запрос в очередь
                 _requestQueue.Enqueue(groupId);
                 return;
             }
@@ -666,21 +644,29 @@ namespace Connector
                 _process = true;
                 groupNow = groupId;
 
-                // Выбираем теги для опроса
-                List<Tag> clientTags = tags.Where(x => x.groupId == groupId && !x.Off).ToList();
+                // Выбираем теги для опроса: если groupId == 0, берем все теги из всех групп; иначе — теги выбранной группы
+                List<Tag> clientTags;
+                if (groupId == 0)
+                {
+                    clientTags = Groups.SelectMany(g => g.Tags).Where(x => !x.Off).ToList();
+                }
+                else
+                {
+                    var group = Groups.FirstOrDefault(g => g.Id == groupId);
+                    clientTags = group != null ? group.Tags.Where(x => !x.Off).ToList() : new List<Tag>();
+                }
+
                 if (clientTags.Any())
                 {
                     await Task.Run(() => _device.Request(clientTags));
                     counterReq++;
-
-                    // Вызов вынесенного метода для обработки ошибок
                     HandleTagErrors(clientTags);
                 }
 
                 await Task.Delay(10);
 
-                int all = tags.Count;
-                int good = tags.Count(x => x.Good);
+                int all = Groups.SelectMany(g => g.Tags).Count();
+                int good = Groups.SelectMany(g => g.Tags).Count(x => x.Good);
                 eventReq?.Invoke(Id, groupId, clientTags.Select(x => (ITagResult)x).ToList(), counterReq, counterFailReq, all, good);
             }
             finally
@@ -692,9 +678,8 @@ namespace Connector
         }
 
         /// <summary>
-        /// Вынесенная обработка ошибок при опросе тегов.
-        /// Если обнаружен breakError и нет корректных тегов, увеличивается счётчик неудачных запросов и вызывается NewBreak.
-        /// Иначе, счётчик сбрасывается.
+        /// Обработка ошибок при опросе тегов: если найден breakError и нет корректных тегов, увеличиваем счётчик неудачных запросов и вызываем NewBreak.
+        /// Иначе сбрасываем счётчик.
         /// </summary>
         /// <param name="clientTags">Список опрашиваемых тегов</param>
         private void HandleTagErrors(List<Tag> clientTags)
@@ -713,10 +698,9 @@ namespace Connector
         }
 
         ushort groupNow = 0;
-        // ======= Конец новой реализации очереди запросов =============
+        // ======= Конец реализации очереди запросов =============
 
         // --------------------------------------------------------------------------------------------------
-
         public void SetLogTraffic(bool enable)
         {
             (_device as IControlTrafficLog).EnableTLog = enable;
@@ -742,8 +726,6 @@ namespace Connector
         }
 
         // --------------------------------------------------------------------------------------------------
-
-        // is NetDevice?
         public bool IsNet()
         {
             return (_device is INetDevice);
@@ -766,7 +748,6 @@ namespace Connector
         }
 
         // ======================================================================================================
-
         #region Static
 
         static public List<Source> items = new List<Source>(); // все источники
@@ -781,8 +762,6 @@ namespace Connector
         static public Source Item(ushort Id) => items.FirstOrDefault(x => x.Id == Id);
         static public Source Item(string title) => items.FirstOrDefault(x => x.title == title);
 
-        
-
         static public void ActivateItems()
         {
             foreach (var item in items)
@@ -790,9 +769,8 @@ namespace Connector
                 item.Activate();
             }
         }
-
         #endregion
-
     }
+
 
 }
