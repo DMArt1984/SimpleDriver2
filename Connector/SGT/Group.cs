@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 using DML;
 using DML.Log;
 using LogCodeMessage;
@@ -11,114 +13,33 @@ namespace Connector
     {
         ushort Id { get; }
         bool Off { get; set; }
-
     }
-    
+
     public struct GroupParamStatus
     {
         public readonly ushort Id;
-        public uint updateRate;
-        public bool off;
-        public bool isStop;
-        public GroupParamStatus(ushort Id, uint updateRate, bool off, bool isStop)
+        public uint UpdateRate;
+        public bool Off;
+        public bool IsStopped;
+        public GroupParamStatus(ushort id, uint updateRate, bool off, bool isStopped)
         {
-            this.Id = Id;
-            this.updateRate = updateRate;
-            this.off = off;
-            this.isStop = isStop;
+            Id = id;
+            UpdateRate = updateRate;
+            Off = off;
+            IsStopped = isStopped;
         }
-    }
-
-    public class GroupManager
-    {
-        public readonly ushort sourceId;
-
-        public delegate void HandlerReq(IGroupOff group);
-        public event HandlerReq tikTakReq;
-
-        public readonly Group _parent;
-
-        System.Threading.Timer timer;
-        bool timerStop = false;
-
-        public int counter = 0;
-
-        public GroupManager(ushort Id, Group parent)
-        {
-            this.sourceId = Id;
-            this._parent = parent;
-        }
-        public void Go(Group group)
-        {
-            tikTakReq?.Invoke(group);
-        }
-
-        public void On()
-        {
-            if (timer == null)
-            {
-                TimerCallback tm = new TimerCallback(TimerCB);
-                timer = new System.Threading.Timer(tm, new { a = 0 }, 0, _parent.UpdateRate);
-
-                // статусы тегов
-                _parent.SendOn();
-            }
-        }
-
-        public void Off()
-        {
-            if (timer != null)
-                StopTimer();
-
-            // статусы тегов
-            _parent.SendOff();
-        }
-
-        public void StopTimer()
-        {
-            timerStop = true;
-        }
-
-        public bool IsStop => (timer == null);
-
-        void TimerCB(object obj)
-        {
-            counter++;
-
-            // v1
-            tikTakReq?.Invoke(_parent);
-
-            _parent.Statistic();
-
-            if (timerStop || _parent.Id == 0 || _parent.Off)
-            {
-                if (timer != null)
-                {
-                    timer.Dispose();
-                    timer = null;
-                }
-                timerStop = false;
-                counter = 0;
-
-                _parent.SendStatusOff();
-            }
-            //Task.Delay(10); // 
-        }
-
     }
 
     public class Group : BaseLogger, IGroupOff
     {
         public ushort Id { get; } // ID группы
-        public string title { get; } // Название тега
-        public string description { get; } // Описание тега
+        public string title { get; } // Название группы
+        public string description { get; } // Описание группы
 
-
-        // теги для группы
-        List<ICodeMessage> tags = new List<ICodeMessage>();
-
+        // Теги для группы
+        private List<ICodeMessage> tags = new List<ICodeMessage>();
+        private int _tagsCount = 0;
         public int TagsCount => _tagsCount;
-        int _tagsCount = 0;
         public int TagsCountGood => tags.Count(x => x.Good);
 
         // События
@@ -128,37 +49,16 @@ namespace Connector
         public delegate void HandlerReq(IGroupOff group);
         public event HandlerReq tikTakReq;
 
-        public GroupManager manager; // = new List<GroupManager>();
-
-        public delegate void HandlerInfo(ushort Id, int counter, int all, int good);
+        public delegate void HandlerInfo(ushort id, int counter, int all, int good);
         public event HandlerInfo tikTakInfo;
 
-        // Одинаковы ?
-        public bool Equals(Group group)
-        {
-            return this.Id == group.Id || this.title == group.title;
-        }
+        // Поля для таймера (объединяет функционал GroupManager)
+        private System.Threading.Timer _timer;
+        private bool _timerStop = false;
+        private int _counter = 0;
 
-        public bool AddManager(GroupManager gm)
-        {
-            this.manager = gm;
-            return true;
-        }
-        public bool AddManager(ushort sourceId, out GroupManager gm)
-        {
-            gm = new GroupManager(this.Id, this);
-            this.manager = gm;
-            return true;
-        }
-
-        public bool RemoveManagers(GroupManager.HandlerReq myMethodName)
-        {
-            this.manager.tikTakReq -= myMethodName;
-            return true;
-        }
-
-        public bool IsStop => manager.IsStop; // timer == null;
-
+        // Параметры обновления
+        private uint _updateRate = 100;
         public uint UpdateRate
         {
             get => _updateRate;
@@ -166,18 +66,19 @@ namespace Connector
             {
                 if (_updateRate != value)
                 {
-                    if (value <= 0)
-                    {
-                        value = 100;
-                    }
-                    _updateRate = value;
-
+                    _updateRate = value <= 0 ? 100u : value;
                     EventChangeParamStatus();
+                    // Если таймер уже запущен, можно пересоздать его с новым интервалом
+                    if (_timer != null)
+                    {
+                        _timer.Change(0, (int)_updateRate);
+                    }
                 }
             }
         }
-        uint _updateRate = 100;
 
+        // Свойство для включения/выключения группы
+        private bool _off = true;
         public bool Off
         {
             get => _off;
@@ -186,36 +87,31 @@ namespace Connector
                 if (_off != value)
                 {
                     _off = value;
-                    if (_off == false) // включить
+                    if (!_off) // включаем группу
                     {
-                        manager.On();
+                        StartTimer();
                     }
-                    else // отключить
+                    else // выключаем группу
                     {
-                        manager.Off();
-                    } 
-
+                        StopTimer();
+                    }
                     EventChangeParamStatus();
                 }
             }
         }
-        bool _off = true;
 
-        bool _disable = false;
+        private bool _disable = false;
+        public string sourceTitle = ""; // Название источника (если необходимо)
 
-        public string sourceTitle = ""; // ...
-
-        //int counter = 0;
-
-        public Group(ushort Id, string title, uint updateRate = 100, bool disable = false, string description = "") : base(LogTarget.FileConsoleForm, null)
+        public Group(ushort id, string title, uint updateRate = 100, bool disable = false, string description = "")
+            : base(LogTarget.FileConsoleForm, null)
         {
-            this.Id = Id;
+            Id = id;
             this.title = title;
             this.description = description;
             UpdateRate = updateRate;
             _disable = disable;
-
-            logger.Info($"new group ID{Id} {title} {updateRate}", eMessageCategory.Source);
+            logger.Info($"new group ID {Id} {title} {updateRate}", eMessageCategory.Source);
         }
 
         public void Activate()
@@ -223,7 +119,7 @@ namespace Connector
             Off = _disable;
         }
 
-        // Добавить теги
+        // Назначение тегов группе
         public void UseTags(List<ICodeMessage> tags)
         {
             if (tags == null)
@@ -234,12 +130,12 @@ namespace Connector
 
         ~Group()
         {
-            manager.StopTimer();
+            StopTimer();
         }
 
-        void EventChangeParamStatus()
+        private void EventChangeParamStatus()
         {
-            eventParams?.Invoke(new GroupParamStatus(Id, _updateRate, _off, IsStop));
+            eventParams?.Invoke(new GroupParamStatus(Id, _updateRate, _off, IsTimerStopped));
         }
 
         public void Refresh()
@@ -247,71 +143,117 @@ namespace Connector
             EventChangeParamStatus();
         }
 
-        // -------------------------------------
+        // Методы управления таймером
 
+        private void StartTimer()
+        {
+            if (_timer == null)
+            {
+                _timerStop = false;
+                _timer = new System.Threading.Timer(TimerCallback, null, 0, (int)UpdateRate);
+                // При включении обновляем статусы тегов
+                SendOn();
+            }
+        }
+
+        private void StopTimer()
+        {
+            if (_timer != null)
+            {
+                _timerStop = true;
+            }
+            // При отключении отправляем статус "выключено"
+            SendOff();
+        }
+
+        // Возвращает true, если таймер не запущен
+        private bool IsTimerStopped => _timer == null;
+
+        // Таймер-колбэк, заменяющий функциональность TimerCB из GroupManager
+        private void TimerCallback(object state)
+        {
+            _counter++;
+            tikTakReq?.Invoke(this);
+            Statistic();
+
+            if (_timerStop || Id == 0 || Off)
+            {
+                _timer?.Dispose();
+                _timer = null;
+                _timerStop = false;
+                _counter = 0;
+                SendStatusOff();
+            }
+        }
+
+        // Метод статистики – можно вызвать для обновления информации о группе
         public void Statistic()
         {
             int all = tags.Count();
-            int good = tags.Count(x => x.Good == true);
-            int counter = manager.counter;
-            tikTakInfo?.Invoke(Id, counter, all, good);
+            int good = tags.Count(x => x.Good);
+            tikTakInfo?.Invoke(Id, _counter, all, good);
         }
 
         public void SendStatusOff()
         {
             SendOff();
-
             EventChangeParamStatus();
         }
 
         public void SendOn()
         {
-            // статусы тегов
+            // Обновляем статусы тегов при включении группы
             Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.groupOn));
         }
 
         public void SendOff()
         {
-            // статусы тегов
+            // Обновляем статусы тегов при выключении группы
             Tag.CodeMessageList(tags, CodeMessageFactory.FromEnumX(eTagCode.groupOff));
         }
 
-        // ===============================================================================
-
-        static public List<Group> items = new List<Group>(); // все группы
+        // Статические методы для работы со списком групп (оставляем без изменений или оптимизируем отдельно)
+        static public List<Group> items = new List<Group>(); // Все группы
         static public ushort lastId = 0;
         static public bool log = false;
 
-        static public bool Exist(Group group) => items.Count(x => x.Equals(group)) > 0; // есть ли такая группа уже в списке
+        static public bool Exist(Group group) => items.Count(x => x.Equals(group)) > 0;
 
         static public void Clear()
         {
-            Group.lastId = 0;
-            Group.items = new List<Group>();
+            lastId = 0;
+            items = new List<Group>();
         }
-        static public Group Item(ushort Id) => items.FirstOrDefault(x => x.Id == Id);
+
+        static public Group Item(ushort id) => items.FirstOrDefault(x => x.Id == id);
         static public Group Item(string title) => items.FirstOrDefault(x => x.title == title);
 
         static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Groups");
 
-        // Привязки групп
+        // Привязка тегов к группам
         static public void LinkGroups()
         {
-            foreach (var item in Group.items)
+            foreach (var group in items)
             {
-                var useTags = Tag.items.Where(x => x.groupId == item.Id).ToList();
-                item.UseTags(useTags.Select( x => x as ICodeMessage).ToList());
+                var useTags = Tag.items.Where(x => x.groupId == group.Id).ToList();
+                group.UseTags(useTags.Select(x => x as ICodeMessage).ToList());
             }
         }
 
         static public void ActivateItems()
         {
-            foreach (var item in Group.items)
+            foreach (var group in items)
             {
-                item.Activate();
+                if (group.Off)
+                    group.Activate();
             }
         }
 
+        // Переопределяем Equals для сравнения групп
+        public bool Equals(Group group)
+        {
+            return this.Id == group.Id || this.title == group.title;
+        }
 
         // Получение параметров группы
         static public void ParseItemGroup(dynamic item, uint forindex, out string title, out uint updateRate, out bool off, out string description, out string sourceTitle, out dynamic tags)
@@ -323,7 +265,7 @@ namespace Connector
             sourceTitle = JsonControl.GetString(item, "Source");
             tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;
         }
-    }
 
-    
+
+}
 }

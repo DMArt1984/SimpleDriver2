@@ -7,24 +7,22 @@ namespace Connector
 {
     static class SourceGroupsHelper
     {
-        // Добавление группы и привязка событий
+        // Добавление группы и привязка события тикания группы к обработчику запроса источника
         public static void AddGroup(Source source, Group group, ConcurrentDictionary<ushort, bool> roll)
         {
-            if (group.AddManager(source.Id, out GroupManager gm))
-            {
-                gm.tikTakReq += source.EventRequest;
-                roll.TryAdd(group.Id, false);
-            }
+            // Подписываем обработчик события тикания группы
+            group.tikTakReq += source.EventRequest;
+            roll.TryAdd(group.Id, false);
         }
 
-        // Удаление группы и отвязка событий
+        // Удаление группы и отвязка события
         public static void RemoveGroup(Source source, Group group, ConcurrentDictionary<ushort, bool> roll)
         {
-            group.RemoveManagers(source.EventRequest);
+            group.tikTakReq -= source.EventRequest;
             roll.TryRemove(group.Id, out _);
         }
 
-        // Использовать группы из списка
+        // Привязка всех групп из списка
         public static void UseGroups(Source source, List<Group> groups, ConcurrentDictionary<ushort, bool> roll)
         {
             if (groups == null)
@@ -35,7 +33,6 @@ namespace Connector
                 AddGroup(source, group, roll);
             }
         }
-
     }
 }
 
