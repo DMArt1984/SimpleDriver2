@@ -1,9 +1,6 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
-using DML;
 using DML.Log;
 using LogCodeMessage;
 
@@ -36,7 +33,13 @@ namespace Connector
         public string title { get; } // Название группы
         public string description { get; } // Описание группы
 
-        public Source ParentSource { get; }
+        private Source _parentSource;
+        public Source ParentSource
+        {
+            get => _parentSource;
+            set => _parentSource = value;
+        }
+
         public List<Tag> Tags { get; } = new List<Tag>();
 
         // Теги для группы
@@ -116,7 +119,7 @@ namespace Connector
             _disable = disable;
 
             ParentSource = parentSource;
-            ParentSource.AddGroup(this);
+            //ParentSource.AddGroup(this);
 
             logger.Info($"new group ID {Id} {title} {updateRate}", eMessageCategory.Source);
         }

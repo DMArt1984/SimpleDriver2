@@ -43,7 +43,10 @@ namespace Connector
         public string description { get; } // Описание источника
 
         // Группы источника (каждая группа содержит свои теги)
-        public List<Group> Groups { get; } = new List<Group>();
+        //public List<Group> Groups { get; } = new List<Group>();
+
+        // Вместо локального списка групп используем вычисляемое свойство
+        public IEnumerable<Group> Groups => Group.items.Where(g => g.ParentSource == this);
 
         // Теги больше не хранятся локально, их можно вычислить через группы
         public int TagsCount => Groups.Sum(g => g.Tags.Count);
@@ -197,35 +200,26 @@ namespace Connector
             Off = _disable;
         }
 
-        // Методы работы с группами напрямую
-
-        public void AddGroup(Group group)
+        // Методы регистрации групп.
+        // Вместо добавления группы в локальное хранилище, мы регистрируем группу в глобальном списке,
+        // устанавливая для неё ParentSource и подписывая событие тикания.
+        public void RegisterGroup(Group group)
         {
-            if (!Groups.Contains(group))
-            {
-                Groups.Add(group);
-                // Подписываем обработчик события тикания группы на метод запроса
-                group.tikTakReq += this.EventRequest;
-            }
+            if (group == null) return;
+            // Устанавливаем связь
+            group.ParentSource = this;
+            // Обязательно отписываем, чтобы избежать дублирования обработчиков, и затем подписываем.
+            group.tikTakReq -= this.EventRequest;
+            group.tikTakReq += this.EventRequest;
         }
 
-        public void RemoveGroup(Group group)
+        public void UnregisterGroup(Group group)
         {
-            if (Groups.Contains(group))
+            if (group == null) return;
+            if (group.ParentSource == this)
             {
-                Groups.Remove(group);
-                // Отписываем обработчик
                 group.tikTakReq -= this.EventRequest;
-            }
-        }
-
-        public void UseGroups(List<Group> groups)
-        {
-            if (groups == null)
-                return;
-            foreach (var group in groups)
-            {
-                AddGroup(group);
+                group.ParentSource = null; // Или присваиваем другое значение по логике приложения.
             }
         }
         // ---------------------------------------------------------------------------
