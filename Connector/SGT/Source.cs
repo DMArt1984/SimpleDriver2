@@ -667,17 +667,8 @@ namespace Connector.SGT
                     await Task.Run(() => _device.Request(clientTags));
                     counterReq++;
 
-                    bool breakError = clientTags.Any(x => x.codeMessage.code == (int)eTagCode.breakError);
-                    bool anyGood = clientTags.Any(x => x.Good && x.Command == eCommand.None && x.WriteTagId == 0 && x.WriteTagValue == null);
-                    if (breakError && !anyGood)
-                    {
-                        counterFailReq++;
-                        NewBreak();
-                    }
-                    else
-                    {
-                        ClearCounterBreak();
-                    }
+                    // Вызов вынесенного метода для обработки ошибок
+                    HandleTagErrors(clientTags);
                 }
 
                 await Task.Delay(10);
@@ -691,6 +682,27 @@ namespace Connector.SGT
                 _requestSemaphore.Release();
                 _process = false;
                 groupNow = 0;
+            }
+        }
+
+        /// <summary>
+        /// Вынесенная обработка ошибок при опросе тегов.
+        /// Если обнаружен breakError и нет корректных тегов, увеличивается счётчик неудачных запросов и вызывается NewBreak.
+        /// Иначе, счётчик сбрасывается.
+        /// </summary>
+        /// <param name="clientTags">Список опрашиваемых тегов</param>
+        private void HandleTagErrors(List<Tag> clientTags)
+        {
+            bool breakError = clientTags.Any(x => x.codeMessage.code == (int)eTagCode.breakError);
+            bool anyGood = clientTags.Any(x => x.Good && x.Command == eCommand.None && x.WriteTagId == 0 && x.WriteTagValue == null);
+            if (breakError && !anyGood)
+            {
+                counterFailReq++;
+                NewBreak();
+            }
+            else
+            {
+                ClearCounterBreak();
             }
         }
 
