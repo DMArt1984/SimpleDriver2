@@ -60,8 +60,6 @@ namespace Connector
         public string tagSource { get; set; } // тег-источник
         public string templateAddress { get; set; } // шаблон адреса
         public string group { get; set; } // группа
-
-        //public string sourceTags { get; set; } // tag1;tag2;tag3
     }
     public class StructTargetEditor
     {

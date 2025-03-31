@@ -44,13 +44,13 @@ namespace Connector
         public string title { get; } // Название источника
         public string description { get; } // Описание источника
 
-        object locker = new object();
+        //object locker = new object();
 
         public List<Group> Groups { get; } = new List<Group>();
 
         // Теги для источника
         List<Tag> tags = new List<Tag>();
-        Dictionary<ushort, List<Tag>> dicTagGroup = new Dictionary<ushort, List<Tag>>();
+        //Dictionary<ushort, List<Tag>> dicTagGroup = new Dictionary<ushort, List<Tag>>();
         public int TagsCount => _tagsCount;
         int _tagsCount = 0;
         public int TagsCountGood => tags.Count(x => x.Good);
@@ -223,15 +223,6 @@ namespace Connector
                 logger.Error(ex.HResult, $"ParamsForSource = {address}: {ex.Message}", eMessageCategory.Source);
                 return new Dictionary<string, string>();
             }
-        }
-
-        // Использовать теги
-        public void UseTags(List<Tag> tags)
-        {
-            if (tags == null)
-                tags = new List<Tag>();
-            this.tags = tags;
-            _tagsCount = this.tags.Count();
         }
 
         // ----------------------------------------------------------------------------
@@ -767,15 +758,6 @@ namespace Connector
             return (_device as INetDevice).TryTcpConnect("", 0, 0);
         }
 
-        // ------------------------------------------------------------------------------------------------------
-
-        public void Link()
-        {
-            var useTags = Tag.items.Where(x => x.sourceId == this.Id).ToList();
-            this.UseTags(useTags);
-            this.UseGroups(Group.items.Where(x => useTags.Select(y => y.groupId).Contains(x.Id)).ToList());
-        }
-
         // ======================================================================================================
 
         #region Static
@@ -799,16 +781,6 @@ namespace Connector
             foreach (var item in items)
             {
                 item.Activate();
-            }
-        }
-
-        static public void LinkSources()
-        {
-            foreach (var item in Source.items)
-            {
-                var useTags = Tag.items.Where(x => x.sourceId == item.Id).ToList();
-                item.UseTags(useTags);
-                item.UseGroups(Group.items.Where(x => useTags.Select(y => y.groupId).Contains(x.Id)).ToList());
             }
         }
 
