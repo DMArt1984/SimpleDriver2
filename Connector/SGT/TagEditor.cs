@@ -159,7 +159,7 @@ namespace Connector
                     bool good = item.Good; // || item.SimEnable; // new item.SimEnable
                     int code = item.codeMessage.code;
                     dynamic lastValue = item.LastGoodValue;
-                    dynamic actualValue = item.Value;
+                    dynamic actualValue = item.value;
 
                     if (address.Contains(goodValue)) // качество тега
                     {
@@ -348,7 +348,7 @@ namespace Connector
                 if (item == null)
                     return "";
 
-                dynamic value = item.Value;
+                dynamic value = item.value;
                 string text = "";
 
                 if (value != null && item.Good)

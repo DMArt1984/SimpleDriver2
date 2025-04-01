@@ -505,10 +505,10 @@ namespace Connector.Driver
                                             if (wTag != null)
                                             {
                                                 if (CashValues.ContainsKey(wTag.title) == false)
-                                                    CashValues.Add(wTag.title, wTag.Value);
+                                                    CashValues.Add(wTag.title, wTag.value);
 
-                                                Value = wTag.Value != CashValues[wTag.title]; // значение меняется
-                                                CashValues[wTag.title] = wTag.Value;
+                                                Value = wTag.value != CashValues[wTag.title]; // значение меняется
+                                                CashValues[wTag.title] = wTag.value;
                                             }
                                             else
                                             {
@@ -523,10 +523,10 @@ namespace Connector.Driver
                                             if (wTag != null)
                                             {
                                                 if (CashValues.ContainsKey(wTag.title) == false)
-                                                    CashValues.Add(wTag.title, wTag.Value);
+                                                    CashValues.Add(wTag.title, wTag.value);
 
-                                                Value = wTag.Value == CashValues[wTag.title]; // значение не меняется
-                                                CashValues[wTag.title] = wTag.Value;
+                                                Value = wTag.value == CashValues[wTag.title]; // значение не меняется
+                                                CashValues[wTag.title] = wTag.value;
                                             }
                                             else
                                             {
@@ -541,10 +541,10 @@ namespace Connector.Driver
                                             if (wTag != null)
                                             {
                                                 if (CashValues.ContainsKey(wTag.title) == false)
-                                                    CashValues.Add(wTag.title, wTag.Value);
+                                                    CashValues.Add(wTag.title, wTag.value);
 
-                                                Value = Convert.ToBoolean(wTag.Value) == true && Convert.ToBoolean(CashValues[wTag.title]) == false; // позитивный фронт
-                                                CashValues[wTag.title] = wTag.Value;
+                                                Value = Convert.ToBoolean(wTag.value) == true && Convert.ToBoolean(CashValues[wTag.title]) == false; // позитивный фронт
+                                                CashValues[wTag.title] = wTag.value;
                                             }
                                             else
                                             {
@@ -559,10 +559,10 @@ namespace Connector.Driver
                                             if (wTag != null)
                                             {
                                                 if (CashValues.ContainsKey(wTag.title) == false)
-                                                    CashValues.Add(wTag.title, wTag.Value);
+                                                    CashValues.Add(wTag.title, wTag.value);
 
-                                                Value = Convert.ToBoolean(wTag.Value) == false && Convert.ToBoolean(CashValues[wTag.title]) == true; // позитивный фронт
-                                                CashValues[wTag.title] = wTag.Value;
+                                                Value = Convert.ToBoolean(wTag.value) == false && Convert.ToBoolean(CashValues[wTag.title]) == true; // позитивный фронт
+                                                CashValues[wTag.title] = wTag.value;
                                             }
                                             else
                                             {
@@ -585,7 +585,7 @@ namespace Connector.Driver
                                         if (Timers.ContainsKey(timerTitle) == false)
                                             Timers.Add(timerTitle, new DMTimer {status = 0, dt = DateTime.Now});
 
-                                        if (Convert.ToBoolean(wTag.Value) == true)
+                                        if (Convert.ToBoolean(wTag.value) == true)
                                         {
                                             if (Timers[timerTitle].status == 0)
                                             {

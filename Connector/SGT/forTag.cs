@@ -55,7 +55,7 @@ namespace Connector
         ushort WriteTagId { get; }
         eDirectFull directFull { get; }
         eCommand Command { get; set; }
-        dynamic Value { get; set; }
+        dynamic value { get; set; }
         dynamic LastGoodValue { get; }
         dynamic WriteTagValue { get; }
         CodeMessage codeMessage { get; set; }
@@ -66,7 +66,7 @@ namespace Connector
     {
         ushort Id { get; }
         bool Good { get; }
-        dynamic Value { get; set; }
+        dynamic value { get; set; }
         CodeMessage codeMessage { get; set; }
     }
     public interface IAppendTag

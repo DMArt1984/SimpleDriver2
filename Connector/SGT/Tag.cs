@@ -68,12 +68,19 @@ namespace Connector
         {
             if (!SimEnable)
             {
-                codeMessage = result.codeMessage;
-                Value = result.value;
+                _codeMessage = result.codeMessage;
+                if (_codeMessage.code == 0)
+                {
+                    _status = eTagStatus.good;
+                } else
+                {
+                    _status = eTagStatus.error;
+                }
+                value = result.value;
             }
         }
 
-        public dynamic Value
+        public dynamic value
         {
             get => _value;
             set
@@ -85,7 +92,7 @@ namespace Connector
                     _lastDTUpdate = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss.fff");
                 }
 
-                eventValue?.Invoke(Id);
+                eventRuntime?.Invoke(Id);
             }
         }
         private dynamic _value = null;
@@ -104,7 +111,7 @@ namespace Connector
                 if (_codeMessage.code != value.code)
                 {
                     _codeMessage = value;
-                    EventChangeCodeMessageStatus();
+                    eventRuntime?.Invoke(Id);
                 }
             }
         }
@@ -118,7 +125,7 @@ namespace Connector
                 if (_status != value)
                 {
                     _status = value;
-                    EventChangeCodeMessageStatus();
+                    eventRuntime?.Invoke(Id);
                 }
             }
         }
@@ -130,14 +137,11 @@ namespace Connector
 
         #region Events
 
-        public delegate void HandlerCodeOrStatus(ushort Id, CodeMessage cm, eTagStatus status);
-        public event HandlerCodeOrStatus eventCodeOrStatus;
+        public delegate void HandlerTagRuntime(ushort Id);
+        public event HandlerTagRuntime eventRuntime;
 
-        public delegate void HandlerParam(TagParam info);
-        public event HandlerParam eventParams;
-
-        public delegate void HandlerValue(ushort Id);
-        public event HandlerValue eventValue;
+        public delegate void HandlerTagParam(TagParam info);
+        public event HandlerTagParam eventParam;
 
         private void EventChangeParam(bool noSetTagON = false)
         {
@@ -149,19 +153,7 @@ namespace Connector
             {
                 codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.tagOn);
             }
-            eventParams?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
-        }
-
-        private void EventChangeCodeMessageStatus()
-        {
-            eventCodeOrStatus?.Invoke(Id, codeMessage, status);
-        }
-
-        public void Refresh()
-        {
-            EventChangeParam(true);
-            EventChangeCodeMessageStatus();
-            eventValue?.Invoke(Id);
+            eventParam?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
         }
 
         #endregion
@@ -192,7 +184,7 @@ namespace Connector
                 if (_dataType != value)
                 {
                     _dataType = value;
-                    Value = null;
+                    this.value = null;
                     _lastGoodValue = null;
                     EventChangeParam();
                 }
@@ -208,7 +200,7 @@ namespace Connector
                 if (_address != value)
                 {
                     _address = value;
-                    Value = null;
+                    this.value = null;
                     _lastGoodValue = null;
 
                     SetInnerTagsForOneTag();
@@ -303,7 +295,7 @@ namespace Connector
             if (SimEnable)
             {
                 codeMessage = Tag.CM.Good;
-                Value = value;
+                this.value = value;
             }
             else
             {

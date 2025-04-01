@@ -192,7 +192,7 @@ namespace Connector
 
         private bool IsWrite(ITagClient tag)
         {
-            return tag.directFull != eDirectFull.Read && (tag.Command != eCommand.Update || (tag.Value != tag.WriteConstValue && tag.Value != tag.WriteTagValue));
+            return tag.directFull != eDirectFull.Read && (tag.Command != eCommand.Update || (tag.value != tag.WriteConstValue && tag.value != tag.WriteTagValue));
         }
 
         // =====================================================================================
