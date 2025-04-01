@@ -45,11 +45,6 @@ namespace Connector
             ParentGroup.AddTag(this);
         }
 
-        public string GetWriteCell()
-        {
-            return !string.IsNullOrWhiteSpace(WriteTagTitle) ? WriteTagTitle : WriteConstValue == null ? null : string.Join(";", WriteConstValue);
-        }
-
         public eCommand Command
         {
             get => _command;
@@ -92,7 +87,7 @@ namespace Connector
                     _lastDTUpdate = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss.fff");
                 }
 
-                eventRuntime?.Invoke(Id);
+                RaiseRuntimeEvent();
             }
         }
         private dynamic _value = null;
@@ -111,7 +106,7 @@ namespace Connector
                 if (_codeMessage.code != value.code)
                 {
                     _codeMessage = value;
-                    eventRuntime?.Invoke(Id);
+                    RaiseRuntimeEvent();
                 }
             }
         }
@@ -125,7 +120,7 @@ namespace Connector
                 if (_status != value)
                 {
                     _status = value;
-                    eventRuntime?.Invoke(Id);
+                    RaiseRuntimeEvent();
                 }
             }
         }
@@ -143,17 +138,25 @@ namespace Connector
         public delegate void HandlerTagParam(TagParam info);
         public event HandlerTagParam eventParam;
 
+        private void RaiseRuntimeEvent()
+        {
+            eventRuntime?.Invoke(Id);
+        }
         private void EventChangeParam(bool noSetTagON = false)
         {
             if (Off)
             {
-                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.tagOff);
+                status = eTagStatus.tagOff;
             }
             else if (!noSetTagON)
             {
-                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.tagOn);
+                status = eTagStatus.tagOn;
             }
             eventParam?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
+        }
+        public string GetWriteCell()
+        {
+            return !string.IsNullOrWhiteSpace(WriteTagTitle) ? WriteTagTitle : WriteConstValue == null ? null : string.Join(";", WriteConstValue);
         }
 
         #endregion
@@ -309,7 +312,7 @@ namespace Connector
 
         public Tag[] InnerTags { get; set; } // Массив внутренних тегов, соответствующих тегам, найденным в адресе
 
-        public Group ParentGroup { get; } // Группа тега
+        public Group ParentGroup { get; set; } // Группа тега
 
         private ushort _groupId = 0;
         public ushort groupId => _groupId;
@@ -361,6 +364,8 @@ namespace Connector
 
         // ============================================================
 
+        #region Static
+
         public static List<Tag> items = new List<Tag>();
         public static ushort lastId = 0;
         public static bool log = false;
@@ -393,7 +398,7 @@ namespace Connector
             }
         }
 
-        
+        #endregion
 
     }
 }

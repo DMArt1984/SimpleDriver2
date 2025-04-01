@@ -60,7 +60,6 @@ namespace Connector
         dynamic WriteTagValue { get; }
         CodeMessage codeMessage { get; set; }
         void SetResult(TagResult result);
-        // Свойство InnerTagIds удалено
     }
     public interface ITagResult
     {

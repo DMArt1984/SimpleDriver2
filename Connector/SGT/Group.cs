@@ -7,28 +7,6 @@ using LogCodeMessage;
 
 namespace Connector
 {
-    public interface IGroupOff
-    {
-        ushort Id { get; }
-        bool Off { get; set; }
-    }
-
-    public struct GroupParamStatus
-    {
-        public readonly ushort Id;
-        public uint UpdateRate;
-        public bool Off;
-        public bool IsStopped;
-
-        public GroupParamStatus(ushort id, uint updateRate, bool off, bool isStopped)
-        {
-            Id = id;
-            UpdateRate = updateRate;
-            Off = off;
-            IsStopped = isStopped;
-        }
-    }
-
     public class Group : BaseLogger, IGroupOff, IDisposable
     {
         public ushort Id { get; }
@@ -110,6 +88,7 @@ namespace Connector
         private bool _disable = false;
         public string sourceTitle = "";
 
+        // Конструктор
         public Group(ushort id, string title, Source parentSource, uint updateRate = 100, bool disable = false, string description = "")
             : base(LogTarget.FileConsoleForm, null)
         {
@@ -143,14 +122,7 @@ namespace Connector
             Off = _disable;
         }
 
-        public void UseTags(List<Tag> tags)
-        {
-            Tags.Clear();
-            if (tags != null)
-            {
-                Tags.AddRange(tags);
-            }
-        }
+        
 
         public void Dispose()
         {
@@ -222,11 +194,6 @@ namespace Connector
             eventParams?.Invoke(new GroupParamStatus(Id, _updateRate, _off, IsTimerStopped));
         }
 
-        public void Refresh()
-        {
-            RaiseParamStatusChanged();
-        }
-
         public override bool Equals(object obj)
         {
             if (obj is Group other)
@@ -240,6 +207,24 @@ namespace Connector
         {
             return Id.GetHashCode() ^ (title?.GetHashCode() ?? 0);
         }
+
+        public void UseTags(List<Tag> tags)
+        {
+            Tags.Clear();
+            if (tags != null)
+            {
+                foreach (var tag in tags)
+                {
+                    // Обновляем родительскую группу у тэга на текущую группу
+                    tag.ParentGroup = this;
+                    Tags.Add(tag);
+                }
+            }
+        }
+
+        // ==============================================================================
+
+        #region Static
 
         public static List<Group> items = new List<Group>();
         public static ushort lastId = 0;
@@ -273,5 +258,7 @@ namespace Connector
                     group.Activate();
             }
         }
+
+        #endregion
     }
 }

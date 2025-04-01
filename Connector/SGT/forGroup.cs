@@ -6,6 +6,28 @@ using System.Threading.Tasks;
 
 namespace Connector
 {
+    public interface IGroupOff
+    {
+        ushort Id { get; }
+        bool Off { get; set; }
+    }
+
+    public struct GroupParamStatus
+    {
+        public readonly ushort Id;
+        public uint UpdateRate;
+        public bool Off;
+        public bool IsStopped;
+
+        public GroupParamStatus(ushort id, uint updateRate, bool off, bool isStopped)
+        {
+            Id = id;
+            UpdateRate = updateRate;
+            Off = off;
+            IsStopped = isStopped;
+        }
+    }
+
     public enum eGroupStatus
     {
         sourceOpened = 100, // Источник открыт – тег получает данные от открытого источника
