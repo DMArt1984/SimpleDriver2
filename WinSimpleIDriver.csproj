@@ -96,6 +96,7 @@
     <Compile Include="Connector\Driver\MSSQLAdapter.cs" />
     <Compile Include="Connector\Include.cs" />
     <Compile Include="Connector\SGT\DeviceFactory.cs" />
+    <Compile Include="Connector\SGT\forGroup.cs" />
     <Compile Include="Connector\SGT\forSource.cs" />
     <Compile Include="Connector\SGT\forTag.cs" />
     <Compile Include="Connector\SGT\Group.cs" />

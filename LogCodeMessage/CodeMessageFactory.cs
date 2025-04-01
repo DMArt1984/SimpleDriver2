@@ -23,14 +23,16 @@ namespace LogCodeMessage
             int code = Convert.ToInt32(value);
             string message = value.ToString();
 
-            if (value is eTagCode tagCode)
+            if (value is eTagStatus tagCode)
             {
                 message = tagCode.GetText();
+            } else if (value is eGroupStatus groupStatus)
+            {
+                message = groupStatus.GetText();
             } else if (value is eSourceStatus sourceStatus)
             {
                 message = sourceStatus.GetText();
-            }
-            else if (value is eSQLStatus sqlStatus)
+            } else if (value is eSQLStatus sqlStatus)
             {
                 message = sqlStatus.GetText();
             }

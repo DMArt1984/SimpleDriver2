@@ -106,16 +106,16 @@ namespace Connector
             this.codeMessage = new CodeMessage(code, message);
         }
 
-        public TagResult(dynamic value, eTagCode tagCode)
+        public TagResult(dynamic value, CodeMessage cm)
         {
             this.value = value;
-            this.codeMessage = new CodeMessage((int)tagCode);
+            this.codeMessage = cm;
         }
 
         public TagResult(dynamic value)
         {
             this.value = value;
-            this.codeMessage = CodeMessageFactory.FromEnumX(eTagCode.good);
+            this.codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.good);
         }
 
         public TagResult(dynamic value, Exception ex)
@@ -127,6 +127,25 @@ namespace Connector
 
     public class Tag : ICodeMessage, ITagClient, ITagResult, IAppendTag
     {
+        public static class CM
+        {
+            public static readonly CodeMessage Good = new CodeMessage(0, null);
+            public static readonly CodeMessage Created = new CodeMessage(1, "Новый тег");
+            public static readonly CodeMessage EmptyRequest = new CodeMessage(-30, "Пустой запрос");
+            public static readonly CodeMessage NoPing = new CodeMessage(-400, "Нет пинга");
+            public static readonly CodeMessage NewValueIsNull = new CodeMessage(404, "Новое значение равно null");
+            public static readonly CodeMessage ConnectionTimedOut = new CodeMessage(-70, "Превышено время ожидания подключения");
+            public static readonly CodeMessage TagTimeout = new CodeMessage(-71, "Таймаут тега");
+            public static readonly CodeMessage NoWrite = new CodeMessage(-80, "Запись невозможна");
+            public static readonly CodeMessage NoData = new CodeMessage(-31, "Нет данных");
+            public static readonly CodeMessage BreakError = new CodeMessage(-600, "Возможна ошибка источника");
+            public static readonly CodeMessage Inconsistency = new CodeMessage(-90, "Несоответствие типа данных");
+            public static readonly CodeMessage NotReliableA = new CodeMessage(-700, "Нет достоверных данных в адресе");
+            public static readonly CodeMessage NotReliableTW = new CodeMessage(-701, "Нет достоверных данных в теге для записи");
+            public static readonly CodeMessage NoTagForWrite = new CodeMessage(-702, "Нет тега для записи");
+            public static readonly CodeMessage NotSupport = new CodeMessage(-702, "Тип данных не поддерживается");
+        }
+
         public ushort Id { get; }
         public string title { get; }
         public string description { get; }
@@ -141,7 +160,7 @@ namespace Connector
         private string _groupTitle = "";
         public string groupTitle => _groupTitle;
 
-        public bool Good => codeMessage.code == (int)eTagCode.good;
+        public bool Good => codeMessage.code == (int)eTagStatus.good;
 
         public bool SimEnable = false;
         public dynamic SimValue = null;
@@ -465,40 +484,35 @@ namespace Connector
                 if (_codeMessage.code != value.code)
                 {
                     _codeMessage = value;
-                    CheckLastError();
                     EventChangeCodeMessage();
                 }
             }
         }
-        private CodeMessage _codeMessage = CodeMessageFactory.FromEnumX(eTagCode.created);
+        private CodeMessage _codeMessage = new CodeMessage();
 
-        public CodeMessage LastError => _lastError;
-        private CodeMessage _lastError;
-
-        private void CheckLastError()
+        public eTagStatus status
         {
-            if (_codeMessage.code < 0)
+            get => _status;
+            set
             {
-                _lastError = new CodeMessage(_codeMessage.code, _codeMessage.message);
+                if (_status != value)
+                {
+                    _status = value;
+                    EventChangeCodeMessage();
+                }
             }
         }
-
-        public void ClearLastError()
-        {
-            _lastError = new CodeMessage();
-            CheckLastError();
-            EventChangeCodeMessage();
-        }
+        private eTagStatus _status = eTagStatus.zero;
 
         private void EventChangeParam(bool noSetTagON = false)
         {
             if (Off)
             {
-                codeMessage = CodeMessageFactory.FromEnumX(eTagCode.tagOff);
+                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.tagOff);
             }
             else if (!noSetTagON)
             {
-                codeMessage = CodeMessageFactory.FromEnumX(eTagCode.tagOn);
+                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.tagOn);
             }
             eventParams?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
         }
@@ -530,12 +544,12 @@ namespace Connector
             SimValue = value;
             if (SimEnable)
             {
-                codeMessage = CodeMessageFactory.FromEnumX(eTagCode.good);
+                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.good);
                 Value = value;
             }
             else
             {
-                codeMessage = CodeMessageFactory.FromEnumX(eTagCode.created);
+                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.zero);
             }
         }
 

@@ -209,12 +209,12 @@ namespace Connector
 
         public void SendOn()
         {
-            Tag.CodeMessageList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagCode.groupOn));
+            Tag.CodeMessageList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupOn));
         }
 
         public void SendOff()
         {
-            Tag.CodeMessageList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagCode.groupOff));
+            Tag.CodeMessageList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupOff));
         }
 
         private void RaiseParamStatusChanged()

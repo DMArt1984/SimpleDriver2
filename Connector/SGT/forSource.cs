@@ -8,7 +8,7 @@ namespace Connector
 {
     public enum eSourceStatus
     {
-        created = 99,
+        zero = 1000, // не определено
         noClient = 1, // нет клиента
         closing = 2, // закрытие...
         closed = 3, // закрыт

@@ -12,9 +12,7 @@ namespace Connector
     interface ISource
     {
         eSourceStatus Status { get; set; }
-
-        void ClearError();
-        CodeMessage ActiveError { get; set; }
+        CodeMessage codeMessage { get; set; }
 
         byte MaxBreak { get; set; }
         byte counterBreak { get; set; }
@@ -187,7 +185,7 @@ namespace Connector
             logger.Info($" step3: CreateClient(paramClient)", eMessageCategory.Source);
             CodeMessage result = (_device as Device)?.CreateClient(address) ?? new CodeMessage(-1, "Invalid device");
             if (result.code != 0)
-                ActiveError = result;
+                codeMessage = result;
             Status = (result.code == 0) ? eSourceStatus.closed : eSourceStatus.noClient;
 
             logger.Info($" step4: _disable = ", eMessageCategory.Source);
@@ -270,7 +268,7 @@ namespace Connector
                 {
                     var retval = IsHostReachable();
                     if (retval == false)
-                        result = CodeMessageFactory.FromEnumX(eTagCode.noPing);
+                        result = Tag.CM.NoPing;
                 }
                 else
                 {
@@ -296,7 +294,7 @@ namespace Connector
                 }
 
                 if (result.code != 0)
-                    ActiveError = result;
+                    codeMessage = result;
 
                 if (result.code == 0)
                 {
@@ -307,7 +305,7 @@ namespace Connector
                     ClearCounterBreak();
                     // Обновляем статус тегов во всех группах
                     var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagCode.sourceOpened));
+                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
 
                     if (AutoRequestAftereOpen)
                         CyclicRequest = true;
@@ -319,7 +317,7 @@ namespace Connector
                     _fail = true;
                     ClearCounterBreak();
                     var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagCode.sourceFail));
+                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceFail));
                     OpenAfterFail();
                 }
 
@@ -344,7 +342,7 @@ namespace Connector
                     result = xdevice.Disconnect();
                 }
                 if (result.code != 0)
-                    ActiveError = result;
+                    codeMessage = result;
 
                 if (result.code == 0)
                 {
@@ -355,7 +353,7 @@ namespace Connector
                     counterFailReq = 0;
                     logger.Info($"Источник ID={Id} {title} > Статусы тегов...", eMessageCategory.Source);
                     var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagCode.sourceClosed));
+                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceClosed));
                     logger.Info($"Источник ID={Id} {title} > 5...", eMessageCategory.Source);
 
                     if (user == false)
@@ -373,7 +371,7 @@ namespace Connector
             else
             {
                 var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagCode.sourceClosed));
+                Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceClosed));
             }
             return 1;
         }
@@ -459,7 +457,7 @@ namespace Connector
                     {
                         WaitProcess();
                         var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                        Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagCode.sourceOpened));
+                        Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
                     }
                     EventStatus();
                 }
@@ -479,16 +477,16 @@ namespace Connector
                 }
             }
         }
-        eSourceStatus _status = eSourceStatus.created;
+        eSourceStatus _status = eSourceStatus.zero;
 
-        public CodeMessage ActiveError
+        public CodeMessage codeMessage
         {
-            get => _activeError;
+            get => _codeMessage;
             set
             {
-                bool newCode = _activeError.code != value.code;
-                _activeError = value;
-                if (_activeError.code < 0)
+                bool newCode = _codeMessage.code != value.code;
+                _codeMessage = value;
+                if (_codeMessage.code < 0)
                 {
                     if (Fail == false)
                     {
@@ -506,16 +504,11 @@ namespace Connector
                 }
                 if (newCode)
                 {
-                    eventError?.Invoke(Id, _activeError);
+                    eventError?.Invoke(Id, _codeMessage);
                 }
             }
         }
-        CodeMessage _activeError;
-
-        public void ClearError()
-        {
-            ActiveError = new CodeMessage();
-        }
+        CodeMessage _codeMessage;
 
         public void NewBreak()
         {
@@ -524,7 +517,7 @@ namespace Connector
             if (counterBreak >= MaxBreak)
             {
                 ClearCounterBreak();
-                ActiveError = CodeMessageFactory.FromEnumX(eTagCode.breakError);
+                codeMessage = Tag.CM.BreakError;
                 logger.Info($"NEW BREAK = ActiveError", eMessageCategory.Source);
             }
         }
@@ -548,7 +541,7 @@ namespace Connector
         {
             EventChangeParam();
             eventStatus?.Invoke(Id, Status);
-            eventError?.Invoke(Id, ActiveError);
+            eventError?.Invoke(Id, codeMessage);
         }
 
         // Статус
@@ -655,7 +648,7 @@ namespace Connector
         /// <param name="clientTags">Список опрашиваемых тегов</param>
         private void HandleTagErrors(List<Tag> clientTags)
         {
-            bool breakError = clientTags.Any(x => x.codeMessage.code == (int)eTagCode.breakError);
+            bool breakError = clientTags.Any(x => x.codeMessage.code == Tag.CM.BreakError.code);
             bool anyGood = clientTags.Any(x => x.Good && x.Command == eCommand.None && x.WriteTagId == 0 && x.WriteTagValue == null);
             if (breakError && !anyGood)
             {
@@ -714,7 +707,7 @@ namespace Connector
             if (IsNet() == false)
                 return new CodeMessage();
             if ((_device as DeviceNet).disableHostForOpen)
-                return (IsHostReachable()) ? new CodeMessage() : CodeMessageFactory.FromEnumX(eTagCode.noPing);
+                return (IsHostReachable()) ? new CodeMessage() : Tag.CM.NoPing;
             return (_device as INetDevice).TryTcpConnect("", 0, 0);
         }
 

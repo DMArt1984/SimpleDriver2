@@ -170,10 +170,10 @@ namespace Connector.Driver
                                                     Value = source.Status.GetText();
                                                     break;
                                                 case "error":
-                                                    Value = source.ActiveError.code;
+                                                    Value = source.codeMessage.code;
                                                     break;
                                                 case "message":
-                                                    Value = source.ActiveError.message;
+                                                    Value = source.codeMessage.message;
                                                     break;
                                                 case "description":
                                                     Value = source.description;
@@ -371,10 +371,10 @@ namespace Connector.Driver
                                                     Value = tag.Id;
                                                     break;
                                                 case "infocode2": // del
-                                                    Value = (tag.Good) ? 0 : (tag.LastError.code == 0) ? 255 : tag.LastError.code;
+                                                    Value = (tag.Good) ? 0 : (tag.codeMessage.code == 0) ? 255 : tag.codeMessage.code;
                                                     break;
                                                 case "infomessage2": // del
-                                                    Value = (tag.Good) ? "" : (String.IsNullOrWhiteSpace(tag.LastError.message)) ? "нет данных" : tag.LastError.message;
+                                                    Value = (tag.Good) ? "" : (String.IsNullOrWhiteSpace(tag.codeMessage.message)) ? "нет данных" : tag.codeMessage.message;
                                                     break;
                                                 case "infocode":
                                                     Value = tag.codeMessage.code;
@@ -383,10 +383,10 @@ namespace Connector.Driver
                                                     Value = tag.codeMessage.message;
                                                     break;
                                                 case "code":
-                                                    Value = tag.LastError.code;
+                                                    Value = tag.codeMessage.code;
                                                     break;
                                                 case "message":
-                                                    Value = tag.LastError.message;
+                                                    Value = tag.codeMessage.message;
                                                     break;
                                                 case "description":
                                                     Value = tag.description;
@@ -639,7 +639,7 @@ namespace Connector.Driver
         public override TagResult SetValue(string address, eDataType DataType, dynamic newValue = null)
         {
             if (newValue == null)
-                return new TagResult(newValue, eTagCode.newValueIsNull);
+                return new TagResult(newValue, Tag.CM.NewValueIsNull);
 
             // добавляем адрес в список
             if (fronts.ContainsKey(address) == false)

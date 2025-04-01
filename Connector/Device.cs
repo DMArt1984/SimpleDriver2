@@ -136,7 +136,7 @@ namespace Connector
 
             if (success == false)
             {
-                tag.SetResult(new TagResult(null, eTagCode.notReliableA));
+                tag.SetResult(new TagResult(null, Tag.CM.NotReliableA));
                 return;
             }
 
@@ -161,12 +161,12 @@ namespace Connector
                     var writeTag = (writeTagId > 0) ? Tag.items.FirstOrDefault(x => x.Id == writeTagId) : null;
                     if (writeTag == null)
                     {
-                        tag.SetResult(new TagResult(null, eTagCode.noTagForWrite));
+                        tag.SetResult(new TagResult(null, Tag.CM.NoTagForWrite));
                         return;
                     }
-                    if (writeTag.codeMessage.code != 0 && writeTag.codeMessage.code != (int)eTagCode.tagOn)
+                    if (writeTag.status != eTagStatus.tagOn)
                     {
-                        tag.SetResult(new TagResult(null, eTagCode.notReliableTW));
+                        tag.SetResult(new TagResult(null, Tag.CM.NotReliableTW));
                         return;
                     }
                     
@@ -199,11 +199,11 @@ namespace Connector
 
         public virtual TagResult GetValue(string address, eDataType dataType)
         {
-            return new TagResult(0, eTagCode.noData);
+            return new TagResult(0, Tag.CM.NoData);
         }
         public virtual TagResult SetValue(string address, eDataType dataType, dynamic newValue)
         {
-            return new TagResult(newValue, eTagCode.noData);
+            return new TagResult(newValue, Tag.CM.NoData);
         }
 
         // ======================================================================================

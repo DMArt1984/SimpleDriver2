@@ -208,12 +208,7 @@ namespace Connector.Driver
  
                     } else
                     {
-                        return new TagResult(Value, eTagCode.noData);
-                        //if (recTime.ContainsKey(hash) == false)
-                        //{
-                        //    recTime.Add(hash, DateTime.Now);
-                        //}
-
+                        return new TagResult(Value, Tag.CM.NoData);
                     }
 
                     // Контроль времени
@@ -228,7 +223,7 @@ namespace Connector.Driver
                         {
                             InnerTrafficLog($" Error: {ts.TotalMilliseconds} мсек > Limit; last result = {Value}");
                             InnerTrafficLog($"  now = {DateTime.Now}; last = {recTime[hash]}");
-                            return new TagResult(Value, eTagCode.tagTimeout);
+                            return new TagResult(Value, Tag.CM.TagTimeout);
                         }
                     }
 

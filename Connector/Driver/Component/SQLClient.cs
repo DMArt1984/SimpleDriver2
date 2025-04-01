@@ -229,7 +229,7 @@ namespace Connector.Driver
             rows = new List<List<string>>();
             if (String.IsNullOrWhiteSpace(SQL))
             {
-                return CodeMessageFactory.FromEnumX(eTagCode.emptyRequest);
+                return Tag.CM.EmptyRequest;
             }
 
             CodeMessage cm;
@@ -282,7 +282,7 @@ namespace Connector.Driver
                         return cm;
                 }
 
-                return CodeMessageFactory.FromEnumX(eTagCode.good);
+                return Tag.CM.Good;
             }
             catch (SqlException ex)
             {
@@ -300,7 +300,7 @@ namespace Connector.Driver
             rows = 0;
             if (String.IsNullOrWhiteSpace(SQL))
             {
-                return CodeMessageFactory.FromEnumX(eTagCode.emptyRequest);
+                return Tag.CM.EmptyRequest;
             }
 
             CodeMessage cm;
@@ -331,7 +331,7 @@ namespace Connector.Driver
                         return cm;
                 }
 
-                return CodeMessageFactory.FromEnumX(eTagCode.good);
+                return Tag.CM.Good;
             }
             catch (SqlException ex)
             {
