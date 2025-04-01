@@ -134,13 +134,20 @@ namespace Connector
         {
             success = true;
 
-            if (tag != null && (tag.InnerTagIds == null || tag.InnerTagIds.Any() == false))
+            // Если tag задан, но у него не заполнены внутренние теги, возвращаем адрес без изменений.
+            if (tag != null && (tag is Tag tTag && (tTag.InnerTags == null || !tTag.InnerTags.Any())))
                 return address;
 
             if (address.Contains("{") && address.Contains("}"))
             {
-                //var itemsList = items.ToList();
-                foreach (var item in (tag == null) ? items : items.Where(x => tag.InnerTagIds.Contains(x.Id)))
+                // Если tag не null, отбираем только те теги, которые присутствуют в его InnerTags.
+                HashSet<ushort> innerIds = null;
+                if (tag != null && tag is Tag t)
+                {
+                    innerIds = new HashSet<ushort>(t.InnerTags.Select(x => x.Id));
+                }
+
+                foreach (var item in tag == null ? items : items.Where(x => innerIds.Contains(x.Id)))
                 {
                     string nameValue = "{" + item.title + "}"; // значение
                     string goodValue = "{" + item.title + ".good}"; // тег хорошего качества

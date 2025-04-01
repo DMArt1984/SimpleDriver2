@@ -7,6 +7,119 @@ using System.Threading.Tasks;
 
 namespace Connector
 {
+    public enum eDataType
+    {
+        Bool = 0,
+        Byte = 1,
+        Binary = 2,
+        Short = 3, UShort = 4,
+        Int = 5, UInt = 6,
+        Float = 7,
+        Long = 10,
+        Double = 11,
+        STRING = 21,
+        HEX = 30,
+        Char = 32,
+        ArrayA = 101,
+        ArrayB = 102,
+        ArrayC = 103
+    }
+    public enum eCommand
+    {
+        None = 0,
+        Play = 1,
+        Update = 2,
+        Wait = 3
+    }
+    public enum eDirect
+    {
+        Read = 0,
+        Write = 10
+    }
+    public enum eDirectFull
+    {
+        Read = 0,
+        WriteConstValue = 11,
+        WriteTagValue = 12
+    }
+
+    public interface ITagClient
+    {
+        ushort Id { get; }
+        string title { get; }
+        bool Good { get; }
+        eDataType DataType { get; }
+        string Address { get; }
+        bool Off { get; }
+        dynamic WriteConstValue { get; set; }
+        ushort WriteTagId { get; }
+        eDirectFull directFull { get; }
+        eCommand Command { get; set; }
+        dynamic Value { get; set; }
+        dynamic LastGoodValue { get; }
+        dynamic WriteTagValue { get; }
+        CodeMessage codeMessage { get; set; }
+        void SetResult(TagResult result);
+        // Свойство InnerTagIds удалено
+    }
+    public interface ITagResult
+    {
+        ushort Id { get; }
+        bool Good { get; }
+        dynamic Value { get; set; }
+        CodeMessage codeMessage { get; set; }
+    }
+    public interface IAppendTag
+    {
+        dynamic LastGoodValue { get; }
+    }
+
+    public struct TagParam
+    {
+        public readonly ushort Id;
+        public string address;
+        public eDataType dataType;
+        public string writeValue;
+        public bool off;
+
+        public TagParam(ushort Id, bool off, string address, eDataType dataType, string writeValue)
+        {
+            this.Id = Id;
+            this.off = off;
+            this.address = address;
+            this.dataType = dataType;
+            this.writeValue = writeValue;
+        }
+    }
+    public struct TagResult
+    {
+        public dynamic value;
+        public CodeMessage codeMessage;
+
+        public TagResult(dynamic value, int code, string message)
+        {
+            this.value = value;
+            this.codeMessage = new CodeMessage(code, message);
+        }
+
+        public TagResult(dynamic value, CodeMessage cm)
+        {
+            this.value = value;
+            this.codeMessage = cm;
+        }
+
+        public TagResult(dynamic value)
+        {
+            this.value = value;
+            this.codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.good);
+        }
+
+        public TagResult(dynamic value, Exception ex)
+        {
+            this.value = value;
+            this.codeMessage = CodeMessageFactory.FromException(ex);
+        }
+    }
     public enum eTagStatus
     {
         zero = 1000, // не определено

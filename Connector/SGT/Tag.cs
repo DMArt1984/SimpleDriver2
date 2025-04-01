@@ -5,126 +5,6 @@ using LogCodeMessage;
 
 namespace Connector
 {
-    public enum eDataType
-    {
-        Bool = 0,
-        Byte = 1,
-        Binary = 2,
-        Short = 3, UShort = 4,
-        Int = 5, UInt = 6,
-        Float = 7,
-        Long = 10,
-        Double = 11,
-        STRING = 21,
-        HEX = 30,
-        Char = 32,
-        ArrayA = 101,
-        ArrayB = 102,
-        ArrayC = 103
-    }
-
-    public enum eCommand
-    {
-        None = 0,
-        Play = 1,
-        Update = 2,
-        Wait = 3
-    }
-
-    public enum eDirect
-    {
-        Read = 0,
-        Write = 10
-    }
-
-    public enum eDirectFull
-    {
-        Read = 0,
-        WriteConstValue = 11,
-        WriteTagValue = 12
-    }
-
-    public interface ITagClient
-    {
-        ushort Id { get; }
-        string title { get; }
-        bool Good { get; }
-        eDataType DataType { get; }
-        string Address { get; }
-        bool Off { get; }
-        dynamic WriteConstValue { get; set; }
-        ushort WriteTagId { get; }
-        eDirectFull directFull { get; }
-        eCommand Command { get; set; }
-        dynamic Value { get; set; }
-        dynamic LastGoodValue { get; }
-        dynamic WriteTagValue { get; }
-        CodeMessage codeMessage { get; set; }
-        void SetResult(TagResult result);
-        ushort[] InnerTagIds { get; set; }
-    }
-
-    public interface ITagResult
-    {
-        ushort Id { get; }
-        bool Good { get; }
-        dynamic Value { get; set; }
-        CodeMessage codeMessage { get; set; }
-    }
-
-    public interface IAppendTag
-    {
-        dynamic LastGoodValue { get; }
-    }
-
-    public struct TagParam
-    {
-        public readonly ushort Id;
-        public string address;
-        public eDataType dataType;
-        public string writeValue;
-        public bool off;
-
-        public TagParam(ushort Id, bool off, string address, eDataType dataType, string writeValue)
-        {
-            this.Id = Id;
-            this.off = off;
-            this.address = address;
-            this.dataType = dataType;
-            this.writeValue = writeValue;
-        }
-    }
-
-    public struct TagResult
-    {
-        public dynamic value;
-        public CodeMessage codeMessage;
-
-        public TagResult(dynamic value, int code, string message)
-        {
-            this.value = value;
-            this.codeMessage = new CodeMessage(code, message);
-        }
-
-        public TagResult(dynamic value, CodeMessage cm)
-        {
-            this.value = value;
-            this.codeMessage = cm;
-        }
-
-        public TagResult(dynamic value)
-        {
-            this.value = value;
-            this.codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.good);
-        }
-
-        public TagResult(dynamic value, Exception ex)
-        {
-            this.value = value;
-            this.codeMessage = CodeMessageFactory.FromException(ex);
-        }
-    }
-
     public class Tag : ICodeMessage, ITagClient, ITagResult, IAppendTag
     {
         public static class CM
@@ -158,15 +38,14 @@ namespace Connector
         public ushort sourceId => ParentGroup?.ParentSource?.Id ?? 0;
 
         public bool Good => status == eTagStatus.good;
-        //public bool Good => codeMessage.code == (int)eTagStatus.good;
 
         public bool SimEnable = false;
         public dynamic SimValue = null;
 
         public bool lic = false; // тег для контроля лицензии
 
-        public delegate void HandlerCode(ushort Id, CodeMessage cm);
-        public event HandlerCode eventCode;
+        public delegate void HandlerCodeOrStatus(ushort Id, CodeMessage cm, eTagStatus status);
+        public event HandlerCodeOrStatus eventCodeOrStatus;
 
         public delegate void HandlerParam(TagParam info);
         public event HandlerParam eventParams;
@@ -174,21 +53,11 @@ namespace Connector
         public delegate void HandlerValue(ushort Id);
         public event HandlerValue eventValue;
 
-        /// <summary>
-        /// Массив идентификаторов внутренних тегов, найденных в адресе.
-        /// Идентификаторы тегов используются для динамической подстановки значений.
-        /// </summary>
-        public ushort[] InnerTagIds { get; set; }
+        public Tag[] InnerTags { get; set; } // Массив внутренних тегов, соответствующих тегам, найденным в адресе
 
-        /// <summary>
-        /// Массив внутренних тегов, соответствующих идентификаторам в <see cref="InnerTagIds"/>.
-        /// Эти теги могут быть использованы для обновления значений с подстановкой из других тегов.
-        /// </summary>
-        public Tag[] InnerTags { get; set; }
+        public Group ParentGroup { get; } // Группа тега
 
-
-        public Group ParentGroup { get; }
-
+        // Конструктор
         public Tag(ushort Id, string title, Group parentGroup, eDataType dataType, string address, string description = "")
         {
             this.Id = Id;
@@ -350,25 +219,6 @@ namespace Connector
             return !string.IsNullOrWhiteSpace(WriteTagTitle) ? WriteTagTitle : WriteConstValue == null ? null : string.Join(";", WriteConstValue);
         }
 
-        public eDirectFull directFull
-        {
-            get
-            {
-                if (WriteTagId == 0 && WriteConstValue == null)
-                {
-                    return eDirectFull.Read;
-                }
-                else if (WriteTagId > 0)
-                {
-                    return eDirectFull.WriteTagValue;
-                }
-                else
-                {
-                    return eDirectFull.WriteConstValue;
-                }
-            }
-        }
-
         public eDirect direct
         {
             get
@@ -383,6 +233,10 @@ namespace Connector
                 }
             }
         }
+        public eDirectFull directFull =>
+            (WriteTagId == 0 && WriteConstValue == null)
+                ? eDirectFull.Read
+                : (WriteTagId > 0 ? eDirectFull.WriteTagValue : eDirectFull.WriteConstValue);
 
         public eCommand Command
         {
@@ -429,7 +283,7 @@ namespace Connector
                 if (_codeMessage.code != value.code)
                 {
                     _codeMessage = value;
-                    EventChangeCodeMessage();
+                    EventChangeCodeMessageStatus();
                 }
             }
         }
@@ -443,7 +297,7 @@ namespace Connector
                 if (_status != value)
                 {
                     _status = value;
-                    EventChangeCodeMessage();
+                    EventChangeCodeMessageStatus();
                 }
             }
         }
@@ -462,9 +316,9 @@ namespace Connector
             eventParams?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
         }
 
-        private void EventChangeCodeMessage()
+        private void EventChangeCodeMessageStatus()
         {
-            eventCode?.Invoke(Id, codeMessage);
+            eventCodeOrStatus?.Invoke(Id, codeMessage, status);
         }
 
         public void SetResult(TagResult result)
@@ -479,7 +333,7 @@ namespace Connector
         public void Refresh()
         {
             EventChangeParam(true);
-            EventChangeCodeMessage();
+            EventChangeCodeMessageStatus();
             eventValue?.Invoke(Id);
         }
 
@@ -526,17 +380,13 @@ namespace Connector
 
         public void SetInnerTagsForOneTag()
         {
-            InnerTagIds = FindInnerTags();
-            InnerTags = items.Where(x => InnerTagIds.Contains(x.Id)).ToArray();
+            // Обновляем только InnerTags, вычисляя их напрямую по условию в строке Address:
+            InnerTags = items
+                .Where(item => Address.Contains($"{{{item.title}}}") ||
+                               Address.Contains($"{{{item.title}.") ||
+                               Address.Contains($"{{{item.title}["))
+                .ToArray();
         }
 
-        public ushort[] FindInnerTags()
-        {
-            if (Address.Contains("{") && Address.Contains("}"))
-            {
-                return items.Where(item => Address.Contains($"{{{item.title}}}") || Address.Contains($"{{{item.title}.") || Address.Contains($"{{{item.title}[")).Select(item => item.Id).ToArray();
-            }
-            return Array.Empty<ushort>();
-        }
     }
 }
