@@ -31,38 +31,33 @@ namespace Connector
 
     public class Group : BaseLogger, IGroupOff, IDisposable
     {
-        public ushort Id { get; }             // ID группы
-        public string title { get; }          // Название группы
-        public string description { get; }    // Описание группы
+        public ushort Id { get; }
+        public string title { get; }
+        public string description { get; }
 
-        // Родительский источник; теперь реализовано как полноценное свойство с get/set
         private Source _parentSource;
         public Source ParentSource
         {
             get => _parentSource;
             set
             {
-                // Если ранее был назначен родитель, отписываем обработчик
                 if (_parentSource != null)
                 {
                     tikTakReq -= _parentSource.EventRequest;
                 }
                 _parentSource = value;
-                // Если новый родитель назначен, подписываем его обработчик
                 if (_parentSource != null)
                 {
-                    tikTakReq -= _parentSource.EventRequest; // чтобы избежать дублирования
+                    tikTakReq -= _parentSource.EventRequest;
                     tikTakReq += _parentSource.EventRequest;
                 }
             }
         }
 
-        // Единая коллекция тегов; если Tag реализует ICodeMessage, ее можно использовать для обновления статусов
         public List<Tag> Tags { get; } = new List<Tag>();
 
         public int TagsCountGood => Tags.Count(tag => tag.Good);
 
-        // События для оповещения об изменениях параметров и статистике
         public delegate void HandlerParam(GroupParamStatus info);
         public event HandlerParam eventParams;
 
@@ -72,7 +67,6 @@ namespace Connector
         public delegate void HandlerInfo(ushort id, int tickCount, int all, int good);
         public event HandlerInfo tikTakInfo;
 
-        // Таймер и связанные поля
         private Timer _timer;
         private bool _timerStop = false;
         private int _tickCount = 0;
@@ -84,18 +78,13 @@ namespace Connector
             {
                 if (_updateRate != value)
                 {
-                    // Если значение не положительное, используем 100 мс по умолчанию
-                    _updateRate = (value <= 0 ? 100u : value);
+                    _updateRate = value <= 0 ? 100u : value;
                     RaiseParamStatusChanged();
-                    if (_timer != null)
-                    {
-                        _timer.Change(0, (int)_updateRate);
-                    }
+                    _timer?.Change(0, (int)_updateRate);
                 }
             }
         }
 
-        // Флаг, управляющий состоянием группы (включена/выключена)
         private bool _off = true;
         public bool Off
         {
@@ -105,11 +94,11 @@ namespace Connector
                 if (_off != value)
                 {
                     _off = value;
-                    if (!_off) // Включение группы – запускаем таймер
+                    if (!_off)
                     {
                         StartTimer();
                     }
-                    else // Выключение – останавливаем таймер
+                    else
                     {
                         StopTimer();
                     }
@@ -119,9 +108,8 @@ namespace Connector
         }
 
         private bool _disable = false;
-        public string sourceTitle = ""; // Название источника (если нужно)
+        public string sourceTitle = "";
 
-        // Конструктор группы
         public Group(ushort id, string title, Source parentSource, uint updateRate = 100, bool disable = false, string description = "")
             : base(LogTarget.FileConsoleForm, null)
         {
@@ -134,7 +122,6 @@ namespace Connector
             logger.Info($"new group ID {Id} {title} {updateRate}", eMessageCategory.Source);
         }
 
-        // Добавление тега в группу
         public void AddTag(Tag tag)
         {
             if (tag != null && !Tags.Contains(tag))
@@ -142,6 +129,7 @@ namespace Connector
                 Tags.Add(tag);
             }
         }
+
         public void RemoveTag(Tag tag)
         {
             if (tag != null && Tags.Contains(tag))
@@ -150,13 +138,11 @@ namespace Connector
             }
         }
 
-        // Метод активации группы (например, при старте источника)
         public void Activate()
         {
             Off = _disable;
         }
 
-        // Метод для задания тегов группы (перезаписывает существующий список)
         public void UseTags(List<Tag> tags)
         {
             Tags.Clear();
@@ -166,25 +152,21 @@ namespace Connector
             }
         }
 
-        // Освобождение ресурсов: останавливаем таймер
         public void Dispose()
         {
             _timer?.Dispose();
         }
 
-        // Таймер: запуск
         private void StartTimer()
         {
             if (_timer == null)
             {
                 _timerStop = false;
                 _timer = new Timer(TimerCallback, null, 0, (int)UpdateRate);
-                // При запуске таймера обновляем статусы тегов
                 SendOn();
             }
         }
 
-        // Таймер: остановка
         private void StopTimer()
         {
             if (_timer != null)
@@ -194,17 +176,14 @@ namespace Connector
             SendOff();
         }
 
-        // Свойство, возвращающее true, если таймер не запущен
         private bool IsTimerStopped => _timer == null;
 
-        // Таймер-колбэк: каждое "тиканье"
         private void TimerCallback(object state)
         {
             _tickCount++;
             tikTakReq?.Invoke(this);
             Statistic();
 
-            // Если остановка или группа выключена – завершаем таймер
             if (_timerStop || Id == 0 || Off)
             {
                 _timer?.Dispose();
@@ -215,7 +194,6 @@ namespace Connector
             }
         }
 
-        // Метод обновления статистики
         public void Statistic()
         {
             int all = Tags.Count;
@@ -223,27 +201,22 @@ namespace Connector
             tikTakInfo?.Invoke(Id, _tickCount, all, good);
         }
 
-        // Обновление статусов тегов при выключении
         public void SendStatusOff()
         {
             SendOff();
             RaiseParamStatusChanged();
         }
 
-        // Установка статуса "включено" для тегов группы
         public void SendOn()
         {
-            // Приводим Tags к ICodeMessage
             Tag.CodeMessageList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagCode.groupOn));
         }
 
-        // Установка статуса "выключено" для тегов группы
         public void SendOff()
         {
             Tag.CodeMessageList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagCode.groupOff));
         }
 
-        // Метод для уведомления об изменении параметров группы
         private void RaiseParamStatusChanged()
         {
             eventParams?.Invoke(new GroupParamStatus(Id, _updateRate, _off, IsTimerStopped));
@@ -254,12 +227,11 @@ namespace Connector
             RaiseParamStatusChanged();
         }
 
-        // Переопределяем Equals и GetHashCode для корректного сравнения групп
         public override bool Equals(object obj)
         {
             if (obj is Group other)
             {
-                return this.Id == other.Id || this.title == other.title;
+                return Id == other.Id || title == other.title;
             }
             return false;
         }
@@ -269,24 +241,22 @@ namespace Connector
             return Id.GetHashCode() ^ (title?.GetHashCode() ?? 0);
         }
 
-        // Статические члены для глобального управления группами
-        static public List<Group> items = new List<Group>(); // Все группы
-        static public ushort lastId = 0;
-        static public bool log = false;
+        public static List<Group> items = new List<Group>();
+        public static ushort lastId = 0;
+        public static bool log = false;
 
-        static public bool Exist(Group group) => items.Any(x => x.Equals(group));
+        public static bool Exist(Group group) => items.Any(x => x.Equals(group));
 
-        static public void Clear()
+        public static void Clear()
         {
             lastId = 0;
             items = new List<Group>();
         }
 
-        static public Group Item(ushort id) => items.FirstOrDefault(x => x.Id == id);
-        static public Group Item(string title) => items.FirstOrDefault(x => x.title == title);
+        public static Group Item(ushort id) => items.FirstOrDefault(x => x.Id == id);
+        public static Group Item(string title) => items.FirstOrDefault(x => x.title == title);
 
-        // Привязка тегов к группам: обновление списка тегов для каждой группы
-        static public void LinkGroups()
+        public static void LinkGroups()
         {
             foreach (var group in items)
             {
@@ -295,7 +265,7 @@ namespace Connector
             }
         }
 
-        static public void ActivateItems()
+        public static void ActivateItems()
         {
             foreach (var group in items)
             {

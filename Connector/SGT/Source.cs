@@ -42,9 +42,6 @@ namespace Connector
         public string title { get; } // Название источника
         public string description { get; } // Описание источника
 
-        // Группы источника (каждая группа содержит свои теги)
-        //public List<Group> Groups { get; } = new List<Group>();
-
         // Вместо локального списка групп используем вычисляемое свойство
         public IEnumerable<Group> Groups => Group.items.Where(g => g.ParentSource == this);
 
@@ -60,19 +57,21 @@ namespace Connector
             return SourceHelp.HelpDicSource(type);
         }
 
-        #region Delegate
+        #region Events
         public delegate void HandlerError(ushort Id, CodeMessage activeError);
-        public HandlerError eventError;
+        public event HandlerError eventError;
 
         public delegate void HandlerStatus(ushort Id, eSourceStatus status);
-        public HandlerStatus eventStatus;
+        public event HandlerStatus eventStatus;
 
         public delegate void HandlerInfo(SourceParam info);
-        public HandlerInfo eventParams;
+        public event HandlerInfo eventParams;
 
         public delegate void HandlerReq(ushort sourceId, ushort groupId, List<ITagResult> results, int counter, int fails, int all, int good);
-        public HandlerReq eventReq;
+        public event HandlerReq eventReq;
+        #endregion
 
+        #region Delegates
         public delegate void HandlerTrafficLog(ushort Id, string message);
         public HandlerTrafficLog logTraffic;
 

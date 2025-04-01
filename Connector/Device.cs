@@ -26,12 +26,6 @@ namespace Connector
         void Request<T>(List<T> tags) where T : ITagClient;
     }
 
-    //public interface IHelp
-    //{
-    //    Dictionary<string, string> HelpSource { get; }
-    //    Dictionary<string, string> HelpTag { get; }
-    //}
-
     interface IControlTrafficLog
     {
         bool EnableTLog { get; set; }
