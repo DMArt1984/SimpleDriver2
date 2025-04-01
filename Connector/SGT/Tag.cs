@@ -150,15 +150,12 @@ namespace Connector
         public string title { get; }
         public string description { get; }
 
-        private ushort _sourceId = 0;
-        public ushort sourceId => _sourceId;
         private ushort _groupId = 0;
         public ushort groupId => _groupId;
+        public string groupTitle => ParentGroup?.title ?? "";
 
-        private string _sourceTitle = "";
-        public string sourceTitle => _sourceTitle;
-        private string _groupTitle = "";
-        public string groupTitle => _groupTitle;
+        public string sourceTitle => ParentGroup?.ParentSource?.title ?? "";
+        public ushort sourceId => ParentGroup?.ParentSource?.Id ?? 0;
 
         public bool Good => codeMessage.code == (int)eTagStatus.good;
 
@@ -167,7 +164,7 @@ namespace Connector
 
         public bool lic = false;
 
-        public delegate void HandlerCode(ushort Id, CodeMessage activeCM, CodeMessage lastError);
+        public delegate void HandlerCode(ushort Id, CodeMessage cm);
         public event HandlerCode eventCode;
 
         public delegate void HandlerParam(TagParam info);
@@ -195,70 +192,7 @@ namespace Connector
 
         public void SetLinkIdTitle()
         {
-            if (!string.IsNullOrWhiteSpace(_sourceTitle))
-            {
-                var source = Source.Item(_sourceTitle);
-                if (source != null)
-                {
-                    _sourceId = source.Id;
-                }
-                else if (Source.lastId == 1)
-                {
-                    _sourceId = Source.items[0].Id;
-                    _sourceTitle = Source.items[0].title;
-                }
-            }
-            else if (_sourceId > 0)
-            {
-                var source = Source.Item(_sourceId);
-                if (source != null)
-                {
-                    _sourceTitle = source.title;
-                }
-                else if (Source.lastId == 1)
-                {
-                    _sourceId = Source.items[0].Id;
-                    _sourceTitle = Source.items[0].title;
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(_groupTitle))
-            {
-                //var group = Group.Item(_groupTitle);
-                //if (group != null)
-                //{
-                //    _groupId = group.Id;
-                //}
-                //else
-                //{
-                //    _groupId = ++Group.lastId;
-                //    Group.items.Add(new Group(_groupId, _groupTitle, 100, false, "Создан динамически по имени"));
-                //}
-            }
-            else if (_groupId > 0)
-            {
-                var group = Group.Item(_groupId);
-                if (group != null)
-                {
-                    _groupTitle = group.title;
-                }
-            }
-
-            if (_groupId == 0 && string.IsNullOrWhiteSpace(_groupTitle))
-            {
-                if (Group.lastId == 1)
-                {
-                    _groupId = Group.items[0].Id;
-                    _groupTitle = Group.items[0].title;
-                }
-                else
-                {
-                    //_groupId = ++Group.lastId;
-                    //_groupTitle = $"GroupID{Group.lastId}";
-                    //Group.items.Add(new Group(_groupId, _groupTitle, 100, false, "Создан динамически"));
-                }
-            }
-
+            //...
             if (!string.IsNullOrWhiteSpace(_writeTagTitle) && title != _writeTagTitle)
             {
                 var tag = Tag.Item(_writeTagTitle);
@@ -519,7 +453,7 @@ namespace Connector
 
         private void EventChangeCodeMessage()
         {
-            eventCode?.Invoke(Id, codeMessage, LastError);
+            eventCode?.Invoke(Id, codeMessage);
         }
 
         public void SetResult(TagResult result)
@@ -552,6 +486,8 @@ namespace Connector
                 codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.zero);
             }
         }
+
+        // ============================================================
 
         public static List<Tag> items = new List<Tag>();
         public static ushort lastId = 0;
