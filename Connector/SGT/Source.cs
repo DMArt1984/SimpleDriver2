@@ -305,7 +305,7 @@ namespace Connector
                     ClearCounterBreak();
                     // Обновляем статус тегов во всех группах
                     var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
+                    Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
 
                     if (AutoRequestAftereOpen)
                         CyclicRequest = true;
@@ -317,7 +317,7 @@ namespace Connector
                     _fail = true;
                     ClearCounterBreak();
                     var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceFail));
+                    Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceFail));
                     OpenAfterFail();
                 }
 
@@ -353,7 +353,7 @@ namespace Connector
                     counterFailReq = 0;
                     logger.Info($"Источник ID={Id} {title} > Статусы тегов...", eMessageCategory.Source);
                     var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                    Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceClosed));
+                    Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceClosed));
                     logger.Info($"Источник ID={Id} {title} > 5...", eMessageCategory.Source);
 
                     if (user == false)
@@ -371,7 +371,7 @@ namespace Connector
             else
             {
                 var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceClosed));
+                Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceClosed));
             }
             return 1;
         }
@@ -457,7 +457,7 @@ namespace Connector
                     {
                         WaitProcess();
                         var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                        Tag.CodeMessageList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
+                        Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
                     }
                     EventStatus();
                 }

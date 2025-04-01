@@ -30,32 +30,7 @@ namespace Connector
         public string title { get; }
         public string description { get; }
 
-        private ushort _groupId = 0;
-        public ushort groupId => _groupId;
-        public string groupTitle => ParentGroup?.title ?? "";
-
-        public string sourceTitle => ParentGroup?.ParentSource?.title ?? "";
-        public ushort sourceId => ParentGroup?.ParentSource?.Id ?? 0;
-
-        public bool Good => status == eTagStatus.good;
-
-        public bool SimEnable = false;
-        public dynamic SimValue = null;
-
         public bool lic = false; // тег для контроля лицензии
-
-        public delegate void HandlerCodeOrStatus(ushort Id, CodeMessage cm, eTagStatus status);
-        public event HandlerCodeOrStatus eventCodeOrStatus;
-
-        public delegate void HandlerParam(TagParam info);
-        public event HandlerParam eventParams;
-
-        public delegate void HandlerValue(ushort Id);
-        public event HandlerValue eventValue;
-
-        public Tag[] InnerTags { get; set; } // Массив внутренних тегов, соответствующих тегам, найденным в адресе
-
-        public Group ParentGroup { get; } // Группа тега
 
         // Конструктор
         public Tag(ushort Id, string title, Group parentGroup, eDataType dataType, string address, string description = "")
@@ -70,42 +45,128 @@ namespace Connector
             ParentGroup.AddTag(this);
         }
 
-        public void SetLinkIdTitle()
+        public string GetWriteCell()
         {
-            //...
-            if (!string.IsNullOrWhiteSpace(_writeTagTitle) && title != _writeTagTitle)
+            return !string.IsNullOrWhiteSpace(WriteTagTitle) ? WriteTagTitle : WriteConstValue == null ? null : string.Join(";", WriteConstValue);
+        }
+
+        public eCommand Command
+        {
+            get => _command;
+            set
             {
-                var tag = Tag.Item(_writeTagTitle);
-                if (tag != null)
+                if (_command != value)
                 {
-                    WriteTagId = tag.Id;
-                }
-                else
-                {
-                    _writeTagTitle = "";
+                    _command = value;
+                    EventChangeParam(true);
                 }
             }
-            else if (WriteTagId > 0 && Id != WriteTagId)
+        }
+        private eCommand _command = eCommand.None;
+
+        public void SetResult(TagResult result)
+        {
+            if (!SimEnable)
             {
-                var tag = Tag.Item(WriteTagId);
-                if (tag != null)
-                {
-                    _writeTagTitle = tag.title;
-                }
-                else
-                {
-                    WriteTagId = 0;
-                }
+                codeMessage = result.codeMessage;
+                Value = result.value;
             }
         }
 
-        public static void CalcId()
+        public dynamic Value
         {
-            foreach (var item in Tag.items)
+            get => _value;
+            set
             {
-                item.SetLinkIdTitle();
+                _value = value;
+                if (Good)
+                {
+                    _lastGoodValue = value;
+                    _lastDTUpdate = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss.fff");
+                }
+
+                eventValue?.Invoke(Id);
             }
         }
+        private dynamic _value = null;
+
+        public string LastDTUpdate => _lastDTUpdate;
+        private string _lastDTUpdate = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss.fff");
+
+        public dynamic LastGoodValue => _lastGoodValue;
+        private dynamic _lastGoodValue = null;
+
+        public CodeMessage codeMessage
+        {
+            get => _codeMessage;
+            set
+            {
+                if (_codeMessage.code != value.code)
+                {
+                    _codeMessage = value;
+                    EventChangeCodeMessageStatus();
+                }
+            }
+        }
+        private CodeMessage _codeMessage = new CodeMessage();
+
+        public eTagStatus status
+        {
+            get => _status;
+            set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                    EventChangeCodeMessageStatus();
+                }
+            }
+        }
+        private eTagStatus _status = eTagStatus.zero;
+
+        public bool Good => status == eTagStatus.good;
+
+
+
+        #region Events
+
+        public delegate void HandlerCodeOrStatus(ushort Id, CodeMessage cm, eTagStatus status);
+        public event HandlerCodeOrStatus eventCodeOrStatus;
+
+        public delegate void HandlerParam(TagParam info);
+        public event HandlerParam eventParams;
+
+        public delegate void HandlerValue(ushort Id);
+        public event HandlerValue eventValue;
+
+        private void EventChangeParam(bool noSetTagON = false)
+        {
+            if (Off)
+            {
+                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.tagOff);
+            }
+            else if (!noSetTagON)
+            {
+                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.tagOn);
+            }
+            eventParams?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
+        }
+
+        private void EventChangeCodeMessageStatus()
+        {
+            eventCodeOrStatus?.Invoke(Id, codeMessage, status);
+        }
+
+        public void Refresh()
+        {
+            EventChangeParam(true);
+            EventChangeCodeMessageStatus();
+            eventValue?.Invoke(Id);
+        }
+
+        #endregion
+
+        #region Setting
 
         public void SetParam(bool off, bool command, ushort writeTagId = 0, dynamic writeValue = null)
         {
@@ -214,11 +275,6 @@ namespace Connector
         private IAppendTag appendValue = null;
         public dynamic WriteTagValue => appendValue?.LastGoodValue;
 
-        public string GetWriteCell()
-        {
-            return !string.IsNullOrWhiteSpace(WriteTagTitle) ? WriteTagTitle : WriteConstValue == null ? null : string.Join(";", WriteConstValue);
-        }
-
         public eDirect direct
         {
             get
@@ -238,119 +294,78 @@ namespace Connector
                 ? eDirectFull.Read
                 : (WriteTagId > 0 ? eDirectFull.WriteTagValue : eDirectFull.WriteConstValue);
 
-        public eCommand Command
-        {
-            get => _command;
-            set
-            {
-                if (_command != value)
-                {
-                    _command = value;
-                    EventChangeParam(true);
-                }
-            }
-        }
-        private eCommand _command = eCommand.None;
-
-        public dynamic Value
-        {
-            get => _value;
-            set
-            {
-                _value = value;
-                if (Good)
-                {
-                    _lastGoodValue = value;
-                    _lastDTUpdate = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss.fff");
-                }
-
-                eventValue?.Invoke(Id);
-            }
-        }
-        private dynamic _value = null;
-
-        public string LastDTUpdate => _lastDTUpdate;
-        private string _lastDTUpdate = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss.fff");
-
-        public dynamic LastGoodValue => _lastGoodValue;
-        private dynamic _lastGoodValue = null;
-
-        public CodeMessage codeMessage
-        {
-            get => _codeMessage;
-            set
-            {
-                if (_codeMessage.code != value.code)
-                {
-                    _codeMessage = value;
-                    EventChangeCodeMessageStatus();
-                }
-            }
-        }
-        private CodeMessage _codeMessage = new CodeMessage();
-
-        public eTagStatus status
-        {
-            get => _status;
-            set
-            {
-                if (_status != value)
-                {
-                    _status = value;
-                    EventChangeCodeMessageStatus();
-                }
-            }
-        }
-        private eTagStatus _status = eTagStatus.zero;
-
-        private void EventChangeParam(bool noSetTagON = false)
-        {
-            if (Off)
-            {
-                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.tagOff);
-            }
-            else if (!noSetTagON)
-            {
-                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.tagOn);
-            }
-            eventParams?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
-        }
-
-        private void EventChangeCodeMessageStatus()
-        {
-            eventCodeOrStatus?.Invoke(Id, codeMessage, status);
-        }
-
-        public void SetResult(TagResult result)
-        {
-            if (!SimEnable)
-            {
-                codeMessage = result.codeMessage;
-                Value = result.value;
-            }
-        }
-
-        public void Refresh()
-        {
-            EventChangeParam(true);
-            EventChangeCodeMessageStatus();
-            eventValue?.Invoke(Id);
-        }
-
-        public void SetSim(bool enable, dynamic value = null)
+        public bool SimEnable = false;
+        public dynamic SimValue = null;
+        public void SimOnOff(bool enable, dynamic value = null)
         {
             SimEnable = enable;
             SimValue = value;
             if (SimEnable)
             {
-                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.good);
+                codeMessage = Tag.CM.Good;
                 Value = value;
             }
             else
             {
-                codeMessage = CodeMessageFactory.FromEnumX(eTagStatus.zero);
+                codeMessage = Tag.CM.Good; //CodeMessageFactory.FromEnumX(eTagStatus.zero);
             }
         }
+
+        #endregion
+
+        #region Builder
+
+        public Tag[] InnerTags { get; set; } // Массив внутренних тегов, соответствующих тегам, найденным в адресе
+
+        public Group ParentGroup { get; } // Группа тега
+
+        private ushort _groupId = 0;
+        public ushort groupId => _groupId;
+        public string groupTitle => ParentGroup?.title ?? "";
+
+        public string sourceTitle => ParentGroup?.ParentSource?.title ?? "";
+        public ushort sourceId => ParentGroup?.ParentSource?.Id ?? 0;
+
+        public void SetLinkIdTitle()
+        {
+            //...
+            if (!string.IsNullOrWhiteSpace(_writeTagTitle) && title != _writeTagTitle)
+            {
+                var tag = Tag.Item(_writeTagTitle);
+                if (tag != null)
+                {
+                    WriteTagId = tag.Id;
+                }
+                else
+                {
+                    _writeTagTitle = "";
+                }
+            }
+            else if (WriteTagId > 0 && Id != WriteTagId)
+            {
+                var tag = Tag.Item(WriteTagId);
+                if (tag != null)
+                {
+                    _writeTagTitle = tag.title;
+                }
+                else
+                {
+                    WriteTagId = 0;
+                }
+            }
+        }
+
+        public void SetInnerTagsForOneTag()
+        {
+            // Обновляем только InnerTags, вычисляя их напрямую по условию в строке Address:
+            InnerTags = items
+                .Where(item => Address.Contains($"{{{item.title}}}") ||
+                               Address.Contains($"{{{item.title}.") ||
+                               Address.Contains($"{{{item.title}["))
+                .ToArray();
+        }
+
+        #endregion
 
         // ============================================================
 
@@ -367,7 +382,15 @@ namespace Connector
         public static Tag Item(ushort Id) => items.FirstOrDefault(x => x.Id == Id);
         public static Tag Item(string title) => items.FirstOrDefault(x => x.title == title);
 
-        public static void CodeMessageList<T>(List<T> tags, CodeMessage codeMessage) where T : ICodeMessage
+        public static void CalcId()
+        {
+            foreach (var item in Tag.items)
+            {
+                item.SetLinkIdTitle();
+            }
+        }
+
+        public static void SetCodeMessageForList<T>(List<T> tags, CodeMessage codeMessage) where T : ICodeMessage
         {
             if (tags == null || !tags.Any())
                 return;
@@ -378,15 +401,7 @@ namespace Connector
             }
         }
 
-        public void SetInnerTagsForOneTag()
-        {
-            // Обновляем только InnerTags, вычисляя их напрямую по условию в строке Address:
-            InnerTags = items
-                .Where(item => Address.Contains($"{{{item.title}}}") ||
-                               Address.Contains($"{{{item.title}.") ||
-                               Address.Contains($"{{{item.title}["))
-                .ToArray();
-        }
+        
 
     }
 }
