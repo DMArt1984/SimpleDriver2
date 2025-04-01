@@ -157,12 +157,13 @@ namespace Connector
         public string sourceTitle => ParentGroup?.ParentSource?.title ?? "";
         public ushort sourceId => ParentGroup?.ParentSource?.Id ?? 0;
 
-        public bool Good => codeMessage.code == (int)eTagStatus.good;
+        public bool Good => status == eTagStatus.good;
+        //public bool Good => codeMessage.code == (int)eTagStatus.good;
 
         public bool SimEnable = false;
         public dynamic SimValue = null;
 
-        public bool lic = false;
+        public bool lic = false; // тег для контроля лицензии
 
         public delegate void HandlerCode(ushort Id, CodeMessage cm);
         public event HandlerCode eventCode;
@@ -173,8 +174,18 @@ namespace Connector
         public delegate void HandlerValue(ushort Id);
         public event HandlerValue eventValue;
 
+        /// <summary>
+        /// Массив идентификаторов внутренних тегов, найденных в адресе.
+        /// Идентификаторы тегов используются для динамической подстановки значений.
+        /// </summary>
         public ushort[] InnerTagIds { get; set; }
+
+        /// <summary>
+        /// Массив внутренних тегов, соответствующих идентификаторам в <see cref="InnerTagIds"/>.
+        /// Эти теги могут быть использованы для обновления значений с подстановкой из других тегов.
+        /// </summary>
         public Tag[] InnerTags { get; set; }
+
 
         public Group ParentGroup { get; }
 
