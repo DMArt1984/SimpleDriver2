@@ -13,28 +13,30 @@ namespace Connector
         public string title { get; }
         public string description { get; }
 
-        private Source _parentSource;
-        public Source ParentSource
+        
+        
+        
+        // Конструктор
+        public Group(ushort id, string title, Source parentSource, uint updateRate = 100, bool waitOff = false, string description = "")
+            : base(LogTarget.FileConsoleForm, null)
         {
-            get => _parentSource;
-            set
-            {
-                if (_parentSource != null)
-                {
-                    tikTakReq -= _parentSource.EventRequest;
-                }
-                _parentSource = value;
-                if (_parentSource != null)
-                {
-                    tikTakReq -= _parentSource.EventRequest;
-                    tikTakReq += _parentSource.EventRequest;
-                }
-            }
+            Id = id;
+            this.title = title;
+            this.description = description;
+            UpdateRate = updateRate;
+            _waitOff = waitOff;
+            ParentSource = parentSource;
+            logger.Info($"new group ID {Id} {title} {updateRate}", eMessageCategory.Source);
+        }
+        public void Dispose()
+        {
+            _timer?.Dispose();
         }
 
-        public List<Tag> Tags { get; } = new List<Tag>();
+        
 
-        public int TagsCountGood => Tags.Count(tag => tag.Good);
+
+        #region Events
 
         public delegate void HandlerParam(GroupParamStatus info);
         public event HandlerParam eventParams;
@@ -44,6 +46,21 @@ namespace Connector
 
         public delegate void HandlerInfo(ushort id, int tickCount, int all, int good);
         public event HandlerInfo tikTakInfo;
+
+        public void Statistic()
+        {
+            int all = Tags.Count;
+            int good = Tags.Count(x => x.Good);
+            tikTakInfo?.Invoke(Id, _tickCount, all, good);
+        }
+        private void RaiseParamStatusChanged()
+        {
+            eventParams?.Invoke(new GroupParamStatus(Id, _updateRate, _off, IsTimerStopped));
+        }
+
+        #endregion
+
+        #region Timer
 
         private Timer _timer;
         private bool _timerStop = false;
@@ -61,72 +78,6 @@ namespace Connector
                     _timer?.Change(0, (int)_updateRate);
                 }
             }
-        }
-
-        private bool _off = true;
-        public bool Off
-        {
-            get => _off;
-            set
-            {
-                if (_off != value)
-                {
-                    _off = value;
-                    if (!_off)
-                    {
-                        StartTimer();
-                    }
-                    else
-                    {
-                        StopTimer();
-                    }
-                    RaiseParamStatusChanged();
-                }
-            }
-        }
-
-        private bool _disable = false;
-        public string sourceTitle = "";
-
-        // Конструктор
-        public Group(ushort id, string title, Source parentSource, uint updateRate = 100, bool disable = false, string description = "")
-            : base(LogTarget.FileConsoleForm, null)
-        {
-            Id = id;
-            this.title = title;
-            this.description = description;
-            UpdateRate = updateRate;
-            _disable = disable;
-            ParentSource = parentSource;
-            logger.Info($"new group ID {Id} {title} {updateRate}", eMessageCategory.Source);
-        }
-
-        public void AddTag(Tag tag)
-        {
-            if (tag != null && !Tags.Contains(tag))
-            {
-                Tags.Add(tag);
-            }
-        }
-
-        public void RemoveTag(Tag tag)
-        {
-            if (tag != null && Tags.Contains(tag))
-            {
-                Tags.Remove(tag);
-            }
-        }
-
-        public void Activate()
-        {
-            Off = _disable;
-        }
-
-        
-
-        public void Dispose()
-        {
-            _timer?.Dispose();
         }
 
         private void StartTimer()
@@ -165,13 +116,43 @@ namespace Connector
                 SendStatusOff();
             }
         }
+        #endregion
 
-        public void Statistic()
+        #region Setting
+        private bool _off = true;
+        public bool Off
         {
-            int all = Tags.Count;
-            int good = Tags.Count(x => x.Good);
-            tikTakInfo?.Invoke(Id, _tickCount, all, good);
+            get => _off;
+            set
+            {
+                if (_off != value)
+                {
+                    _off = value;
+                    if (!_off)
+                    {
+                        StartTimer();
+                    }
+                    else
+                    {
+                        StopTimer();
+                    }
+                    RaiseParamStatusChanged();
+                }
+            }
         }
+
+        private bool _waitOff = false;
+        public void Start()
+        {
+            Off = _waitOff;
+        }
+        public void Stop()
+        {
+            _waitOff = Off;
+            Off = false;
+        }
+        #endregion
+
 
         public void SendStatusOff()
         {
@@ -189,10 +170,7 @@ namespace Connector
             Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupOff));
         }
 
-        private void RaiseParamStatusChanged()
-        {
-            eventParams?.Invoke(new GroupParamStatus(Id, _updateRate, _off, IsTimerStopped));
-        }
+        
 
         public override bool Equals(object obj)
         {
@@ -208,6 +186,28 @@ namespace Connector
             return Id.GetHashCode() ^ (title?.GetHashCode() ?? 0);
         }
 
+        #region Builder
+        private Source _parentSource;
+        public Source ParentSource
+        {
+            get => _parentSource;
+            set
+            {
+                if (_parentSource != null)
+                {
+                    tikTakReq -= _parentSource.EventRequest;
+                }
+                _parentSource = value;
+                if (_parentSource != null)
+                {
+                    tikTakReq -= _parentSource.EventRequest;
+                    tikTakReq += _parentSource.EventRequest;
+                }
+            }
+        }
+        public string sourceTitle => ParentSource?.title ?? "";
+        public List<Tag> Tags { get; } = new List<Tag>();
+        public int TagsCountGood => Tags.Count(tag => tag.Good);
         public void UseTags(List<Tag> tags)
         {
             Tags.Clear();
@@ -221,6 +221,26 @@ namespace Connector
                 }
             }
         }
+        public void AddTag(Tag tag)
+        {
+            if (tag != null && !Tags.Contains(tag))
+            {
+                tag.ParentGroup = this; // Устанавливаем родительскую группу
+                Tags.Add(tag);
+            }
+        }
+
+        public void RemoveTag(Tag tag)
+        {
+            if (tag != null && Tags.Contains(tag))
+            {
+                tag.ParentGroup = null; // Сбрасываем родительскую группу
+                Tags.Remove(tag);
+            }
+        }
+
+
+        #endregion
 
         // ==============================================================================
 
@@ -255,7 +275,7 @@ namespace Connector
             foreach (var group in items)
             {
                 if (group.Off)
-                    group.Activate();
+                    group.Start();
             }
         }
 
