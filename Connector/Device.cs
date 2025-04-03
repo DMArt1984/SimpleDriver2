@@ -48,18 +48,6 @@ namespace Connector
         public delegate void HandlerLog(CodeMessage cm);
         public HandlerLog log;
 
-        // IHelp Реализация
-
-        //public virtual Dictionary<string, string> HelpSource
-        //{
-        //    get { return new Dictionary<string, string>(); }
-        //}
-
-        //public virtual Dictionary<string, string> HelpTag
-        //{
-        //    get { return new Dictionary<string, string>(); }
-        //}
-
         // =================================================================================
 
         public Device()

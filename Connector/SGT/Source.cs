@@ -572,13 +572,6 @@ namespace Connector
             eventParams?.Invoke(new SourceParam(Id, Address, AutoRequestAftereOpen, AutoOpenAfterFail));
         }
 
-        public void Refresh()
-        {
-            EventChangeParam();
-            eventStatus?.Invoke(Id, Status);
-            eventError?.Invoke(Id, codeMessage);
-        }
-
         // Статус
         void EventStatus()
         {
