@@ -66,6 +66,7 @@ namespace Connector
         private Timer _timer;
         private bool _timerStop = false;
         private int _tickCount = 0;
+
         private uint _updateRate = 100;
         public uint UpdateRate
         {

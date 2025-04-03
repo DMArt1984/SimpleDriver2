@@ -640,10 +640,15 @@ namespace Connector
                     HandleTagErrors(clientTags);
                 }
 
-                await Task.Delay(10);
+                await Task.Delay(10); // отдохнем!
 
+                // все группы
                 int all = Groups.SelectMany(g => g.Tags).Count();
                 int good = Groups.SelectMany(g => g.Tags).Count(x => x.Good);
+                // только текущей группы
+                int allx = clientTags.Count;
+                int goodx = clientTags.Count(x => x.Good);
+                // 
                 eventReq?.Invoke(Id, groupId, clientTags.Select(x => (ITagResult)x).ToList(), counterReq, counterFailReq, all, good);
             }
             finally
