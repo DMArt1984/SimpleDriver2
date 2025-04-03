@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogCodeMessage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,15 @@ using System.Threading.Tasks;
 
 namespace Connector
 {
+    interface ISource
+    {
+        eSourceStatus Status { get; set; }
+        CodeMessage codeMessage { get; set; }
+
+        byte MaxBreak { get; set; }
+        byte counterBreak { get; set; }
+    }
+
     public enum eSourceStatus
     {
         zero = 1000, // не определено

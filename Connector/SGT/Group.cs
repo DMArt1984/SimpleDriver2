@@ -39,16 +39,6 @@ namespace Connector
         public delegate void HandlerReq(IGroupOff group);
         public event HandlerReq tikTakReq;
 
-        //public delegate void HandlerInfo(ushort id, int tickCount, int all, int good);
-        //public event HandlerInfo tikTakInfo;
-
-        // Вызывается для получения статистики по тегам
-        public int StatisticGood()
-        {
-            int all = Tags.Count;
-            int good = Tags.Count(x => x.Good);
-            return good;
-        }
         private void RaiseParamStatusChanged()
         {
             eventParams?.Invoke(new GroupParamStatus(Id, _updateRate, _off, IsTimerStopped));
@@ -96,7 +86,10 @@ namespace Connector
             if (_timer == null)
             {
                 _timerStop = false;
-                _timer = new Timer(TimerCallback, null, 0, (int)UpdateRate);
+                // Вычисляем начальное смещение, например, на основе ID группы или случайное значение
+                // Такой механизм поможет распределить нагрузку равномернее и снизить вероятность одновременного вызова обработчика событий
+                int initialDelay = new Random().Next(0, 100); // случайное смещение от 0 до 100 мс
+                _timer = new Timer(TimerCallback, null, initialDelay, (int)UpdateRate);
                 OnAndTimerStart();
             }
         }
@@ -116,7 +109,6 @@ namespace Connector
         {
             _tickCount++;
             tikTakReq?.Invoke(this);
-            //Statistic();
 
             if (_timerStop || Id == 0 || Off)
             {

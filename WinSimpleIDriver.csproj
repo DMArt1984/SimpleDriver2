@@ -107,6 +107,7 @@
     <Compile Include="Connector\SGT\Tag.cs" />
     <Compile Include="Connector\Driver\TestTable.cs" />
     <Compile Include="Connector\SGT\TagEditor.cs" />
+    <Compile Include="Connector\SGT\TagErrorHandler.cs" />
     <Compile Include="DML\BaseLogger.cs" />
     <Compile Include="LogCodeMessage\CodeMessage.cs" />
     <Compile Include="LogCodeMessage\CodeMessageFactory.cs" />
