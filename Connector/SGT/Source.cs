@@ -256,74 +256,94 @@ namespace Connector
             logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено", eMessageCategory.Source);
         }
 
-        int Open()
+        private int Open()
         {
-            if (Status == eSourceStatus.closed)
+            if (Status != eSourceStatus.closed)
+                return 1;
+
+            Status = eSourceStatus.opening;
+            CodeMessage result = TryOpenConnection();
+
+            if (result.code == 0)
             {
-                Status = eSourceStatus.opening;
-                CodeMessage result = new CodeMessage();
-
-                if (_device is INetDevice && (_device as DeviceNet).disableHostForOpen)
-                {
-                    var retval = IsHostReachable();
-                    if (retval == false)
-                        result = Tag.CM.NoPing;
-                }
-                else
-                {
-                    result = TryTcpConnect();
-                }
-
-                if (result.code == 0)
-                {
-                    logger.Info($"Источник ID={Id} {title} > Соединение...", eMessageCategory.Source);
-                    var xdevice = _device as IRealDevice;
-                    if (xdevice != null)
-                    {
-                        result = xdevice.Connect(Address);
-                    }
-                    else
-                    {
-                        result = new CodeMessage();
-                    }
-                }
-                else
-                {
-                    logger.Info($"Источник ID={Id} {title} > Нет связи с хостом/IP", eMessageCategory.Source);
-                }
-
-                if (result.code != 0)
-                    codeMessage = result;
-
-                if (result.code == 0)
-                {
-                    logger.Info($"Источник ID={Id} {title} > Открыть - успешно!", eMessageCategory.Source);
-                    _opened = true;
-                    _fail = false;
-                    stepReOpen = 0;
-                    ClearCounterBreak();
-                    // Обновляем статус тегов во всех группах
-                    var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                    //Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
-
-                    if (AutoRequestAftereOpen)
-                        CyclicRequest = true;
-                }
-                else
-                {
-                    logger.Info($"Источник ID={Id} {title} > Открыть - ошибка {result.code} {result.message}", eMessageCategory.Source);
-                    Status = eSourceStatus.breaking;
-                    _fail = true;
-                    ClearCounterBreak();
-                    var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                    Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceDisable));
-                    OpenAfterFail();
-                }
-
-                EventStatus();
-                return result.code;
+                UpdateSuccessState();
             }
-            return 1;
+            else
+            {
+                UpdateFailureState(result);
+            }
+
+            EventStatus();
+            return result.code;
+        }
+
+        /// <summary>
+        /// Пытается открыть соединение с устройством. Если устройство является сетевым и настроено без проверки хоста,
+        /// проверяет доступность хоста; иначе пытается выполнить TCP-подключение, а затем подключиться через IRealDevice.
+        /// </summary>
+        private CodeMessage TryOpenConnection()
+        {
+            CodeMessage result = new CodeMessage();
+
+            if (_device is INetDevice && (_device as DeviceNet).disableHostForOpen)
+            {
+                if (!IsHostReachable())
+                    result = Tag.CM.NoPing;
+            }
+            else
+            {
+                result = TryTcpConnect();
+            }
+
+            if (result.code == 0)
+            {
+                logger.Info($"Источник ID={Id} {title} > Соединение...", eMessageCategory.Source);
+                if (_device is IRealDevice xdevice)
+                    result = xdevice.Connect(Address);
+                else
+                    result = new CodeMessage();
+            }
+            else
+            {
+                logger.Info($"Источник ID={Id} {title} > Нет связи с хостом/IP", eMessageCategory.Source);
+            }
+
+            if (result.code != 0)
+                codeMessage = result;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Обновляет внутреннее состояние при успешном открытии соединения.
+        /// </summary>
+        private void UpdateSuccessState()
+        {
+            logger.Info($"Источник ID={Id} {title} > Открыть - успешно!", eMessageCategory.Source);
+            _opened = true;
+            _fail = false;
+            stepReOpen = 0;
+            ClearCounterBreak();
+            // Обновляем статус тегов во всех группах (при необходимости раскомментируйте)
+            // var allTags = Groups.SelectMany(g => g.Tags).ToList();
+            // Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
+
+            if (AutoRequestAftereOpen)
+                CyclicRequest = true;
+        }
+
+        /// <summary>
+        /// Обновляет внутреннее состояние и инициирует переподключение при ошибке открытия.
+        /// </summary>
+        private void UpdateFailureState(CodeMessage result)
+        {
+            logger.Info($"Источник ID={Id} {title} > Открыть - ошибка {result.code} {result.message}", eMessageCategory.Source);
+            Status = eSourceStatus.breaking;
+            _fail = true;
+            ClearCounterBreak();
+            var allTags = Groups.SelectMany(g => g.Tags).ToList();
+            Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceDisable));
+            OpenAfterFail();
         }
 
         // ------------------------------------------
