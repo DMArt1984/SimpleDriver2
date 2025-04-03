@@ -39,14 +39,15 @@ namespace Connector
         public delegate void HandlerReq(IGroupOff group);
         public event HandlerReq tikTakReq;
 
-        public delegate void HandlerInfo(ushort id, int tickCount, int all, int good);
-        public event HandlerInfo tikTakInfo;
+        //public delegate void HandlerInfo(ushort id, int tickCount, int all, int good);
+        //public event HandlerInfo tikTakInfo;
 
-        public void Statistic()
+        // Вызывается для получения статистики по тегам
+        public int StatisticGood()
         {
             int all = Tags.Count;
             int good = Tags.Count(x => x.Good);
-            tikTakInfo?.Invoke(Id, _tickCount, all, good);
+            return good;
         }
         private void RaiseParamStatusChanged()
         {
@@ -115,7 +116,7 @@ namespace Connector
         {
             _tickCount++;
             tikTakReq?.Invoke(this);
-            Statistic();
+            //Statistic();
 
             if (_timerStop || Id == 0 || Off)
             {

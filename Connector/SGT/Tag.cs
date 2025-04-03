@@ -297,7 +297,7 @@ namespace Connector
                 if (_writeTagId != value)
                 {
                     _writeTagId = value;
-                    appendValue = Tag.items.FirstOrDefault(x => x.Id == value);
+                    appendTag = Tag.items.FirstOrDefault(x => x.Id == value);
                     EventChangeParam(true);
                 }
             }
@@ -305,8 +305,8 @@ namespace Connector
         private ushort _writeTagId = 0;
         public string WriteTagTitle => _writeTagTitle;
         private string _writeTagTitle;
-        private IAppendTag appendValue = null;
-        public dynamic WriteTagValue => appendValue?.LastGoodValue;
+        private IAppendTag appendTag = null;
+        public dynamic WriteTagValue => appendTag?.LastGoodValue;
 
         public eDirect direct
         {
