@@ -13,7 +13,6 @@ namespace Connector
         public string title { get; }
         public string description { get; }
 
-        
 
         // Конструктор
         public Group(ushort id, string title, Source parentSource, uint updateRate = 100, bool waitOff = false, string description = "")
@@ -31,9 +30,6 @@ namespace Connector
         {
             _timer?.Dispose();
         }
-
-        
-
 
         #region Events
 
@@ -100,7 +96,7 @@ namespace Connector
             {
                 _timerStop = false;
                 _timer = new Timer(TimerCallback, null, 0, (int)UpdateRate);
-                SendOn();
+                OnAndTimerStart();
             }
         }
 
@@ -110,7 +106,7 @@ namespace Connector
             {
                 _timerStop = true;
             }
-            SendOff();
+            OffAndTimerStop();
         }
 
         private bool IsTimerStopped => _timer == null;
@@ -132,17 +128,21 @@ namespace Connector
         }
         public void SendStatusOff()
         {
-            SendOff();
+            OffAndTimerStop();
             RaiseParamStatusChanged();
         }
 
-        public void SendOn()
+        public void OnAndTimerStart()
         {
+            Status = eGroupStatus.On;
+            RaiseParamStatusChanged();
             //Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupOn));
         }
 
-        public void SendOff()
+        public void OffAndTimerStop()
         {
+            Status = eGroupStatus.Off;
+            RaiseParamStatusChanged();
             Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupDisable));
         }
         #endregion
@@ -165,7 +165,7 @@ namespace Connector
                     {
                         StopTimer();
                     }
-                    RaiseParamStatusChanged();
+                    
                 }
             }
         }
