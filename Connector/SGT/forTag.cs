@@ -123,14 +123,11 @@ namespace Connector
     {
         zero = 1000, // не определено
         good = 0, // Тег работает корректно
-        error = -400, // Ошибка тега
-        sourceOpened = 100, // Источник открыт – тег получает данные от открытого источника
-        sourceClosed = 200, // Источник закрыт – тег не может получать данные, так как источник закрыт
-        sourceFail = -200, // Ошибка источника – возникла проблема с источником, из-за которой тег не обновляется
-        groupOff = 300, // Группа отключена – теги в данной группе не активны
-        groupOn = 301, // Группа включена – теги в группе активны, но опрос может быть не запущен
-        tagOff = 50, // Тег отключен – тег не участвует в опросе
-        tagOn = 51 // Тег включен – тег участвует в опросе 
+        error = -800, // Ошибка тега
+        sourceDisable= 100, // Источник не активен
+        groupDisable = 200, // Группа не активна
+        tagOff = 300, // Тег отключен – тег не участвует в опросе
+        tagOn = 900 // Тег включен – тег участвует в опросе 
     }
 
     public static class eTagCodeExtensions
@@ -139,24 +136,20 @@ namespace Connector
         {
             switch (status)
             {
+                case eTagStatus.zero:
+                    return "Не определено";
                 case eTagStatus.good:
                     return "Норма";
                 case eTagStatus.error:
                     return "Ошибка тега";
-                case eTagStatus.sourceOpened:
-                    return "Источник открыт – тег получает данные от открытого источника";
-                case eTagStatus.sourceClosed:
-                    return "Источник закрыт – тег не может получать данные, так как источник закрыт";
-                case eTagStatus.sourceFail:
-                    return "Источник в ошибке – возникла проблема с источником, из-за которой тег не обновляется";
-                case eTagStatus.groupOff:
-                    return "Группа отключена – теги в данной группе не активны";
-                case eTagStatus.groupOn:
-                    return "Группа включена – теги в группе активны, но опрос может быть не запущен";
+                case eTagStatus.sourceDisable:
+                    return "Источник не активен";
+                case eTagStatus.groupDisable:
+                    return "Группа не активна";
                 case eTagStatus.tagOff:
-                    return "Тег отключен – тег не участвует в опросе";
+                    return "Тег отключен";
                 case eTagStatus.tagOn:
-                    return "Тег включен – тег участвует в опросе";
+                    return "Тег включен";
                 default:
                     return status.ToString();
             }

@@ -112,7 +112,7 @@ namespace Connector
         }
         private CodeMessage _codeMessage = new CodeMessage();
 
-        public eTagStatus status
+        public eTagStatus Status
         {
             get => _status;
             set
@@ -126,9 +126,47 @@ namespace Connector
         }
         private eTagStatus _status = eTagStatus.zero;
 
-        public bool Good => status == eTagStatus.good;
+        public bool Good => Status == eTagStatus.good;
+
+        #region Runtime
+        public eTagStatus ReSelectStatus(eTagStatus status)
+        {
+            if (ParentGroup == null)
+                return eTagStatus.groupDisable;
+
+            if (ParentGroup.ParentSource == null)
+                return eTagStatus.sourceDisable;
+            
+            // статус группы
+            eGroupStatus groupStatus = ParentGroup.Status;
+            switch (groupStatus)
+            {
+                case eGroupStatus.zero:
+                case eGroupStatus.Off:
+                    return eTagStatus.groupDisable;
+            }
+
+            // статус источника
+            eSourceStatus sourceStatus = ParentGroup.ParentSource.Status;
+            switch (sourceStatus)
+            {
+                case eSourceStatus.closed:
+                case eSourceStatus.closing:
+                case eSourceStatus.opening:
+                case eSourceStatus.errOpen:
+                case eSourceStatus.errClose:
+                case eSourceStatus.noClient:
+                case eSourceStatus.wait:
+                case eSourceStatus.breaking:
+                //case eSourceStatus.openedNoCycle:
+                    return eTagStatus.sourceDisable;
+            }
+
+            return status;
+        }
 
 
+        #endregion
 
         #region Events
 
@@ -146,11 +184,11 @@ namespace Connector
         {
             if (Off)
             {
-                status = eTagStatus.tagOff;
+                Status = eTagStatus.tagOff;
             }
             else if (!noSetTagON)
             {
-                status = eTagStatus.tagOn;
+                Status = eTagStatus.tagOn;
             }
             eventParam?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
         }

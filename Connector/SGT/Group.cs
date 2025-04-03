@@ -14,8 +14,7 @@ namespace Connector
         public string description { get; }
 
         
-        
-        
+
         // Конструктор
         public Group(ushort id, string title, Source parentSource, uint updateRate = 100, bool waitOff = false, string description = "")
             : base(LogTarget.FileConsoleForm, null)
@@ -58,6 +57,21 @@ namespace Connector
             eventParams?.Invoke(new GroupParamStatus(Id, _updateRate, _off, IsTimerStopped));
         }
 
+        #endregion
+
+        #region Runtime
+        public eGroupStatus Status
+        {
+            get => _status;
+            set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                }
+            }
+        }
+        eGroupStatus _status = eGroupStatus.zero;
         #endregion
 
         #region Timer
@@ -116,6 +130,21 @@ namespace Connector
                 SendStatusOff();
             }
         }
+        public void SendStatusOff()
+        {
+            SendOff();
+            RaiseParamStatusChanged();
+        }
+
+        public void SendOn()
+        {
+            //Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupOn));
+        }
+
+        public void SendOff()
+        {
+            Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupDisable));
+        }
         #endregion
 
         #region Setting
@@ -153,24 +182,6 @@ namespace Connector
         }
         #endregion
 
-
-        public void SendStatusOff()
-        {
-            SendOff();
-            RaiseParamStatusChanged();
-        }
-
-        public void SendOn()
-        {
-            Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupOn));
-        }
-
-        public void SendOff()
-        {
-            Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupOff));
-        }
-
-        
 
         public override bool Equals(object obj)
         {

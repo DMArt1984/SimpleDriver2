@@ -164,7 +164,7 @@ namespace Connector
                         tag.SetResult(new TagResult(null, Tag.CM.NoTagForWrite));
                         return;
                     }
-                    if (writeTag.status != eTagStatus.tagOn)
+                    if (writeTag.Status != eTagStatus.tagOn)
                     {
                         tag.SetResult(new TagResult(null, Tag.CM.NotReliableTW));
                         return;
