@@ -359,6 +359,32 @@ namespace Connector
         public string sourceTitle => ParentGroup?.ParentSource?.title ?? "";
         public ushort sourceId => ParentGroup?.ParentSource?.Id ?? 0;
 
+        public void RebindGroup(Group newGroup)
+        {
+            // Если новая группа совпадает с текущей, ничего не меняем.
+            if (ParentGroup == newGroup)
+                return;
+
+            // Если уже привязанная группа существует, удаляем тег из её коллекции.
+            if (ParentGroup != null)
+            {
+                ParentGroup.RemoveTag(this);
+            }
+
+            // Привязываем новую группу
+            ParentGroup = newGroup;
+
+            // Если новая группа не null, добавляем тег в её коллекцию
+            if (newGroup != null)
+            {
+                newGroup.AddTag(this);
+            }
+
+            // После перепривязки обновляем статус тега с учётом новых условий (источник и группа)
+            //UpdateStatus();
+        }
+
+
         public void SetLinkIdTitle()
         {
             //...

@@ -200,14 +200,54 @@ namespace Connector
             {
                 if (_parentSource != null)
                 {
+                    // Отписываем старый обработчик события
                     tikTakReq -= _parentSource.EventRequest;
                 }
                 _parentSource = value;
                 if (_parentSource != null)
                 {
-                    tikTakReq -= _parentSource.EventRequest;
+                    // Подписываем новый обработчик события
+                    tikTakReq -= _parentSource.EventRequest; // на всякий случай отписываем (чтобы избежать дублирования)
                     tikTakReq += _parentSource.EventRequest;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Метод перепривязки Source для группы.
+        /// Отписывает группу от старого источника и привязывает к новому.
+        /// </summary>
+        /// <param name="newSource">Новый объект Source, который будет установлен как родительский для группы.</param>
+        public void RebindSource(Source newSource)
+        {
+            // Если новый источник совпадает со старым, ничего не меняем.
+            if (newSource == _parentSource)
+                return;
+
+            // Отписываемся от событий старого источника, если он задан.
+            if (_parentSource != null)
+            {
+                tikTakReq -= _parentSource.EventRequest;
+            }
+
+            // Устанавливаем новый источник
+            ParentSource = newSource;
+
+            // Если необходимо, можно вызвать метод обновления статуса группы
+            // с учетом нового источника:
+            RaiseParamStatusChanged();
+        }
+
+        /// <summary>
+        /// Метод сброса привязки Source: отписывается от событий и обнуляет ссылку.
+        /// </summary>
+        public void UnbindSource()
+        {
+            if (_parentSource != null)
+            {
+                tikTakReq -= _parentSource.EventRequest;
+                _parentSource = null;
+                RaiseParamStatusChanged();
             }
         }
         public string sourceTitle => ParentSource?.title ?? "";
