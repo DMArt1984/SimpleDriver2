@@ -207,23 +207,30 @@ namespace Connector
             get => _off;
             set
             {
+                // Если значение не изменилось, ничего не делаем
+                if (_off == value)
+                    return;
+
                 _off = value;
-                if (_off == false) // включить
+
+                if (!_off) // Включение источника
                 {
                     UserUseClosed = false;
-                    Open(true);
+                    Open(); // синхронный вызов открытия
                 }
-                else // отключить
+                else // Отключение источника
                 {
                     if (Status != eSourceStatus.closed && Status != eSourceStatus.closing)
                     {
                         UserUseClosed = true;
-                        Close(true);
+                        // Вызываем асинхронное закрытие, не дожидаясь завершения
+                        CloseAsync(true).ConfigureAwait(false);
                     }
                 }
             }
         }
-        bool _off = true;
+        private bool _off = true;
+
 
         bool _disable = false;
 
@@ -249,7 +256,7 @@ namespace Connector
             logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 4 - завершено", eMessageCategory.Source);
         }
 
-        int Open(bool user = false)
+        int Open()
         {
             if (Status == eSourceStatus.closed)
             {
@@ -321,7 +328,7 @@ namespace Connector
 
         // ------------------------------------------
 
-        private int Close(bool user = false)
+        private async Task<int> CloseAsync(bool user = false)
         {
             logger.Info($"Источник ID={Id} {title} > Закрыть...", eMessageCategory.Source);
 
@@ -332,15 +339,14 @@ namespace Connector
                 return 1;
             }
 
-            // Переходим в состояние закрытия
+            // Переходим в состояние закрытия.
             Status = eSourceStatus.closing;
             logger.Info($"Источник ID={Id} {title} > Ждем завершения процесса...", eMessageCategory.Source);
-            WaitUntilProcessCompletes();
+            await WaitUntilProcessCompletesAsync();
 
-            // Попытка отключения устройства
+            // Пытаемся отключить устройство.
             CodeMessage result = DisconnectDevice();
 
-            // Если произошла ошибка при отключении, логируем её
             if (result.code != 0)
             {
                 codeMessage = result;
@@ -353,9 +359,7 @@ namespace Connector
                 UpdateAllTagsStatus(eTagStatus.sourceDisable);
 
                 if (!user)
-                {
                     AttemptReopenAfterFail();
-                }
             }
 
             EventStatus();
@@ -387,15 +391,13 @@ namespace Connector
             counterFailReq = 0;
         }
 
-        private void WaitUntilProcessCompletes()
+        private async Task WaitUntilProcessCompletesAsync()
         {
             logger.Info("Ожидание завершения процесса...", eMessageCategory.Source);
             DateTime dt = DateTime.Now;
-            while (_process)
+            while (_process && (DateTime.Now - dt).TotalMilliseconds < 5000)
             {
-                Thread.Sleep(100);
-                if (DateTime.Now.Subtract(dt).TotalMilliseconds > 5000)
-                    break;
+                await Task.Delay(100);
             }
             logger.Info("Ожидание завершено.", eMessageCategory.Source);
         }
@@ -449,7 +451,7 @@ namespace Connector
             if (!Off)
             {
                 logger.Info("REOPEN: Повторная попытка Open()", eMessageCategory.Source);
-                Open(false);
+                Open();
             }
             else
             {
