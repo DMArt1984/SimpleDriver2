@@ -60,6 +60,10 @@ namespace Connector.Driver
         // Синхронизация потоков
         private object sync = new object();
 
+        //
+        private CancellationTokenSource _cts = new CancellationTokenSource();
+        private Task _receiveTask;
+
         // Лог
         public override bool SupportTLog { get; } = true;
 
@@ -77,24 +81,20 @@ namespace Connector.Driver
 
         public AppUDP(string parameters)
         {
-            receiveThread = new Thread(new ThreadStart(ReceiveMessage));
-            receiveThread.IsBackground = true;
-            receiveThread.Start();
-            //...
-            //CreateClient(parameters);
+            // Запускаем асинхронный прием сообщений
+            _receiveTask = ReceiveMessagesAsync(_cts.Token);
+            // Инициализация клиента или вызов CreateClient(parameters) при необходимости...
         }
 
-        ~AppUDP()
+        public override void Dispose()
         {
             try
             {
-                threadExit = true;
-                receiveThread?.Abort();
+                _cts.Cancel();
+                _receiveTask?.Wait(); // можно дождаться завершения или использовать await в асинхронном Dispose
             }
-            catch
-            {
-
-            }
+            catch { }
+            base.Dispose();
         }
 
         // -------------------------------------------------------------------------------------------
@@ -250,129 +250,104 @@ namespace Connector.Driver
         // ---------------------------------------------------------------------------------------------
 
         // Прием сообщений
-        private async void ReceiveMessage()
+        private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
         {
             try
             {
-                // Ожидание параметров клиента
-                do
+                // Открываем UdpClient для приема сообщений
+                using (UdpClient receiver = new UdpClient(localPort))
                 {
-                    await Task.Delay(10);
-                } while (cmd == UDPcommand.None);
-                
-                // Установка клиента
-                UdpClient receiver = new UdpClient(localPort); // UdpClient для получения данных
-                IPEndPoint remoteIp = null; // адрес входящего подключения
-
-                do
-                {
-                    if (cmd == UDPcommand.Run)
+                    while (!cancellationToken.IsCancellationRequested)
                     {
-
                         try
                         {
-                            while (cmd == UDPcommand.Run)
+                            UdpReceiveResult result = await receiver.ReceiveAsync().ConfigureAwait(false);
+                            string message = Encoding.Unicode.GetString(result.Buffer);
+
+                            // Обработка сообщения с синхронизацией
+                            lock (sync)
                             {
-                                lock (sync)
+                                // Разбиваем сообщение на части и обрабатываем его
+                                string[] partsMessages = message.Split((char)13);
+                                if (partsMessages.Length == 3)
                                 {
-                                    byte[] data = receiver.Receive(ref remoteIp); // получаем данные
-                                    string message = Encoding.Unicode.GetString(data);
+                                    var key = partsMessages[0];
+                                    var strDataType = partsMessages[1];
+                                    var content = partsMessages[2];
 
-                                    Notify_Receive?.Invoke(message); // событие...
-
-                                    InnerTrafficLog($"receive: {message}");
-
-                                    // Разбива сообщения на части
-                                    string[] partsMessages = message.Split((char)13);
-
-                                    if (partsMessages.Length == 3)
+                                    if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(strDataType))
                                     {
-                                        var key = partsMessages[0];
-                                        var strDataType = partsMessages[1];
-                                        var content = partsMessages[2];
+                                        bool cmdFlag = key[0] == 'C'; // команда
+                                        bool answerFlag = key[0] == 'A'; // ответ
+                                        key = key.Substring(1);
 
-                                        if (key.Length > 1 && strDataType.Length > 1)
+                                        eDataType dataType = (eDataType)Enum.Parse(typeof(eDataType), strDataType, true);
+
+                                        InnerTrafficLog($"cmd = {cmdFlag}; answer = {answerFlag}; key = {key}; dataType = {dataType}; content = {content}");
+
+                                        if (cmdFlag)
                                         {
-                                            bool cmd = (key[0] == 'C'); // команда
-                                            bool answer = (key[0] == 'A'); // ответ
-                                            key = key.Substring(1);
-
-                                            eDataType datatType = (eDataType)System.Enum.Parse(typeof(eDataType), strDataType, true);
-
-                                            InnerTrafficLog($" cmd = {cmd}; answer = {answer}; key = {key}; dataType = {datatType}; content = {content}");
-
-                                            if (cmd)
+                                            TagResult tagResult = AppDevice.StaticGetValue(content, dataType);
+                                            var strValue = tagResult.value;
+                                            if (tagResult.value is IEnumerable && tagResult.value.GetType() != typeof(string))
                                             {
-                                                // выполнение команды
-                                                var tagResult = AppDevice.StaticGetValue(content, datatType);
-                                                var strValue = tagResult.value;
-                                                if (tagResult.value is IEnumerable && tagResult.value.GetType() != typeof(string))
-                                                {
-                                                    strValue = String.Join($"{(char)9}", tagResult.value);
-                                                }
-
-                                                // добавление уникального кода к ответу
-                                                var hash = Convert.ToString(content.GetHashCode());
-                                                content = "A" + hash + (char)13 + strDataType + (char)13 + strValue;
-
-                                                InnerTrafficLog($" CMD: result = {tagResult.value}; code = {tagResult.codeMessage}; content = {content}");
-
-                                                // отправка ответа клиенту
-                                                var exeption = SendMessage(content); //SendMessage(content, remoteIp.Address.ToString());
+                                                strValue = String.Join("~", tagResult.value);
                                             }
-                                            else if (answer)
-                                            {
-                                                dynamic value = content;
-                                                string[] arr = content.Split((char)9);
-                                                if (arr.Length >= 2)
-                                                    value = arr;
+                                            // Формируем ответ
+                                            var hash = Convert.ToString(content.GetHashCode());
+                                            content = "A" + hash + (char)13 + strDataType + (char)13 + strValue;
 
-                                                // размещение данных в словаре
-                                                if (recData.ContainsKey(key))
-                                                {
-                                                    recData[key] = value;
-                                                    recTime[key] = DateTime.Now;
-                                                    InnerTrafficLog($" ANSWER: change");
-                                                }
-                                                else
-                                                {
-                                                    recData.Add(key, value);
-                                                    recTime.Add(key, DateTime.Now);
-                                                    InnerTrafficLog($" ANSWER: add");
-                                                }
+                                            InnerTrafficLog($"CMD: result = {tagResult.value}; code = {tagResult.codeMessage}; content = {content}");
+
+                                            // Отправка ответа клиенту
+                                            SendMessage(content);
+                                        }
+                                        else if (answerFlag)
+                                        {
+                                            dynamic value = content;
+                                            string[] arr = content.Split((char)9);
+                                            if (arr.Length >= 2)
+                                                value = arr;
+
+                                            // Обновляем словари ответов
+                                            if (recData.ContainsKey(key))
+                                            {
+                                                recData[key] = value;
+                                                recTime[key] = DateTime.Now;
+                                                InnerTrafficLog("ANSWER: change");
+                                            }
+                                            else
+                                            {
+                                                recData.Add(key, value);
+                                                recTime.Add(key, DateTime.Now);
+                                                InnerTrafficLog("ANSWER: add");
                                             }
                                         }
                                     }
-
-
                                 }
-
                             }
-
+                        }
+                        catch (SocketException sex)
+                        {
+                            // Обработка ошибок сокета – если ошибка связана с отменой, то выходим из цикла
+                            if (cancellationToken.IsCancellationRequested)
+                                break;
+                            InnerTrafficLog($"Socket error: {sex.Message}");
                         }
                         catch (Exception ex)
                         {
-                            //situation = new CodeMessage(ex.HResult, ex.Message);
+                            InnerTrafficLog($"Ошибка приема сообщения: {ex.Message}");
                         }
-
                     }
-
-                    // RESTART...
-                    if (cmd == UDPcommand.Restart)
-                    {
-                        receiver = new UdpClient(localPort); // UdpClient для получения данных
-                        cmd = UDPcommand.Run;
-                    }
-
-                    await Task.Delay(10);
-
-                } while (threadExit == false);
-
-                receiver.Close();
-
-            } catch (Exception ex)
+                }
+            }
+            catch (OperationCanceledException)
             {
-                log?.Invoke(CodeMessageFactory.FromException(ex, $"new UdpClient({localPort}): #"));
+                // Ожидаемое исключение при отмене
+            }
+            catch (Exception ex)
+            {
+                log?.Invoke(CodeMessageFactory.FromException(ex, $"ReceiveMessagesAsync error"));
             }
         }
 
