@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using DML.Log;
 using LogCodeMessage;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Connector
 {
-    public class Tag : ITagStatus, ITagClient, ITagResult, IAppendTag
+    public class Tag : BaseLogger, ITagStatus, ITagClient, ITagResult, IAppendTag
     {
         public static class CM
         {
@@ -36,6 +37,7 @@ namespace Connector
 
         // Конструктор
         public Tag(ushort Id, string title, Group parentGroup, eDataType dataType, string address, string description = "")
+            : base(LogTarget.FileConsoleForm, null)
         {
             this.Id = Id;
             this.title = title;
@@ -182,7 +184,7 @@ namespace Connector
 
         private void RaiseRuntimeEvent()
         {
-            eventRuntime?.Invoke(Id);
+            SafeInvokeHandlerTagRuntime(eventRuntime, Id);
         }
         private void EventChangeParam(bool noSetTagON = false)
         {
@@ -194,7 +196,7 @@ namespace Connector
             {
                 Status = eTagStatus.tagOn;
             }
-            eventParam?.Invoke(new TagParam(Id, Off, Address, DataType, GetWriteCell()));
+            SafeInvokeHandlerTagParam(eventParam, new TagParam(Id, Off, Address, DataType, GetWriteCell()));
         }
         public string GetWriteCell()
         {
@@ -472,5 +474,44 @@ namespace Connector
             }
         }
         #endregion
+
+        // ==========================
+
+        // Безопасный вызов для HandlerTagRuntime (принимает ushort Id)
+        private void SafeInvokeHandlerTagRuntime(HandlerTagRuntime handler, ushort id)
+        {
+            if (handler == null)
+                return;
+            foreach (HandlerTagRuntime subscriber in handler.GetInvocationList())
+            {
+                try
+                {
+                    subscriber(id);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.HResult, $"Ошибка в обработчике HandlerTagRuntime: {ex.Message}", eMessageCategory.Source);
+                }
+            }
+        }
+
+        // Безопасный вызов для HandlerTagParam (принимает TagParam)
+        private void SafeInvokeHandlerTagParam(HandlerTagParam handler, TagParam info)
+        {
+            if (handler == null)
+                return;
+            foreach (HandlerTagParam subscriber in handler.GetInvocationList())
+            {
+                try
+                {
+                    subscriber(info);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.HResult, $"Ошибка в обработчике HandlerTagParam: {ex.Message}", eMessageCategory.Source);
+                }
+            }
+        }
+
     }
 }
