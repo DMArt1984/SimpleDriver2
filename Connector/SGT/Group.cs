@@ -135,14 +135,12 @@ namespace Connector
         {
             Status = eGroupStatus.On;
             RaiseParamStatusChanged();
-            //Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupOn));
         }
 
         public void OffAndTimerStop()
         {
             Status = eGroupStatus.Off;
             RaiseParamStatusChanged();
-            //Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupDisable));
         }
         #endregion
 
@@ -256,36 +254,67 @@ namespace Connector
             }
         }
         public string sourceTitle => ParentSource?.title ?? "";
-        public List<Tag> Tags { get; } = new List<Tag>();
-        public int TagsCountGood => Tags.Count(tag => tag.Good);
-        public void UseTags(List<Tag> tags)
+
+        // Приватная коллекция тегов с объектом-замком
+        private readonly object _tagsLock = new object();
+        private List<Tag> _tags = new List<Tag>();
+        // Публичное свойство, возвращающее копию списка для потокобезопасного доступа
+        public List<Tag> Tags
         {
-            Tags.Clear();
-            if (tags != null)
+            get
             {
-                foreach (var tag in tags)
+                lock (_tagsLock)
                 {
-                    // Обновляем родительскую группу у тэга на текущую группу
-                    tag.ParentGroup = this;
-                    Tags.Add(tag);
+                    return _tags.ToList();
                 }
             }
         }
+
+        public int TagsCountGood => Tags.Count(tag => tag.Good);
+        public void UseTags(List<Tag> tags)
+        {
+            lock (_tagsLock)
+            {
+                _tags.Clear();
+                if (tags != null)
+                {
+                    foreach (var tag in tags)
+                    {
+                        tag.ParentGroup = this;
+                        _tags.Add(tag);
+                    }
+                }
+            }
+        }
+        // Метод для добавления тега
         public void AddTag(Tag tag)
         {
-            if (tag != null && !Tags.Contains(tag))
+            if (tag != null)
             {
-                tag.ParentGroup = this; // Устанавливаем родительскую группу
-                Tags.Add(tag);
+                lock (_tagsLock)
+                {
+                    if (!_tags.Contains(tag))
+                    {
+                        tag.ParentGroup = this;
+                        _tags.Add(tag);
+                    }
+                }
             }
         }
 
+        // Метод для удаления тега
         public void RemoveTag(Tag tag)
         {
-            if (tag != null && Tags.Contains(tag))
+            if (tag != null)
             {
-                tag.ParentGroup = null; // Сбрасываем родительскую группу
-                Tags.Remove(tag);
+                lock (_tagsLock)
+                {
+                    if (_tags.Contains(tag))
+                    {
+                        tag.ParentGroup = null;
+                        _tags.Remove(tag);
+                    }
+                }
             }
         }
 
@@ -296,20 +325,39 @@ namespace Connector
 
         #region Static
 
+        // Статическая коллекция с объектом-замком
+        private static readonly object _itemsLock = new object();
         public static List<Group> items = new List<Group>();
+
         public static ushort lastId = 0;
         public static bool log = false;
 
         public static bool Exist(Group group) => items.Any(x => x.Equals(group));
 
+        // Пример обновления статической коллекции
         public static void Clear()
         {
-            lastId = 0;
-            items = new List<Group>();
+            lock (_itemsLock)
+            {
+                lastId = 0;
+                items = new List<Group>();
+            }
         }
 
-        public static Group Item(ushort id) => items.FirstOrDefault(x => x.Id == id);
-        public static Group Item(string title) => items.FirstOrDefault(x => x.title == title);
+        public static Group Item(ushort id)
+        {
+            lock (_itemsLock)
+            {
+                return items.FirstOrDefault(x => x.Id == id);
+            }
+        }
+        public static Group Item(string title)
+        {
+            lock (_itemsLock)
+            {
+                return items.FirstOrDefault(x => x.title == title);
+            }
+        }
 
         public static void LinkGroups()
         {

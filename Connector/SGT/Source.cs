@@ -353,10 +353,9 @@ namespace Connector
         {
             logger.Info($"Источник ID={Id} {title} > Закрыть...", eMessageCategory.Source);
 
-            // Если источник уже закрыт, обновляем статусы тегов и возвращаем код по умолчанию.
+            // Если источник уже закрыт, возвращаем код по умолчанию.
             if (Status == eSourceStatus.closed)
             {
-                UpdateAllTagsStatus(eTagStatus.sourceDisable);
                 return 1;
             }
 
@@ -377,7 +376,6 @@ namespace Connector
             {
                 logger.Info($"Источник ID={Id} {title} > Закрыть - успешно!", eMessageCategory.Source);
                 ResetSourceState();
-                UpdateAllTagsStatus(eTagStatus.sourceDisable);
 
                 if (!user)
                     AttemptReopenAfterFail();
@@ -396,12 +394,6 @@ namespace Connector
                 return xdevice.Disconnect();
             }
             return new CodeMessage();
-        }
-
-        private void UpdateAllTagsStatus(eTagStatus newStatus)
-        {
-            //var allTags = Groups.SelectMany(g => g.Tags).ToList();
-            //Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(newStatus));
         }
 
         private void ResetSourceState()
