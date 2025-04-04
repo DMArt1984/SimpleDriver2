@@ -1,0 +1,1927 @@
+{
+    "Setting": {
+        "Title": "#param#title",
+        "Maximize": "#param#max",
+        "Admin": "12345",
+        "LicTag": "Value710",
+        "LicValue": 100,
+        "TagTable": "view-100"
+    },
+    "Sources": [
+        {
+            "Title": "Crane1",
+            "Driver": "ModbusRTUclient",
+            "Address": "port=COM3;baudrate=9600;parity=None;dataBits=8;stopBits=2;timeout=500;fails=10",
+            "Group": "CRN1",
+            "Off": true,
+            "Reconnect": true,
+            "Desc": "Кран №1",
+            "Tags": [
+                {
+                    "Title": "C1DRV1_Kit1_3",
+                    "DataType": "Short",
+                    "Addr": "1:HR-1>3",
+                    "Source": "Crane1"
+                }
+            ]
+        },
+        {
+            "Title": "Segnetics",
+            "Driver": "ModbusTCPclient",
+            "Address": "ip=127.0.0.2;port=502;id=1;timeout=500",
+            "Group": "FolderSEG",
+            "Off": true,
+            "Desc": "�������� ��������!",
+            "Reconnect": true,
+            "Auto": true,
+            "Tags": [
+                {
+                    "Title": "Value1",
+                    "DataType": "Short",
+                    "Addr": "HR-1>4",
+                    "Desc": "array of short",
+                    "Off": 0
+                },
+                {
+                    "Title": "Value1Float",
+                    "DataType": "Float",
+                    "Addr": "HR-1>3",
+                    "Desc": "array of float",
+                    "Off": 0
+                },
+                {
+                    "Title": "Value2",
+                    "DataType": "Short",
+                    "Addr": "HR-8",
+                    "Desc": "text2",
+                    "Value": 549,
+                    "Command": true
+                },
+                {
+                    "Title": "Value2r",
+                    "DataType": "Short",
+                    "Addr": "HR-8",
+                    "Desc": "text2"
+                },
+                {
+                    "Title": "Value3",
+                    "DataType": "Short",
+                    "Addr": "HR-1",
+                    "Desc": "text3",
+                    "Off": 0,
+                    "Group": "Folder02",
+                    "Command": true
+                },
+                {
+                    "Title": "Value3B",
+                    "DataType": "Short",
+                    "Addr": "HR-5",
+                    "Desc": "text3",
+                    "Off": 0,
+                    "Group": "Folder02",
+                    "Write": "Value3"
+                },
+                {
+                    "Title": "Boiler1_Interlocks",
+                    "DataType": "Int",
+                    "Desc": "���������� (������) 1",
+                    "Addr": "HR-1"
+                },
+                {
+                    "Title": "Boiler2_Interlocks",
+                    "DataType": "Int",
+                    "Desc": "���������� (������) 2",
+                    "Addr": "HR-2"
+                },
+                {
+                    "Title": "Boiler3_Interlocks",
+                    "DataType": "Int",
+                    "Desc": "���������� (������) 3",
+                    "Addr": "HR-3"
+                },
+                {
+                    "Title": "Boiler4_Interlocks",
+                    "DataType": "Int",
+                    "Desc": "���������� (������) 4",
+                    "Addr": "HR-4"
+                }
+            ]
+        },
+        {
+            "Title": "Segnetics2",
+            "Driver": "ModbusTCPclient",
+            "Address": "ip=192.168.1.213;port=502;id=1;timeout=500",
+            "Group": "FolderS1",
+            "Off": true,
+            "Tags": [
+                {
+                    "Title": "Seg2Value1",
+                    "DataType": "Float",
+                    "Addr": "HR-1"
+                },
+                {
+                    "Title": "Seg2Value2",
+                    "DataType": "Float",
+                    "Addr": "HR-2"
+                },
+                {
+                    "Title": "Seg2Value3",
+                    "DataType": "Float",
+                    "Addr": "HR-3"
+                },
+                {
+                    "Title": "Seg2Value4",
+                    "DataType": "Float",
+                    "Addr": "HR-4"
+                }
+
+
+            ]
+        },
+        {
+            "Title": "SQLTest",
+            "Driver": "MSSQLclient",
+            "Address": "Data Source=localhost\\SQLEXPRESS01;Initial Catalog=dbTEST;User Id = Tech; Password = 123456",
+            "Off": true,
+            "Group": "FolderSQL",
+            "Tags": [
+                {
+                    "Title": "SQ001",
+                    "DataType": "Int",
+                    "Addr": "SELECT COUNT(*) FROM DRIVE"
+                },
+                {
+                    "Title": "SQ002",
+                    "DataType": "Int",
+                    "Addr": "UPDATE DRIVE SET Text = 'First' WHERE ID=1",
+                    "Command": true
+                },
+                {
+                    "Title": "SQ003",
+                    "DataType": "Bool",
+                    "Addr": "UPDATE DRIVE SET Text = 'Second' WHERE ID=2",
+                    "Value": false
+                }
+
+            ]
+        },
+        {
+            "Title": "Formula#1",
+            "Driver": "Formula",
+            "Address": "",
+            "Auto": true
+        },
+        {
+            "Title": "Formula#2",
+            "Driver": "Formula",
+            "Address": "",
+            "Off": false
+        },
+        {
+            "Title": "APP#1",
+            "Driver": "Application",
+            "Address": "",
+            "Group": "Info",
+            "Off": false,
+            "Auto": true,
+            "Tags": [
+                {
+                    "Title": "ValuesDIC",
+                    "DataType": "STRING",
+                    "Addr": "source@Formula#2@dicvalue",
+                    "Desc": "������� ����� Formula#2"
+                },
+                {
+                    "Title": "AppInfo",
+                    "DataType": "STRING",
+                    "Addr": "APP@Title",
+                    "Desc": "��������� �������"
+                },
+                {
+                    "Title": "Attention_Count",
+                    "DataType": "Int",
+                    "Addr": "attention@count",
+                    "Group": "Sample Messages",
+                    "Desc": "���������� ���������"
+                },
+                {
+                    "Title": "Attention_Info_Count",
+                    "DataType": "Int",
+                    "Addr": "attention@info",
+                    "Group": "Sample Messages",
+                    "Desc": "���������� Info ���������"
+                },
+                {
+                    "Title": "Attention_Warning_Count",
+                    "DataType": "Int",
+                    "Addr": "attention@warning",
+                    "Group": "Sample Messages",
+                    "Desc": "���������� Warning ���������"
+                },
+                {
+                    "Title": "Attention_WarningInNew_Count",
+                    "DataType": "Int",
+                    "Addr": "attention@warning@IncNew",
+                    "Group": "Sample Messages",
+                    "Desc": "���������� Warning ���������"
+                },
+                {
+                    "Title": "Attention_Alarm_Count",
+                    "DataType": "Int",
+                    "Addr": "attention@alarm",
+                    "Group": "Sample Messages",
+                    "Desc": "���������� Alarm ���������"
+                },
+                {
+                    "Title": "Attention_AlarmIN_Count",
+                    "DataType": "Int",
+                    "Addr": "attention@alarm@Inc",
+                    "Group": "Sample Messages",
+                    "Desc": "���������� Alarm ���������"
+                },
+                {
+                    "Title": "SourceCount",
+                    "DataType": "Int",
+                    "Group": "Info1",
+                    "Addr": "source@count",
+                    "Desc": "���������� ����������"
+                },
+                {
+                    "Title": "SourceList",
+                    "DataType": "STRING",
+                    "Group": "Info1",
+                    "Addr": "source@list",
+                    "Desc": "������ ����������"
+                },
+                {
+                    "Title": "Source1_Title",
+                    "DataType": "STRING",
+                    "Group": "Info1",
+                    "Addr": "source@1@title",
+                    "Desc": "�������� � ���������"
+                },
+                {
+                    "Title": "Source1_ID",
+                    "DataType": "Int",
+                    "Group": "Info1",
+                    "Addr": "Source@{Source1_Title}@ID",
+                    "Desc": "ID � ���������"
+                },
+                {
+                    "Title": "Source1_address",
+                    "DataType": "STRING",
+                    "Group": "Info1",
+                    "Addr": "SOURCE@1@address",
+                    "Desc": "����� � ���������"
+                },
+                {
+                    "Title": "Source1_Description",
+                    "DataType": "STRING",
+                    "Group": "Info1",
+                    "Addr": "SOURCE@1@description",
+                    "Desc": "�������� � ���������"
+                },
+                {
+                    "Title": "Source1_lastError",
+                    "DataType": "STRING",
+                    "Group": "Info1",
+                    "Addr": "SOURCE@1@lastErrorCode",
+                    "Desc": "��� ��������� ������ � ���������"
+                },
+                {
+                    "Title": "Source1_code",
+                    "DataType": "STRING",
+                    "Group": "Info1",
+                    "Addr": "SOURCE@1@code",
+                    "Desc": "��� � ���������"
+                },
+                {
+                    "Title": "Source2_Driver",
+                    "DataType": "STRING",
+                    "Group": "Info1",
+                    "Addr": "SOURCE@2@driver",
+                    "Desc": "������� � ���������"
+                },
+                {
+                    "Title": "Source2_message",
+                    "DataType": "STRING",
+                    "Group": "Info1",
+                    "Addr": "SOURCE@2@message",
+                    "Desc": "��������� � ���������"
+                },
+                {
+                    "Title": "Source2_Code",
+                    "DataType": "Long",
+                    "Group": "Info1",
+                    "Addr": "SOURCE@2@code",
+                    "Desc": "��� � ���������"
+                },
+                {
+                    "Title": "Source2_tags count",
+                    "DataType": "Int",
+                    "Group": "Info1",
+                    "Addr": "SOURCE@2@tagsCount",
+                    "Desc": "���������� ����� � ���������"
+                },
+                {
+                    "Title": "Source2_tags good",
+                    "DataType": "Int",
+                    "Group": "Info1",
+                    "Addr": "SOURCE@2@tagsGood",
+                    "Desc": "���������� ����� �������� �������� � ���������"
+                },
+                {
+                    "Title": "Source2_ON",
+                    "DataType": "Bool",
+                    "Group": "Info1",
+                    "Addr": "SOURCE@2@ON",
+                    "Desc": "������� �� � ��������"
+                },
+                {
+                    "Title": "GroupCount",
+                    "DataType": "Int",
+                    "Group": "Info2",
+                    "Addr": "group@count",
+                    "Desc": "���������� �����"
+                },
+                {
+                    "Title": "GroupList",
+                    "DataType": "STRING",
+                    "Group": "Info2",
+                    "Addr": "group@list",
+                    "Desc": "������ �����"
+                },
+                {
+                    "Title": "Group2_Title",
+                    "DataType": "STRING",
+                    "Group": "Info2",
+                    "Addr": "group@2@title",
+                    "Desc": "�������� � ������"
+                },
+                {
+                    "Title": "Group2_ID",
+                    "DataType": "Int",
+                    "Group": "Info2",
+                    "Addr": "Group@{Group2_Title}@ID",
+                    "Desc": "ID � ������"
+                },
+                {
+                    "Title": "Group2_Description",
+                    "DataType": "STRING",
+                    "Group": "Info2",
+                    "Addr": "GROUP@2@description",
+                    "Desc": "�������� � ������"
+                },
+                {
+                    "Title": "Group2_tagsCount",
+                    "DataType": "Int",
+                    "Group": "Info2",
+                    "Addr": "GROUP@2@tagscount",
+                    "Desc": "���������� ����� � ������"
+                },
+                {
+                    "Title": "Group2_tagsGood",
+                    "DataType": "Int",
+                    "Group": "Info2",
+                    "Addr": "GROUP@2@tagsgood",
+                    "Desc": "���������� ����� �������� �������� � ������"
+                },
+                {
+                    "Title": "Group2_ON",
+                    "DataType": "Bool",
+                    "Group": "Info2",
+                    "Addr": "GROUP@2@on",
+                    "Desc": "�������� �� � ������"
+                },
+                {
+                    "Title": "Group2_Interval",
+                    "DataType": "Int",
+                    "Group": "Info2",
+                    "Addr": "GROUP@2@interval",
+                    "Desc": "�������� ������ � ������"
+                },
+                {
+                    "Title": "TagCount",
+                    "DataType": "Int",
+                    "Group": "Info3",
+                    "Addr": "tag@count",
+                    "Desc": "���������� �����"
+                },
+                {
+                    "Title": "TagList",
+                    "DataType": "STRING",
+                    "Group": "Info3",
+                    "Addr": "tag@list",
+                    "Desc": "������ �����"
+                },
+                {
+                    "Title": "TagGood",
+                    "DataType": "Int",
+                    "Group": "Info3",
+                    "Addr": "tag@good",
+                    "Desc": "���������� ����� �������� ��������"
+                },
+                {
+                    "Title": "TagID",
+                    "DataType": "Int",
+                    "Group": "Info3",
+                    "Addr": "tag@TagCount@id",
+                    "Desc": "ID � ����"
+                },
+                {
+                    "Title": "TagTitle",
+                    "DataType": "STRING",
+                    "Group": "Info3",
+                    "Addr": "tag@TagCount@title",
+                    "Desc": "�������� � ����"
+                },
+                {
+                    "Title": "Tag1_Code",
+                    "DataType": "Int",
+                    "Group": "Info3",
+                    "Addr": "tag@1@code",
+                    "Desc": "��� � ����"
+                },
+                {
+                    "Title": "Tag1_ON",
+                    "DataType": "Bool",
+                    "Group": "Info3",
+                    "Addr": "tag@1@on",
+                    "Desc": "������� �� � ���"
+                },
+                {
+                    "Title": "Tag1_Message",
+                    "DataType": "Int",
+                    "Group": "Info3",
+                    "Addr": "tag@1@message",
+                    "Desc": "��������� � ����"
+                },
+                {
+                    "Title": "Tag1_Description",
+                    "DataType": "STRING",
+                    "Group": "Info3",
+                    "Addr": "tag@1@description",
+                    "Desc": "�������� � ����"
+                },
+                {
+                    "Title": "Tag1_Address",
+                    "DataType": "STRING",
+                    "Group": "Info3",
+                    "Addr": "tag@1@address",
+                    "Desc": "����� � ����"
+                },
+                {
+                    "Title": "Tag_AI1_DataType",
+                    "DataType": "STRING",
+                    "Group": "Info3",
+                    "Addr": "tag@AI1@datatype",
+                    "Desc": "��� ������ � ����"
+                },
+                {
+                    "Title": "Tag_AI1_Good",
+                    "DataType": "Bool",
+                    "Group": "Info3",
+                    "Addr": "tag@AI1@good",
+                    "Desc": "�������� �� �������� � ���"
+                },
+                {
+                    "Title": "Tag_AI1_Value",
+                    "DataType": "STRING",
+                    "Group": "Info3",
+                    "Addr": "tag@AI1@value",
+                    "Desc": "�������� � ����"
+                },
+                {
+                    "Title": "Tag_AI1_SourceID",
+                    "DataType": "Int",
+                    "Group": "Info3",
+                    "Addr": "tag@AI1@sourceId",
+                    "Desc": "ID ��������� � ����"
+                },
+                {
+                    "Title": "Tag_AI1_SourceTitle",
+                    "DataType": "STRING",
+                    "Group": "Info3",
+                    "Addr": "tag@AI1@sourceTitle",
+                    "Desc": "�������� ��������� � ����"
+                },
+                {
+                    "Title": "Tag_AI1_GroupID",
+                    "DataType": "Int",
+                    "Group": "Info3",
+                    "Addr": "tag@AI1@groupId",
+                    "Desc": "ID ������ � ����"
+                },
+                {
+                    "Title": "Tag_AI1_GroupTitle",
+                    "DataType": "STRING",
+                    "Group": "Info3",
+                    "Addr": "tag@AI1@groupTitle",
+                    "Desc": "�������� ������ � ����"
+                },
+                {
+                    "Title": "Sound_Count",
+                    "DataType": "Int",
+                    "Group": "Info4",
+                    "Addr": "sound@count",
+                    "Desc": "���������� �������� ����������"
+                },
+                {
+                    "Title": "Sound_Playing",
+                    "DataType": "Bool",
+                    "Group": "Info4",
+                    "Addr": "sound@playing",
+                    "Desc": "������� �� �������� ����������"
+                },
+                {
+                    "Title": "Sound_ActiveFileName",
+                    "DataType": "STRING",
+                    "Group": "Info4",
+                    "Addr": "sound@activeFilename",
+                    "Desc": "��� ����� ��������� ��������� ����������"
+                }
+
+
+            ]
+        },
+        {
+            "Title": "appUDP-1",
+            "Driver": "AppUDP",
+            "Address": "ip=127.0.0.1;remotePort=8002;localPort=8001;timeout=500;wait=3000",
+            "Group": "myUPD1",
+            "Off": false,
+            "Auto": true,
+            "Tags": [
+                {
+                    "Title": "udp_comm12",
+                    "DataType": "Int",
+                    "Addr": "source@count"
+                },
+                {
+                    "Title": "udp_comm11",
+                    "DataType": "STRING",
+                    "Addr": "source@list"
+                },
+                {
+                    "Title": "udp_comm13",
+                    "DataType": "STRING",
+                    "Addr": "app@time"
+                }
+            ]
+        },
+        {
+            "Title": "appUDP-2",
+            "Driver": "AppUDP",
+            "Address": "ip=127.0.0.1;remotePort=8001;localPort=8002;timeout=500;wait=3000",
+            "Group": "myUPD2",
+            "Off": false,
+            "Auto": true,
+            "Tags": [
+                {
+                    "Title": "udp_comm21",
+                    "DataType": "Int",
+                    "Addr": "tag@AI1@value"
+                }
+            ]
+        }
+    ],
+
+    "Groups": [
+        {
+            "Title": "FolderSEG",
+            "Tags": [
+                {
+                    "Title": "Value1_1",
+                    "DataType": "Short",
+                    "Addr": "{Value1[1]}",
+                    "Source": "Formula#2",
+                    "Desc": "index=1"
+                },
+                {
+                    "Title": "Value1_2",
+                    "DataType": "Short",
+                    "Addr": "{Value1[2]}",
+                    "Source": "Formula#2",
+                    "Desc": "index=2"
+                }
+            ]
+        },
+        {
+            "Title": "Folder01",
+            "Tags": [
+                {
+                    "Title": "Value4",
+                    "DataType": "Long",
+                    "Addr": "HR-4",
+                    "Source": "Segnetics",
+                    "Desc": "text4",
+                    "Off": 0
+                },
+                {
+                    "Title": "Value5",
+                    "DataType": "Bool",
+                    "Addr": "25 > {Value6}",
+                    "Source": "Formula#1",
+                    "Desc": "text5",
+                    "Off": 0
+                },
+                {
+                    "Title": "ValuePage",
+                    "DataType": "Bool",
+                    "Addr": "true",
+                    "Source": "Formula#1",
+                    "Desc": "visible for page",
+                    "Off": 0,
+                    "Command": true
+                },
+                {
+                    "Title": "Value1good",
+                    "DataType": "Bool",
+                    "Addr": "true",
+                    "Source": "Formula#1",
+                    "Desc": "good",
+                    "Off": 0
+                },
+                {
+                    "Title": "Value1code",
+                    "DataType": "Int",
+                    "Addr": "337",
+                    "Source": "Formula#1",
+                    "Desc": "code",
+                    "Off": 0
+                },
+                {
+                    "Title": "Value1_HEX_DEC",
+                    "DataType": "STRING",
+                    "Addr": "dec HDEC(DHEX({Value1code})) = hex DHEX({Value1code})",
+                    "Source": "Formula#1",
+                    "Desc": "message",
+                    "Off": 0
+                },
+                {
+                    "Title": "Source1code",
+                    "DataType": "Int",
+                    "Addr": "551",
+                    "Source": "Formula#1",
+                    "Desc": "code",
+                    "Off": 0
+                },
+                {
+                    "Title": "Source1message",
+                    "DataType": "STRING",
+                    "Addr": "YEEES!",
+                    "Source": "Formula#1",
+                    "Desc": "message",
+                    "Off": 0
+                },
+                {
+                    "Title": "AI1",
+                    "DataType": "Float",
+                    "Addr": "ROLL({AI1} + {Value6} - 50;-1000;1000)",
+                    "Source": "Formula#1",
+                    "Desc": "������ ����������",
+                    "Off": 0
+                },
+                {
+                    "Title": "AI2",
+                    "DataType": "FLOAT",
+                    "Addr": "ROLL({AI2} + (50 - RND)*0,2;-500;500)",
+                    "Source": "Formula#1",
+                    "Desc": "������ ����������",
+                    "Off": 0
+                },
+                {
+                    "Title": "AI3",
+                    "DataType": "FLOAT",
+                    "Addr": "LIM({AI3} + (RND - 50)*0,1;0;2000)",
+                    "Source": "Formula#1",
+                    "Desc": "������ ����������",
+                    "Off": 0
+                }
+            ]
+        },
+        {
+            "Title": "Folder02",
+            "Desc": "�������� ��� ������ Folder",
+            "UpdateRate": 500,
+            "Off": false
+        },
+        {
+            "Title": "Folder03",
+            "Desc": "����� ����� ���� ��������� ����������",
+            "UpdateRate": 2000,
+            "Off": false
+        },
+        {
+            "Title": "Folder05",
+            "UpdateRate": 3000,
+            "Off": false
+        },
+        {
+            "Title": "myDataType",
+            "UpdateRate": 1000,
+            "Source": "Formula#1",
+            "Tags": [
+                {
+                    "Title": "dt_Bool1",
+                    "DataType": "Bool",
+                    "Addr": "TRUE"
+                },
+                {
+                    "Title": "dt_Bool2",
+                    "DataType": "Bool",
+                    "Addr": "800"
+                },
+                {
+                    "Title": "dt_Bool3",
+                    "DataType": "Bool",
+                    "Addr": "0"
+                },
+                {
+                    "Title": "dt_Bool4",
+                    "DataType": "Bool",
+                    "Addr": "Hello!"
+                },
+                {
+                    "Title": "dt_Byte1",
+                    "DataType": "Byte",
+                    "Addr": "127"
+                },
+                {
+                    "Title": "dt_Byte2",
+                    "DataType": "Byte",
+                    "Addr": "9000"
+                },
+                {
+                    "Title": "dt_Byte3",
+                    "DataType": "Byte",
+                    "Addr": "A"
+                },
+                {
+                    "Title": "dt_Byte4",
+                    "DataType": "Byte",
+                    "Addr": "ABCD"
+                },
+                {
+                    "Title": "dt_Byte5",
+                    "DataType": "Byte",
+                    "Addr": "19,3"
+                },
+                {
+                    "Title": "dt_Byte6",
+                    "DataType": "Byte",
+                    "Addr": "2"
+                },
+                {
+                    "Title": "dt_Binary1",
+                    "DataType": "Binary",
+                    "Addr": "21"
+                },
+                {
+                    "Title": "dt_Binary2",
+                    "DataType": "Binary",
+                    "Addr": "text"
+                },
+                {
+                    "Title": "dt_Hex1",
+                    "DataType": "HEX",
+                    "Addr": "171"
+                },
+                {
+                    "Title": "dt_Hex2",
+                    "DataType": "HEX",
+                    "Addr": "text"
+                },
+                {
+                    "Title": "dt_Char1",
+                    "DataType": "Char",
+                    "Addr": "65"
+                },
+                {
+                    "Title": "dt_Char2",
+                    "DataType": "Char",
+                    "Addr": "365"
+                },
+                {
+                    "Title": "dt_Char3",
+                    "DataType": "Char",
+                    "Addr": "E"
+                },
+                {
+                    "Title": "dt_Char4",
+                    "DataType": "Char",
+                    "Addr": "Kevin"
+                },
+                {
+                    "Title": "dt_Int1",
+                    "DataType": "Int",
+                    "Addr": "15994,1"
+                },
+                {
+                    "Title": "dt_Int2",
+                    "DataType": "Int",
+                    "Addr": "120,5mm"
+                },
+                {
+                    "Title": "dt_Float1",
+                    "DataType": "Float",
+                    "Addr": "0,457"
+                },
+                {
+                    "Title": "dt_Float2",
+                    "DataType": "Float",
+                    "Addr": "0.457"
+                },
+                {
+                    "Title": "dt_Float3",
+                    "DataType": "Float",
+                    "Addr": "TEXT0,998A"
+                },
+                {
+                    "Title": "dt_Double1",
+                    "DataType": "Double",
+                    "Addr": "-12345678,9"
+                },
+                {
+                    "Title": "dt_Double2",
+                    "DataType": "Double",
+                    "Addr": "-1,23456789X"
+                },
+                {
+                    "Title": "dt_ArrayA1",
+                    "DataType": "ArrayA",
+                    "Addr": "1;12;303;4;A;A B C;array Text"
+                },
+                {
+                    "Title": "dt_ArrayA2",
+                    "DataType": "ArrayA",
+                    "Addr": "array Text"
+                },
+                {
+                    "Title": "dt_ArrayB",
+                    "DataType": "ArrayB",
+                    "Addr": "one two 3 5 FIVE"
+                }
+            ]
+        },
+        {
+            "Title": "myConvert",
+            "UpdateRate": 1000,
+            "Source": "Formula#2",
+            "Tags": [
+                {
+                    "Title": "mc_DHEX1",
+                    "DataType": "String",
+                    "Addr": "DHEX(175)",
+                    "Desc": "DEC � HEX"
+                },
+                {
+                    "Title": "mc_HDEC1",
+                    "DataType": "Int",
+                    "Addr": "HDEC({mc_DHEX1})",
+                    "Desc": "HEX � DEC"
+                },
+                {
+                    "Title": "mc_DBIN1",
+                    "DataType": "STRING",
+                    "Addr": "DBIN(7)",
+                    "Desc": "DEC � BIN"
+                },
+                {
+                    "Title": "mcBDEC1",
+                    "DataType": "Long",
+                    "Addr": "BDEC({mc_DBIN1})",
+                    "Desc": "BIN � DEC"
+                },
+                {
+                    "Title": "mcBYTES_FROM_W1",
+                    "DataType": "ArrayA",
+                    "Addr": "BYTES_FROM_W(3009)",
+                    "Desc": "Bytes from word"
+                },
+                {
+                    "Title": "mcBYTES_TO_W1",
+                    "DataType": "UShort",
+                    "Addr": "BYTES_TO_W({mcBYTES_FROM_W1})",
+                    "Desc": "Bytes to word"
+                },
+                {
+                    "Title": "mcBYTES_FROM_DW1",
+                    "DataType": "ArrayA",
+                    "Addr": "BYTES_FROM_DW(75001)",
+                    "Desc": "Bytes from dword"
+                },
+                {
+                    "Title": "mcBYTES_TO_DW1",
+                    "DataType": "Int",
+                    "Addr": "BYTES_TO_DW({mcBYTES_FROM_DW1})",
+                    "Desc": "Bytes to dword"
+                },
+                {
+                    "Title": "mcBYTES_FROM_FLOAT1",
+                    "DataType": "ArrayA",
+                    "Addr": "BYTES_FROM_FLOAT(1,99)",
+                    "Desc": "Bytes from real"
+                },
+                {
+                    "Title": "mcBYTES_TO_FLOAT1",
+                    "DataType": "Float",
+                    "Addr": "BYTES_TO_FLOAT({mcBYTES_FROM_FLOAT1})",
+                    "Desc": "Bytes to real"
+                },
+                {
+                    "Title": "mcBYTES_FROM_LONG1",
+                    "DataType": "ArrayA",
+                    "Addr": "BYTES_FROM_LONG(1110007999888)",
+                    "Desc": "Bytes from long"
+                },
+                {
+                    "Title": "mcBYTES_TO_LONG1",
+                    "DataType": "Long",
+                    "Addr": "BYTES_TO_LONG({mcBYTES_FROM_LONG1})",
+                    "Desc": "Bytes to long"
+                },
+                {
+                    "Title": "mcBYTES_FROM_DOUBLE1",
+                    "DataType": "ArrayA",
+                    "Addr": "BYTES_FROM_DOUBLE(5000123,45)",
+                    "Desc": "Bytes from double"
+                },
+                {
+                    "Title": "mcBYTES_TO_DOUBLE1",
+                    "DataType": "Double",
+                    "Addr": "BYTES_TO_DOUBLE({mcBYTES_FROM_DOUBLE1})",
+                    "Desc": "Bytes to double"
+                }
+
+            ]
+        },
+        {
+            "Title": "myAI",
+            "UpdateRate": 1000,
+            "Source": "Formula#2",
+            "Tags": [
+                {
+                    "Title": "ai_Value",
+                    "DataType": "Float",
+                    "Desc": "AI Value",
+                    "Value": 50
+                },
+                {
+                    "Title": "ai_ValueGood",
+                    "DataType": "Bool",
+                    "Addr": "{ai_Value.good}",
+                    "Desc": "AI Value"
+                },
+                {
+                    "Title": "ai_HiHi",
+                    "DataType": "Float",
+                    "Desc": "AI HiHi",
+                    "Value": 90
+                },
+                {
+                    "Title": "ai_Hi",
+                    "DataType": "Float",
+                    "Desc": "AI Hi",
+                    "Value": 80
+                },
+                {
+                    "Title": "ai_Lo",
+                    "DataType": "Float",
+                    "Desc": "AI Lo",
+                    "Value": 20
+                },
+                {
+                    "Title": "ai_LoLo",
+                    "DataType": "Float",
+                    "Desc": "AI LoLo",
+                    "Value": 10
+                },
+                {
+                    "Title": "ai_Status",
+                    "DataType": "ArrayA",
+                    "Addr": "HL_AI({ai_Value};{ai_ValueGood};{ai_LoLo};{ai_Lo};{ai_Hi};{ai_HiHi})",
+                    "Desc": "status of AI [Good,LoLo,Lo,Hi,HiHi]"
+                }
+
+            ]
+        },
+        {
+            "Title": "Sample Messages",
+            "UpdateRate": 250,
+            "Tags": [
+                {
+                    "Title": "mess_Info1",
+                    "DataType": "Bool",
+                    "Addr": "FALSE",
+                    "Source": "Formula#2",
+                    "Desc": "���������� 1"
+                },
+                {
+                    "Title": "mess_Warning1",
+                    "DataType": "Bool",
+                    "Addr": "1",
+                    "Source": "Formula#2",
+                    "Desc": "�������������� 1"
+                },
+                {
+                    "Title": "mess_Alarm1",
+                    "DataType": "Int",
+                    "Addr": "99",
+                    "Source": "Formula#2",
+                    "Desc": "������ 1"
+                },
+                {
+                    "Title": "mess_Info2",
+                    "DataType": "Bool",
+                    "Addr": "FALSE",
+                    "Source": "Formula#2",
+                    "Desc": "���������� 2"
+                },
+                {
+                    "Title": "mess_Warning2",
+                    "DataType": "Bool",
+                    "Addr": "1",
+                    "Source": "Formula#2",
+                    "Desc": "�������������� 2"
+                },
+                {
+                    "Title": "mess_Alarm2",
+                    "DataType": "Int",
+                    "Addr": "99",
+                    "Source": "Formula#2",
+                    "Desc": "������ 2"
+                },
+                {
+                    "Title": "mess_Random",
+                    "DataType": "Float",
+                    "Addr": "RND+100",
+                    "Source": "Formula#2",
+                    "Desc": "��������� �����"
+                }
+            ]
+        }
+    ],
+
+    "Tags": [
+        {
+            "Title": "ValuesDIC_Item_STRING",
+            "DataType": "STRING",
+            "Addr": "{ValuesDIC[mess_Random]}",
+            "Desc": "������� �������",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValuesDIC_Item_Array",
+            "DataType": "ArrayC",
+            "Addr": "{ValuesDIC_Item_STRING}",
+            "Desc": "������� �������",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValuesDIC_Item_Array_1",
+            "DataType": "Int",
+            "Addr": "{ValuesDIC_Item_Array[1]}",
+            "Desc": "������� �������",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "Value6",
+            "DataType": "Long",
+            "Addr": "RND",
+            "Desc": "text6",
+            "Off": false,
+            "Group": "Folder02",
+            "Source": "Formula#1"
+        },
+        {
+            "Title": "Value7",
+            "DataType": "Int",
+            "Addr": "����� �� �����",
+            "Desc": "text7",
+            "Off": 0,
+            "Source": "Formula#1",
+            "Group": "Folder02",
+            "Write": "Value8"
+        },
+        {
+            "Title": "Value71",
+            "DataType": "Int",
+            "Addr": "(100 + 200)/25",
+            "Desc": "text7",
+            "Off": 0,
+            "Source": "Formula#1"
+        },
+        {
+            "Title": "Value8",
+            "DataType": "Float",
+            "Addr": "1,75 + {Value8}",
+            "Desc": "text8",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#1"
+        },
+        {
+            "Title": "ValueCMD",
+            "DataType": "Short",
+            "Addr": "HR-1",
+            "Desc": "for command",
+            "Off": 0,
+            "Group": "Folder02",
+            "Source": "Formula#1",
+            "Value": 0,
+            "Command": true
+        },
+        {
+            "Title": "Value200",
+            "DataType": "Short",
+            "Addr": "HR-8",
+            "Desc": "text2",
+            "Source": "Formula#1",
+            "Value": 549
+        },
+        {
+            "Title": "ValueArrayC",
+            "DataType": "STRING",
+            "Addr": "E~100",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValueArrayEindex",
+            "DataType": "Int",
+            "Addr": "{ValueArrayC[E]}",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValueDIC",
+            "DataType": "Int",
+            "Addr": "DICT(a;b;c|8;8+1;10|b)",
+            "Desc": "sample for DICTIONARY",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValueLIST",
+            "DataType": "STRING",
+            "Addr": "LIST(�;�;�;�;�|0+1)",
+            "Desc": "sample for LIST",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValueLISTB",
+            "DataType": "STRING",
+            "Addr": "LISTB(� � � � �|1+1)",
+            "Desc": "sample for LISTB",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValueLISTC",
+            "DataType": "STRING",
+            "Addr": "LISTC(�~�~�~�~�|2+1)",
+            "Desc": "sample for LISTC",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValueSEL",
+            "DataType": "STRING",
+            "Addr": "SEL(5 > 4;Start;End)",
+            "Desc": "sample for SELECTOR",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValueINSIDE",
+            "DataType": "STRING",
+            "Addr": "INSIDE(value[501];[;]) and INSIDE(value=502;value=;) and INSIDE(503END;;END)",
+            "Desc": "sample for INSIDE",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValueIndex",
+            "DataType": "Float",
+            "Addr": "{Value7}",
+            "Desc": "sample for {}",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValueColor",
+            "DataType": "STRING",
+            "Addr": "Coral",
+            "Desc": "sample for Color",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        },
+        {
+            "Title": "ValueColor2",
+            "DataType": "STRING",
+            "Addr": "SEL({Value5};Green;Red)",
+            "Desc": "Color for rectangle",
+            "Off": 0,
+            "Group": "Folder04",
+            "Source": "Formula#2"
+        }
+    ],
+
+    "Structures": [
+        {
+            "Title": "Boiler_Interlocks",
+            "Join": ".",
+            "DataType": "BOOL",
+            "Address": "{#Source.[#Target]}",
+            "Source": "FormulaS1",
+            "Group": "GroupS1",
+            "SourceTags": [
+                "Boiler1_Interlocks",
+                "Boiler2_Interlocks",
+                "Boiler3_Interlocks",
+                "Boiler4_Interlocks"
+            ],
+            "TargetTags": [
+                {
+                    "Title": "NoWaterFlow",
+                    "Desc": "��� ������ ���� ����� �����",
+                    "Address": "1"
+                },
+                {
+                    "Title": "Thermostat115Max",
+                    "Desc": "�������� 115�� Max",
+                    "Address": "2"
+                },
+                {
+                    "Title": "WaterPressureSwitchMax",
+                    "Desc": "���� �������� ���� M��",
+                    "Address": "3"
+                },
+                {
+                    "Title": "WaterPressureSwitchMin",
+                    "Desc": "���� �������� ���� Min",
+                    "Address": "4"
+                },
+                {
+                    "Title": "PressureFurnaceMax",
+                    "Desc": "�������� � ����� Max",
+                    "Address": "5"
+                },
+                {
+                    "Title": "GasPressureMax",
+                    "Desc": "�������� ���a M��",
+                    "Address": "6"
+                },
+                {
+                    "Title": "GasPressureMin",
+                    "Desc": "�������� ���a Min",
+                    "Address": "7"
+                },
+                {
+                    "Title": "MaxWaterTemperature",
+                    "Desc": "����������� ���� ���",
+                    "Address": "8"
+                },
+                {
+                    "Title": "WowTemperatureGaseMax",
+                    "Desc": "����������� ��. ����� ���",
+                    "Address": "9"
+                },
+                {
+                    "Title": "BurnerBlockage",
+                    "Desc": "���������� �� �������",
+                    "Address": "10"
+                },
+                {
+                    "Title": "EmergencyStopFungus",
+                    "Desc": "��������� ��������� (������)",
+                    "Address": "11"
+                },
+                {
+                    "Title": "SensorFailure",
+                    "Desc": "������������� ��������",
+                    "Address": "12"
+                },
+                {
+                    "Title": "WaterPressureSensorMax",
+                    "Desc": "�������� ���� Max �����. ����.",
+                    "Address": "13"
+                },
+                {
+                    "Title": "WaterPressureSensorMin",
+                    "Desc": "�������� ���� Min �����. ����.",
+                    "Address": "14"
+                },
+                {
+                    "Title": "HardwareFailure",
+                    "Desc": "������������� ������������",
+                    "Address": "15"
+                },
+                {
+                    "Title": "OilPressureMin",
+                    "Desc": "�������� ������� ������� Min",
+                    "Address": "16"
+                }
+
+            ]
+        }
+    ],
+
+    "Help": {
+        "1": "���������� Help",
+        "������ ���������": "��, ��� ������ ���������"
+
+    },
+
+    "Pages": [
+        {
+            "Title": "Screen #1",
+            "Height": 600,
+            "Width": 1000,
+            "Elements": [
+                {
+                    "Name": "SC1-Picture1",
+                    "Type": "PictureBox",
+                    "x": 170,
+                    "y": 5,
+                    "Height": 200,
+                    "Width": 200,
+                    "Image": "Images\\anime.png",
+                    "Visible": "{Value1good}",
+                    "ToolTip": "Hello-1"
+                },
+                {
+                    "Name": "SC1-Picture2",
+                    "Type": "PictureBox",
+                    "x": 400,
+                    "y": 50,
+                    "Height": 100,
+                    "Width": 100,
+                    "Image": "Images\\Alpha1.gif",
+                    "Visible": "{dt_Bool1}",
+                    "ToolTip": "Hello-2"
+                },
+                {
+                    "Name": "SC1-Picture3",
+                    "Type": "PictureBox",
+                    "x": 450,
+                    "y": 50,
+                    "Height": 100,
+                    "Width": 100,
+                    "Image": "Images\\Alpha2.gif",
+                    "Visible": "{dt_Bool2}",
+                    "ToolTip": "Hello-3"
+                },
+                {
+                    "Name": "SC1-Picture4",
+                    "Type": "PictureBox",
+                    "x": 550,
+                    "y": 50,
+                    "Height": 100,
+                    "Width": 100,
+                    "Image": "Images\\Alpha0.gif",
+                    "List": "SC1-ImageList1",
+                    "Value": "{dt_Byte6}",
+                    "ToolTip": "Hello-4"
+                },
+                {
+                    "Name": "SC1-ImageList1",
+                    "Type": "ImageList",
+                    "Height": 100,
+                    "Width": 100,
+                    "Images": [
+                        "Images\\Alpha0.png",
+                        "Images\\Alpha1.png",
+                        "Images\\Alpha2.png",
+                        "Images\\Alpha3.png"
+                    ]
+                },
+                {
+                    "Name": "Element1",
+                    "Text": "Hello!",
+                    "Type": "Label",
+                    "Color": "Coral",
+                    "FontSize": 16,
+                    "x": 10,
+                    "y": 10,
+                    "ToolTip": "Hello-5"
+                },
+                {
+                    "Name": "Element2",
+                    "Text": "{AI2}",
+                    "Type": "Label",
+                    "Color": "#39817d",
+                    "x": 10,
+                    "y": 50
+                },
+                {
+                    "Name": "Element3",
+                    "Text": "{AI1}",
+                    "Format": "������� = {0, 0:C2}",
+                    "Type": "OutputBox",
+                    "Color": "#7ff3e0",
+                    "x": 10,
+                    "y": 90,
+                    "FontSize": 12,
+                    "Height": 20,
+                    "Width": 300
+                }
+            ]
+        },
+        {
+            "Title": "Screen_2",
+            "Image": "Images\\Intro4.png",
+            "Visible": "{ValuePage}",
+            "Elements": [
+                {
+                    "Name": "Element4",
+                    "Text": "AI3 = {AI3}",
+                    "Type": "Label",
+                    "FontSize": 14,
+                    "x": 10,
+                    "y": 10
+                },
+                {
+                    "Name": "Element4B",
+                    "Text": "ValueCMD = {ValueCMD}",
+                    "Type": "Label",
+                    "FontSize": 12,
+                    "x": 150,
+                    "y": 10
+                },
+                {
+                    "Name": "Element5",
+                    "Text": "write ValueCMD",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "write;ValueCMD;{AI3}",
+                    "x": 10,
+                    "y": 50
+                },
+                {
+                    "Name": "Element6",
+                    "Text": "update ValueCMD",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "update;ValueCMD",
+                    "x": 10,
+                    "y": 90
+                },
+                {
+                    "Name": "Element7",
+                    "Text": "E = {Value200}",
+                    "Type": "IOBox",
+                    "Tag": "Value200",
+                    "Color": "50-100-50",
+                    "FontSize": 14,
+                    "x": 10,
+                    "y": 250
+                }
+            ]
+        },
+        {
+            "Title": "Screen_3",
+            "Elements": [
+                {
+                    "Name": "Element9",
+                    "Text": "{Value5}",
+                    "Type": "OutputBox",
+                    "Color": "{ValueColor}",
+                    "FontSize": 14,
+                    "x": 10,
+                    "y": 50,
+                    "Height": 20,
+                    "Width": 100
+                },
+                {
+                    "Name": "Element10",
+                    "Text": "{Value2r}",
+                    "Type": "IOBox",
+                    "Tag": "Value2",
+                    "FontSize": 14,
+                    "x": 10,
+                    "y": 110,
+                    "Height": 20,
+                    "Width": 100
+                },
+                {
+                    "Name": "Element11",
+                    "Text": "{Value2r}",
+                    "Type": "IOPop",
+                    "Tag": "Value2",
+                    "FontSize": 14,
+                    "x": 10,
+                    "y": 170,
+                    "Height": 20,
+                    "Width": 100
+                },
+                {
+                    "Name": "ElementRectangle1",
+                    "Type": "Rectangle",
+                    "Color": "{ValueColor2}",
+                    "x": 200,
+                    "y": 30,
+                    "Height": 30,
+                    "Width": 30
+                },
+                {
+                    "Name": "ElementProgress1",
+                    "Type": "Progress",
+                    "Min": 0,
+                    "Max": 100,
+                    "Value": "{Value6}",
+                    "Color": "{ValueColor2}",
+                    "x": 200,
+                    "y": 100,
+                    "Height": 30,
+                    "Width": 200
+                }
+            ]
+        },
+        {
+            "Title": "Screen #4 ������",
+            "Height": 500,
+            "Width": 500,
+            "Elements": [
+                {
+                    "Name": "SC4Button1",
+                    "Text": "�������� Formula#2 ON",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "source;Formula#2;ON",
+                    "x": 10,
+                    "y": 30
+                },
+                {
+                    "Name": "SC4Button2",
+                    "Text": "�������� Formula#2 OFF",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "source;Formula#2;OFF",
+                    "x": 10,
+                    "y": 60
+                },
+                {
+                    "Name": "SC4Button3",
+                    "Text": "�������� Formula#2 ��������� �����",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "source;Formula#2;one",
+                    "x": 10,
+                    "y": 90
+                },
+                {
+                    "Name": "SC4Button4",
+                    "Text": "�������� Formula#2 ���� �����",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "source;Formula#2;start",
+                    "x": 10,
+                    "y": 120
+                },
+                {
+                    "Name": "SC4Button5",
+                    "Text": "�������� Formula#2 ���� �����",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "source;Formula#2;stop",
+                    "x": 10,
+                    "y": 150
+                },
+                {
+                    "Name": "SC4Button6",
+                    "Text": "������ Folder04 ON",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "group;Folder04;on",
+                    "x": 10,
+                    "y": 200
+                },
+                {
+                    "Name": "SC4Button7",
+                    "Text": "������ Folder04 OFF",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "group;Folder04;off",
+                    "x": 10,
+                    "y": 230
+                },
+                {
+                    "Name": "SC4Button8",
+                    "Text": "��� ValueIndex ON",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "tag;ValueIndex;on",
+                    "x": 300,
+                    "y": 30
+                },
+                {
+                    "Name": "SC4Button9",
+                    "Text": "��� ValueIndex OFF",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "tag;ValueIndex;off",
+                    "x": 300,
+                    "y": 60
+                },
+                {
+                    "Name": "SC4Button10",
+                    "Text": "��� ValueIndex ������",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "tag;ValueIndex;chart",
+                    "x": 300,
+                    "y": 90
+                },
+                {
+                    "Name": "SC4Button11",
+                    "Text": "����� ������� ID 3",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "archive;3",
+                    "x": 300,
+                    "y": 200
+                },
+                {
+                    "Name": "SC4Button12",
+                    "Text": "����� ���������",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "history",
+                    "x": 300,
+                    "y": 230
+                },
+                {
+                    "Name": "SC4Button13",
+                    "Text": "book1",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "book;book1.book",
+                    "x": 300,
+                    "y": 280
+                },
+                {
+                    "Name": "SC4Button14",
+                    "Text": "book2",
+                    "Type": "Button",
+                    "FontSize": 10,
+                    "Command": "book;book2.book;��������� ���������",
+                    "x": 300,
+                    "y": 310
+                }
+            ]
+        },
+        {
+            "Title": "Screen #5",
+            "Elements": [
+                {
+                    "Name": "ElementTempl1",
+                    "Type": "Template",
+                    "TemplateTitle": "AIval",
+                    "TemplateValues": [
+                        "-", // 0
+                        "B2_value", // 1
+                        "W", // 2
+                        "Value6", // 3
+                        "%" // 4
+                    ],
+                    "x": 10,
+                    "y": 10
+                },
+                {
+                    "Name": "Tank1",
+                    "Type": "Tank",
+                    "x": 100,
+                    "y": 300,
+                    "Width": 50,
+                    "Height": 200,
+                    //"Color": "green",
+                    "Image": "Images\\FireX1_frame2.png",
+                    "Value": "{Value6}",
+                    "Min": 0,
+                    "Max": 100
+                },
+                {
+                    "Name": "Tank2",
+                    "Type": "Tank",
+                    "x": 170,
+                    "y": 300,
+                    "Width": 50,
+                    "Height": 100,
+                    "Color": "blue",
+                    "Value": "{AI2}",
+                    "Min": -500,
+                    "Max": 500
+                }
+                
+            ]
+        }
+    ],
+
+    "Templates": [
+        {
+            "Title": "AIval",
+            "Elements": [
+                {
+                    "Name": "@1_A",
+                    "Type": "Label",
+                    "x": 0,
+                    "y": 0,
+                    "Height": 25,
+                    "Width": 20,
+                    "Format": "{0}",
+                    "FontSize": "12",
+                    "Text": " @2"
+                },
+                {
+                    "Name": "@1_B",
+                    "Type": "OutputBox",
+                    "x": 29,
+                    "y": -3,
+                    "Height": 25,
+                    "Width": 60,
+                    "FontSize": "12",
+                    "Format": "{0, 0:f2}",
+                    "Text": "{@3}"
+                },
+                {
+                    "Name": "@1_C",
+                    "Type": "Label",
+                    "x": 90,
+                    "y": 0,
+                    "Height": 25,
+                    "Width": 20,
+                    "Text": "@4",
+                    "Format": "{0}",
+                    "FontSize": "12"
+                }
+            ]
+        }
+    ],
+
+    "Archives": [
+        {
+            "Title": "Values 6 and 7",
+            "Folder": "AR1",
+            "Interval": 0,
+            "Tags": [
+                "Value6",
+                "Value7"
+            ]
+        },
+        {
+            "Title": "Title-5",
+            "Folder": "AR2",
+            "Interval": 3000,
+            "Tags": [
+                "Value5"
+            ]
+        },
+        {
+            "Title": "��� ������ ������� ���������",
+            "Folder": "AR3",
+            "Interval": 1000,
+            "Tags": [
+                "AI1",
+                "AI2",
+                "AI3"
+            ]
+        }
+    ],
+
+    "Messages": [
+        {
+            "Title": "Messages #1",
+            "Filename": "messages1.txt",
+            "Says": [
+                {
+                    "Type": "Info",
+                    "Tag": "mess_Info1",
+                    "Wait": "#param#wait",
+                    "Event": true,
+                    "Description": "����������! �������� (#param#wait) = {mess_Random}"
+                },
+                {
+                    "Type": "Warning",
+                    "Tag": "mess_Warning1",
+                    "Wait": 3000,
+                    "Event": false,
+                    "Description": "��������������! �������� (3000) = {mess_Random}"
+                },
+                {
+                    "Type": "Alarm",
+                    "Tag": "mess_Alarm1",
+                    "Event": 128,
+                    "Description": "������! �������� = {mess_Random}"
+                }
+
+            ]
+        },
+        {
+            "Title": "Messages #2 INV",
+            "Filename": "messages2.txt",
+            "Says": [
+                {
+                    "Type": "Info",
+                    "Tag": "mess_Info2",
+                    "Event": false,
+                    "Inverse": true,
+                    "Description": "���������� 2 = {mess_Random}"
+                },
+                {
+                    "Type": "Warning",
+                    "Tag": "mess_Warning2",
+                    "Event": true,
+                    "Inverse": true,
+                    "Description": "�������������� 2 = {mess_Random}"
+                },
+                {
+                    "Type": "Alarm",
+                    "Tag": "mess_Alarm2",
+                    "Event": 99,
+                    "Inverse": true,
+                    "Description": "������ 2 = {mess_Random}"
+                }
+
+            ]
+        }
+    ],
+
+    "Sounds": [
+        {
+            "Tag": "Attention_Info_Count",
+            "Event": 0,
+            "Inverse": true,
+            "Filename": "Sounds\\emergencyAlert.wav"
+        },
+        {
+            "Tag": "Attention_WarningInNew_Count",
+            "Event": 0,
+            "Inverse": true,
+            "Filename": "Sounds\\hallAlarm.wav",
+            "Volume": 100,
+            "Loop": true
+        },
+        {
+            "Tag": "Attention_AlarmIN_Count",
+            "Event": 0,
+            "Inverse": true,
+            "Filename": "Sounds\\alarm1.mp3",
+            "Volume": 50,
+            "Loop": true
+        }
+
+    ],
+
+    "Webserver": {
+        "Port": 90,
+        "Requests": [
+            {
+                "Address": "scada",
+                "Page": "web/scada.html"
+            },
+            {
+                "Address": "info1",
+                "Page": "web/info1.html"
+            },
+            {
+                "Address": "info2",
+                "Page": "web/info2.html"
+            },
+            {
+                "Address": "info3",
+                "Html": "<!DOCTYPE html><html><body><h1>My First Heading</h1><p>Value8 = {Value8}</p></body></html>",
+                "UseTags": true
+            },
+            {
+                "Address": "data",
+                "Json": {
+                    "var1": 779,
+                    "var2": [
+                        {
+                            "x": 1
+                        },
+                        {
+                            "x": 2
+                        },
+                        {
+                            "x": 3
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
