@@ -462,17 +462,14 @@ namespace Connector
             }
         }
 
-        void WaitProcess()
+        private async Task WaitProcessAsync()
         {
             logger.Info("wait process [", eMessageCategory.Source);
             DateTime dt = DateTime.Now;
-            while (_process)
+            while (_process && (DateTime.Now - dt).TotalMilliseconds < 5000)
             {
                 logger.Info("wait process...", eMessageCategory.Source);
-                Thread.Sleep(100);
-                TimeSpan ts = DateTime.Now.Subtract(dt);
-                if (ts.TotalMilliseconds > 5000)
-                    break;
+                await Task.Delay(100);
             }
             logger.Info("wait process ]", eMessageCategory.Source);
         }
@@ -490,7 +487,8 @@ namespace Connector
                     _cyclicRequest = value;
                     if (value == false)
                     {
-                        WaitProcess();
+                        // Запускаем асинхронное ожидание, не блокируя поток
+                        _ = WaitProcessAsync();
                     }
                     EventStatus();
                 }

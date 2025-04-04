@@ -69,7 +69,8 @@ namespace Connector
                 if (_codeMessage.code == 0)
                 {
                     _status = eTagStatus.good;
-                } else
+                }
+                else
                 {
                     _status = eTagStatus.error;
                 }
@@ -132,7 +133,6 @@ namespace Connector
 
         #region Runtime
 
-        // Обновление статуса
         public void UpdateStatus()
         {
             Status = ReSelectStatus(Status);
@@ -145,8 +145,7 @@ namespace Connector
 
             if (ParentGroup.ParentSource == null)
                 return eTagStatus.sourceDisable;
-            
-            // статус группы
+
             eGroupStatus groupStatus = ParentGroup.Status;
             switch (groupStatus)
             {
@@ -155,7 +154,6 @@ namespace Connector
                     return eTagStatus.groupDisable;
             }
 
-            // статус источника
             eSourceStatus sourceStatus = ParentGroup.ParentSource.Status;
             switch (sourceStatus)
             {
@@ -167,14 +165,11 @@ namespace Connector
                 case eSourceStatus.noClient:
                 case eSourceStatus.wait:
                 case eSourceStatus.breaking:
-                //case eSourceStatus.openedNoCycle:
                     return eTagStatus.sourceDisable;
             }
 
             return status;
         }
-
-
         #endregion
 
         #region Events
@@ -205,7 +200,6 @@ namespace Connector
         {
             return !string.IsNullOrWhiteSpace(WriteTagTitle) ? WriteTagTitle : WriteConstValue == null ? null : string.Join(";", WriteConstValue);
         }
-
         #endregion
 
         #region Setting
@@ -306,7 +300,7 @@ namespace Connector
                 if (_writeTagId != value)
                 {
                     _writeTagId = value;
-                    appendTag = Tag.items.FirstOrDefault(x => x.Id == value);
+                    appendTag = Tag.Item(value);
                     EventChangeParam(true);
                 }
             }
@@ -349,10 +343,9 @@ namespace Connector
             }
             else
             {
-                codeMessage = Tag.CM.Good; //CodeMessageFactory.FromEnumX(eTagStatus.zero);
+                codeMessage = Tag.CM.Good;
             }
         }
-
         #endregion
 
         #region Builder
@@ -370,33 +363,24 @@ namespace Connector
 
         public void RebindGroup(Group newGroup)
         {
-            // Если новая группа совпадает с текущей, ничего не меняем.
             if (ParentGroup == newGroup)
                 return;
 
-            // Если уже привязанная группа существует, удаляем тег из её коллекции.
             if (ParentGroup != null)
             {
                 ParentGroup.RemoveTag(this);
             }
 
-            // Привязываем новую группу
             ParentGroup = newGroup;
 
-            // Если новая группа не null, добавляем тег в её коллекцию
             if (newGroup != null)
             {
                 newGroup.AddTag(this);
             }
-
-            // После перепривязки обновляем статус тега с учётом новых условий (источник и группа)
-            //UpdateStatus();
         }
-
 
         public void SetLinkIdTitle()
         {
-            //...
             if (!string.IsNullOrWhiteSpace(_writeTagTitle) && title != _writeTagTitle)
             {
                 var tag = Tag.Item(_writeTagTitle);
@@ -425,19 +409,18 @@ namespace Connector
 
         public void SetInnerTagsForOneTag()
         {
-            // Обновляем только InnerTags, вычисляя их напрямую по условию в строке Address:
             InnerTags = items
                 .Where(item => Address.Contains($"{{{item.title}}}") ||
                                Address.Contains($"{{{item.title}.") ||
                                Address.Contains($"{{{item.title}["))
                 .ToArray();
         }
-
         #endregion
 
-        // ============================================================
-
         #region Static
+
+        // Объект-замок для статической коллекции тегов
+        private static readonly object _tagItemsLock = new object();
 
         public static List<Tag> items = new List<Tag>();
         public static ushort lastId = 0;
@@ -445,31 +428,38 @@ namespace Connector
 
         public static void Clear()
         {
-            lastId = 0;
-            items = new List<Tag>();
-        }
-
-        public static Tag Item(ushort Id) => items.FirstOrDefault(x => x.Id == Id);
-        public static Tag Item(string title) => items.FirstOrDefault(x => x.title == title);
-
-        public static void CalcId()
-        {
-            foreach (var item in Tag.items)
+            lock (_tagItemsLock)
             {
-                item.SetLinkIdTitle();
+                lastId = 0;
+                items = new List<Tag>();
             }
         }
 
-        //public static void SetCodeMessageForList<T>(List<T> tags, CodeMessage codeMessage) where T : ICodeMessage
-        //{
-        //    if (tags == null || !tags.Any())
-        //        return;
+        public static Tag Item(ushort Id)
+        {
+            lock (_tagItemsLock)
+            {
+                return items.FirstOrDefault(x => x.Id == Id);
+            }
+        }
+        public static Tag Item(string title)
+        {
+            lock (_tagItemsLock)
+            {
+                return items.FirstOrDefault(x => x.title == title);
+            }
+        }
 
-        //    foreach (var tag in tags)
-        //    {
-        //        tag.codeMessage = codeMessage;
-        //    }
-        //}
+        public static void CalcId()
+        {
+            lock (_tagItemsLock)
+            {
+                foreach (var item in items)
+                {
+                    item.SetLinkIdTitle();
+                }
+            }
+        }
 
         public static void UpdateStatusForList<T>(List<T> tags) where T : ITagStatus
         {
@@ -481,8 +471,6 @@ namespace Connector
                 tag.UpdateStatus();
             }
         }
-
         #endregion
-
     }
 }
