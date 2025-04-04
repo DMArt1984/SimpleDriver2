@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Connector;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,4 +28,12 @@ namespace LogCodeMessage
         CodeMessage codeMessage { get; set; }
         bool Good { get; }
     }
+
+    public interface ITagStatus
+    {
+        ushort Id { get; }
+        eTagStatus Status { get; }
+        void UpdateStatus();
+    }
+
 }

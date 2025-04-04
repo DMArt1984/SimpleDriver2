@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using LogCodeMessage;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Connector
 {
-    public class Tag : ICodeMessage, ITagClient, ITagResult, IAppendTag
+    public class Tag : ITagStatus, ITagClient, ITagResult, IAppendTag
     {
         public static class CM
         {
@@ -129,6 +131,13 @@ namespace Connector
         public bool Good => Status == eTagStatus.good;
 
         #region Runtime
+
+        // Обновление статуса
+        public void UpdateStatus()
+        {
+            Status = ReSelectStatus(Status);
+        }
+
         public eTagStatus ReSelectStatus(eTagStatus status)
         {
             if (ParentGroup == null)
@@ -451,14 +460,25 @@ namespace Connector
             }
         }
 
-        public static void SetCodeMessageForList<T>(List<T> tags, CodeMessage codeMessage) where T : ICodeMessage
+        //public static void SetCodeMessageForList<T>(List<T> tags, CodeMessage codeMessage) where T : ICodeMessage
+        //{
+        //    if (tags == null || !tags.Any())
+        //        return;
+
+        //    foreach (var tag in tags)
+        //    {
+        //        tag.codeMessage = codeMessage;
+        //    }
+        //}
+
+        public static void UpdateStatusForList<T>(List<T> tags) where T : ITagStatus
         {
             if (tags == null || !tags.Any())
                 return;
 
             foreach (var tag in tags)
             {
-                tag.codeMessage = codeMessage;
+                tag.UpdateStatus();
             }
         }
 

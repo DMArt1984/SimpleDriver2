@@ -58,6 +58,7 @@ namespace Connector
                 if (_status != value)
                 {
                     _status = value;
+                    Tag.UpdateStatusForList(Tags.Cast<ITagStatus>().ToList());
                     eventStatus?.Invoke(this.Id, _status);
                 }
             }
@@ -141,7 +142,7 @@ namespace Connector
         {
             Status = eGroupStatus.Off;
             RaiseParamStatusChanged();
-            Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupDisable));
+            //Tag.SetCodeMessageForList(Tags.Cast<ICodeMessage>().ToList(), CodeMessageFactory.FromEnumX(eTagStatus.groupDisable));
         }
         #endregion
 

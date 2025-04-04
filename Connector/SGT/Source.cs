@@ -36,6 +36,7 @@ namespace Connector
         public IEnumerable<Group> Groups => Group.items.Where(g => g.ParentSource == this);
 
         // Теги больше не хранятся локально, их можно вычислить через группы
+        public List<Tag> Tags => Groups.SelectMany(g => g.Tags).ToList();
         public int TagsCount => Groups.Sum(g => g.Tags.Count);
         public int TagsCountGood => Groups.Sum(g => g.Tags.Count(x => x.Good));
 
@@ -341,8 +342,8 @@ namespace Connector
             Status = eSourceStatus.breaking;
             _fail = true;
             ClearCounterBreak();
-            var allTags = Groups.SelectMany(g => g.Tags).ToList();
-            Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceDisable));
+            //var allTags = Groups.SelectMany(g => g.Tags).ToList();
+            //Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceDisable));
             OpenAfterFail();
         }
 
@@ -399,8 +400,8 @@ namespace Connector
 
         private void UpdateAllTagsStatus(eTagStatus newStatus)
         {
-            var allTags = Groups.SelectMany(g => g.Tags).ToList();
-            Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(newStatus));
+            //var allTags = Groups.SelectMany(g => g.Tags).ToList();
+            //Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(newStatus));
         }
 
         private void ResetSourceState()
@@ -509,7 +510,7 @@ namespace Connector
                     if (value == false)
                     {
                         WaitProcess();
-                        var allTags = Groups.SelectMany(g => g.Tags).ToList();
+                        //var allTags = Groups.SelectMany(g => g.Tags).ToList();
                         //Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
                     }
                     EventStatus();
@@ -526,6 +527,7 @@ namespace Connector
                 if (_status != value)
                 {
                     _status = value;
+                    Tag.UpdateStatusForList(Tags.Cast<ITagStatus>().ToList());
                     eventStatus?.Invoke(Id, _status);
                 }
             }
@@ -658,8 +660,8 @@ namespace Connector
                 await Task.Delay(10); // отдохнем!
 
                 // все группы
-                int all = Groups.SelectMany(g => g.Tags).Count();
-                int good = Groups.SelectMany(g => g.Tags).Count(x => x.Good);
+                int all = Tags.Count();
+                int good = Tags.Count(x => x.Good);
                 // только текущей группы
                 int allx = clientTags.Count;
                 int goodx = clientTags.Count(x => x.Good);
