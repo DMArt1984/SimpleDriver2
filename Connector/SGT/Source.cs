@@ -579,11 +579,17 @@ namespace Connector
         {
             if (group == null || group.Off || !Opened || (!CyclicRequest && group.Id > 0))
                 return;
-            _requestQueue.Enqueue(group.Id);
-            ProcessQueue();
+            _ = ProcessQueueAsync().ContinueWith(t =>
+            {
+                if (t.Exception != null)
+                {
+                    int errorCode = t.Exception.InnerException?.HResult ?? -1;
+                    logger.Error(errorCode, $"Ошибка при обработке очереди запросов: {t.Exception}", eMessageCategory.Source);
+                }
+            }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
-        private async void ProcessQueue()
+        private async Task ProcessQueueAsync()
         {
             if (Interlocked.CompareExchange(ref _processing, 1, 0) != 0)
                 return;
