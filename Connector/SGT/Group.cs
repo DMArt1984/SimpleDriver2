@@ -44,7 +44,7 @@ namespace Connector
 
         private void RaiseParamStatusChanged()
         {
-            eventParams?.Invoke(new GroupParamStatus(Id, _updateRate, _off, IsTimerStopped));
+            SafeInvokeHandlerParam(eventParams, new GroupParamStatus(Id, _updateRate, _off, IsTimerStopped));
         }
 
         #endregion
@@ -59,7 +59,7 @@ namespace Connector
                 {
                     _status = value;
                     Tag.UpdateStatusForList(Tags.Cast<ITagStatus>().ToList());
-                    eventStatus?.Invoke(this.Id, _status);
+                    SafeInvokeHandlerGroupStatus(eventStatus, this.Id, _status);
                 }
             }
         }
@@ -114,7 +114,7 @@ namespace Connector
         private void TimerCallback(object state)
         {
             _tickCount++;
-            tikTakReq?.Invoke(this);
+            SafeInvokeHandlerReq(tikTakReq, this);
 
             if (_timerStop || Id == 0 || Off)
             {
@@ -378,5 +378,63 @@ namespace Connector
         }
 
         #endregion
+
+        // ==============================================================================
+
+        // Безопасный вызов для HandlerParam (принимает GroupParamStatus)
+        private void SafeInvokeHandlerParam(HandlerParam handler, GroupParamStatus info)
+        {
+            if (handler == null)
+                return;
+            foreach (HandlerParam subscriber in handler.GetInvocationList())
+            {
+                try
+                {
+                    subscriber(info);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.HResult, $"Ошибка в обработчике HandlerParam: {ex.Message}", eMessageCategory.Source);
+                }
+            }
+        }
+
+        // Безопасный вызов для HandlerReq (принимает IGroupOff)
+        private void SafeInvokeHandlerReq(HandlerReq handler, IGroupOff group)
+        {
+            if (handler == null)
+                return;
+            foreach (HandlerReq subscriber in handler.GetInvocationList())
+            {
+                try
+                {
+                    subscriber(group);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.HResult, $"Ошибка в обработчике HandlerReq: {ex.Message}", eMessageCategory.Source);
+                }
+            }
+        }
+
+        // Безопасный вызов для HandlerGroupStatus (принимает ushort Id и eGroupStatus)
+        private void SafeInvokeHandlerGroupStatus(HandlerGroupStatus handler, ushort id, eGroupStatus status)
+        {
+            if (handler == null)
+                return;
+            foreach (HandlerGroupStatus subscriber in handler.GetInvocationList())
+            {
+                try
+                {
+                    subscriber(id, status);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.HResult, $"Ошибка в обработчике HandlerGroupStatus: {ex.Message}", eMessageCategory.Source);
+                }
+            }
+        }
+
+
     }
 }
