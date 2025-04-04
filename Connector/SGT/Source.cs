@@ -9,7 +9,6 @@ using LogCodeMessage;
 
 namespace Connector
 {
-    
     public struct SourceParam
     {
         public readonly ushort Id;
@@ -35,7 +34,7 @@ namespace Connector
         // Вместо локального списка групп используем вычисляемое свойство
         public IEnumerable<Group> Groups => Group.items.Where(g => g.ParentSource == this);
 
-        // Теги больше не хранятся локально, их можно вычислить через группы
+        // Теги вычисляются через группы
         public List<Tag> Tags => Groups.SelectMany(g => g.Tags).ToList();
         public int TagsCount => Groups.Sum(g => g.Tags.Count);
         public int TagsCountGood => Groups.Sum(g => g.Tags.Count(x => x.Good));
@@ -140,7 +139,8 @@ namespace Connector
         public Source(ushort Id, string title,
             eDriverType driverType, IDeviceFactory deviceFactory,
             bool disable,
-            bool auto, bool reopen, string address = "", string description = "") : base(LogTarget.FileConsoleForm, null)
+            bool auto, bool reopen, string address = "", string description = "")
+            : base(LogTarget.FileConsoleForm, null)
         {
             _driverType = driverType;
             _deviceFactory = deviceFactory;
@@ -232,7 +232,6 @@ namespace Connector
         }
         private bool _off = true;
 
-
         bool _disable = false;
 
         public void OnControl(string newAddress)
@@ -249,7 +248,7 @@ namespace Connector
             Address = newAddress; // новый адрес
 
             logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 2 - новые параметры", eMessageCategory.Source);
-           //var dic = ParamsForSource(Address);
+            //var dic = ParamsForSource(Address);
 
             logger.Info($"Подключить: {this.Id} {this.title} > {newAddress}. Шаг 3 - пересоздание клиента", eMessageCategory.Source);
             _device.CreateClient(Address); // пересоздание клиента
@@ -325,9 +324,6 @@ namespace Connector
             _fail = false;
             stepReOpen = 0;
             ClearCounterBreak();
-            // Обновляем статус тегов во всех группах (при необходимости раскомментируйте)
-            // var allTags = Groups.SelectMany(g => g.Tags).ToList();
-            // Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
 
             if (AutoRequestAftereOpen)
                 CyclicRequest = true;
@@ -342,8 +338,6 @@ namespace Connector
             Status = eSourceStatus.breaking;
             _fail = true;
             ClearCounterBreak();
-            //var allTags = Groups.SelectMany(g => g.Tags).ToList();
-            //Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceDisable));
             OpenAfterFail();
         }
 
@@ -353,18 +347,15 @@ namespace Connector
         {
             logger.Info($"Источник ID={Id} {title} > Закрыть...", eMessageCategory.Source);
 
-            // Если источник уже закрыт, возвращаем код по умолчанию.
             if (Status == eSourceStatus.closed)
             {
                 return 1;
             }
 
-            // Переходим в состояние закрытия.
             Status = eSourceStatus.closing;
             logger.Info($"Источник ID={Id} {title} > Ждем завершения процесса...", eMessageCategory.Source);
             await WaitUntilProcessCompletesAsync();
 
-            // Пытаемся отключить устройство.
             CodeMessage result = DisconnectDevice();
 
             if (result.code != 0)
@@ -438,10 +429,8 @@ namespace Connector
 
         private void OpenAfterFail()
         {
-            // Просто вызываем метод, отвечающий за попытку переподключения
             AttemptReopenAfterFail();
         }
-
 
         // ------------------------------------------
 
@@ -502,8 +491,6 @@ namespace Connector
                     if (value == false)
                     {
                         WaitProcess();
-                        //var allTags = Groups.SelectMany(g => g.Tags).ToList();
-                        //Tag.SetCodeMessageForList(allTags, CodeMessageFactory.FromEnumX(eTagStatus.sourceOpened));
                     }
                     EventStatus();
                 }
@@ -557,8 +544,6 @@ namespace Connector
         }
         CodeMessage _codeMessage;
 
-        
-
         // ================================================================================================
         // Параметры
         void EventChangeParam()
@@ -602,7 +587,7 @@ namespace Connector
         private async void ProcessQueue()
         {
             if (Interlocked.CompareExchange(ref _processing, 1, 0) != 0)
-                return; // уже обрабатывается
+                return;
             try
             {
                 while (_requestQueue.TryDequeue(out ushort groupId))
@@ -616,7 +601,6 @@ namespace Connector
             }
         }
 
-        // Асинхронная версия метода обработки запроса
         private SemaphoreSlim _requestSemaphore = new SemaphoreSlim(1, 1);
         ushort groupNow = 0;
         public async Task EventRequestRUNAsync(ushort groupId)
@@ -631,17 +615,15 @@ namespace Connector
                 _process = true;
                 groupNow = groupId;
 
-                // Выбираем теги для опроса
                 List<Tag> clientTags;
                 if (groupId == 0)
                 {
                     return;
-                    //clientTags = Groups.SelectMany(g => g.Tags).Where(x => !x.Off).ToList();
                 }
 
                 var group = Groups.FirstOrDefault(g => g.Id == groupId);
                 clientTags = group != null ? group.Tags.Where(x => !x.Off).ToList() : new List<Tag>();
-                
+
                 if (clientTags.Any())
                 {
                     await Task.Run(() => _device.Request(clientTags));
@@ -649,15 +631,12 @@ namespace Connector
                     HandleTagErrors(clientTags);
                 }
 
-                await Task.Delay(10); // отдохнем!
+                await Task.Delay(10);
 
-                // все группы
                 int all = Tags.Count();
                 int good = Tags.Count(x => x.Good);
-                // только текущей группы
                 int allx = clientTags.Count;
                 int goodx = clientTags.Count(x => x.Good);
-                // 
                 eventReq?.Invoke(Id, groupId, clientTags.Select(x => (ITagResult)x).ToList(), counterReq, counterFailReq, all, good);
             }
             finally
@@ -669,11 +648,6 @@ namespace Connector
         }
 
         private TagErrorHandler _errorHandler = new TagErrorHandler(10);
-        /// <summary>
-        /// Обработка ошибок при опросе тегов: если найден breakError и нет корректных тегов, увеличиваем счётчик неудачных запросов и вызываем NewBreak.
-        /// Иначе сбрасываем счётчик.
-        /// </summary>
-        /// <param name="clientTags">Список опрашиваемых тегов</param>
         private void HandleTagErrors(List<Tag> clientTags)
         {
             if (_errorHandler.ProcessErrors(clientTags))
@@ -704,7 +678,6 @@ namespace Connector
 
         // ======= Конец реализации очереди запросов =============
 
-        // --------------------------------------------------------------------------------------------------
         public void SetLogTraffic(bool enable)
         {
             (_device as IControlTrafficLog).EnableTLog = enable;
@@ -729,7 +702,6 @@ namespace Connector
             log?.Invoke(cm);
         }
 
-        // --------------------------------------------------------------------------------------------------
         public bool IsNet()
         {
             return (_device is INetDevice);
@@ -751,30 +723,48 @@ namespace Connector
             return (_device as INetDevice).TryTcpConnect("", 0, 0);
         }
 
-        // ==================================================================================================
         #region Static
 
+        private static readonly object _sourceItemsLock = new object();
         static public List<Source> items = new List<Source>(); // все источники
         static public ushort lastId = 0;
 
         static public void Clear()
         {
-            Source.lastId = 0;
-            Source.items = new List<Source>();
+            lock (_sourceItemsLock)
+            {
+                Source.lastId = 0;
+                Source.items = new List<Source>();
+            }
         }
 
-        static public Source Item(ushort Id) => items.FirstOrDefault(x => x.Id == Id);
-        static public Source Item(string title) => items.FirstOrDefault(x => x.title == title);
+        static public Source Item(ushort Id)
+        {
+            lock (_sourceItemsLock)
+            {
+                return items.FirstOrDefault(x => x.Id == Id);
+            }
+        }
+        static public Source Item(string title)
+        {
+            lock (_sourceItemsLock)
+            {
+                return items.FirstOrDefault(x => x.title == title);
+            }
+        }
 
         static public void ActivateItems()
         {
-            foreach (var item in items)
+            List<Source> snapshot;
+            lock (_sourceItemsLock)
+            {
+                snapshot = items.ToList();
+            }
+            foreach (var item in snapshot)
             {
                 item.Activate();
             }
         }
         #endregion
     }
-
-
 }
