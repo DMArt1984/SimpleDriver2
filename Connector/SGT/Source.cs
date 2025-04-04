@@ -636,7 +636,11 @@ namespace Connector
                 if (clientTags.Any())
                 {
                     // Передаем token в Task.Delay, если RequestAsync реализован асинхронно, можно вызывать его напрямую
+                    // v1
                     await Task.Run(() => _device.Request(clientTags), cancellationToken);
+                    // v2
+                    //await _device.RequestAsync(clientTags); // здесь не испорльзуется cancellationToken
+
                     counterReq++;
                     HandleTagErrors(clientTags);
                 }

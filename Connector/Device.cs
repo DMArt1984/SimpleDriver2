@@ -24,6 +24,9 @@ namespace Connector
         CodeMessage CreateClient(string parameters);
         CodeMessage RemoveClient();
         void Request<T>(List<T> tags) where T : ITagClient;
+
+        // Новый асинхронный метод запроса
+        Task RequestAsync<T>(List<T> tags) where T : ITagClient;
     }
 
     interface IControlTrafficLog
@@ -101,6 +104,12 @@ namespace Connector
                     WorkTag(tags[i]);
                 }
             }
+        }
+
+        // Асинхронная версия – по умолчанию оборачиваем синхронный вызов в Task.Run
+        public virtual async Task RequestAsync<T>(List<T> tags) where T : ITagClient
+        {
+            await Task.Run(() => Request(tags));
         }
 
         public virtual void RequestParallel<T>(List<T> tags) where T : ITagClient

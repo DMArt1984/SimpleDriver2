@@ -106,5 +106,12 @@ namespace Connector
             }
         }
 
+        public override async Task RequestAsync<T>(List<T> tags)
+        {
+            // Если возможно, используем асинхронные операции, например, await stream.WriteAsync(...) или await socket.ConnectAsync(...)
+            // В этом примере мы просто оборачиваем базовый синхронный вызов,
+            // но здесь можно добавить асинхронную логику, если это требуется.
+            await base.RequestAsync(tags);
+        }
     }
 }
