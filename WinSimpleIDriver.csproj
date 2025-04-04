@@ -81,6 +81,7 @@
     <Compile Include="Connector\Device.cs" />
     <Compile Include="Connector\Driver\AppDevice.cs" />
     <Compile Include="Connector\Driver\AppUDP.cs" />
+    <Compile Include="Connector\Driver\Component\AppAddressParser.cs" />
     <Compile Include="Connector\Driver\Component\ModbusRTUmaster.cs" />
     <Compile Include="Connector\Driver\Component\Pinger.cs" />
     <Compile Include="Connector\Driver\Component\SocetModbusTCPmaster.cs" />
