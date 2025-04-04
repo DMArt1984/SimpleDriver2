@@ -505,7 +505,7 @@ namespace Connector
                 {
                     _status = value;
                     Tag.UpdateStatusForList(Tags.Cast<ITagStatus>().ToList());
-                    eventStatus?.Invoke(Id, _status);
+                    SafeInvokeHandlerStatus(eventStatus, Id, _status);
                 }
             }
         }
@@ -536,7 +536,8 @@ namespace Connector
                 }
                 if (newCode)
                 {
-                    eventError?.Invoke(Id, _codeMessage);
+                    //eventError?.Invoke(Id, _codeMessage);
+                    SafeInvokeHandlerError(eventError, Id, _codeMessage);
                 }
             }
         }
@@ -546,7 +547,7 @@ namespace Connector
         // Параметры
         void EventChangeParam()
         {
-            eventParams?.Invoke(new SourceParam(Id, Address, AutoRequestAftereOpen, AutoOpenAfterFail));
+            SafeInvokeHandlerInfo(eventParams, new SourceParam(Id, Address, AutoRequestAftereOpen, AutoOpenAfterFail));
         }
 
         // Статус
@@ -635,7 +636,7 @@ namespace Connector
                 int good = Tags.Count(x => x.Good);
                 int allx = clientTags.Count;
                 int goodx = clientTags.Count(x => x.Good);
-                eventReq?.Invoke(Id, groupId, clientTags.Select(x => (ITagResult)x).ToList(), counterReq, counterFailReq, all, good);
+                SafeInvokeHandlerReq(eventReq, Id, groupId, clientTags.Select(x => (ITagResult)x).ToList(), counterReq, counterFailReq, all, good);
             }
             finally
             {
@@ -764,5 +765,77 @@ namespace Connector
             }
         }
         #endregion
+
+        // ==================================================================================================
+        private void SafeInvokeHandlerError(HandlerError handler, ushort id, CodeMessage error)
+        {
+            if (handler == null)
+                return;
+            foreach (HandlerError subscriber in handler.GetInvocationList())
+            {
+                try
+                {
+                    subscriber(id, error);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.HResult, $"Ошибка в обработчике HandlerError: {ex.Message}", eMessageCategory.Source);
+                }
+            }
+        }
+        private void SafeInvokeHandlerStatus(HandlerStatus handler, ushort id, eSourceStatus status)
+        {
+            if (handler == null)
+                return;
+            foreach (HandlerStatus subscriber in handler.GetInvocationList())
+            {
+                try
+                {
+                    subscriber(id, status);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.HResult, $"Ошибка в обработчике HandlerStatus: {ex.Message}", eMessageCategory.Source);
+                }
+            }
+        }
+        private void SafeInvokeHandlerInfo(HandlerInfo handler, SourceParam info)
+        {
+            if (handler == null)
+                return;
+            foreach (HandlerInfo subscriber in handler.GetInvocationList())
+            {
+                try
+                {
+                    subscriber(info);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.HResult, $"Ошибка в обработчике HandlerInfo: {ex.Message}", eMessageCategory.Source);
+                }
+            }
+        }
+        private void SafeInvokeHandlerReq(HandlerReq handler, ushort sourceId, ushort groupId, List<ITagResult> results, int counter, int fails, int all, int good)
+        {
+            if (handler == null)
+                return;
+            foreach (HandlerReq subscriber in handler.GetInvocationList())
+            {
+                try
+                {
+                    subscriber(sourceId, groupId, results, counter, fails, all, good);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.HResult, $"Ошибка в обработчике HandlerReq: {ex.Message}", eMessageCategory.Source);
+                }
+            }
+        }
+
+
+
+
+
+
     }
 }
