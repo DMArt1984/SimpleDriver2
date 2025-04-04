@@ -343,7 +343,7 @@ namespace Connector
 
         // ------------------------------------------
 
-        private async Task<int> CloseAsync(bool user = false)
+        private async Task<int> CloseAsync(bool user = false, CancellationToken cancellationToken = default)
         {
             logger.Info($"Источник ID={Id} {title} > Закрыть...", eMessageCategory.Source);
 
@@ -354,7 +354,7 @@ namespace Connector
 
             Status = eSourceStatus.closing;
             logger.Info($"Источник ID={Id} {title} > Ждем завершения процесса...", eMessageCategory.Source);
-            await WaitUntilProcessCompletesAsync();
+            await WaitUntilProcessCompletesAsync(cancellationToken);
 
             CodeMessage result = DisconnectDevice();
 
@@ -377,6 +377,7 @@ namespace Connector
             return result.code;
         }
 
+
         private CodeMessage DisconnectDevice()
         {
             var xdevice = _device as IRealDevice;
@@ -395,13 +396,14 @@ namespace Connector
             counterFailReq = 0;
         }
 
-        private async Task WaitUntilProcessCompletesAsync()
+        private async Task WaitUntilProcessCompletesAsync(CancellationToken cancellationToken = default)
         {
             logger.Info("Ожидание завершения процесса...", eMessageCategory.Source);
             DateTime dt = DateTime.Now;
             while (_process && (DateTime.Now - dt).TotalMilliseconds < 5000)
             {
-                await Task.Delay(100);
+                cancellationToken.ThrowIfCancellationRequested();
+                await Task.Delay(100, cancellationToken);
             }
             logger.Info("Ожидание завершено.", eMessageCategory.Source);
         }
@@ -579,6 +581,7 @@ namespace Connector
         {
             if (group == null || group.Off || !Opened || (!CyclicRequest && group.Id > 0))
                 return;
+            _requestQueue.Enqueue(group.Id);
             _ = ProcessQueueAsync().ContinueWith(t =>
             {
                 if (t.Exception != null)
@@ -589,7 +592,7 @@ namespace Connector
             }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
-        private async Task ProcessQueueAsync()
+        private async Task ProcessQueueAsync(CancellationToken cancellationToken = default)
         {
             if (Interlocked.CompareExchange(ref _processing, 1, 0) != 0)
                 return;
@@ -597,7 +600,8 @@ namespace Connector
             {
                 while (_requestQueue.TryDequeue(out ushort groupId))
                 {
-                    await EventRequestRUNAsync(groupId);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    await EventRequestRUNAsync(groupId, cancellationToken);
                 }
             }
             finally
@@ -608,9 +612,9 @@ namespace Connector
 
         private SemaphoreSlim _requestSemaphore = new SemaphoreSlim(1, 1);
         ushort groupNow = 0;
-        public async Task EventRequestRUNAsync(ushort groupId)
+        public async Task EventRequestRUNAsync(ushort groupId, CancellationToken cancellationToken = default)
         {
-            if (!await _requestSemaphore.WaitAsync(TimeSpan.FromSeconds(10)))
+            if (!await _requestSemaphore.WaitAsync(TimeSpan.FromSeconds(10), cancellationToken))
             {
                 _requestQueue.Enqueue(groupId);
                 return;
@@ -631,12 +635,13 @@ namespace Connector
 
                 if (clientTags.Any())
                 {
-                    await Task.Run(() => _device.Request(clientTags));
+                    // Передаем token в Task.Delay, если RequestAsync реализован асинхронно, можно вызывать его напрямую
+                    await Task.Run(() => _device.Request(clientTags), cancellationToken);
                     counterReq++;
                     HandleTagErrors(clientTags);
                 }
 
-                await Task.Delay(10);
+                await Task.Delay(10, cancellationToken);
 
                 int all = Tags.Count();
                 int good = Tags.Count(x => x.Good);
