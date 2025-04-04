@@ -39,6 +39,9 @@ namespace Connector
         public delegate void HandlerReq(IGroupOff group);
         public event HandlerReq tikTakReq;
 
+        public delegate void HandlerGroupStatus(ushort Id, eGroupStatus status);
+        public event HandlerGroupStatus eventStatus;
+
         private void RaiseParamStatusChanged()
         {
             eventParams?.Invoke(new GroupParamStatus(Id, _updateRate, _off, IsTimerStopped));
@@ -55,6 +58,7 @@ namespace Connector
                 if (_status != value)
                 {
                     _status = value;
+                    eventStatus?.Invoke(this.Id, _status);
                 }
             }
         }

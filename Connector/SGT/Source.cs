@@ -526,7 +526,7 @@ namespace Connector
                 if (_status != value)
                 {
                     _status = value;
-                    eventStatus?.Invoke(Id, value);
+                    eventStatus?.Invoke(Id, _status);
                 }
             }
         }
