@@ -13,17 +13,14 @@ namespace Connector
     /// </summary>
     public static class ProjectConverter
     {
-        /// <summary>
-        /// Преобразует список SourceEditor из EditorControl в список объектов Source.
-        /// </summary>
-        /// <param name="deviceFactory">Инстанс фабрики устройств для создания источников.</param>
-        /// <returns>Список объектов Source.</returns>
-        public static List<Source> ConvertSources(IDeviceFactory deviceFactory)
+        #region Source
+
+        public static List<Source> ConvertEditorToControlSources(List<SourceEditor> eSources, IDeviceFactory deviceFactory)
         {
-            var sources = new List<Source>();
-            if (EditorControl.sources != null)
+            var cSources = new List<Source>();
+            if (eSources != null)
             {
-                foreach (var se in EditorControl.sources)
+                foreach (var se in eSources)
                 {
                     // Преобразуем идентификатор (uint) в ushort (при условии, что он входит в диапазон)
                     var source = new Source(
@@ -36,28 +33,22 @@ namespace Connector
                         se.reconnect,      // авто-переподключение
                         se.address,
                         se.description);
-                    sources.Add(source);
+                    cSources.Add(source);
                 }
             }
-            return sources;
+            return cSources;
         }
 
-        /// <summary>
-        /// Обновляет Source.items на основе данных из EditorControl.sources.
-        /// Если источник с данным Id уже существует, обновляются его изменяемые свойства.
-        /// Если новый источник отсутствует – он добавляется,
-        /// а если существующий источник отсутствует в новых данных – удаляется.
-        /// </summary>
-        public static void UpdateSources(IDeviceFactory deviceFactory)
+        public static void UpdateEditorToControlSources(List<SourceEditor> eSources, List<Source> cSources, IDeviceFactory deviceFactory)
         {
             // Получаем новый список источников
-            var newSources = ConvertSources(deviceFactory);
+            var newSources = ConvertEditorToControlSources(eSources, deviceFactory);
 
             // Создаем словарь новых источников по Id
             var newDict = newSources.ToDictionary(s => s.Id);
 
             // Обновляем существующие источники
-            foreach (var existing in Source.items.ToList())
+            foreach (var existing in cSources)
             {
                 if (newDict.TryGetValue(existing.Id, out var updated))
                 {
@@ -73,37 +64,34 @@ namespace Connector
                 else
                 {
                     // Если источник отсутствует в новом списке, удаляем его.
-                    Source.items.Remove(existing);
+                    cSources.Remove(existing);
                 }
             }
 
             // Добавляем новые источники, которых нет в Source.items.
-            var currentIds = new HashSet<ushort>(Source.items.Select(s => s.Id));
+            var currentIds = new HashSet<ushort>(cSources.Select(s => s.Id));
             foreach (var newSource in newSources)
             {
                 if (!currentIds.Contains(newSource.Id))
                 {
-                    Source.items.Add(newSource);
+                    cSources.Add(newSource);
                 }
             }
         }
 
+        #endregion
 
-        /// <summary>
-        /// Преобразует список GroupEditor из EditorControl в список объектов Group.
-        /// Для определения родительского источника используется поле sourceTitle.
-        /// </summary>
-        /// <param name="sources">Список источников, полученных ранее.</param>
-        /// <returns>Список объектов Group.</returns>
-        public static List<Group> ConvertGroups(List<Source> sources)
+        #region Group
+
+        public static List<Group> ConvertEditorToControlGroups(List<Source> cSources, List<GroupEditor> eGroups)
         {
             var groups = new List<Group>();
-            if (EditorControl.groups != null)
+            if (eGroups != null)
             {
-                foreach (var ge in EditorControl.groups)
+                foreach (var ge in eGroups)
                 {
                     // Ищем родительский источник по совпадению названия
-                    Source parentSource = sources.FirstOrDefault(s => s.title.Equals(ge.sourceTitle, StringComparison.OrdinalIgnoreCase));
+                    Source parentSource = cSources.FirstOrDefault(s => s.title.Equals(ge.sourceTitle, StringComparison.OrdinalIgnoreCase));
                     if (parentSource != null)
                     {
                         var group = new Group(
@@ -119,17 +107,17 @@ namespace Connector
             }
             return groups;
         }
-        public static void UpdateGroups(List<Source> updatedSources)
+        public static void UpdateEditorToControlGroups(List<Source> updatedSources, List<GroupEditor> eGroups, List<Group> cGroups)
         {
             // Получаем новый список групп, используя обновленные источники
-            var newGroups = ConvertGroups(updatedSources);
+            var newGroups = ConvertEditorToControlGroups(updatedSources, eGroups);
 
             // Формируем словарь для быстрого поиска по Id
             var newDict = newGroups.ToDictionary(g => g.Id);
 
             // Обновляем существующие группы
             // Создаем копию списка, чтобы безопасно перебирать при удалении
-            foreach (var existing in Group.items.ToList())
+            foreach (var existing in cGroups.ToList())
             {
                 if (newDict.TryGetValue(existing.Id, out var updated))
                 {
@@ -151,34 +139,31 @@ namespace Connector
                 else
                 {
                     // Если текущая группа отсутствует в новом наборе, удаляем её
-                    Group.items.Remove(existing);
+                    cGroups.Remove(existing);
                 }
             }
 
             // Добавляем новые группы, которых еще нет в Group.items
-            var currentIds = new HashSet<ushort>(Group.items.Select(g => g.Id));
+            var currentIds = new HashSet<ushort>(cGroups.Select(g => g.Id));
             foreach (var newGroup in newGroups)
             {
                 if (!currentIds.Contains(newGroup.Id))
                 {
-                    Group.items.Add(newGroup);
+                    cGroups.Add(newGroup);
                 }
             }
         }
 
+        #endregion
 
-        /// <summary>
-        /// Преобразует список TagEditor из EditorControl в список объектов Tag.
-        /// Для определения родительской группы используется поле groupTitle.
-        /// </summary>
-        /// <param name="groups">Список групп, полученных ранее.</param>
-        /// <returns>Список объектов Tag.</returns>
-        public static List<Tag> ConvertTags(List<Group> groups)
+        #region Tag
+
+        public static List<Tag> ConvertEditorToControlTags(List<Group> groups, List<TagEditor> eTags)
         {
             var tags = new List<Tag>();
-            if (EditorControl.tags != null)
+            if (eTags != null)
             {
-                foreach (var te in EditorControl.tags)
+                foreach (var te in eTags)
                 {
                     // Ищем родительскую группу по совпадению названия
                     Group parentGroup = groups.FirstOrDefault(g => g.title.Equals(te.groupTitle, StringComparison.OrdinalIgnoreCase));
@@ -197,17 +182,17 @@ namespace Connector
             }
             return tags;
         }
-        public static void UpdateTags(List<Group> updatedGroups)
+        public static void UpdateEditorToControlTags(List<Group> updatedGroups, List<TagEditor> eTags, List<Tag> cTags)
         {
             // Получаем новый список тегов из обновлённых групп.
-            var newTags = ConvertTags(updatedGroups);
+            var newTags = ConvertEditorToControlTags(updatedGroups, eTags);
 
             // Формируем словарь новых тегов по Id для быстрого поиска.
             var newDict = newTags.ToDictionary(t => t.Id);
 
             // Обновляем существующие теги.
             // Используем ToList(), чтобы избежать проблем при удалении из Tag.items во время перебора.
-            foreach (var existing in Tag.items.ToList())
+            foreach (var existing in cTags.ToList())
             {
                 if (newDict.TryGetValue(existing.Id, out var updated))
                 {
@@ -230,20 +215,22 @@ namespace Connector
                 else
                 {
                     // Если текущий тег отсутствует в новом наборе – удаляем его.
-                    Tag.items.Remove(existing);
+                    cTags.Remove(existing);
                 }
             }
 
             // Добавляем новые теги, которых ещё нет в Tag.items.
-            var currentIds = new HashSet<ushort>(Tag.items.Select(t => t.Id));
+            var currentIds = new HashSet<ushort>(cTags.Select(t => t.Id));
             foreach (var newTag in newTags)
             {
                 if (!currentIds.Contains(newTag.Id))
                 {
-                    Tag.items.Add(newTag);
+                    cTags.Add(newTag);
                 }
             }
         }
+
+        #endregion
 
     }
 }
