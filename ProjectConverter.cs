@@ -43,32 +43,53 @@ namespace Connector
         {
             // Получаем новый список источников
             var newSources = ConvertEditorToControlSources(eSources, deviceFactory);
-
             // Создаем словарь новых источников по Id
             var newDict = newSources.ToDictionary(s => s.Id);
 
             // Обновляем существующие источники
-            foreach (var existing in cSources)
+            // Используем ToList(), чтобы безопасно удалять элементы из cSources
+            foreach (var existing in cSources.ToList())
             {
                 if (newDict.TryGetValue(existing.Id, out var updated))
                 {
-                    // Обновляем изменяемые свойства, например, Address.
-                    // Если в вашем классе Source имеются другие изменяемые свойства,
-                    // их можно добавить сюда.
-                    if (existing.Address != updated.Address)
+                    // Если тип драйвера не совпадает, удаляем старый источник
+                    if (existing.driverType != updated.driverType)
                     {
-                        existing.Address = updated.Address;
+                        cSources.Remove(existing);
                     }
-                    // Здесь можно добавить обновление других параметров, если они реализованы через свойства.
+                    else
+                    {
+                        // Если драйвер тот же, обновляем все остальные свойства
+                        if (existing.title!= updated.title)
+                        {
+                            existing.title = updated.title;
+                        }
+                        if (existing.Address != updated.Address)
+                        {
+                            existing.Address = updated.Address;
+                        }
+                        if (existing.AutoRequestAftereOpen != updated.AutoRequestAftereOpen)
+                        {
+                            existing.AutoRequestAftereOpen = updated.AutoRequestAftereOpen;
+                        }
+                        if (existing.AutoOpenAfterFail != updated.AutoOpenAfterFail)
+                        {
+                            existing.AutoOpenAfterFail = updated.AutoOpenAfterFail;
+                        }
+                        if (existing.description != updated.description)
+                        {
+                            existing.description = updated.description;
+                        }
+                    }
                 }
                 else
                 {
-                    // Если источник отсутствует в новом списке, удаляем его.
+                    // Если источник отсутствует в новом списке, удаляем его
                     cSources.Remove(existing);
                 }
             }
 
-            // Добавляем новые источники, которых нет в Source.items.
+            // Добавляем новые источники, которых нет в cSources
             var currentIds = new HashSet<ushort>(cSources.Select(s => s.Id));
             foreach (var newSource in newSources)
             {
@@ -78,6 +99,7 @@ namespace Connector
                 }
             }
         }
+
 
         #endregion
 
@@ -196,7 +218,7 @@ namespace Connector
             {
                 if (newDict.TryGetValue(existing.Id, out var updated))
                 {
-                    // Обновляем изменяемые свойства, если они отличаются.
+                    // Обновляем изменяемые свойства, если они отличаются
                     if (existing.Address != updated.Address)
                     {
                         existing.Address = updated.Address;
@@ -208,6 +230,21 @@ namespace Connector
                     if (existing.DataType != updated.DataType)
                     {
                         existing.DataType = updated.DataType;
+                    }
+                    // Обновляем команду: предположим, что если isCommand == true, то Command выставляется в eCommand.Wait, иначе в eCommand.None
+                    if (existing.Command != updated.Command)
+                    {
+                        existing.Command = updated.Command;
+                    }
+                    // Обновляем значение для записи
+                    if (existing.WriteConstValue != updated.WriteConstValue)
+                    {
+                        existing.WriteConstValue = updated.WriteConstValue;
+                    }
+                    // Обновляем идентификатор тега-источника для записи
+                    if (existing.WriteTagId != updated.WriteTagId)
+                    {
+                        existing.WriteTagId = updated.WriteTagId;
                     }
                     // Если имеются и другие изменяемые свойства (например, description),
                     // их можно обновить аналогичным образом.

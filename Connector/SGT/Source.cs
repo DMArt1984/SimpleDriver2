@@ -28,8 +28,8 @@ namespace Connector
     public class Source : BaseLogger, ISource
     {
         public ushort Id { get; } // ID источника данных
-        public string title { get; } // Название источника
-        public string description { get; } // Описание источника
+        public string title { get; set; } // Название источника
+        public string description { get; set; } // Описание источника
 
         // Вместо локального списка групп используем вычисляемое свойство
         public IEnumerable<Group> Groups => Group.items.Where(g => g.ParentSource == this);
@@ -142,8 +142,8 @@ namespace Connector
             bool auto, bool reopen, string address = "", string description = "")
             : base(LogTarget.FileConsoleForm, null)
         {
-            _driverType = driverType;
             _deviceFactory = deviceFactory;
+            _driverType = driverType;
             _device = _deviceFactory.CreateDevice(driverType, address);
 
             if (_device is Device dr)
@@ -159,7 +159,7 @@ namespace Connector
             this.AutoOpenAfterFail = reopen;
             this.Address = address;
 
-            SetClient(address);
+            ChangeClient(address);
 
             logger.Info($"new SOURCE ID {Id} {title} {driverType} {address}", eMessageCategory.Source);
         }
@@ -173,7 +173,7 @@ namespace Connector
             }
         }
 
-        private void SetClient(string address)
+        public void ChangeClient(string address)
         {
             logger.Info($" step3: CreateClient(paramClient)", eMessageCategory.Source);
             CodeMessage result = (_device as Device)?.CreateClient(address) ?? new CodeMessage(-1, "Invalid device");
@@ -185,18 +185,10 @@ namespace Connector
             _disable = _disable || result.code != 0;
         }
 
+
         public void Activate()
         {
             Off = _disable;
-        }
-
-        // -----------------------------------------------------------------------------------------
-
-        // Одиночный запрос
-        public void OneRequest()
-        {
-            // Для запроса со всеми тегами передаем специальный идентификатор (например, 0)
-            EventRequest(new Group(0, "", this));
         }
 
         // =========================================================================================
