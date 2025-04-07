@@ -175,7 +175,7 @@ namespace DML
                     row.Cells[col.Driver].Value = item.driver.ToString();
                     row.Cells[col.Address].Value = item.address;
                     row.Cells[col.Desc].Value = item.description;
-                    row.Cells[col.CountTags].Value = EditorControl.tags.Count(x => x.sourceTitle == item.title);
+                    row.Cells[col.CountTags].Value = 0;
 
                     row.Cells[col.Calc].Value = false;
                     row.Cells[col.Status].Value = "";
@@ -351,8 +351,7 @@ namespace DML
                     row.Cells[col.Title].Value = item.title;
                     row.Cells[col.Source].Value = item.sourceTitle;
                     row.Cells[col.Desc].Value = item.description;
-                    //row.Cells[colGroupTags].Value = EditorControl.tags.Count(x => x.groupTitle == item.title);
-                    //row.Cells[colGroupSources].Value = EditorControl.sources.Count(x => x.groupTitle == item.title);
+                    row.Cells[col.CountTags].Value = 0;
 
                     row.Cells[col.Status].Value = "";
 
@@ -572,7 +571,6 @@ namespace DML
                         address = row.Cells[col.Address].Value.ToString(),
                         dataType = (eDataType)Enum.Parse(typeof(eDataType), row.Cells[col.DataType].Value.ToString(), true),
                         groupTitle = row.Cells[col.Group].Value.ToString(),
-                        sourceTitle = "", //row.Cells[col.Source].Value.ToString(),
                         block = row.Cells[col.Block].Value.ToString(),
                         description = row.Cells[col.Desc].Value.ToString(),
                         //...

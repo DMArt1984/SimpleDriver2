@@ -100,7 +100,7 @@ namespace WinSimpleIDriver
             }
 
             // Установить ID и Title для объектов
-            CalcIdAndTitle();
+            //CalcIdAndTitle();
 
             // Распаковка структур
             if (TagLib.IsStructures(data))
@@ -214,15 +214,12 @@ namespace WinSimpleIDriver
                 
                 foreach (dynamic item in data)
                 {
-                    TagLib.ParseItemTag(item, ++tagId, out string title, out string sourceTitle, out eDataType dataType, out bool off, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand);
+                    TagLib.ParseItemTag(item, ++tagId, out string title, out eDataType dataType, out bool off, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand);
                     TagEditor oneTag = new TagEditor
                     {
                         Id = tagId,
                         title = title,
                         dataType = dataType,
-                        sourceId = sourceId,
-                        groupId = groupId,
-                        sourceTitle = sourceTitle,
                         groupTitle = groupTitle,
                         address = address,
                         disableOnStart = off,
@@ -238,25 +235,25 @@ namespace WinSimpleIDriver
         }
 
         // Установить ID и Title для объектов
-        static void CalcIdAndTitle()
-        {
-            var sourceDict = sources.ToDictionary(x => x.Id);
-            var groupDict = groups.ToDictionary(x => x.Id);
+        //static void CalcIdAndTitle()
+        //{
+        //    var sourceDict = sources.ToDictionary(x => x.Id);
+        //    var groupDict = groups.ToDictionary(x => x.Id);
 
-            foreach (var tag in tags)
-            {
-                if (sourceDict.TryGetValue(tag.sourceId, out var source))
-                {
-                    tag.sourceTitle = source.title;
-                    tag.sourceId = source.Id;
-                }
-                if (groupDict.TryGetValue(tag.groupId, out var group))
-                {
-                    tag.groupTitle = group.title;
-                    tag.groupId = group.Id;
-                }
-            }
-        }
+        //    foreach (var tag in tags)
+        //    {
+        //        if (sourceDict.TryGetValue(tag.sourceId, out var source))
+        //        {
+        //            tag.sourceTitle = source.title;
+        //            tag.sourceId = source.Id;
+        //        }
+        //        if (groupDict.TryGetValue(tag.groupId, out var group))
+        //        {
+        //            tag.groupTitle = group.title;
+        //            tag.groupId = group.Id;
+        //        }
+        //    }
+        //}
 
         // Распаковка структур
         static void ParseStructures(dynamic data)

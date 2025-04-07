@@ -31,9 +31,9 @@ namespace Connector
         public ushort Id; // Уникальный идентификатор (0 - нет Id)
         public string title; // Название
         public eDataType dataType;
-        public ushort sourceId; // ID драйвера
-        public ushort groupId; // ID группы
-        public string sourceTitle; // Название драйвера
+        //public ushort sourceId; // ID драйвера
+        //public ushort groupId; // ID группы
+        //public string sourceTitle; // Название драйвера
         public string groupTitle; // Название группы
         public string address; // адрес
         public bool disableOnStart; // // Отключен при старте
@@ -85,10 +85,10 @@ namespace Connector
         static public bool IsListBlocks(dynamic output) => JsonControl.IsProp(output, "Blocks");
 
         // Получение параметров тега
-        static public void ParseItemTag(dynamic item, uint forId, out string title, out string source, out eDataType dataType, out bool off, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand)
+        static public void ParseItemTag(dynamic item, uint forId, out string title, out eDataType dataType, out bool off, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand)
         {
             title = JsonControl.GetString(item, "Title", $"Tag #{forId}");
-            source = JsonControl.GetString(item, "Source");
+            //source = JsonControl.GetString(item, "Source");
             groupTitle = JsonControl.GetString(item, "Group");
             dataType = JsonControl.GetTypeEnum<eDataType>(item, "DataType", eDataType.Binary);
             address = JsonControl.GetString(item, "Addr");
