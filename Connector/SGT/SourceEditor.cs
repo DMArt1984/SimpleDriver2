@@ -24,11 +24,11 @@ namespace Connector
 
     public class SourceEditor // Редактирование
     {
-        public uint Id; // Уникальный идентификатор (0 - нет Id)
+        public ushort Id; // Уникальный идентификатор (0 - нет Id)
         public eDriverType driver; // Тип драйвера
         public string title; // Название драйвера
         public string address; // Строка подключения
-        public bool off; // Отключение
+        public bool disableOnStart; // Отключен при старте
         public string description; // Описание
         public bool auto; // Запуск опроса после открытия файла
         public bool reconnect; // Автоматическое переподключение

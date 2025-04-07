@@ -158,6 +158,7 @@ namespace Connector
             this.AutoRequestAftereOpen = auto;
             this.AutoOpenAfterFail = reopen;
             this.Address = address;
+            this._disable = disable;
 
             ChangeClient(address);
 
@@ -185,6 +186,7 @@ namespace Connector
             _disable = _disable || result.code != 0;
         }
 
+        // =========================================================================================
 
         public void Activate()
         {

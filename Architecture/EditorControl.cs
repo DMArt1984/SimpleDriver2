@@ -25,9 +25,9 @@ namespace WinSimpleIDriver
         static public List<IncludeEditor> includes;
         static public List<IncludeChildEditor> includeChilds;
 
-        static uint sourceId = 0;
-        static uint groupId = 0;
-        static uint tagId = 0;
+        static ushort sourceId = 0;
+        static ushort groupId = 0;
+        static ushort tagId = 0;
         static uint blockUnnamedId = 0;
 
         static uint structureId = 0;
@@ -128,7 +128,7 @@ namespace WinSimpleIDriver
                         driver = driver,
                         title = title,
                         address = address,
-                        off = off,
+                        disableOnStart = off,
                         description = description,
                         auto = auto,
                         reconnect = reconnect
@@ -175,7 +175,7 @@ namespace WinSimpleIDriver
                     {
                         Id = groupId,
                         title = title,
-                        off = off,
+                        disableOnStart = off,
                         updateRate = updateRate,
                         description = description,
                         sourceTitle = sourceTitle
@@ -207,7 +207,7 @@ namespace WinSimpleIDriver
         }
 
         // Распаковка тегов
-        static void ParseTags(dynamic data, uint sourceId = 0, uint groupId = 0, string block = null)
+        static void ParseTags(dynamic data, ushort sourceId = 0, ushort groupId = 0, string block = null)
         {
             if (data != null)
             {
@@ -225,7 +225,7 @@ namespace WinSimpleIDriver
                         sourceTitle = sourceTitle,
                         groupTitle = groupTitle,
                         address = address,
-                        off = off,
+                        disableOnStart = off,
                         isCommand = isCommand,
                         writeTitle = writeTitle,
                         constValue = constValue,

@@ -167,7 +167,7 @@ namespace DML
                 {
                     DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
                     row.Cells[0].Value = item.Id;
-                    row.Cells[3].Value = !item.off;
+                    row.Cells[3].Value = !item.disableOnStart;
                     row.Cells[4].Value = item.auto; // автоматический опрос
                     row.Cells[5].Value = item.reconnect; // автоматическое переподключение
 
@@ -197,8 +197,8 @@ namespace DML
 
                     SourceEditor se = new SourceEditor
                     {
-                         Id = Convert.ToUInt32(row.Cells[0].Value),
-                         off = !Convert.ToBoolean(row.Cells[3].Value),
+                         Id = Convert.ToUInt16(row.Cells[0].Value),
+                         disableOnStart = !Convert.ToBoolean(row.Cells[3].Value),
                          auto = Convert.ToBoolean(row.Cells[4].Value),
                          reconnect = Convert.ToBoolean(row.Cells[5].Value),
                          title = row.Cells[col.Title].Value.ToString(),
@@ -345,7 +345,7 @@ namespace DML
                 {
                     DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
                     row.Cells[0].Value = item.Id;
-                    row.Cells[3].Value = !item.off;
+                    row.Cells[3].Value = !item.disableOnStart;
                     row.Cells[5].Value = item.updateRate.ToString();
 
                     row.Cells[col.Title].Value = item.title;
@@ -372,8 +372,8 @@ namespace DML
 
                     GroupEditor ge = new GroupEditor
                     {
-                        Id = Convert.ToUInt32(row.Cells[0].Value),
-                        off = !Convert.ToBoolean(row.Cells[3].Value),
+                        Id = Convert.ToUInt16(row.Cells[0].Value),
+                        disableOnStart = !Convert.ToBoolean(row.Cells[3].Value),
                         updateRate = Convert.ToUInt32(row.Cells[5].Value),
                         title = row.Cells[col.Title].Value.ToString(),
                         sourceTitle = row.Cells[col.Source].Value.ToString(),
@@ -533,7 +533,7 @@ namespace DML
                     {
                         var row = tagTable.NewRow();
                         row[0] = item.Id;
-                        row[3] = !item.off;
+                        row[3] = !item.disableOnStart;
                         row[col.Title] = item.title;
                         row[col.DataType] = item.dataType.ToString();
                         row[col.Group] = item.groupTitle;
@@ -566,8 +566,8 @@ namespace DML
 
                     TagEditor te = new TagEditor
                     {
-                        Id = Convert.ToUInt32(row.Cells[0].Value),
-                        off = !Convert.ToBoolean(row.Cells[3].Value),
+                        Id = Convert.ToUInt16(row.Cells[0].Value),
+                        disableOnStart = !Convert.ToBoolean(row.Cells[3].Value),
                         title = row.Cells[col.Title].Value.ToString(),
                         address = row.Cells[col.Address].Value.ToString(),
                         dataType = (eDataType)Enum.Parse(typeof(eDataType), row.Cells[col.DataType].Value.ToString(), true),

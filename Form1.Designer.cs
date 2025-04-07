@@ -220,14 +220,14 @@ namespace WinSimpleIDriver
             this.changeFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.changeTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewLog = new System.Windows.Forms.DataGridView();
-            this.splitContainerLogMain = new System.Windows.Forms.SplitContainer();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.logDT = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.logCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.logType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.logCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.logText = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.splitContainerLogMain = new System.Windows.Forms.SplitContainer();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTreeMain)).BeginInit();
@@ -305,70 +305,70 @@ namespace WinSimpleIDriver
             // ToolStripMenuItemNew
             // 
             this.ToolStripMenuItemNew.Name = "ToolStripMenuItemNew";
-            this.ToolStripMenuItemNew.Size = new System.Drawing.Size(162, 22);
+            this.ToolStripMenuItemNew.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemNew.Text = "Новый";
             this.ToolStripMenuItemNew.Click += new System.EventHandler(this.ToolStripMenuItemNew_Click);
             // 
             // ToolStripMenuItemOpen
             // 
             this.ToolStripMenuItemOpen.Name = "ToolStripMenuItemOpen";
-            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(162, 22);
+            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemOpen.Text = "Открыть";
             this.ToolStripMenuItemOpen.Click += new System.EventHandler(this.ToolStripMenuItemOpen_Click);
             // 
             // ToolStripMenuItemSave
             // 
             this.ToolStripMenuItemSave.Name = "ToolStripMenuItemSave";
-            this.ToolStripMenuItemSave.Size = new System.Drawing.Size(162, 22);
+            this.ToolStripMenuItemSave.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemSave.Text = "Сохранить";
             this.ToolStripMenuItemSave.Click += new System.EventHandler(this.ToolStripMenuItemSave_Click);
             // 
             // ToolStripMenuItemSaveAs
             // 
             this.ToolStripMenuItemSaveAs.Name = "ToolStripMenuItemSaveAs";
-            this.ToolStripMenuItemSaveAs.Size = new System.Drawing.Size(162, 22);
+            this.ToolStripMenuItemSaveAs.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemSaveAs.Text = "Сохранить как...";
             this.ToolStripMenuItemSaveAs.Click += new System.EventHandler(this.ToolStripMenuItemSaveAs_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(159, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(160, 6);
             // 
             // ToolStripMenuItemLastFiles
             // 
             this.ToolStripMenuItemLastFiles.Name = "ToolStripMenuItemLastFiles";
-            this.ToolStripMenuItemLastFiles.Size = new System.Drawing.Size(162, 22);
+            this.ToolStripMenuItemLastFiles.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemLastFiles.Text = "Последние";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(159, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(160, 6);
             // 
             // ToolStripMenuItemImport
             // 
             this.ToolStripMenuItemImport.Name = "ToolStripMenuItemImport";
-            this.ToolStripMenuItemImport.Size = new System.Drawing.Size(162, 22);
+            this.ToolStripMenuItemImport.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemImport.Text = "Импорт";
             this.ToolStripMenuItemImport.Click += new System.EventHandler(this.ToolStripMenuItemImport_Click);
             // 
             // ToolStripMenuItemExport
             // 
             this.ToolStripMenuItemExport.Name = "ToolStripMenuItemExport";
-            this.ToolStripMenuItemExport.Size = new System.Drawing.Size(162, 22);
+            this.ToolStripMenuItemExport.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemExport.Text = "Экспорт";
             this.ToolStripMenuItemExport.Click += new System.EventHandler(this.ToolStripMenuItemExport_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(159, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(160, 6);
             // 
             // ToolStripMenuItemExit
             // 
             this.ToolStripMenuItemExit.Name = "ToolStripMenuItemExit";
-            this.ToolStripMenuItemExit.Size = new System.Drawing.Size(162, 22);
+            this.ToolStripMenuItemExit.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemExit.Text = "Выход";
             this.ToolStripMenuItemExit.Click += new System.EventHandler(this.ToolStripMenuItemExit_Click);
             // 
@@ -400,7 +400,7 @@ namespace WinSimpleIDriver
             // testToolStripMenuItem
             // 
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(65, 19);
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(63, 19);
             this.testToolStripMenuItem.Text = "Test Tree";
             this.testToolStripMenuItem.Visible = false;
             this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
@@ -408,7 +408,7 @@ namespace WinSimpleIDriver
             // testTagSourceToolStripMenuItem
             // 
             this.testTagSourceToolStripMenuItem.Name = "testTagSourceToolStripMenuItem";
-            this.testTagSourceToolStripMenuItem.Size = new System.Drawing.Size(98, 19);
+            this.testTagSourceToolStripMenuItem.Size = new System.Drawing.Size(96, 19);
             this.testTagSourceToolStripMenuItem.Text = "Test TagSource";
             this.testTagSourceToolStripMenuItem.Visible = false;
             this.testTagSourceToolStripMenuItem.Click += new System.EventHandler(this.testTagSourceToolStripMenuItem_Click);
@@ -496,7 +496,7 @@ namespace WinSimpleIDriver
             this.labelProject.AutoSize = true;
             this.labelProject.Location = new System.Drawing.Point(10, 7);
             this.labelProject.Name = "labelProject";
-            this.labelProject.Size = new System.Drawing.Size(51, 17);
+            this.labelProject.Size = new System.Drawing.Size(50, 15);
             this.labelProject.TabIndex = 1;
             this.labelProject.Text = "Проект";
             // 
@@ -506,7 +506,7 @@ namespace WinSimpleIDriver
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeViewProject.ContextMenuStrip = this.contextMenuStripTreeProj;
-            this.treeViewProject.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.treeViewProject.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.treeViewProject.Location = new System.Drawing.Point(7, 29);
             this.treeViewProject.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.treeViewProject.Name = "treeViewProject";
@@ -587,11 +587,11 @@ namespace WinSimpleIDriver
             this.tabPageSource.Controls.Add(this.buttonSourceDel);
             this.tabPageSource.Controls.Add(this.buttonSourceCopy);
             this.tabPageSource.Controls.Add(this.dataGridViewSource);
-            this.tabPageSource.Location = new System.Drawing.Point(4, 26);
+            this.tabPageSource.Location = new System.Drawing.Point(4, 24);
             this.tabPageSource.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageSource.Name = "tabPageSource";
             this.tabPageSource.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPageSource.Size = new System.Drawing.Size(1122, 408);
+            this.tabPageSource.Size = new System.Drawing.Size(1122, 410);
             this.tabPageSource.TabIndex = 0;
             this.tabPageSource.Text = "Источники данных";
             this.tabPageSource.UseVisualStyleBackColor = true;
@@ -623,7 +623,7 @@ namespace WinSimpleIDriver
             this.checkBoxSourceStatistic.AutoSize = true;
             this.checkBoxSourceStatistic.Location = new System.Drawing.Point(653, 10);
             this.checkBoxSourceStatistic.Name = "checkBoxSourceStatistic";
-            this.checkBoxSourceStatistic.Size = new System.Drawing.Size(95, 21);
+            this.checkBoxSourceStatistic.Size = new System.Drawing.Size(95, 19);
             this.checkBoxSourceStatistic.TabIndex = 9;
             this.checkBoxSourceStatistic.Text = "Статистика";
             this.checkBoxSourceStatistic.UseVisualStyleBackColor = true;
@@ -636,7 +636,7 @@ namespace WinSimpleIDriver
             this.checkBoxSourceDesc.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxSourceDesc.Location = new System.Drawing.Point(543, 10);
             this.checkBoxSourceDesc.Name = "checkBoxSourceDesc";
-            this.checkBoxSourceDesc.Size = new System.Drawing.Size(89, 21);
+            this.checkBoxSourceDesc.Size = new System.Drawing.Size(83, 19);
             this.checkBoxSourceDesc.TabIndex = 8;
             this.checkBoxSourceDesc.Text = "Описание";
             this.checkBoxSourceDesc.UseVisualStyleBackColor = true;
@@ -647,7 +647,7 @@ namespace WinSimpleIDriver
             this.checkBoxSourceRuntime.AutoSize = true;
             this.checkBoxSourceRuntime.Location = new System.Drawing.Point(449, 10);
             this.checkBoxSourceRuntime.Name = "checkBoxSourceRuntime";
-            this.checkBoxSourceRuntime.Size = new System.Drawing.Size(75, 21);
+            this.checkBoxSourceRuntime.Size = new System.Drawing.Size(73, 19);
             this.checkBoxSourceRuntime.TabIndex = 7;
             this.checkBoxSourceRuntime.Text = "Runtime";
             this.checkBoxSourceRuntime.UseVisualStyleBackColor = true;
@@ -660,7 +660,7 @@ namespace WinSimpleIDriver
             this.checkBoxSourceEditor.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxSourceEditor.Location = new System.Drawing.Point(356, 10);
             this.checkBoxSourceEditor.Name = "checkBoxSourceEditor";
-            this.checkBoxSourceEditor.Size = new System.Drawing.Size(84, 21);
+            this.checkBoxSourceEditor.Size = new System.Drawing.Size(82, 19);
             this.checkBoxSourceEditor.TabIndex = 6;
             this.checkBoxSourceEditor.Text = "Редактор";
             this.checkBoxSourceEditor.UseVisualStyleBackColor = true;
@@ -673,7 +673,7 @@ namespace WinSimpleIDriver
             this.textBoxSourceFilter.Location = new System.Drawing.Point(7, 39);
             this.textBoxSourceFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxSourceFilter.Name = "textBoxSourceFilter";
-            this.textBoxSourceFilter.Size = new System.Drawing.Size(1001, 22);
+            this.textBoxSourceFilter.Size = new System.Drawing.Size(1001, 21);
             this.textBoxSourceFilter.TabIndex = 5;
             this.textBoxSourceFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxSourceFilter.TextChanged += new System.EventHandler(this.textBoxSourceFilter_TextChanged);
@@ -735,7 +735,7 @@ namespace WinSimpleIDriver
             this.dataGridViewSource.MultiSelect = false;
             this.dataGridViewSource.Name = "dataGridViewSource";
             this.dataGridViewSource.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewSource.Size = new System.Drawing.Size(1109, 365);
+            this.dataGridViewSource.Size = new System.Drawing.Size(1109, 369);
             this.dataGridViewSource.TabIndex = 1;
             this.dataGridViewSource.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewSource_CellBeginEdit);
             this.dataGridViewSource.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewSource_CellEndEdit);
@@ -754,7 +754,7 @@ namespace WinSimpleIDriver
             this.sourceID.HeaderText = "ID";
             this.sourceID.Name = "sourceID";
             this.sourceID.ReadOnly = true;
-            this.sourceID.Width = 45;
+            this.sourceID.Width = 44;
             // 
             // sourceCalc
             // 
@@ -786,14 +786,14 @@ namespace WinSimpleIDriver
             this.sourceAutomation.Name = "sourceAutomation";
             this.sourceAutomation.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.sourceAutomation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.sourceAutomation.Width = 52;
+            this.sourceAutomation.Width = 48;
             // 
             // sourceAutoRestart
             // 
             this.sourceAutoRestart.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.sourceAutoRestart.HeaderText = "АПП";
             this.sourceAutoRestart.Name = "sourceAutoRestart";
-            this.sourceAutoRestart.Width = 39;
+            this.sourceAutoRestart.Width = 38;
             // 
             // sourceDriver
             // 
@@ -833,7 +833,7 @@ namespace WinSimpleIDriver
             this.sourceTags.HeaderText = "Теги";
             this.sourceTags.Name = "sourceTags";
             this.sourceTags.ReadOnly = true;
-            this.sourceTags.Width = 57;
+            this.sourceTags.Width = 58;
             // 
             // sourceStatistic
             // 
@@ -856,11 +856,11 @@ namespace WinSimpleIDriver
             this.tabPageGroup.Controls.Add(this.buttonGroupDel);
             this.tabPageGroup.Controls.Add(this.buttonGroupCopy);
             this.tabPageGroup.Controls.Add(this.dataGridViewGroup);
-            this.tabPageGroup.Location = new System.Drawing.Point(4, 22);
+            this.tabPageGroup.Location = new System.Drawing.Point(4, 24);
             this.tabPageGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageGroup.Name = "tabPageGroup";
             this.tabPageGroup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPageGroup.Size = new System.Drawing.Size(1122, 412);
+            this.tabPageGroup.Size = new System.Drawing.Size(1122, 410);
             this.tabPageGroup.TabIndex = 1;
             this.tabPageGroup.Text = "Группы опроса";
             this.tabPageGroup.UseVisualStyleBackColor = true;
@@ -883,7 +883,7 @@ namespace WinSimpleIDriver
             this.checkBoxGroupSource.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxGroupSource.Location = new System.Drawing.Point(663, 10);
             this.checkBoxGroupSource.Name = "checkBoxGroupSource";
-            this.checkBoxGroupSource.Size = new System.Drawing.Size(83, 21);
+            this.checkBoxGroupSource.Size = new System.Drawing.Size(81, 19);
             this.checkBoxGroupSource.TabIndex = 19;
             this.checkBoxGroupSource.Text = "Источник";
             this.checkBoxGroupSource.UseVisualStyleBackColor = true;
@@ -894,7 +894,7 @@ namespace WinSimpleIDriver
             this.checkBoxGroupRuntime.AutoSize = true;
             this.checkBoxGroupRuntime.Location = new System.Drawing.Point(364, 10);
             this.checkBoxGroupRuntime.Name = "checkBoxGroupRuntime";
-            this.checkBoxGroupRuntime.Size = new System.Drawing.Size(75, 21);
+            this.checkBoxGroupRuntime.Size = new System.Drawing.Size(73, 19);
             this.checkBoxGroupRuntime.TabIndex = 18;
             this.checkBoxGroupRuntime.Text = "Runtime";
             this.checkBoxGroupRuntime.UseVisualStyleBackColor = true;
@@ -905,7 +905,7 @@ namespace WinSimpleIDriver
             this.comboBoxGroupFilterSource.FormattingEnabled = true;
             this.comboBoxGroupFilterSource.Location = new System.Drawing.Point(7, 37);
             this.comboBoxGroupFilterSource.Name = "comboBoxGroupFilterSource";
-            this.comboBoxGroupFilterSource.Size = new System.Drawing.Size(199, 25);
+            this.comboBoxGroupFilterSource.Size = new System.Drawing.Size(199, 23);
             this.comboBoxGroupFilterSource.Sorted = true;
             this.comboBoxGroupFilterSource.TabIndex = 17;
             this.toolTip1.SetToolTip(this.comboBoxGroupFilterSource, "Источник");
@@ -917,7 +917,7 @@ namespace WinSimpleIDriver
             this.checkBoxGroupStatistic.AutoSize = true;
             this.checkBoxGroupStatistic.Location = new System.Drawing.Point(562, 10);
             this.checkBoxGroupStatistic.Name = "checkBoxGroupStatistic";
-            this.checkBoxGroupStatistic.Size = new System.Drawing.Size(95, 21);
+            this.checkBoxGroupStatistic.Size = new System.Drawing.Size(95, 19);
             this.checkBoxGroupStatistic.TabIndex = 16;
             this.checkBoxGroupStatistic.Text = "Статистика";
             this.checkBoxGroupStatistic.UseVisualStyleBackColor = true;
@@ -930,7 +930,7 @@ namespace WinSimpleIDriver
             this.checkBoxGroupDesc.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxGroupDesc.Location = new System.Drawing.Point(453, 10);
             this.checkBoxGroupDesc.Name = "checkBoxGroupDesc";
-            this.checkBoxGroupDesc.Size = new System.Drawing.Size(89, 21);
+            this.checkBoxGroupDesc.Size = new System.Drawing.Size(83, 19);
             this.checkBoxGroupDesc.TabIndex = 15;
             this.checkBoxGroupDesc.Text = "Описание";
             this.checkBoxGroupDesc.UseVisualStyleBackColor = true;
@@ -943,7 +943,7 @@ namespace WinSimpleIDriver
             this.checkBoxGroupEditor.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxGroupEditor.Location = new System.Drawing.Point(268, 10);
             this.checkBoxGroupEditor.Name = "checkBoxGroupEditor";
-            this.checkBoxGroupEditor.Size = new System.Drawing.Size(84, 21);
+            this.checkBoxGroupEditor.Size = new System.Drawing.Size(82, 19);
             this.checkBoxGroupEditor.TabIndex = 14;
             this.checkBoxGroupEditor.Text = "Редактор";
             this.checkBoxGroupEditor.UseVisualStyleBackColor = true;
@@ -956,7 +956,7 @@ namespace WinSimpleIDriver
             this.textBoxGroupFilter.Location = new System.Drawing.Point(212, 39);
             this.textBoxGroupFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxGroupFilter.Name = "textBoxGroupFilter";
-            this.textBoxGroupFilter.Size = new System.Drawing.Size(787, 22);
+            this.textBoxGroupFilter.Size = new System.Drawing.Size(787, 21);
             this.textBoxGroupFilter.TabIndex = 13;
             this.textBoxGroupFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxGroupFilter.TextChanged += new System.EventHandler(this.textBoxGroupFilter_TextChanged);
@@ -1014,7 +1014,7 @@ namespace WinSimpleIDriver
             this.dataGridViewGroup.MultiSelect = false;
             this.dataGridViewGroup.Name = "dataGridViewGroup";
             this.dataGridViewGroup.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewGroup.Size = new System.Drawing.Size(1109, 341);
+            this.dataGridViewGroup.Size = new System.Drawing.Size(1109, 339);
             this.dataGridViewGroup.TabIndex = 9;
             this.dataGridViewGroup.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewGroup_CellBeginEdit);
             this.dataGridViewGroup.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewGroup_CellEndEdit);
@@ -1033,7 +1033,7 @@ namespace WinSimpleIDriver
             this.groupID.HeaderText = "ID";
             this.groupID.Name = "groupID";
             this.groupID.ReadOnly = true;
-            this.groupID.Width = 45;
+            this.groupID.Width = 44;
             // 
             // groupCalc
             // 
@@ -1088,7 +1088,7 @@ namespace WinSimpleIDriver
             this.groupTags.Name = "groupTags";
             this.groupTags.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.groupTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.groupTags.Width = 38;
+            this.groupTags.Width = 39;
             // 
             // groupStatistic
             // 
@@ -1120,10 +1120,10 @@ namespace WinSimpleIDriver
             this.tabPageTag.Controls.Add(this.buttonTagDel);
             this.tabPageTag.Controls.Add(this.buttonTagCopy);
             this.tabPageTag.Controls.Add(this.dataGridViewTag);
-            this.tabPageTag.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTag.Location = new System.Drawing.Point(4, 24);
             this.tabPageTag.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageTag.Name = "tabPageTag";
-            this.tabPageTag.Size = new System.Drawing.Size(1122, 412);
+            this.tabPageTag.Size = new System.Drawing.Size(1122, 410);
             this.tabPageTag.TabIndex = 2;
             this.tabPageTag.Text = "Теги";
             this.tabPageTag.UseVisualStyleBackColor = true;
@@ -1133,7 +1133,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagAddress.AutoSize = true;
             this.checkBoxTagAddress.Location = new System.Drawing.Point(706, 38);
             this.checkBoxTagAddress.Name = "checkBoxTagAddress";
-            this.checkBoxTagAddress.Size = new System.Drawing.Size(67, 21);
+            this.checkBoxTagAddress.Size = new System.Drawing.Size(60, 19);
             this.checkBoxTagAddress.TabIndex = 27;
             this.checkBoxTagAddress.Text = "Адрес";
             this.checkBoxTagAddress.UseVisualStyleBackColor = true;
@@ -1144,7 +1144,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagSave.AutoSize = true;
             this.checkBoxTagSave.Location = new System.Drawing.Point(630, 38);
             this.checkBoxTagSave.Name = "checkBoxTagSave";
-            this.checkBoxTagSave.Size = new System.Drawing.Size(70, 21);
+            this.checkBoxTagSave.Size = new System.Drawing.Size(68, 19);
             this.checkBoxTagSave.TabIndex = 26;
             this.checkBoxTagSave.Text = "Запись";
             this.checkBoxTagSave.UseVisualStyleBackColor = true;
@@ -1168,7 +1168,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagSG.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxTagSG.Location = new System.Drawing.Point(494, 38);
             this.checkBoxTagSG.Name = "checkBoxTagSG";
-            this.checkBoxTagSG.Size = new System.Drawing.Size(130, 21);
+            this.checkBoxTagSG.Size = new System.Drawing.Size(124, 19);
             this.checkBoxTagSG.TabIndex = 24;
             this.checkBoxTagSG.Text = "Источник/Группа";
             this.checkBoxTagSG.UseVisualStyleBackColor = true;
@@ -1179,7 +1179,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagBP.AutoSize = true;
             this.checkBoxTagBP.Location = new System.Drawing.Point(269, 38);
             this.checkBoxTagBP.Name = "checkBoxTagBP";
-            this.checkBoxTagBP.Size = new System.Drawing.Size(119, 21);
+            this.checkBoxTagBP.Size = new System.Drawing.Size(114, 19);
             this.checkBoxTagBP.TabIndex = 23;
             this.checkBoxTagBP.Text = "Блок/Страница";
             this.checkBoxTagBP.UseVisualStyleBackColor = true;
@@ -1190,7 +1190,7 @@ namespace WinSimpleIDriver
             this.comboBoxTagFilterPage.FormattingEnabled = true;
             this.comboBoxTagFilterPage.Location = new System.Drawing.Point(460, 64);
             this.comboBoxTagFilterPage.Name = "comboBoxTagFilterPage";
-            this.comboBoxTagFilterPage.Size = new System.Drawing.Size(145, 25);
+            this.comboBoxTagFilterPage.Size = new System.Drawing.Size(145, 23);
             this.comboBoxTagFilterPage.Sorted = true;
             this.comboBoxTagFilterPage.TabIndex = 22;
             this.toolTip1.SetToolTip(this.comboBoxTagFilterPage, "Страница");
@@ -1202,7 +1202,7 @@ namespace WinSimpleIDriver
             this.comboBoxTagFilterBlock.FormattingEnabled = true;
             this.comboBoxTagFilterBlock.Location = new System.Drawing.Point(309, 64);
             this.comboBoxTagFilterBlock.Name = "comboBoxTagFilterBlock";
-            this.comboBoxTagFilterBlock.Size = new System.Drawing.Size(145, 25);
+            this.comboBoxTagFilterBlock.Size = new System.Drawing.Size(145, 23);
             this.comboBoxTagFilterBlock.Sorted = true;
             this.comboBoxTagFilterBlock.TabIndex = 21;
             this.toolTip1.SetToolTip(this.comboBoxTagFilterBlock, "Блок");
@@ -1214,7 +1214,7 @@ namespace WinSimpleIDriver
             this.comboBoxTagFilterGroup.FormattingEnabled = true;
             this.comboBoxTagFilterGroup.Location = new System.Drawing.Point(158, 64);
             this.comboBoxTagFilterGroup.Name = "comboBoxTagFilterGroup";
-            this.comboBoxTagFilterGroup.Size = new System.Drawing.Size(145, 25);
+            this.comboBoxTagFilterGroup.Size = new System.Drawing.Size(145, 23);
             this.comboBoxTagFilterGroup.Sorted = true;
             this.comboBoxTagFilterGroup.TabIndex = 20;
             this.toolTip1.SetToolTip(this.comboBoxTagFilterGroup, "Группа");
@@ -1226,7 +1226,7 @@ namespace WinSimpleIDriver
             this.comboBoxTagFilterSource.FormattingEnabled = true;
             this.comboBoxTagFilterSource.Location = new System.Drawing.Point(7, 64);
             this.comboBoxTagFilterSource.Name = "comboBoxTagFilterSource";
-            this.comboBoxTagFilterSource.Size = new System.Drawing.Size(145, 25);
+            this.comboBoxTagFilterSource.Size = new System.Drawing.Size(145, 23);
             this.comboBoxTagFilterSource.Sorted = true;
             this.comboBoxTagFilterSource.TabIndex = 19;
             this.toolTip1.SetToolTip(this.comboBoxTagFilterSource, "Источник");
@@ -1249,7 +1249,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagStatistic.AutoSize = true;
             this.checkBoxTagStatistic.Location = new System.Drawing.Point(393, 38);
             this.checkBoxTagStatistic.Name = "checkBoxTagStatistic";
-            this.checkBoxTagStatistic.Size = new System.Drawing.Size(95, 21);
+            this.checkBoxTagStatistic.Size = new System.Drawing.Size(95, 19);
             this.checkBoxTagStatistic.TabIndex = 17;
             this.checkBoxTagStatistic.Text = "Статистика";
             this.checkBoxTagStatistic.UseVisualStyleBackColor = true;
@@ -1262,7 +1262,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagDesc.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxTagDesc.Location = new System.Drawing.Point(177, 38);
             this.checkBoxTagDesc.Name = "checkBoxTagDesc";
-            this.checkBoxTagDesc.Size = new System.Drawing.Size(89, 21);
+            this.checkBoxTagDesc.Size = new System.Drawing.Size(83, 19);
             this.checkBoxTagDesc.TabIndex = 16;
             this.checkBoxTagDesc.Text = "Описание";
             this.checkBoxTagDesc.UseVisualStyleBackColor = true;
@@ -1273,7 +1273,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagRuntime.AutoSize = true;
             this.checkBoxTagRuntime.Location = new System.Drawing.Point(95, 38);
             this.checkBoxTagRuntime.Name = "checkBoxTagRuntime";
-            this.checkBoxTagRuntime.Size = new System.Drawing.Size(75, 21);
+            this.checkBoxTagRuntime.Size = new System.Drawing.Size(73, 19);
             this.checkBoxTagRuntime.TabIndex = 15;
             this.checkBoxTagRuntime.Text = "Runtime";
             this.checkBoxTagRuntime.UseVisualStyleBackColor = true;
@@ -1286,7 +1286,7 @@ namespace WinSimpleIDriver
             this.checkBoxTagEditor.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxTagEditor.Location = new System.Drawing.Point(7, 38);
             this.checkBoxTagEditor.Name = "checkBoxTagEditor";
-            this.checkBoxTagEditor.Size = new System.Drawing.Size(84, 21);
+            this.checkBoxTagEditor.Size = new System.Drawing.Size(82, 19);
             this.checkBoxTagEditor.TabIndex = 14;
             this.checkBoxTagEditor.Text = "Редактор";
             this.checkBoxTagEditor.UseVisualStyleBackColor = true;
@@ -1299,7 +1299,7 @@ namespace WinSimpleIDriver
             this.textBoxTagFilter.Location = new System.Drawing.Point(611, 66);
             this.textBoxTagFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxTagFilter.Name = "textBoxTagFilter";
-            this.textBoxTagFilter.Size = new System.Drawing.Size(427, 22);
+            this.textBoxTagFilter.Size = new System.Drawing.Size(427, 21);
             this.textBoxTagFilter.TabIndex = 13;
             this.textBoxTagFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxTagFilter.TextChanged += new System.EventHandler(this.textBoxTagFilter_TextChanged);
@@ -1365,7 +1365,7 @@ namespace WinSimpleIDriver
             this.dataGridViewTag.MultiSelect = false;
             this.dataGridViewTag.Name = "dataGridViewTag";
             this.dataGridViewTag.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewTag.Size = new System.Drawing.Size(1109, 311);
+            this.dataGridViewTag.Size = new System.Drawing.Size(1109, 309);
             this.dataGridViewTag.TabIndex = 9;
             this.dataGridViewTag.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewTag_CellBeginEdit);
             this.dataGridViewTag.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTag_CellEndEdit);
@@ -1384,7 +1384,7 @@ namespace WinSimpleIDriver
             this.tagID.HeaderText = "ID";
             this.tagID.Name = "tagID";
             this.tagID.ReadOnly = true;
-            this.tagID.Width = 45;
+            this.tagID.Width = 44;
             // 
             // tagCalc
             // 
@@ -1481,7 +1481,7 @@ namespace WinSimpleIDriver
             this.tagPage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.tagPage.HeaderText = "Страница";
             this.tagPage.Name = "tagPage";
-            this.tagPage.Width = 93;
+            this.tagPage.Width = 89;
             // 
             // tagStatus
             // 
@@ -1489,7 +1489,7 @@ namespace WinSimpleIDriver
             this.tagStatus.HeaderText = "Статус";
             this.tagStatus.Name = "tagStatus";
             this.tagStatus.ReadOnly = true;
-            this.tagStatus.Width = 74;
+            this.tagStatus.Width = 72;
             // 
             // tagMessage
             // 
@@ -1514,9 +1514,9 @@ namespace WinSimpleIDriver
             this.tabPageStructure.Controls.Add(this.buttonStructDel);
             this.tabPageStructure.Controls.Add(this.buttonStructCopy);
             this.tabPageStructure.Controls.Add(this.splitContainerStructure);
-            this.tabPageStructure.Location = new System.Drawing.Point(4, 22);
+            this.tabPageStructure.Location = new System.Drawing.Point(4, 24);
             this.tabPageStructure.Name = "tabPageStructure";
-            this.tabPageStructure.Size = new System.Drawing.Size(1122, 412);
+            this.tabPageStructure.Size = new System.Drawing.Size(1122, 410);
             this.tabPageStructure.TabIndex = 5;
             this.tabPageStructure.Text = "Структуры тегов";
             this.tabPageStructure.UseVisualStyleBackColor = true;
@@ -1528,7 +1528,7 @@ namespace WinSimpleIDriver
             this.checkBoxStructCol.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxStructCol.Location = new System.Drawing.Point(352, 9);
             this.checkBoxStructCol.Name = "checkBoxStructCol";
-            this.checkBoxStructCol.Size = new System.Drawing.Size(274, 21);
+            this.checkBoxStructCol.Size = new System.Drawing.Size(271, 19);
             this.checkBoxStructCol.TabIndex = 26;
             this.checkBoxStructCol.Text = "Название структуры для дочерних таблиц";
             this.checkBoxStructCol.UseVisualStyleBackColor = true;
@@ -1599,8 +1599,8 @@ namespace WinSimpleIDriver
             this.splitContainerStructure.Panel2.Controls.Add(this.label3);
             this.splitContainerStructure.Panel2.Controls.Add(this.label2);
             this.splitContainerStructure.Panel2.Controls.Add(this.buttonStructureRight);
-            this.splitContainerStructure.Size = new System.Drawing.Size(1116, 373);
-            this.splitContainerStructure.SplitterDistance = 165;
+            this.splitContainerStructure.Size = new System.Drawing.Size(1116, 371);
+            this.splitContainerStructure.SplitterDistance = 164;
             this.splitContainerStructure.TabIndex = 0;
             // 
             // label1
@@ -1608,7 +1608,7 @@ namespace WinSimpleIDriver
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(7, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 17);
+            this.label1.Size = new System.Drawing.Size(68, 15);
             this.label1.TabIndex = 21;
             this.label1.Text = "Структуры";
             // 
@@ -1641,7 +1641,7 @@ namespace WinSimpleIDriver
             this.textBoxStructureFilter.Location = new System.Drawing.Point(289, 7);
             this.textBoxStructureFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxStructureFilter.Name = "textBoxStructureFilter";
-            this.textBoxStructureFilter.Size = new System.Drawing.Size(507, 22);
+            this.textBoxStructureFilter.Size = new System.Drawing.Size(507, 21);
             this.textBoxStructureFilter.TabIndex = 18;
             this.textBoxStructureFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxStructureFilter.TextChanged += new System.EventHandler(this.textBoxStructureFilter_TextChanged);
@@ -1651,7 +1651,7 @@ namespace WinSimpleIDriver
             this.comboBoxStructureTargetFilterParent.FormattingEnabled = true;
             this.comboBoxStructureTargetFilterParent.Location = new System.Drawing.Point(84, 5);
             this.comboBoxStructureTargetFilterParent.Name = "comboBoxStructureTargetFilterParent";
-            this.comboBoxStructureTargetFilterParent.Size = new System.Drawing.Size(199, 25);
+            this.comboBoxStructureTargetFilterParent.Size = new System.Drawing.Size(199, 23);
             this.comboBoxStructureTargetFilterParent.Sorted = true;
             this.comboBoxStructureTargetFilterParent.TabIndex = 19;
             this.toolTip1.SetToolTip(this.comboBoxStructureTargetFilterParent, "Структура");
@@ -1677,7 +1677,7 @@ namespace WinSimpleIDriver
             this.dataGridViewStructure.MultiSelect = false;
             this.dataGridViewStructure.Name = "dataGridViewStructure";
             this.dataGridViewStructure.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewStructure.Size = new System.Drawing.Size(1106, 125);
+            this.dataGridViewStructure.Size = new System.Drawing.Size(1106, 124);
             this.dataGridViewStructure.TabIndex = 10;
             this.dataGridViewStructure.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStructure_CellEndEdit);
             this.dataGridViewStructure.SelectionChanged += new System.EventHandler(this.dataGridViewStructure_SelectionChanged);
@@ -1693,7 +1693,7 @@ namespace WinSimpleIDriver
             this.structureID.HeaderText = "ID";
             this.structureID.Name = "structureID";
             this.structureID.ReadOnly = true;
-            this.structureID.Width = 45;
+            this.structureID.Width = 44;
             // 
             // structureTitle
             // 
@@ -1750,7 +1750,7 @@ namespace WinSimpleIDriver
             // splitContainerStructTagTarget.Panel2
             // 
             this.splitContainerStructTagTarget.Panel2.Controls.Add(this.dataGridViewStructureTarget);
-            this.splitContainerStructTagTarget.Size = new System.Drawing.Size(1115, 169);
+            this.splitContainerStructTagTarget.Size = new System.Drawing.Size(1115, 168);
             this.splitContainerStructTagTarget.SplitterDistance = 423;
             this.splitContainerStructTagTarget.TabIndex = 25;
             // 
@@ -1769,7 +1769,7 @@ namespace WinSimpleIDriver
             this.dataGridViewStructureTag.MultiSelect = false;
             this.dataGridViewStructureTag.Name = "dataGridViewStructureTag";
             this.dataGridViewStructureTag.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewStructureTag.Size = new System.Drawing.Size(411, 157);
+            this.dataGridViewStructureTag.Size = new System.Drawing.Size(411, 156);
             this.dataGridViewStructureTag.TabIndex = 23;
             this.dataGridViewStructureTag.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStructureTag_CellEndEdit);
             this.dataGridViewStructureTag.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewStructureTag_UserAddedRow);
@@ -1784,7 +1784,7 @@ namespace WinSimpleIDriver
             this.targetTagID.HeaderText = "ID";
             this.targetTagID.Name = "targetTagID";
             this.targetTagID.ReadOnly = true;
-            this.targetTagID.Width = 45;
+            this.targetTagID.Width = 44;
             // 
             // targetTagStruct
             // 
@@ -1815,7 +1815,7 @@ namespace WinSimpleIDriver
             this.dataGridViewStructureTarget.MultiSelect = false;
             this.dataGridViewStructureTarget.Name = "dataGridViewStructureTarget";
             this.dataGridViewStructureTarget.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewStructureTarget.Size = new System.Drawing.Size(680, 157);
+            this.dataGridViewStructureTarget.Size = new System.Drawing.Size(680, 156);
             this.dataGridViewStructureTarget.TabIndex = 11;
             this.dataGridViewStructureTarget.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStructureTarget_CellEndEdit);
             this.dataGridViewStructureTarget.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewTarget_UserAddedRow);
@@ -1830,7 +1830,7 @@ namespace WinSimpleIDriver
             this.targetID.HeaderText = "ID";
             this.targetID.Name = "targetID";
             this.targetID.ReadOnly = true;
-            this.targetID.Width = 45;
+            this.targetID.Width = 44;
             // 
             // targetStructure
             // 
@@ -1861,7 +1861,7 @@ namespace WinSimpleIDriver
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(7, 11);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(32, 17);
+            this.label3.Size = new System.Drawing.Size(33, 15);
             this.label3.TabIndex = 24;
             this.label3.Text = "Теги";
             // 
@@ -1871,7 +1871,7 @@ namespace WinSimpleIDriver
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(773, 11);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(134, 17);
+            this.label2.Size = new System.Drawing.Size(130, 15);
             this.label2.TabIndex = 22;
             this.label2.Text = "Элементы структуры";
             // 
@@ -1894,9 +1894,9 @@ namespace WinSimpleIDriver
             this.tabPageInclude.Controls.Add(this.buttonIncludeDel);
             this.tabPageInclude.Controls.Add(this.buttonIncludeCopy);
             this.tabPageInclude.Controls.Add(this.splitContainerInclude);
-            this.tabPageInclude.Location = new System.Drawing.Point(4, 22);
+            this.tabPageInclude.Location = new System.Drawing.Point(4, 24);
             this.tabPageInclude.Name = "tabPageInclude";
-            this.tabPageInclude.Size = new System.Drawing.Size(1122, 412);
+            this.tabPageInclude.Size = new System.Drawing.Size(1122, 410);
             this.tabPageInclude.TabIndex = 4;
             this.tabPageInclude.Text = "Классы (внешние проекты)";
             this.tabPageInclude.UseVisualStyleBackColor = true;
@@ -1908,7 +1908,7 @@ namespace WinSimpleIDriver
             this.checkBoxIncludePrefix.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxIncludePrefix.Location = new System.Drawing.Point(352, 9);
             this.checkBoxIncludePrefix.Name = "checkBoxIncludePrefix";
-            this.checkBoxIncludePrefix.Size = new System.Drawing.Size(289, 21);
+            this.checkBoxIncludePrefix.Size = new System.Drawing.Size(280, 19);
             this.checkBoxIncludePrefix.TabIndex = 31;
             this.checkBoxIncludePrefix.Text = "Название префикса для дочерней таблицы";
             this.checkBoxIncludePrefix.UseVisualStyleBackColor = true;
@@ -1977,7 +1977,7 @@ namespace WinSimpleIDriver
             this.splitContainerInclude.Panel2.Controls.Add(this.textBoxIncludeChildFilter);
             this.splitContainerInclude.Panel2.Controls.Add(this.buttonIncludeRight);
             this.splitContainerInclude.Panel2.Controls.Add(this.dataGridViewIncludeChild);
-            this.splitContainerInclude.Size = new System.Drawing.Size(1116, 371);
+            this.splitContainerInclude.Size = new System.Drawing.Size(1116, 369);
             this.splitContainerInclude.SplitterDistance = 552;
             this.splitContainerInclude.SplitterWidth = 10;
             this.splitContainerInclude.TabIndex = 4;
@@ -2000,7 +2000,7 @@ namespace WinSimpleIDriver
             this.textBoxIncludeFilter.Location = new System.Drawing.Point(3, 4);
             this.textBoxIncludeFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxIncludeFilter.Name = "textBoxIncludeFilter";
-            this.textBoxIncludeFilter.Size = new System.Drawing.Size(447, 22);
+            this.textBoxIncludeFilter.Size = new System.Drawing.Size(447, 21);
             this.textBoxIncludeFilter.TabIndex = 14;
             this.textBoxIncludeFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxIncludeFilter.TextChanged += new System.EventHandler(this.textBoxIncludeFilter_TextChanged);
@@ -2008,7 +2008,7 @@ namespace WinSimpleIDriver
             // buttonIncludeLeft
             // 
             this.buttonIncludeLeft.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.buttonIncludeLeft.Location = new System.Drawing.Point(530, 122);
+            this.buttonIncludeLeft.Location = new System.Drawing.Point(530, 121);
             this.buttonIncludeLeft.Name = "buttonIncludeLeft";
             this.buttonIncludeLeft.Size = new System.Drawing.Size(17, 118);
             this.buttonIncludeLeft.TabIndex = 3;
@@ -2031,7 +2031,7 @@ namespace WinSimpleIDriver
             this.dataGridViewInclude.MultiSelect = false;
             this.dataGridViewInclude.Name = "dataGridViewInclude";
             this.dataGridViewInclude.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewInclude.Size = new System.Drawing.Size(523, 333);
+            this.dataGridViewInclude.Size = new System.Drawing.Size(523, 331);
             this.dataGridViewInclude.TabIndex = 2;
             this.dataGridViewInclude.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewInclude_CellEndEdit);
             this.dataGridViewInclude.SelectionChanged += new System.EventHandler(this.dataGridViewInclude_SelectionChanged);
@@ -2047,7 +2047,7 @@ namespace WinSimpleIDriver
             this.includeID.HeaderText = "ID";
             this.includeID.Name = "includeID";
             this.includeID.ReadOnly = true;
-            this.includeID.Width = 45;
+            this.includeID.Width = 44;
             // 
             // includePrefix
             // 
@@ -2066,7 +2066,7 @@ namespace WinSimpleIDriver
             this.comboBoxIncludeChildFilterParent.FormattingEnabled = true;
             this.comboBoxIncludeChildFilterParent.Location = new System.Drawing.Point(26, 3);
             this.comboBoxIncludeChildFilterParent.Name = "comboBoxIncludeChildFilterParent";
-            this.comboBoxIncludeChildFilterParent.Size = new System.Drawing.Size(199, 25);
+            this.comboBoxIncludeChildFilterParent.Size = new System.Drawing.Size(199, 23);
             this.comboBoxIncludeChildFilterParent.Sorted = true;
             this.comboBoxIncludeChildFilterParent.TabIndex = 18;
             this.toolTip1.SetToolTip(this.comboBoxIncludeChildFilterParent, "Класс");
@@ -2076,7 +2076,7 @@ namespace WinSimpleIDriver
             // buttonIncludeChildFilter
             // 
             this.buttonIncludeChildFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonIncludeChildFilter.Location = new System.Drawing.Point(469, 3);
+            this.buttonIncludeChildFilter.Location = new System.Drawing.Point(463, 3);
             this.buttonIncludeChildFilter.Name = "buttonIncludeChildFilter";
             this.buttonIncludeChildFilter.Size = new System.Drawing.Size(75, 24);
             this.buttonIncludeChildFilter.TabIndex = 16;
@@ -2091,7 +2091,7 @@ namespace WinSimpleIDriver
             this.textBoxIncludeChildFilter.Location = new System.Drawing.Point(231, 4);
             this.textBoxIncludeChildFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxIncludeChildFilter.Name = "textBoxIncludeChildFilter";
-            this.textBoxIncludeChildFilter.Size = new System.Drawing.Size(232, 22);
+            this.textBoxIncludeChildFilter.Size = new System.Drawing.Size(226, 21);
             this.textBoxIncludeChildFilter.TabIndex = 15;
             this.textBoxIncludeChildFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxIncludeChildFilter.TextChanged += new System.EventHandler(this.textBoxChangeFilter_TextChanged);
@@ -2099,7 +2099,7 @@ namespace WinSimpleIDriver
             // buttonIncludeRight
             // 
             this.buttonIncludeRight.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonIncludeRight.Location = new System.Drawing.Point(4, 122);
+            this.buttonIncludeRight.Location = new System.Drawing.Point(4, 121);
             this.buttonIncludeRight.Name = "buttonIncludeRight";
             this.buttonIncludeRight.Size = new System.Drawing.Size(17, 118);
             this.buttonIncludeRight.TabIndex = 4;
@@ -2123,7 +2123,7 @@ namespace WinSimpleIDriver
             this.dataGridViewIncludeChild.MultiSelect = false;
             this.dataGridViewIncludeChild.Name = "dataGridViewIncludeChild";
             this.dataGridViewIncludeChild.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewIncludeChild.Size = new System.Drawing.Size(518, 333);
+            this.dataGridViewIncludeChild.Size = new System.Drawing.Size(512, 331);
             this.dataGridViewIncludeChild.TabIndex = 3;
             this.dataGridViewIncludeChild.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewIncludeChild_CellEndEdit);
             this.dataGridViewIncludeChild.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewIncludeChild_UserAddedRow);
@@ -2138,7 +2138,7 @@ namespace WinSimpleIDriver
             this.changeID.HeaderText = "ID";
             this.changeID.Name = "changeID";
             this.changeID.ReadOnly = true;
-            this.changeID.Width = 45;
+            this.changeID.Width = 44;
             // 
             // changePrefix
             // 
@@ -2178,6 +2178,38 @@ namespace WinSimpleIDriver
             this.dataGridViewLog.Size = new System.Drawing.Size(1344, 110);
             this.dataGridViewLog.TabIndex = 0;
             // 
+            // logDT
+            // 
+            this.logDT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.logDT.HeaderText = "ДатаВремя";
+            this.logDT.Name = "logDT";
+            // 
+            // logCategory
+            // 
+            this.logCategory.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.logCategory.HeaderText = "Категория";
+            this.logCategory.Name = "logCategory";
+            this.logCategory.Width = 94;
+            // 
+            // logType
+            // 
+            this.logType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.logType.HeaderText = "Тип";
+            this.logType.Name = "logType";
+            this.logType.ReadOnly = true;
+            this.logType.Width = 53;
+            // 
+            // logCode
+            // 
+            this.logCode.HeaderText = "Код";
+            this.logCode.Name = "logCode";
+            // 
+            // logText
+            // 
+            this.logText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.logText.HeaderText = "Текст";
+            this.logText.Name = "logText";
+            // 
             // splitContainerLogMain
             // 
             this.splitContainerLogMain.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2203,48 +2235,15 @@ namespace WinSimpleIDriver
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // logDT
-            // 
-            this.logDT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.logDT.HeaderText = "ДатаВремя";
-            this.logDT.Name = "logDT";
-            this.logDT.Width = 103;
-            // 
-            // logCategory
-            // 
-            this.logCategory.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.logCategory.HeaderText = "Категория";
-            this.logCategory.Name = "logCategory";
-            this.logCategory.Width = 94;
-            // 
-            // logType
-            // 
-            this.logType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.logType.HeaderText = "Тип";
-            this.logType.Name = "logType";
-            this.logType.ReadOnly = true;
-            this.logType.Width = 52;
-            // 
-            // logCode
-            // 
-            this.logCode.HeaderText = "Код";
-            this.logCode.Name = "logCode";
-            // 
-            // logText
-            // 
-            this.logText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.logText.HeaderText = "Текст";
-            this.logText.Name = "logText";
-            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1361, 602);
             this.Controls.Add(this.splitContainerLogMain);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
-            this.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form1";

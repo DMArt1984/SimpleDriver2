@@ -28,15 +28,15 @@ namespace Connector
 
     public class TagEditor // Редактирование
     {
-        public uint Id; // Уникальный идентификатор (0 - нет Id)
+        public ushort Id; // Уникальный идентификатор (0 - нет Id)
         public string title; // Название
         public eDataType dataType;
-        public uint sourceId; // ID драйвера
-        public uint groupId; // ID группы
+        public ushort sourceId; // ID драйвера
+        public ushort groupId; // ID группы
         public string sourceTitle; // Название драйвера
         public string groupTitle; // Название группы
         public string address; // адрес
-        public bool off; // отключение
+        public bool disableOnStart; // // Отключен при старте
         public bool isCommand; // запрос по команде
         public string writeTitle; // Источник новых значений (имя тега)
         public string constValue; // Записываемое значение

@@ -28,12 +28,13 @@ namespace Connector
                         se.title,
                         se.driver,         // eDriverType
                         deviceFactory,
-                        se.off,            // параметр disable
+                        se.disableOnStart,            // параметр disable
                         se.auto,           // авто-опрос после открытия
                         se.reconnect,      // авто-переподключение
                         se.address,
                         se.description);
                     cSources.Add(source);
+
                 }
             }
             return cSources;
@@ -121,7 +122,7 @@ namespace Connector
                             ge.title,
                             parentSource,
                             ge.updateRate,
-                            ge.off,          // здесь можем интерпретировать off как waitOff (при необходимости можно добавить отдельное свойство)
+                            ge.disableOnStart,          // здесь можем интерпретировать off как waitOff (при необходимости можно добавить отдельное свойство)
                             ge.description);
                         groups.Add(group);
                     }
@@ -147,11 +148,6 @@ namespace Connector
                     if (existing.UpdateRate != updated.UpdateRate)
                     {
                         existing.UpdateRate = updated.UpdateRate;
-                    }
-                    // Обновляем состояние off, если необходимо (это может зависеть от логики приложения)
-                    if (existing.Off != updated.Off)
-                    {
-                        existing.Off = updated.Off;
                     }
                     // Если в вашем классе Group есть метод для обновления описания или других параметров,
                     // вызовите его здесь. Если свойства заданы только для чтения, их можно обновлять через методы.
@@ -223,18 +219,9 @@ namespace Connector
                     {
                         existing.Address = updated.Address;
                     }
-                    if (existing.Off != updated.Off)
-                    {
-                        existing.Off = updated.Off;
-                    }
                     if (existing.DataType != updated.DataType)
                     {
                         existing.DataType = updated.DataType;
-                    }
-                    // Обновляем команду: предположим, что если isCommand == true, то Command выставляется в eCommand.Wait, иначе в eCommand.None
-                    if (existing.Command != updated.Command)
-                    {
-                        existing.Command = updated.Command;
                     }
                     // Обновляем значение для записи
                     if (existing.WriteConstValue != updated.WriteConstValue)

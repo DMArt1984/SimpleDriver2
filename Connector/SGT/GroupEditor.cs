@@ -21,9 +21,9 @@ namespace Connector
 
     public class GroupEditor // Редактирование
     {
-        public uint Id; // Уникальный идентификатор (0 - нет Id)
+        public ushort Id; // Уникальный идентификатор (0 - нет Id)
         public string title; // Название
-        public bool off; // Отключение
+        public bool disableOnStart; // // Отключен при старте
         public uint updateRate; // Период опроса (мсек)
         public string description; // Описание
         public string sourceTitle; // Название источника
