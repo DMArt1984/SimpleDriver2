@@ -243,6 +243,7 @@ public static class ProjectSettingsConverter
     /// <summary>
     /// Нормализует настройки, устанавливая параметр "Source" для группы,
     /// если она не имеет его, а один из источников содержит параметр "Group" (единичный) с именем этой группы.
+    /// После обработки параметра "Group" у источника он удаляется.
     /// </summary>
     public static string NormalizeSourceGroup(string inputJson)
     {
@@ -269,6 +270,8 @@ public static class ProjectSettingsConverter
                         matchingGroup["Source"] = source["Title"];
                     }
                 }
+                // После обработки удаляем параметр "Group" из источника, так как он больше не нужен.
+                source.Remove("Group");
             }
         }
 
@@ -327,6 +330,134 @@ public static class ProjectSettingsConverter
 
         return root.ToString(Formatting.Indented);
     }
+
+    /// <summary>
+    /// Нормализует настройки, перемещая массив "Tags" из объекта Source в соответствующую группу,
+    /// если у этого источника задан единственный Group (свойство "Group").
+    /// Если перенос происходит, то у каждого тега из этого массива удаляются параметры "Group" и "Source",
+    /// так как теперь они вложены в нужное место.
+    /// </summary>
+    public static string NormalizeSourceTagsToGroup(string inputJson)
+    {
+        JObject root = JObject.Parse(inputJson);
+
+        // Получаем массивы Sources и Groups из корневого уровня.
+        var sources = root["Sources"]?.OfType<JObject>().ToList() ?? new List<JObject>();
+        var groups = root["Groups"]?.OfType<JObject>().ToList() ?? new List<JObject>();
+
+        foreach (var source in sources)
+        {
+            // Проверяем, содержит ли Source массив "Tags" и свойство "Group" (единичное, а не массив "Groups")
+            if (source["Tags"] != null && source["Tags"].Type == JTokenType.Array &&
+                source["Group"] != null && source["Group"].Type == JTokenType.String)
+            {
+                string groupTitle = source["Group"].ToString();
+
+                // Ищем группу в корневом массиве Groups по совпадению Title с groupTitle.
+                var matchingGroup = groups.FirstOrDefault(g => g["Title"] != null && g["Title"].ToString() == groupTitle);
+                if (matchingGroup != null)
+                {
+                    // Получаем массив тегов из Source.
+                    JArray sourceTags = (JArray)source["Tags"];
+
+                    // Если в группе уже есть свойство "Tags", то объединяем массивы,
+                    // иначе создаем новое свойство "Tags" с данным массивом.
+                    if (matchingGroup["Tags"] != null && matchingGroup["Tags"].Type == JTokenType.Array)
+                    {
+                        JArray groupTags = (JArray)matchingGroup["Tags"];
+                        // Добавляем каждый тег из sourceTags в groupTags.
+                        foreach (JObject tag in sourceTags.OfType<JObject>())
+                        {
+                            // Удаляем из тега параметры "Group" и "Source"
+                            tag.Remove("Group");
+                            tag.Remove("Source");
+                            groupTags.Add(tag);
+                        }
+                    }
+                    else
+                    {
+                        JArray newGroupTags = new JArray();
+                        foreach (JObject tag in sourceTags.OfType<JObject>())
+                        {
+                            // Удаляем из тега параметры "Group" и "Source"
+                            tag.Remove("Group");
+                            tag.Remove("Source");
+                            newGroupTags.Add(tag);
+                        }
+                        matchingGroup["Tags"] = newGroupTags;
+                    }
+                }
+                // После переноса, удаляем массив "Tags" из источника,
+                // а также свойство "Group", так как оно больше не нужно в Source.
+                source.Remove("Tags");
+                source.Remove("Group");
+            }
+        }
+
+        return root.ToString(Formatting.Indented);
+    }
+
+    /// <summary>
+    /// Нормализует настройки, перемещая массив "Tags" из объекта Source в единственную группу, связанную с этим Source.
+    /// Для каждого объекта Source ищется в корневом массиве "Groups" все группы, у которых параметр "Source" равен значению свойства "Title" этого Source.
+    /// Если таких групп ровно одна, то переносится массив "Tags" из Source в эту группу. При этом у каждого перенесённого тега удаляются параметры "Group" и "Source",
+    /// так как теперь они вложены в нужную группу.
+    /// </summary>
+    public static string NormalizeSourceTagsToUniqueGroup(string inputJson)
+    {
+        JObject root = JObject.Parse(inputJson);
+
+        // Получаем массивы Sources и Groups из корневого уровня.
+        var sources = root["Sources"]?.OfType<JObject>().ToList() ?? new List<JObject>();
+        var groups = root["Groups"]?.OfType<JObject>().ToList() ?? new List<JObject>();
+
+        foreach (var source in sources)
+        {
+            // Если Source содержит массив "Tags"
+            if (source["Tags"] != null && source["Tags"].Type == JTokenType.Array)
+            {
+                string sourceTitle = source["Title"]?.ToString();
+                if (string.IsNullOrEmpty(sourceTitle))
+                    continue;
+
+                // Находим все группы, у которых параметр "Source" равен sourceTitle.
+                var relatedGroups = groups.Where(g => g["Source"] != null && g["Source"].ToString() == sourceTitle).ToList();
+
+                // Если таких групп ровно одна, переносим массив "Tags" из Source в эту группу.
+                if (relatedGroups.Count == 1)
+                {
+                    JObject targetGroup = relatedGroups.First();
+                    // Если у группы уже есть массив "Tags", используем его, иначе создаем новый.
+                    JArray groupTags;
+                    if (targetGroup["Tags"] != null && targetGroup["Tags"].Type == JTokenType.Array)
+                    {
+                        groupTags = (JArray)targetGroup["Tags"];
+                    }
+                    else
+                    {
+                        groupTags = new JArray();
+                        targetGroup["Tags"] = groupTags;
+                    }
+
+                    // Переносим каждый тег из массива Source["Tags"].
+                    JArray sourceTags = (JArray)source["Tags"];
+                    foreach (JObject tag in sourceTags.OfType<JObject>())
+                    {
+                        // Удаляем из тега параметры "Group" и "Source", так как теперь он вложен.
+                        tag.Remove("Group");
+                        tag.Remove("Source");
+                        groupTags.Add(tag);
+                    }
+
+                    // После переноса удаляем массив "Tags" из Source.
+                    source.Remove("Tags");
+                }
+            }
+        }
+
+        return root.ToString(Formatting.Indented);
+    }
+
 
 }
 
