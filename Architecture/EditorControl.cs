@@ -121,14 +121,14 @@ namespace WinSimpleIDriver
                 
                 foreach (dynamic item in data)
                 {
-                    SourceLib.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool off, out string description, out dynamic tagsInSource, out bool auto, out bool reconnect);
+                    SourceLib.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool disableOnStart, out string description, out dynamic tagsInSource, out bool auto, out bool reconnect);
                     SourceEditor rowSource = new SourceEditor
                     {
                         Id = sourceId,
                         driver = driver,
                         title = title,
                         address = address,
-                        disableOnStart = off,
+                        disableOnStart = disableOnStart,
                         description = description,
                         auto = auto,
                         reconnect = reconnect
@@ -170,12 +170,12 @@ namespace WinSimpleIDriver
                 
                 foreach (dynamic item in data)
                 {
-                    GroupLib.ParseItemGroup(item, ++groupId, out string title, out uint updateRate, out bool off, out string description, out string sourceTitle, out dynamic tagsInSource);
+                    GroupLib.ParseItemGroup(item, ++groupId, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle, out dynamic tagsInSource);
                     GroupEditor rowGroup = new GroupEditor
                     {
                         Id = groupId,
                         title = title,
-                        disableOnStart = off,
+                        disableOnStart = disableOnStart,
                         updateRate = updateRate,
                         description = description,
                         sourceTitle = sourceTitle
@@ -214,7 +214,7 @@ namespace WinSimpleIDriver
                 
                 foreach (dynamic item in data)
                 {
-                    TagLib.ParseItemTag(item, ++tagId, out string title, out eDataType dataType, out bool off, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand);
+                    TagLib.ParseItemTag(item, ++tagId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand);
                     TagEditor oneTag = new TagEditor
                     {
                         Id = tagId,
@@ -222,7 +222,7 @@ namespace WinSimpleIDriver
                         dataType = dataType,
                         groupTitle = groupTitle,
                         address = address,
-                        disableOnStart = off,
+                        disableOnStart = disableOnStart,
                         isCommand = isCommand,
                         writeTitle = writeTitle,
                         constValue = constValue,
