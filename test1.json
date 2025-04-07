@@ -11,12 +11,13 @@
     ],
 
     "Groups": [
-        {
-            "Title": "Folder02",
-            "Desc": "Описание группы",
-            "UpdateRate": 500,
-            "Off": false
-        }
+      {
+        "Title": "Folder02",
+        "Desc": "Описание группы",
+        "UpdateRate": 500,
+        "Off": false,
+        "Source": "Crane1"
+      }
     ],
 
     "Tags": [
@@ -26,7 +27,6 @@
         "Addr": "XXX",
         "Desc": "text7",
         "Off": 0,
-        "Source": "Crane1",
         "Group": "Folder02",
         "Write": "Value8"
       },
@@ -36,7 +36,6 @@
         "Addr": "(100 + 200)/25",
         "Desc": "text7",
         "Off": 0,
-        "Source": "Crane1",
         "Group": "Folder02"
       },
       {
@@ -45,7 +44,6 @@
         "Addr": "HR-1",
         "Desc": "for command",
         "Off": 0,
-        "Source": "Crane1",
         "Group": "Folder02",
         "Value": 0,
         "Command": true
@@ -55,7 +53,6 @@
         "DataType": "Short",
         "Addr": "HR-8",
         "Desc": "text2",
-        "Source": "Crane1",
         "Group": "Folder02",
         "Value": 549
       },
@@ -64,7 +61,6 @@
         "DataType": "STRING",
         "Addr": "E~100",
         "Off": 0,
-        "Source": "Crane1",
         "Group": "Folder02"
       },
       {
@@ -72,7 +68,6 @@
         "DataType": "Int",
         "Addr": "{ValueArrayC[E]}",
         "Off": 0,
-        "Source": "Crane1",
         "Group": "Folder02"
       },
       {
@@ -81,7 +76,6 @@
         "Addr": "DICT(a;b;c|8;8+1;10|b)",
         "Desc": "sample for DICTIONARY",
         "Off": 0,
-        "Source": "Crane1",
         "Group": "Folder02"
       },
       {
@@ -90,7 +84,6 @@
         "Addr": "LIST(�;�;�;�;�|0+1)",
         "Desc": "sample for LIST",
         "Off": 0,
-        "Source": "Crane1",
         "Group": "Folder02"
       },
       {
@@ -99,7 +92,6 @@
         "Addr": "LISTB(� � � � �|1+1)",
         "Desc": "sample for LISTB",
         "Off": 0,
-        "Source": "Crane1",
         "Group": "Folder02"
       },
       {
@@ -108,7 +100,6 @@
         "Addr": "LISTC(�~�~�~�~�|2+1)",
         "Desc": "sample for LISTC",
         "Off": 0,
-        "Source": "Crane1",
         "Group": "Folder02"
       },
       {
@@ -117,7 +108,6 @@
         "Addr": "INSIDE(value[501];[;]) and INSIDE(value=502;value=;) and INSIDE(503END;;END)",
         "Desc": "sample for INSIDE",
         "Off": 0,
-        "Source": "Crane1",
         "Group": "Folder02"
       },
       {
@@ -125,14 +115,12 @@
         "DataType": "Float",
         "Addr": "{Value7}",
         "Desc": "sample for {}",
-        "Source": "Crane1",
         "Group": "Folder02"
       },
       {
         "Title": "ValueColor",
         "DataType": "STRING",
         "Addr": "Coral",
-        "Source": "Crane1",
         "Group": "Folder02"
       }
     ]

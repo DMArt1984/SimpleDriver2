@@ -199,7 +199,7 @@
     <None Include="Settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="test5.json">
+    <None Include="test1.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="test2.json">
@@ -211,7 +211,6 @@
     <None Include="test3.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="test1.json" />
     <None Include="variables.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
