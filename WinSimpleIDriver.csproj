@@ -158,6 +158,7 @@
     <Compile Include="Architecture\myTree.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectConverter.cs" />
+    <Compile Include="ProjectSettingsConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DML\Settings.cs" />
     <Compile Include="Connector\Driver\Component\SimpleConverter.cs" />
