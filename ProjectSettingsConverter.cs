@@ -238,6 +238,96 @@ public static class ProjectSettingsConverter
         return result.ToString(Formatting.Indented);
     }
 
+    // ======================================================================================================================
+
+    /// <summary>
+    /// Нормализует настройки, устанавливая параметр "Source" для группы,
+    /// если она не имеет его, а один из источников содержит параметр "Group" (единичный) с именем этой группы.
+    /// </summary>
+    public static string NormalizeSourceGroup(string inputJson)
+    {
+        JObject root = JObject.Parse(inputJson);
+
+        // Получаем списки источников и групп из корневых массивов.
+        var sources = root["Sources"]?.OfType<JObject>().ToList() ?? new List<JObject>();
+        var groups = root["Groups"]?.OfType<JObject>().ToList() ?? new List<JObject>();
+
+        // Проходим по каждому источнику.
+        foreach (var source in sources)
+        {
+            // Если источник содержит параметр "Group" (единичный, а не массив "Groups")
+            if (source["Group"] != null)
+            {
+                string groupTitle = source["Group"].ToString();
+                // Ищем группу с совпадающим названием в корневом массиве "Groups"
+                var matchingGroup = groups.FirstOrDefault(g => g["Title"] != null && g["Title"].ToString() == groupTitle);
+                if (matchingGroup != null)
+                {
+                    // Если у найденной группы отсутствует параметр "Source" и источник имеет "Title"
+                    if (matchingGroup["Source"] == null && source["Title"] != null)
+                    {
+                        matchingGroup["Source"] = source["Title"];
+                    }
+                }
+            }
+        }
+
+        return root.ToString(Formatting.Indented);
+    }
+
+    /// <summary>
+    /// Нормализует проект следующим образом:
+    /// - Если в корневом массиве "Groups" содержится только один элемент, то для каждого тега из массива "Tags",
+    ///   который не имеет параметра "Group" (или его значение пусто), устанавливается параметр "Group"
+    ///   равный значению свойства "Title" единственной группы.
+    /// - Если в корневом массиве "Sources" содержится только один элемент, то для каждого объекта из массива "Groups",
+    ///   который не имеет параметра "Source" (или его значение пусто), устанавливается параметр "Source"
+    ///   равный значению свойства "Title" единственного источника.
+    /// </summary>
+    public static string NormalizeSingleGroupAndSource(string inputJson)
+    {
+        JObject root = JObject.Parse(inputJson);
+
+        // Получаем списки источников, групп и тегов из корневых массивов.
+        var sources = root["Sources"]?.OfType<JObject>().ToList() ?? new List<JObject>();
+        var groups = root["Groups"]?.OfType<JObject>().ToList() ?? new List<JObject>();
+        var tags = root["Tags"]?.OfType<JObject>().ToList() ?? new List<JObject>();
+
+        // Если в проекте только один Group, устанавливаем его Title во все теги, у которых не задан параметр "Group".
+        if (groups.Count == 1)
+        {
+            string groupTitle = groups[0]["Title"]?.ToString();
+            if (!string.IsNullOrWhiteSpace(groupTitle))
+            {
+                foreach (var tag in tags)
+                {
+                    if (tag["Group"] == null || string.IsNullOrWhiteSpace(tag["Group"].ToString()))
+                    {
+                        tag["Group"] = groupTitle;
+                    }
+                }
+            }
+        }
+
+        // Если в проекте только один Source, устанавливаем его Title во все группы, у которых не задан параметр "Source".
+        if (sources.Count == 1)
+        {
+            string sourceTitle = sources[0]["Title"]?.ToString();
+            if (!string.IsNullOrWhiteSpace(sourceTitle))
+            {
+                foreach (var group in groups)
+                {
+                    if (group["Source"] == null || string.IsNullOrWhiteSpace(group["Source"].ToString()))
+                    {
+                        group["Source"] = sourceTitle;
+                    }
+                }
+            }
+        }
+
+        return root.ToString(Formatting.Indented);
+    }
+
 }
 
 
