@@ -348,20 +348,20 @@ namespace WinSimpleIDriver
             await SaveProjectAsync(true);
         }
 
-        private void ToolStripMenuItemImport_Click(object sender, EventArgs e)
+        private async void ToolStripMenuItemImport_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Импорт проекта");
             string file = FileControl.SelectExcelImportFile();
             if (string.IsNullOrEmpty(file))
                 return;
 
-            string json = ExcelJsonConverter.ExcelToJson(file);
+            string json = await ExcelJsonConverter.ExcelToJsonAsync(file);
 
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, json);
             jsonProjStatustic();
         }
 
-        private void ToolStripMenuItemExport_Click(object sender, EventArgs e)
+        private async void ToolStripMenuItemExport_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Экспорт проекта");
             string file = FileControl.SelectExcelExportFile();
@@ -371,7 +371,7 @@ namespace WinSimpleIDriver
             string json = richTextBoxJsonProject.Text;
             json = ProjectSettingsConverter.NormalizeAll(json);
 
-            ExcelJsonConverter.JsonToExcel(json, file);
+            await ExcelJsonConverter.JsonToExcelAsync(json, file);
 
         }
 
