@@ -355,7 +355,14 @@ namespace WinSimpleIDriver
             if (string.IsNullOrEmpty(file))
                 return;
 
-            string json = await ExcelJsonConverter.ExcelToJsonAsync(file);
+            // Создаем объект IProgress<int>, который обновляет метку lblStatus
+            IProgress<string> progress = new Progress<string>(processed =>
+            {
+                // Обновление UI происходит в UI-потоке автоматически
+                jsonProjectStatistic.Text = $"{processed}";
+            });
+
+            string json = await ExcelJsonConverter.ExcelToJsonAsync(file, progress);
 
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, json);
             jsonProjStatustic();
@@ -368,10 +375,17 @@ namespace WinSimpleIDriver
             if (string.IsNullOrEmpty(file))
                 return;
 
+            // Создаем объект IProgress<int>, который обновляет метку lblStatus
+            IProgress<int> progress = new Progress<int>(processed =>
+            {
+                // Обновление UI происходит в UI-потоке автоматически
+                jsonProjectStatistic.Text = $"Обработано тегов: {processed}";
+            });
+
             string json = richTextBoxJsonProject.Text;
             json = ProjectSettingsConverter.NormalizeAll(json);
 
-            await ExcelJsonConverter.JsonToExcelAsync(json, file);
+            await ExcelJsonConverter.JsonToExcelAsync(json, file, progress);
 
         }
 
