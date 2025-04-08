@@ -22,7 +22,7 @@
 
   "Tags": [
     {
-      "Title": "ValueLISTB",
+      "Title": "ValueLISTB1",
       "DataType": "STRING",
       "Addr": "LISTB(� � � � �|1+1)",
       "Desc": "sample for LISTB",
@@ -31,7 +31,7 @@
       "Block": "Name.A"
     },
     {
-      "Title": "ValueLISTC",
+      "Title": "ValueLISTC2",
       "DataType": "STRING",
       "Addr": "LISTC(�~�~�~�~�|2+1)",
       "Desc": "sample for LISTC",
@@ -40,7 +40,7 @@
       "Block": "SQLData"
     },
     {
-      "Title": "ValueINSIDE",
+      "Title": "ValueINSIDE3",
       "DataType": "STRING",
       "Addr": "INSIDE(value[501];[;]) and INSIDE(value=502;value=;) and INSIDE(503END;;END)",
       "Desc": "sample for INSIDE",
@@ -48,7 +48,7 @@
       "Group": "Folder02"
     },
     {
-      "Title": "ValueIndex",
+      "Title": "ValueIndex4",
       "DataType": "Float",
       "Addr": "{Value7}",
       "Desc": "sample for {}",
@@ -56,7 +56,7 @@
       "Block": "Name.A.4"
     },
     {
-      "Title": "ValueColor",
+      "Title": "ValueColor5",
       "DataType": "STRING",
       "Addr": "Coral",
       "Group": "Folder02"
@@ -66,7 +66,7 @@
   "Blocks": {
     "Name.A.4": [
       {
-        "Title": "Value7",
+        "Title": "Value7_6",
         "DataType": "Int",
         "Addr": "XXX",
         "Desc": "text7",
@@ -75,7 +75,7 @@
         "Write": "Value8"
       },
       {
-        "Title": "Value71",
+        "Title": "Value71_7",
         "DataType": "Int",
         "Addr": "(100 + 200)/25",
         "Desc": "text7",
@@ -83,7 +83,7 @@
         "Group": "Folder02"
       },
       {
-        "Title": "ValueCMD",
+        "Title": "ValueCMD_8",
         "DataType": "Short",
         "Addr": "HR-1",
         "Desc": "for command",
@@ -96,7 +96,7 @@
     "Name": {
       "B.2": [
         {
-          "Title": "ValueB-82",
+          "Title": "ValueB-82_9",
           "DataType": "Int",
           "Addr": "HR-2",
           "Desc": "text2",
@@ -106,7 +106,7 @@
       ],
       "B.3": [
         {
-          "Title": "ValueB-83",
+          "Title": "ValueB-83_10",
           "DataType": "Int",
           "Addr": "HR-2",
           "Desc": "text2",
@@ -117,7 +117,7 @@
     },
     "SQLData": [
       {
-        "Title": "Value200",
+        "Title": "Value200_11",
         "DataType": "Short",
         "Addr": "HR-8",
         "Desc": "text2",
@@ -125,21 +125,21 @@
         "Value": 549
       },
       {
-        "Title": "ValueArrayC",
+        "Title": "ValueArrayC_12",
         "DataType": "STRING",
         "Addr": "E~100",
         "Off": 0,
         "Group": "Folder02"
       },
       {
-        "Title": "ValueArrayEindex",
+        "Title": "ValueArrayEindex_13",
         "DataType": "Int",
         "Addr": "{ValueArrayC[E]}",
         "Off": 0,
         "Group": "Folder02"
       },
       {
-        "Title": "ValueDIC",
+        "Title": "ValueDIC_14",
         "DataType": "Int",
         "Addr": "DICT(a;b;c|8;8+1;10|b)",
         "Desc": "sample for DICTIONARY",
@@ -147,7 +147,7 @@
         "Group": "Folder02"
       },
       {
-        "Title": "ValueLIST",
+        "Title": "ValueLIST_15",
         "DataType": "STRING",
         "Addr": "LIST(�;�;�;�;�|0+1)",
         "Desc": "sample for LIST",

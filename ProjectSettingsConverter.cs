@@ -845,25 +845,33 @@ public static class ProjectSettingsConverter
     }
 
     /// <summary>
-    /// Reinserts tags into a nested "Blocks" structure based on their "Block" property.
-    /// For each tag in the root-level "Tags" array that contains a "Block" property,
-    /// the method removes that property from the tag and uses its value (which is expected 
-    /// to be a dot-separated string, e.g. "Name.A.4") to create a nested structure in a new 
-    /// "Blocks" section. The tag is then appended to the array at the leaf node of that structure.
-    /// Tags that do not have a "Block" property remain in the root-level "Tags" array.
-    /// After processing, the "Blocks" section is added to the root if not empty.
+    /// Переставляет теги из корневого массива "Tags" в раздел "Blocks" согласно значению их свойства "Block".
+    /// Для каждого тега, у которого задано свойство "Block" (представляющее вложенность в виде строки с разделителями точками),
+    /// метод удаляет это свойство из тега и перемещает тег в соответствующую ветку в разделе "Blocks".
+    /// Если раздел "Blocks" уже существует, новые теги будут добавлены в существующие или новые ветки внутри него.
+    /// Если раздел "Blocks" отсутствует, он будет создан.
+    /// Теги, у которых не задано свойство "Block", остаются в корневом массиве "Tags".
     /// </summary>
     public static string ReintegrateTagsToBlocks(string inputJson)
     {
         JObject root = JObject.Parse(inputJson);
 
-        // Create a new JObject to build the Blocks structure.
-        JObject blocks = new JObject();
-
-        // Get the root-level Tags array. If absent, создаём пустой.
+        // Получаем или создаем корневой массив "Tags".
         JArray tags = root["Tags"] as JArray ?? new JArray();
 
-        // List для хранения тегов, у которых не задан параметр Block.
+        // Если раздел "Blocks" уже существует, используем его; иначе создаем новый.
+        JObject blocks;
+        if (root["Blocks"] != null && root["Blocks"].Type == JTokenType.Object)
+        {
+            blocks = (JObject)root["Blocks"];
+        }
+        else
+        {
+            blocks = new JObject();
+            root["Blocks"] = blocks;
+        }
+
+        // Список для тегов, у которых не задано свойство "Block".
         List<JObject> remainingTags = new List<JObject>();
 
         // Обходим все теги в корневом массиве.
@@ -872,15 +880,14 @@ public static class ProjectSettingsConverter
             JToken blockToken = tag["Block"];
             if (blockToken != null)
             {
-                // Извлекаем значение свойства Block, например "Name.A.4"
                 string blockPath = blockToken.ToString();
-                // Удаляем свойство "Block" из тега, поскольку оно больше не потребуется.
+                // Удаляем свойство "Block" из тега, так как оно будет перенесено.
                 tag.Remove("Block");
 
-                // Разбиваем путь по точке.
+                // Разбиваем путь вложенности по точке.
                 string[] pathParts = blockPath.Split('.');
                 JObject current = blocks;
-                // Проходим по всем частям пути, кроме последней, создавая вложенные объекты, если их нет.
+                // Проходим по всем частям пути, кроме последней, создавая вложенные объекты, если они отсутствуют.
                 for (int i = 0; i < pathParts.Length - 1; i++)
                 {
                     string key = pathParts[i];
@@ -902,111 +909,111 @@ public static class ProjectSettingsConverter
                 {
                     tagArray = (JArray)current[leafKey];
                 }
-                // Добавляем тег в найденный (или созданный) массив.
+                // Добавляем тег в массив, если его там еще нет.
                 tagArray.Add(tag);
             }
             else
             {
-                // Если у тега нет свойства Block, оставляем его в корневом массиве.
+                // Если у тега нет свойства "Block", оставляем его в корневом массиве.
                 remainingTags.Add(tag);
             }
         }
 
-        // Обновляем корневой массив "Tags" оставшимися тегами.
+        // Обновляем корневой массив "Tags" оставшимися тегами (без свойства Block).
         root["Tags"] = new JArray(remainingTags);
-
-        // Если полученная структура Blocks содержит данные, добавляем её в корневой объект.
-        if (blocks.HasValues)
-        {
-            root["Blocks"] = blocks;
-        }
-        else
-        {
-            // Если Blocks пуст, убираем его (если оно было).
-            root.Remove("Blocks");
-        }
 
         return root.ToString(Formatting.Indented);
     }
 
+
     // ============================================================================================================
 
     /// <summary>
-    /// Рекурсивно обходит JSON-узел и подсчитывает количество объектов, найденных в массивах с ключами "Sources", "Groups" и "Tags".
+    /// Рекурсивно обходит JSON-узел и подсчитывает количество объектов, найденных в массивах
+    /// с ключами "Sources", "Groups" и "Tags". Если мы находимся внутри раздела Blocks,
+    /// то любой обнаруженный массив считается как массив тегов.
     /// </summary>
     /// <param name="token">Текущий JSON-узел для обхода.</param>
     /// <param name="sourceCount">Суммарное количество найденных элементов в массивах Sources.</param>
     /// <param name="groupCount">Суммарное количество найденных элементов в массивах Groups.</param>
     /// <param name="tagCount">Суммарное количество найденных элементов в массивах Tags.</param>
-    private static void CountTokens(JToken token, ref int sourceCount, ref int groupCount, ref int tagCount)
+    /// <param name="inBlocks">Флаг, указывающий, что текущий узел находится внутри раздела Blocks.</param>
+    private static void CountTokens(JToken token, ref int sourceCount, ref int groupCount, ref int tagCount, bool inBlocks = false)
     {
         if (token is JObject obj)
         {
-            // Обходим все свойства объекта.
             foreach (var prop in obj.Properties())
             {
-                // Если свойство называется "Sources", "Groups" или "Tags", то обрабатываем его как массив.
-                if (prop.Name.Equals("Sources", StringComparison.OrdinalIgnoreCase) && prop.Value is JArray sourcesArr)
+                // Если мы наткнулись на раздел "Blocks", то устанавливаем флаг.
+                bool nextInBlocks = inBlocks || prop.Name.Equals("Blocks", StringComparison.OrdinalIgnoreCase);
+
+                // Если не в Blocks и свойство соответствует "Sources"
+                if (!inBlocks && prop.Name.Equals("Sources", StringComparison.OrdinalIgnoreCase) && prop.Value is JArray sourcesArr)
                 {
                     sourceCount += sourcesArr.Count;
-                    // Рекурсивно обрабатываем каждый элемент массива.
                     foreach (var item in sourcesArr)
                     {
-                        CountTokens(item, ref sourceCount, ref groupCount, ref tagCount);
+                        CountTokens(item, ref sourceCount, ref groupCount, ref tagCount, nextInBlocks);
                     }
                 }
-                else if (prop.Name.Equals("Groups", StringComparison.OrdinalIgnoreCase) && prop.Value is JArray groupsArr)
+                // Если не в Blocks и свойство соответствует "Groups"
+                else if (!inBlocks && prop.Name.Equals("Groups", StringComparison.OrdinalIgnoreCase) && prop.Value is JArray groupsArr)
                 {
                     groupCount += groupsArr.Count;
                     foreach (var item in groupsArr)
                     {
-                        CountTokens(item, ref sourceCount, ref groupCount, ref tagCount);
+                        CountTokens(item, ref sourceCount, ref groupCount, ref tagCount, nextInBlocks);
                     }
                 }
-                else if (prop.Name.Equals("Tags", StringComparison.OrdinalIgnoreCase) && prop.Value is JArray tagsArr)
+                // Если свойство называется "Tags" (когда не в Blocks) или мы уже внутри Blocks – любое значение рассматриваем как массив тегов.
+                else if ((!inBlocks && prop.Name.Equals("Tags", StringComparison.OrdinalIgnoreCase)) || inBlocks)
                 {
-                    tagCount += tagsArr.Count;
-                    foreach (var item in tagsArr)
+                    if (prop.Value is JArray arr)
                     {
-                        CountTokens(item, ref sourceCount, ref groupCount, ref tagCount);
+                        tagCount += arr.Count;
+                        foreach (var item in arr)
+                        {
+                            CountTokens(item, ref sourceCount, ref groupCount, ref tagCount, nextInBlocks);
+                        }
+                    }
+                    else
+                    {
+                        CountTokens(prop.Value, ref sourceCount, ref groupCount, ref tagCount, nextInBlocks);
                     }
                 }
                 else
                 {
-                    // Для остальных свойств продолжаем обход.
-                    CountTokens(prop.Value, ref sourceCount, ref groupCount, ref tagCount);
+                    CountTokens(prop.Value, ref sourceCount, ref groupCount, ref tagCount, nextInBlocks);
                 }
             }
         }
-        else if (token is JArray arr)
+        else if (token is JArray arrToken)
         {
-            // Если токен является массивом, обходим каждый его элемент.
-            foreach (var item in arr)
+            foreach (var item in arrToken)
             {
-                CountTokens(item, ref sourceCount, ref groupCount, ref tagCount);
+                CountTokens(item, ref sourceCount, ref groupCount, ref tagCount, inBlocks);
             }
         }
-        // Для примитивных значений дальнейший обход не требуется.
+        // Примитивные значения далее не обрабатываем.
     }
 
     /// <summary>
     /// Подсчитывает статистику по количеству источников (Sources), групп (Groups) и тегов (Tags)
-    /// во входном JSON. Учтена вложенность: если эти массивы находятся внутри других объектов (например,
-    /// вложенные группы в источниках, теги в группах, а также объекты внутри Blocks),
-    /// они также будут подсчитаны.
+    /// во входном JSON с учетом вложенности, включая массивы внутри Blocks.
     /// </summary>
     /// <param name="inputJson">Исходная строка JSON.</param>
-    /// <param name="sourceCount">Возвращаемое значение – общее количество объектов в массивах Sources.</param>
-    /// <param name="groupCount">Возвращаемое значение – общее количество объектов в массивах Groups.</param>
-    /// <param name="tagCount">Возвращаемое значение – общее количество объектов в массивах Tags.</param>
+    /// <param name="sourceCount">Выходное количество объектов в массивах Sources.</param>
+    /// <param name="groupCount">Выходное количество объектов в массивах Groups.</param>
+    /// <param name="tagCount">Выходное количество объектов в массивах Tags.</param>
     public static void GetJsonStatistics(string inputJson, out int sourceCount, out int groupCount, out int tagCount)
     {
         JObject root = JObject.Parse(inputJson);
         sourceCount = 0;
         groupCount = 0;
         tagCount = 0;
-        CountTokens(root, ref sourceCount, ref groupCount, ref tagCount);
+        CountTokens(root, ref sourceCount, ref groupCount, ref tagCount, false);
     }
+
 
 }
 
