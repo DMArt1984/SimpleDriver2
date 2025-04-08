@@ -7,6 +7,35 @@ using System.Linq;
 public static class ProjectSettingsConverter
 {
     /// <summary>
+    /// Приводит исходный JSON в базовую длинную форму и последовательно выполняет нормализацию:
+    /// 1. ConvertToLongForm – перевод всех объектов в корневые массивы (Sources, Groups, Tags).
+    /// 2. NormalizeSourceGroup – если у Source задан единичный параметр Group, находит соответствующую группу и устанавливает ей параметр Source, затем удаляет этот параметр из Source.
+    /// 3. NormalizeSingleGroupAndSource – если в проекте только один Source или только один Group, устанавливает во все группы и теги соответствующие параметры.
+    /// 4. NormalizeSourceTagsToUniqueGroup – переносит массив Tags из Source в связанную группу (если для Source существует ровно одна группа).
+    /// 5. NormalizeDuplicateEntriesMerge – объединяет дублирующиеся записи по свойству Title или, если объединение невозможно, переименовывает их.
+    /// </summary>
+    public static string NormalizeAll(string inputJson)
+    {
+        // 1. Приводим JSON к длинной форме (все массивы на корневом уровне).
+        string result = ConvertToLongForm(inputJson);
+
+        // 2. Нормализуем параметр Group у источников.
+        result = NormalizeSourceGroup(result);
+
+        // 3. Если в проекте только один Source или только один Group – устанавливаем соответствующие значения во все элементы.
+        result = NormalizeSingleGroupAndSource(result);
+
+        // 4. Переносим массив Tags из Source в группу, если для Source существует единственная соответствующая группа.
+        result = NormalizeSourceTagsToUniqueGroup(result);
+
+        // 5. Объединяем дублирующиеся записи по свойству Title (либо объединяя, либо переименовывая их).
+        result = NormalizeDuplicateEntriesMerge(result);
+
+        return result;
+    }
+
+
+    /// <summary>
     /// Преобразует входной JSON в длинный вид, где массивы Sources, Groups и Tags находятся на корневом уровне.
     /// Если группы вложены в Source, у каждой группы добавляется параметр "Source" (на основании Title родительского источника).
     /// Если теги вложены в Group, у тега добавляется параметр "Group" (на основании Title группы).
