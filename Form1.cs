@@ -362,6 +362,9 @@ namespace WinSimpleIDriver
         // Новый проект
         private void FormClear()
         {
+            // окно файла проекта
+            richTextBoxJsonProject.Text = "";
+
             // DGV
             DataTableLib.Clear();
 
@@ -388,6 +391,11 @@ namespace WinSimpleIDriver
 
             // Загрузка проекта JSON
             string input = FileControl.LoadFromFile(ref fileName, out string path, select); // чтение из файла...
+
+            // окно файла проекта
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+
+            // Далее?
             if (String.IsNullOrWhiteSpace(input))
                 return;
 

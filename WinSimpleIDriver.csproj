@@ -110,6 +110,7 @@
     <Compile Include="Connector\SGT\TagEditor.cs" />
     <Compile Include="Connector\SGT\TagErrorHandler.cs" />
     <Compile Include="DML\BaseLogger.cs" />
+    <Compile Include="JsonFormViewer.cs" />
     <Compile Include="LogCodeMessage\CodeMessage.cs" />
     <Compile Include="LogCodeMessage\CodeMessageFactory.cs" />
     <Compile Include="DML\ColorConverterHelper.cs" />
