@@ -392,6 +392,8 @@ namespace WinSimpleIDriver
             // Загрузка проекта JSON
             string input = FileControl.LoadFromFile(ref fileName, out string path, select); // чтение из файла...
 
+            //input = DecodeEncode.FixGarbledCyrillicEncoding(input); // исправление кодировки
+
             // окно файла проекта
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
             jsonProjStatustic();
