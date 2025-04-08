@@ -202,4 +202,37 @@ public static class FileControl
     {
         MessageBox.Show(message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
+
+    // =====================================================================================================
+
+    public static string SelectExcelExportFile()
+    {
+        using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+        {
+            saveFileDialog.Title = "Выберите путь для экспорта в Excel";
+            saveFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx|All Files (*.*)|*.*";
+            saveFileDialog.DefaultExt = "xlsx";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                return saveFileDialog.FileName;
+            }
+        }
+        return null;
+    }
+
+    public static string SelectExcelImportFile()
+    {
+        using (OpenFileDialog openFileDialog = new OpenFileDialog())
+        {
+            openFileDialog.Title = "Выберите файл для импорта из Excel";
+            openFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx|All Files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                return openFileDialog.FileName;
+            }
+        }
+        return null;
+    }
+
+
 }

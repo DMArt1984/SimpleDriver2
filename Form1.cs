@@ -351,12 +351,28 @@ namespace WinSimpleIDriver
         private void ToolStripMenuItemImport_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Импорт проекта");
+            string file = FileControl.SelectExcelImportFile();
+            if (string.IsNullOrEmpty(file))
+                return;
 
+            string json = ExcelJsonConverter.ExcelToJson(file);
+
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, json);
+            jsonProjStatustic();
         }
 
         private void ToolStripMenuItemExport_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Экспорт проекта");
+            string file = FileControl.SelectExcelExportFile();
+            if (string.IsNullOrEmpty(file))
+                return;
+
+            string json = richTextBoxJsonProject.Text;
+            json = ProjectSettingsConverter.NormalizeAll(json);
+
+            ExcelJsonConverter.JsonToExcel(json, file);
+
         }
 
         // Новый проект
@@ -391,8 +407,6 @@ namespace WinSimpleIDriver
 
             // Загрузка проекта JSON
             string input = FileControl.LoadFromFile(ref fileName, out string path, select); // чтение из файла...
-
-            //input = DecodeEncode.FixGarbledCyrillicEncoding(input); // исправление кодировки
 
             // окно файла проекта
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
