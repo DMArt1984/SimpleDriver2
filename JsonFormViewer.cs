@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -10,19 +11,18 @@ namespace WinSimpleIDriver
     static class JsonFormViewer
     {
         /// <summary>
-        /// Выводит содержимое JSON (в виде строки) в элемент RichTextBox с цветным форматированием синтаксиса.
+        /// Выводит содержимое JSON (в виде строки) в элемент RichTextBox с цветной подсветкой синтаксиса
+        /// и с измененным размером шрифта в зависимости от уровня вложенности:
+        /// - уровень 0 (корневой уровень) – шрифт в 2 раза больше базового,
+        /// - уровень 1 – шрифт в 1.5 раза больше базового,
+        /// - для остальных уровней базовый размер шрифта.
         /// </summary>
-        /// <param name="richTextBox">
-        /// Элемент RichTextBox, в который будет выведен JSON.
-        /// </param>
-        /// <param name="jsonContent">
-        /// Строка, содержащая JSON (например, считанный из файла).
-        /// </param>
+        /// <param name="richTextBox">Элемент RichTextBox, в который будет выведен JSON.</param>
+        /// <param name="jsonContent">Строка, содержащая JSON.</param>
         public static void DisplayColoredJson(RichTextBox richTextBox, string jsonContent)
         {
-            // Используем полученную строку, форматируем (prettify) JSON с отступами, если это возможно.
+            // Парсим и форматируем JSON с отступами
             string json = jsonContent;
-
             try
             {
                 JToken parsedJson = JToken.Parse(json);
@@ -33,51 +33,81 @@ namespace WinSimpleIDriver
                 MessageBox.Show("Ошибка форматирования JSON: " + ex.Message);
             }
 
-            // Очищаем и настраиваем RichTextBox.
+            // Очищаем RichTextBox и устанавливаем базовые параметры
             richTextBox.Clear();
-            richTextBox.Text = json;
             richTextBox.BackColor = Color.White;
-            richTextBox.Font = new Font("Consolas", 10);
+            string fontFamily = "Consolas";
+            float baseFontSize = 10f; // базовый размер шрифта
 
-            // Вызываем метод синтаксической подсветки.
+            // Разбиваем JSON на строки
+            string[] lines = json.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            foreach (string line in lines)
+            {
+                // Определяем количество ведущих пробелов, чтобы вычислить уровень вложенности.
+                int spaceCount = line.TakeWhile(c => c == ' ').Count();
+                // Предполагаем, что один уровень соответствует 4 пробелам.
+                int level = spaceCount / 4;
+                float fontSize = baseFontSize;
+                if (level == 0)
+                {
+                    fontSize = baseFontSize * 1.4f;
+                }
+                else if (level == 1)
+                {
+                    fontSize = baseFontSize * 1.2f;
+                }
+                // Для уровней 2 и выше оставляем базовый размер.
+
+                Font lineFont = new Font(fontFamily, fontSize);
+                // Запоминаем текущую длину текста, чтобы установить форматирование для новой строки.
+                int start = richTextBox.TextLength;
+                richTextBox.AppendText(line + Environment.NewLine);
+                richTextBox.Select(start, line.Length);
+                richTextBox.SelectionFont = lineFont;
+                // Сбрасываем цвет выделения в стандартный
+                richTextBox.SelectionColor = richTextBox.ForeColor;
+                // Перемещаем курсор в конец
+                richTextBox.SelectionStart = richTextBox.TextLength;
+                richTextBox.SelectionLength = 0;
+            }
+
+            // Выполняем подсветку синтаксиса без изменения шрифта
             HighlightJson(richTextBox);
         }
 
         /// <summary>
-        /// Метод, который осуществляет подсветку синтаксиса JSON в RichTextBox.
-        /// Использует регулярные выражения для выделения ключей, строковых значений, чисел, логических значений и null.
+        /// Осуществляет подсветку синтаксиса JSON в RichTextBox, используя регулярные выражения для выделения:
+        /// - ключей (строки перед двоеточием), 
+        /// - строковых значений, чисел, логических значений и null.
+        /// Метод изменяет только цвет выделения, не затрагивая размер шрифта.
         /// </summary>
         /// <param name="richTextBox">Элемент RichTextBox с текстом JSON.</param>
         private static void HighlightJson(RichTextBox richTextBox)
         {
-            // Сохраняем текущую позицию курсора, чтобы в конце восстановить.
+            // Сохраняем текущую позицию курсора
             int originalSelectionStart = richTextBox.SelectionStart;
             int originalSelectionLength = richTextBox.SelectionLength;
 
-            // Определяем регулярные выражения для подсветки.
-            // Ключи в JSON (строки перед двоеточием)
+            // Определяем регулярные выражения для различных элементов JSON.
+            // Ключи: строки, за которыми следует двоеточие
             string keyPattern = @"(""(\\[uU][0-9a-fA-F]{4}|\\[^u]|[^\\\""])*""(?=\s*:))";
             // Строковые значения
             string stringPattern = @"(?<=:\s*)(""(\\[uU][0-9a-fA-F]{4}|\\[^u]|[^\\\""])*"")";
-            // Числа (целые и дробные, включая экспоненту)
+            // Числа (целые, дробные, с экспонентой)
             string numberPattern = @"(?<=:\s*)(-?\d+(\.\d+)?([eE][+\-]?\d+)?)";
-            // Логические значения (true/false)
+            // Логические значения
             string boolPattern = @"(?<=:\s*)(true|false)";
             // null
             string nullPattern = @"(?<=:\s*)(null)";
 
-            // Подсвечиваем ключи (синим)
+            // Применяем подсветку
             ApplyRegexHighlighting(richTextBox, keyPattern, Color.Blue);
-            // Подсвечиваем строковые значения (коричневым)
             ApplyRegexHighlighting(richTextBox, stringPattern, Color.Brown);
-            // Подсвечиваем числа (пурпурным)
             ApplyRegexHighlighting(richTextBox, numberPattern, Color.Magenta);
-            // Подсвечиваем логические значения (темно-голубым)
             ApplyRegexHighlighting(richTextBox, boolPattern, Color.DarkCyan);
-            // Подсвечиваем null (серым)
             ApplyRegexHighlighting(richTextBox, nullPattern, Color.Gray);
 
-            // Восстанавливаем оригинальное выделение.
+            // Восстанавливаем исходное выделение.
             richTextBox.SelectionStart = originalSelectionStart;
             richTextBox.SelectionLength = originalSelectionLength;
             richTextBox.SelectionColor = richTextBox.ForeColor;

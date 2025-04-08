@@ -395,6 +395,8 @@ namespace WinSimpleIDriver
             // окно файла проекта
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
 
+            return; // временно! потом УДАЛИТЬ!!!
+
             // Далее?
             if (String.IsNullOrWhiteSpace(input))
                 return;
@@ -1531,5 +1533,53 @@ namespace WinSimpleIDriver
 
         #endregion
 
+        private void toolStripButtonNormalize_Click(object sender, EventArgs e)
+        {
+            string input = richTextBoxJsonProject.Text;
+            input = ProjectSettingsConverter.NormalizeAll(input);
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+        }
+
+        private void toolStripButtonLong_Click(object sender, EventArgs e)
+        {
+            string input = richTextBoxJsonProject.Text;
+            input = ProjectSettingsConverter.ConvertToLongForm(input);
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+        }
+
+        private void toolStripButtonShort_Click(object sender, EventArgs e)
+        {
+            string input = richTextBoxJsonProject.Text;
+            input = ProjectSettingsConverter.ConvertToShortForm(input);
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+        }
+
+        private void toolStripButtonGroup_Click(object sender, EventArgs e)
+        {
+            string input = richTextBoxJsonProject.Text;
+            input = ProjectSettingsConverter.ConvertToGroupNestedForm(input);
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+        }
+
+        private void toolStripButtonSource_Click(object sender, EventArgs e)
+        {
+            string input = richTextBoxJsonProject.Text;
+            input = ProjectSettingsConverter.ConvertToSourceNestedForm(input);
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+        }
+
+        private void toolStripButtonInBlock_Click(object sender, EventArgs e)
+        {
+            string input = richTextBoxJsonProject.Text;
+            input = ProjectSettingsConverter.ReintegrateTagsToBlocks(input);
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+        }
+
+        private void toolStripButtonOutBlock_Click(object sender, EventArgs e)
+        {
+            string input = richTextBoxJsonProject.Text;
+            input = ProjectSettingsConverter.ExtractTagsFromBlocks(input);
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+        }
     }
 }

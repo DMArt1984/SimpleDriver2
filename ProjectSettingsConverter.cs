@@ -16,19 +16,22 @@ public static class ProjectSettingsConverter
     /// </summary>
     public static string NormalizeAll(string inputJson)
     {
-        // 1. Приводим JSON к длинной форме (все массивы на корневом уровне).
-        string result = ConvertToLongForm(inputJson);
+        // 1. Распаковка из блоков (Blocks)
+        string result = ExtractTagsFromBlocks(inputJson);
 
-        // 2. Нормализуем параметр Group у источников.
+        // 2. Приводим JSON к длинной форме (все массивы на корневом уровне).
+        result = ConvertToLongForm(result);
+
+        // 3. Нормализуем параметр Group у источников.
         result = NormalizeSourceGroup(result);
 
-        // 3. Если в проекте только один Source или только один Group – устанавливаем соответствующие значения во все элементы.
+        // 4. Если в проекте только один Source или только один Group – устанавливаем соответствующие значения во все элементы.
         result = NormalizeSingleGroupAndSource(result);
 
-        // 4. Переносим массив Tags из Source в группу, если для Source существует единственная соответствующая группа.
+        // 5. Переносим массив Tags из Source в группу, если для Source существует единственная соответствующая группа.
         result = NormalizeSourceTagsToUniqueGroup(result);
 
-        // 5. Объединяем дублирующиеся записи по свойству Title (либо объединяя, либо переименовывая их).
+        // 6. Объединяем дублирующиеся записи по свойству Title (либо объединяя, либо переименовывая их).
         result = NormalizeDuplicateEntriesMerge(result);
 
         return result;
@@ -427,60 +430,80 @@ public static class ProjectSettingsConverter
     }
 
     /// <summary>
-    /// Нормализует настройки, перемещая массив "Tags" из объекта Source в единственную группу, связанную с этим Source.
-    /// Для каждого объекта Source ищется в корневом массиве "Groups" все группы, у которых параметр "Source" равен значению свойства "Title" этого Source.
-    /// Если таких групп ровно одна, то переносится массив "Tags" из Source в эту группу. При этом у каждого перенесённого тега удаляются параметры "Group" и "Source",
-    /// так как теперь они вложены в нужную группу.
+    /// Нормализует перенос массива "Tags" из объекта Source в соответствующую группу, 
+    /// если данный Source использует ровно одну группу.
+    /// Для определения целевой группы метод ищет в корневом массиве "Groups" группу, у которой
+    /// свойство "Source" равно значению свойства "Title" данного Source, и при этом название группы
+    /// совпадает со значением, сохранённым в свойстве "OriginalGroup" источника.
+    /// Если таких групп ровно одна, то все теги из Source перемещаются в эту группу, а у каждого перенесённого тега удаляются свойства "Group" и "Source".
+    /// После переноса массив "Tags" удаляется из Source.
     /// </summary>
+    /// <param name="inputJson">
+    /// Исходная строка JSON с настройками, где объекты Source могут содержать массив "Tags", а также может быть сохранено значение целевого Group в свойстве "OriginalGroup".
+    /// </param>
+    /// <returns>
+    /// Нормализованная строка JSON, в которой для каждого Source, использующего ровно один Group, массив "Tags" перенесён в соответствующую группу.
+    /// </returns>
     public static string NormalizeSourceTagsToUniqueGroup(string inputJson)
     {
         JObject root = JObject.Parse(inputJson);
 
-        // Получаем массивы Sources и Groups из корневого уровня.
+        // Получаем списки Sources и Groups из корневого уровня.
         var sources = root["Sources"]?.OfType<JObject>().ToList() ?? new List<JObject>();
         var groups = root["Groups"]?.OfType<JObject>().ToList() ?? new List<JObject>();
 
         foreach (var source in sources)
         {
-            // Если Source содержит массив "Tags"
-            if (source["Tags"] != null && source["Tags"].Type == JTokenType.Array)
+            // Определяем целевой Group для источника.
+            // Сначала пробуем получить свойство "Group". Если его нет, то пытаемся взять "OriginalGroup".
+            string groupIndicator = null;
+            if (source["Group"] != null && !string.IsNullOrWhiteSpace(source["Group"].ToString()))
             {
-                string sourceTitle = source["Title"]?.ToString();
-                if (string.IsNullOrEmpty(sourceTitle))
-                    continue;
+                groupIndicator = source["Group"].ToString();
+            }
+            else if (source["OriginalGroup"] != null && !string.IsNullOrWhiteSpace(source["OriginalGroup"].ToString()))
+            {
+                groupIndicator = source["OriginalGroup"].ToString();
+            }
 
-                // Находим все группы, у которых параметр "Source" равен sourceTitle.
-                var relatedGroups = groups.Where(g => g["Source"] != null && g["Source"].ToString() == sourceTitle).ToList();
+            // Если индикатор группы не найден или Source не содержит массив Tags – переходим к следующему Source.
+            if (string.IsNullOrEmpty(groupIndicator) || source["Tags"] == null || source["Tags"].Type != JTokenType.Array)
+                continue;
 
-                // Если таких групп ровно одна, переносим массив "Tags" из Source в эту группу.
-                if (relatedGroups.Count == 1)
+            // Получаем Title источника
+            string sourceTitle = source["Title"]?.ToString();
+            if (string.IsNullOrEmpty(sourceTitle))
+                continue;
+
+            // Находим все группы, у которых свойство "Source" равно sourceTitle и Title группы совпадает с groupIndicator.
+            var relatedGroups = groups.Where(g =>
+                                        g["Source"] != null && g["Source"].ToString() == sourceTitle &&
+                                        g["Title"] != null && g["Title"].ToString() == groupIndicator)
+                                      .ToList();
+            // Если таких групп ровно одна, переносим массив "Tags" из Source в эту группу.
+            if (relatedGroups.Count == 1)
+            {
+                JObject targetGroup = relatedGroups.First();
+                JArray groupTags;
+                if (targetGroup["Tags"] != null && targetGroup["Tags"].Type == JTokenType.Array)
                 {
-                    JObject targetGroup = relatedGroups.First();
-                    // Если у группы уже есть массив "Tags", используем его, иначе создаем новый.
-                    JArray groupTags;
-                    if (targetGroup["Tags"] != null && targetGroup["Tags"].Type == JTokenType.Array)
-                    {
-                        groupTags = (JArray)targetGroup["Tags"];
-                    }
-                    else
-                    {
-                        groupTags = new JArray();
-                        targetGroup["Tags"] = groupTags;
-                    }
-
-                    // Переносим каждый тег из массива Source["Tags"].
-                    JArray sourceTags = (JArray)source["Tags"];
-                    foreach (JObject tag in sourceTags.OfType<JObject>())
-                    {
-                        // Удаляем из тега параметры "Group" и "Source", так как теперь он вложен.
-                        tag.Remove("Group");
-                        tag.Remove("Source");
-                        groupTags.Add(tag);
-                    }
-
-                    // После переноса удаляем массив "Tags" из Source.
-                    source.Remove("Tags");
+                    groupTags = (JArray)targetGroup["Tags"];
                 }
+                else
+                {
+                    groupTags = new JArray();
+                    targetGroup["Tags"] = groupTags;
+                }
+
+                JArray sourceTags = (JArray)source["Tags"];
+                foreach (JObject tag in sourceTags.OfType<JObject>())
+                {
+                    tag.Remove("Group");
+                    tag.Remove("Source");
+                    groupTags.Add(tag);
+                }
+                // После успешного переноса удаляем массив "Tags" из Source.
+                source.Remove("Tags");
             }
         }
 

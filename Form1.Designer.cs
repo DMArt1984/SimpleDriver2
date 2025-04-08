@@ -34,14 +34,14 @@ namespace WinSimpleIDriver
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Блоки");
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Структуры");
             System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Классы");
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -237,6 +237,9 @@ namespace WinSimpleIDriver
             this.toolStripButtonSource = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonInBlock = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonOutBlock = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonNormalize = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTreeMain)).BeginInit();
@@ -759,10 +762,10 @@ namespace WinSimpleIDriver
             // sourceID
             // 
             this.sourceID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle33.Format = "N0";
-            dataGridViewCellStyle33.NullValue = null;
-            this.sourceID.DefaultCellStyle = dataGridViewCellStyle33;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle17.Format = "N0";
+            dataGridViewCellStyle17.NullValue = null;
+            this.sourceID.DefaultCellStyle = dataGridViewCellStyle17;
             this.sourceID.HeaderText = "ID";
             this.sourceID.Name = "sourceID";
             this.sourceID.ReadOnly = true;
@@ -1038,10 +1041,10 @@ namespace WinSimpleIDriver
             // groupID
             // 
             this.groupID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle34.Format = "N0";
-            dataGridViewCellStyle34.NullValue = null;
-            this.groupID.DefaultCellStyle = dataGridViewCellStyle34;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle18.Format = "N0";
+            dataGridViewCellStyle18.NullValue = null;
+            this.groupID.DefaultCellStyle = dataGridViewCellStyle18;
             this.groupID.HeaderText = "ID";
             this.groupID.Name = "groupID";
             this.groupID.ReadOnly = true;
@@ -1389,10 +1392,10 @@ namespace WinSimpleIDriver
             // tagID
             // 
             this.tagID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle35.Format = "N0";
-            dataGridViewCellStyle35.NullValue = null;
-            this.tagID.DefaultCellStyle = dataGridViewCellStyle35;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle19.Format = "N0";
+            dataGridViewCellStyle19.NullValue = null;
+            this.tagID.DefaultCellStyle = dataGridViewCellStyle19;
             this.tagID.HeaderText = "ID";
             this.tagID.Name = "tagID";
             this.tagID.ReadOnly = true;
@@ -1698,10 +1701,10 @@ namespace WinSimpleIDriver
             // structureID
             // 
             this.structureID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle36.Format = "N0";
-            dataGridViewCellStyle36.NullValue = null;
-            this.structureID.DefaultCellStyle = dataGridViewCellStyle36;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle20.Format = "N0";
+            dataGridViewCellStyle20.NullValue = null;
+            this.structureID.DefaultCellStyle = dataGridViewCellStyle20;
             this.structureID.HeaderText = "ID";
             this.structureID.Name = "structureID";
             this.structureID.ReadOnly = true;
@@ -1789,10 +1792,10 @@ namespace WinSimpleIDriver
             // targetTagID
             // 
             this.targetTagID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle37.Format = "N0";
-            dataGridViewCellStyle37.NullValue = null;
-            this.targetTagID.DefaultCellStyle = dataGridViewCellStyle37;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle21.Format = "N0";
+            dataGridViewCellStyle21.NullValue = null;
+            this.targetTagID.DefaultCellStyle = dataGridViewCellStyle21;
             this.targetTagID.HeaderText = "ID";
             this.targetTagID.Name = "targetTagID";
             this.targetTagID.ReadOnly = true;
@@ -1835,10 +1838,10 @@ namespace WinSimpleIDriver
             // targetID
             // 
             this.targetID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle38.Format = "N0";
-            dataGridViewCellStyle38.NullValue = null;
-            this.targetID.DefaultCellStyle = dataGridViewCellStyle38;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle22.Format = "N0";
+            dataGridViewCellStyle22.NullValue = null;
+            this.targetID.DefaultCellStyle = dataGridViewCellStyle22;
             this.targetID.HeaderText = "ID";
             this.targetID.Name = "targetID";
             this.targetID.ReadOnly = true;
@@ -2052,10 +2055,10 @@ namespace WinSimpleIDriver
             // includeID
             // 
             this.includeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle39.Format = "N0";
-            dataGridViewCellStyle39.NullValue = null;
-            this.includeID.DefaultCellStyle = dataGridViewCellStyle39;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle23.Format = "N0";
+            dataGridViewCellStyle23.NullValue = null;
+            this.includeID.DefaultCellStyle = dataGridViewCellStyle23;
             this.includeID.HeaderText = "ID";
             this.includeID.Name = "includeID";
             this.includeID.ReadOnly = true;
@@ -2143,10 +2146,10 @@ namespace WinSimpleIDriver
             // changeID
             // 
             this.changeID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle40.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle40.Format = "N0";
-            dataGridViewCellStyle40.NullValue = null;
-            this.changeID.DefaultCellStyle = dataGridViewCellStyle40;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle24.Format = "N0";
+            dataGridViewCellStyle24.NullValue = null;
+            this.changeID.DefaultCellStyle = dataGridViewCellStyle24;
             this.changeID.HeaderText = "ID";
             this.changeID.Name = "changeID";
             this.changeID.ReadOnly = true;
@@ -2273,10 +2276,13 @@ namespace WinSimpleIDriver
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonNormalize,
             this.toolStripButtonLong,
             this.toolStripButtonShort,
+            this.toolStripSeparator1,
             this.toolStripButtonGroup,
             this.toolStripButtonSource,
+            this.toolStripSeparator2,
             this.toolStripButtonInBlock,
             this.toolStripButtonOutBlock});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -2293,6 +2299,7 @@ namespace WinSimpleIDriver
             this.toolStripButtonLong.Name = "toolStripButtonLong";
             this.toolStripButtonLong.Size = new System.Drawing.Size(97, 22);
             this.toolStripButtonLong.Text = "Длинный стиль";
+            this.toolStripButtonLong.Click += new System.EventHandler(this.toolStripButtonLong_Click);
             // 
             // toolStripButtonShort
             // 
@@ -2302,6 +2309,7 @@ namespace WinSimpleIDriver
             this.toolStripButtonShort.Name = "toolStripButtonShort";
             this.toolStripButtonShort.Size = new System.Drawing.Size(98, 22);
             this.toolStripButtonShort.Text = "Короткий стиль";
+            this.toolStripButtonShort.Click += new System.EventHandler(this.toolStripButtonShort_Click);
             // 
             // toolStripButtonGroup
             // 
@@ -2311,6 +2319,7 @@ namespace WinSimpleIDriver
             this.toolStripButtonGroup.Name = "toolStripButtonGroup";
             this.toolStripButtonGroup.Size = new System.Drawing.Size(145, 22);
             this.toolStripButtonGroup.Text = "Групповая вложенность";
+            this.toolStripButtonGroup.Click += new System.EventHandler(this.toolStripButtonGroup_Click);
             // 
             // toolStripButtonSource
             // 
@@ -2320,6 +2329,7 @@ namespace WinSimpleIDriver
             this.toolStripButtonSource.Name = "toolStripButtonSource";
             this.toolStripButtonSource.Size = new System.Drawing.Size(156, 22);
             this.toolStripButtonSource.Text = "Вложенность в источники";
+            this.toolStripButtonSource.Click += new System.EventHandler(this.toolStripButtonSource_Click);
             // 
             // toolStripButtonInBlock
             // 
@@ -2329,6 +2339,7 @@ namespace WinSimpleIDriver
             this.toolStripButtonInBlock.Name = "toolStripButtonInBlock";
             this.toolStripButtonInBlock.Size = new System.Drawing.Size(108, 22);
             this.toolStripButtonInBlock.Text = "Упаковка в блоки";
+            this.toolStripButtonInBlock.Click += new System.EventHandler(this.toolStripButtonInBlock_Click);
             // 
             // toolStripButtonOutBlock
             // 
@@ -2338,6 +2349,27 @@ namespace WinSimpleIDriver
             this.toolStripButtonOutBlock.Name = "toolStripButtonOutBlock";
             this.toolStripButtonOutBlock.Size = new System.Drawing.Size(132, 22);
             this.toolStripButtonOutBlock.Text = "Распаковка из блоков";
+            this.toolStripButtonOutBlock.Click += new System.EventHandler(this.toolStripButtonOutBlock_Click);
+            // 
+            // toolStripButtonNormalize
+            // 
+            this.toolStripButtonNormalize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonNormalize.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNormalize.Image")));
+            this.toolStripButtonNormalize.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonNormalize.Name = "toolStripButtonNormalize";
+            this.toolStripButtonNormalize.Size = new System.Drawing.Size(94, 22);
+            this.toolStripButtonNormalize.Text = "Нормализация";
+            this.toolStripButtonNormalize.Click += new System.EventHandler(this.toolStripButtonNormalize_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // Form1
             // 
@@ -2608,6 +2640,9 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.ToolStripButton toolStripButtonSource;
         private System.Windows.Forms.ToolStripButton toolStripButtonInBlock;
         private System.Windows.Forms.ToolStripButton toolStripButtonOutBlock;
+        private System.Windows.Forms.ToolStripButton toolStripButtonNormalize;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 
