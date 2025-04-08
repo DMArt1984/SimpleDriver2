@@ -394,6 +394,7 @@ namespace WinSimpleIDriver
 
             // окно файла проекта
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+            jsonProjStatustic();
 
             return; // временно! потом УДАЛИТЬ!!!
 
@@ -1538,6 +1539,7 @@ namespace WinSimpleIDriver
             string input = richTextBoxJsonProject.Text;
             input = ProjectSettingsConverter.NormalizeAll(input);
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+            jsonProjStatustic();
         }
 
         private void toolStripButtonLong_Click(object sender, EventArgs e)
@@ -1545,6 +1547,7 @@ namespace WinSimpleIDriver
             string input = richTextBoxJsonProject.Text;
             input = ProjectSettingsConverter.ConvertToLongForm(input);
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+            jsonProjStatustic();
         }
 
         private void toolStripButtonShort_Click(object sender, EventArgs e)
@@ -1552,6 +1555,7 @@ namespace WinSimpleIDriver
             string input = richTextBoxJsonProject.Text;
             input = ProjectSettingsConverter.ConvertToShortForm(input);
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+            jsonProjStatustic();
         }
 
         private void toolStripButtonGroup_Click(object sender, EventArgs e)
@@ -1559,6 +1563,7 @@ namespace WinSimpleIDriver
             string input = richTextBoxJsonProject.Text;
             input = ProjectSettingsConverter.ConvertToGroupNestedForm(input);
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+            jsonProjStatustic();
         }
 
         private void toolStripButtonSource_Click(object sender, EventArgs e)
@@ -1566,6 +1571,7 @@ namespace WinSimpleIDriver
             string input = richTextBoxJsonProject.Text;
             input = ProjectSettingsConverter.ConvertToSourceNestedForm(input);
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+            jsonProjStatustic();
         }
 
         private void toolStripButtonInBlock_Click(object sender, EventArgs e)
@@ -1573,6 +1579,7 @@ namespace WinSimpleIDriver
             string input = richTextBoxJsonProject.Text;
             input = ProjectSettingsConverter.ReintegrateTagsToBlocks(input);
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+            jsonProjStatustic();
         }
 
         private void toolStripButtonOutBlock_Click(object sender, EventArgs e)
@@ -1580,6 +1587,16 @@ namespace WinSimpleIDriver
             string input = richTextBoxJsonProject.Text;
             input = ProjectSettingsConverter.ExtractTagsFromBlocks(input);
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+            jsonProjStatustic();
         }
+
+        // Статистика
+        private void jsonProjStatustic()
+        {
+            ProjectSettingsConverter.GetJsonStatistics(richTextBoxJsonProject.Text, out int s, out int g, out int t);
+            jsonProjectStatistic.Text = $"{s} - {g} - {t}";
+        }
+
+
     }
 }

@@ -273,10 +273,19 @@ public static class ProjectSettingsConverter
     // ======================================================================================================================
 
     /// <summary>
-    /// Нормализует настройки, устанавливая параметр "Source" для группы,
-    /// если она не имеет его, а один из источников содержит параметр "Group" (единичный) с именем этой группы.
-    /// После обработки параметра "Group" у источника он удаляется.
+    /// Нормализует настройки, обрабатывая параметр "Group" у объектов Source.
+    /// Если у Source задан единичный параметр "Group", метод ищет группу в корневом массиве "Groups",
+    /// у которой Title совпадает с этим значением, и, если у группы отсутствует параметр "Source",
+    /// устанавливает его равным значению свойства "Title" источника. При этом, если в данном Source есть массив "Tags",
+    /// для каждого тега в этом массиве добавляется параметр "Group" со значением из источника.
+    /// После обработки свойство "Group" удаляется из Source.
     /// </summary>
+    /// <param name="inputJson">
+    /// Исходная строка JSON с настройками, содержащая корневые массивы "Sources" и "Groups".
+    /// </param>
+    /// <returns>
+    /// Нормализованная строка JSON, где для каждого Source значение "Group" перенесено в его теги и затем удалено из самого Source.
+    /// </returns>
     public static string NormalizeSourceGroup(string inputJson)
     {
         JObject root = JObject.Parse(inputJson);
@@ -292,8 +301,23 @@ public static class ProjectSettingsConverter
             if (source["Group"] != null)
             {
                 string groupTitle = source["Group"].ToString();
-                // Ищем группу с совпадающим названием в корневом массиве "Groups"
-                var matchingGroup = groups.FirstOrDefault(g => g["Title"] != null && g["Title"].ToString() == groupTitle);
+
+                // Если в источнике есть массив "Tags", для каждого тега устанавливаем свойство "Group"
+                if (source["Tags"] != null && source["Tags"].Type == JTokenType.Array)
+                {
+                    foreach (JObject tag in source["Tags"].OfType<JObject>())
+                    {
+                        // Устанавливаем свойство "Group", если его нет.
+                        if (tag["Group"] == null || string.IsNullOrWhiteSpace(tag["Group"].ToString()))
+                        {
+                            tag["Group"] = groupTitle;
+                        }
+                    }
+                }
+
+                // Ищем группу с совпадающим Title в корневом массиве "Groups"
+                var matchingGroup = groups.FirstOrDefault(g =>
+                                        g["Title"] != null && g["Title"].ToString() == groupTitle);
                 if (matchingGroup != null)
                 {
                     // Если у найденной группы отсутствует параметр "Source" и источник имеет "Title"
@@ -302,13 +326,15 @@ public static class ProjectSettingsConverter
                         matchingGroup["Source"] = source["Title"];
                     }
                 }
-                // После обработки удаляем параметр "Group" из источника, так как он больше не нужен.
+
+                // После обработки удаляем параметр "Group" из источника.
                 source.Remove("Group");
             }
         }
 
         return root.ToString(Formatting.Indented);
     }
+
 
     /// <summary>
     /// Нормализует проект следующим образом:
@@ -431,84 +457,108 @@ public static class ProjectSettingsConverter
 
     /// <summary>
     /// Нормализует перенос массива "Tags" из объекта Source в соответствующую группу, 
-    /// если данный Source использует ровно одну группу.
-    /// Для определения целевой группы метод ищет в корневом массиве "Groups" группу, у которой
-    /// свойство "Source" равно значению свойства "Title" данного Source, и при этом название группы
-    /// совпадает со значением, сохранённым в свойстве "OriginalGroup" источника.
-    /// Если таких групп ровно одна, то все теги из Source перемещаются в эту группу, а у каждого перенесённого тега удаляются свойства "Group" и "Source".
-    /// После переноса массив "Tags" удаляется из Source.
+    /// если для данного Source можно однозначно определить целевую группу.
+    /// Если у Source задан параметр "Group", то он используется; если же его нет, 
+    /// пытаемся определить значение из массива тегов (если все теги содержат единое значение "Group").
+    /// После определения целевого значения производится поиск в корневом массиве "Groups" группы,
+    /// у которой свойство "Source" равно Title данного Source, а Title равно найденному значению.
+    /// Если такая группа найдена ровно одна, все теги из Source перемещаются в эту группу,
+    /// а у перенесённых тегов удаляются свойства "Group" и "Source". Затем удаляется массив "Tags" из Source.
     /// </summary>
     /// <param name="inputJson">
-    /// Исходная строка JSON с настройками, где объекты Source могут содержать массив "Tags", а также может быть сохранено значение целевого Group в свойстве "OriginalGroup".
+    /// Исходная строка JSON, где объекты Source могут содержать массив "Tags".
     /// </param>
     /// <returns>
-    /// Нормализованная строка JSON, в которой для каждого Source, использующего ровно один Group, массив "Tags" перенесён в соответствующую группу.
+    /// Нормализованная строка JSON, в которой для каждого Source, для которого можно однозначно определить целевую группу,
+    /// массив "Tags" перенесён в соответствующую группу.
     /// </returns>
     public static string NormalizeSourceTagsToUniqueGroup(string inputJson)
     {
         JObject root = JObject.Parse(inputJson);
 
-        // Получаем списки Sources и Groups из корневого уровня.
+        // Получаем список объектов Sources и Groups из корневого уровня.
         var sources = root["Sources"]?.OfType<JObject>().ToList() ?? new List<JObject>();
         var groups = root["Groups"]?.OfType<JObject>().ToList() ?? new List<JObject>();
 
         foreach (var source in sources)
         {
-            // Определяем целевой Group для источника.
-            // Сначала пробуем получить свойство "Group". Если его нет, то пытаемся взять "OriginalGroup".
-            string groupIndicator = null;
-            if (source["Group"] != null && !string.IsNullOrWhiteSpace(source["Group"].ToString()))
+            // Проверяем, содержит ли Source массив "Tags".
+            if (source["Tags"] != null && source["Tags"].Type == JTokenType.Array)
             {
-                groupIndicator = source["Group"].ToString();
-            }
-            else if (source["OriginalGroup"] != null && !string.IsNullOrWhiteSpace(source["OriginalGroup"].ToString()))
-            {
-                groupIndicator = source["OriginalGroup"].ToString();
-            }
+                string sourceTitle = source["Title"]?.ToString();
+                if (string.IsNullOrEmpty(sourceTitle))
+                    continue;
 
-            // Если индикатор группы не найден или Source не содержит массив Tags – переходим к следующему Source.
-            if (string.IsNullOrEmpty(groupIndicator) || source["Tags"] == null || source["Tags"].Type != JTokenType.Array)
-                continue;
-
-            // Получаем Title источника
-            string sourceTitle = source["Title"]?.ToString();
-            if (string.IsNullOrEmpty(sourceTitle))
-                continue;
-
-            // Находим все группы, у которых свойство "Source" равно sourceTitle и Title группы совпадает с groupIndicator.
-            var relatedGroups = groups.Where(g =>
-                                        g["Source"] != null && g["Source"].ToString() == sourceTitle &&
-                                        g["Title"] != null && g["Title"].ToString() == groupIndicator)
-                                      .ToList();
-            // Если таких групп ровно одна, переносим массив "Tags" из Source в эту группу.
-            if (relatedGroups.Count == 1)
-            {
-                JObject targetGroup = relatedGroups.First();
-                JArray groupTags;
-                if (targetGroup["Tags"] != null && targetGroup["Tags"].Type == JTokenType.Array)
+                // Определяем целевой индикатор группы.
+                // Сначала пытаемся получить его из свойства "Group" или "OriginalGroup" в источнике.
+                string groupIndicator = null;
+                if (source["Group"] != null && !string.IsNullOrWhiteSpace(source["Group"].ToString()))
                 {
-                    groupTags = (JArray)targetGroup["Tags"];
+                    groupIndicator = source["Group"].ToString();
+                }
+                else if (source["OriginalGroup"] != null && !string.IsNullOrWhiteSpace(source["OriginalGroup"].ToString()))
+                {
+                    groupIndicator = source["OriginalGroup"].ToString();
                 }
                 else
                 {
-                    groupTags = new JArray();
-                    targetGroup["Tags"] = groupTags;
+                    // Если в объекте Source нет свойства "Group", пытаемся определить его из массива тегов.
+                    var tagGroupNames = ((JArray)source["Tags"]).OfType<JObject>()
+                                             .Select(tag => tag["Group"]?.ToString())
+                                             .Where(g => !string.IsNullOrWhiteSpace(g))
+                                             .Distinct()
+                                             .ToList();
+                    if (tagGroupNames.Count == 1)
+                    {
+                        groupIndicator = tagGroupNames.First();
+                    }
                 }
 
-                JArray sourceTags = (JArray)source["Tags"];
-                foreach (JObject tag in sourceTags.OfType<JObject>())
+                // Если индикатор так и не определён, пропускаем этот источник.
+                if (string.IsNullOrEmpty(groupIndicator))
+                    continue;
+
+                // Ищем группу в корневом массиве Groups,
+                // для которой свойство "Source" совпадает с Title данного источника,
+                // а Title группы равен определенному индикатору.
+                var relatedGroups = groups.Where(g =>
+                    g["Source"] != null && g["Source"].ToString() == sourceTitle &&
+                    g["Title"] != null && g["Title"].ToString() == groupIndicator)
+                    .ToList();
+
+                // Если найдена ровно одна группа, переносим массив "Tags".
+                if (relatedGroups.Count == 1)
                 {
-                    tag.Remove("Group");
-                    tag.Remove("Source");
-                    groupTags.Add(tag);
+                    JObject targetGroup = relatedGroups.First();
+                    // Получаем или создаем массив тегов у группы.
+                    JArray groupTags;
+                    if (targetGroup["Tags"] != null && targetGroup["Tags"].Type == JTokenType.Array)
+                    {
+                        groupTags = (JArray)targetGroup["Tags"];
+                    }
+                    else
+                    {
+                        groupTags = new JArray();
+                        targetGroup["Tags"] = groupTags;
+                    }
+
+                    // Переносим каждый тег из массива Source["Tags"] в массив группы.
+                    JArray sourceTags = (JArray)source["Tags"];
+                    foreach (JObject tag in sourceTags.OfType<JObject>())
+                    {
+                        tag.Remove("Group");
+                        tag.Remove("Source");
+                        groupTags.Add(tag);
+                    }
+                    // Удаляем массив "Tags" из источника после успешного переноса.
+                    source.Remove("Tags");
                 }
-                // После успешного переноса удаляем массив "Tags" из Source.
-                source.Remove("Tags");
             }
         }
 
         return root.ToString(Formatting.Indented);
     }
+
 
     /// <summary>
     /// Нормализует настройки, обрабатывая дублирующиеся значения свойства "Title".
@@ -879,6 +929,84 @@ public static class ProjectSettingsConverter
         return root.ToString(Formatting.Indented);
     }
 
+    // ============================================================================================================
+
+    /// <summary>
+    /// Рекурсивно обходит JSON-узел и подсчитывает количество объектов, найденных в массивах с ключами "Sources", "Groups" и "Tags".
+    /// </summary>
+    /// <param name="token">Текущий JSON-узел для обхода.</param>
+    /// <param name="sourceCount">Суммарное количество найденных элементов в массивах Sources.</param>
+    /// <param name="groupCount">Суммарное количество найденных элементов в массивах Groups.</param>
+    /// <param name="tagCount">Суммарное количество найденных элементов в массивах Tags.</param>
+    private static void CountTokens(JToken token, ref int sourceCount, ref int groupCount, ref int tagCount)
+    {
+        if (token is JObject obj)
+        {
+            // Обходим все свойства объекта.
+            foreach (var prop in obj.Properties())
+            {
+                // Если свойство называется "Sources", "Groups" или "Tags", то обрабатываем его как массив.
+                if (prop.Name.Equals("Sources", StringComparison.OrdinalIgnoreCase) && prop.Value is JArray sourcesArr)
+                {
+                    sourceCount += sourcesArr.Count;
+                    // Рекурсивно обрабатываем каждый элемент массива.
+                    foreach (var item in sourcesArr)
+                    {
+                        CountTokens(item, ref sourceCount, ref groupCount, ref tagCount);
+                    }
+                }
+                else if (prop.Name.Equals("Groups", StringComparison.OrdinalIgnoreCase) && prop.Value is JArray groupsArr)
+                {
+                    groupCount += groupsArr.Count;
+                    foreach (var item in groupsArr)
+                    {
+                        CountTokens(item, ref sourceCount, ref groupCount, ref tagCount);
+                    }
+                }
+                else if (prop.Name.Equals("Tags", StringComparison.OrdinalIgnoreCase) && prop.Value is JArray tagsArr)
+                {
+                    tagCount += tagsArr.Count;
+                    foreach (var item in tagsArr)
+                    {
+                        CountTokens(item, ref sourceCount, ref groupCount, ref tagCount);
+                    }
+                }
+                else
+                {
+                    // Для остальных свойств продолжаем обход.
+                    CountTokens(prop.Value, ref sourceCount, ref groupCount, ref tagCount);
+                }
+            }
+        }
+        else if (token is JArray arr)
+        {
+            // Если токен является массивом, обходим каждый его элемент.
+            foreach (var item in arr)
+            {
+                CountTokens(item, ref sourceCount, ref groupCount, ref tagCount);
+            }
+        }
+        // Для примитивных значений дальнейший обход не требуется.
+    }
+
+    /// <summary>
+    /// Подсчитывает статистику по количеству источников (Sources), групп (Groups) и тегов (Tags)
+    /// во входном JSON. Учтена вложенность: если эти массивы находятся внутри других объектов (например,
+    /// вложенные группы в источниках, теги в группах, а также объекты внутри Blocks),
+    /// они также будут подсчитаны.
+    /// </summary>
+    /// <param name="inputJson">Исходная строка JSON.</param>
+    /// <param name="sourceCount">Возвращаемое значение – общее количество объектов в массивах Sources.</param>
+    /// <param name="groupCount">Возвращаемое значение – общее количество объектов в массивах Groups.</param>
+    /// <param name="tagCount">Возвращаемое значение – общее количество объектов в массивах Tags.</param>
+    public static void GetJsonStatistics(string inputJson, out int sourceCount, out int groupCount, out int tagCount)
+    {
+        JObject root = JObject.Parse(inputJson);
+        sourceCount = 0;
+        groupCount = 0;
+        tagCount = 0;
+        CountTokens(root, ref sourceCount, ref groupCount, ref tagCount);
+    }
 
 }
 
