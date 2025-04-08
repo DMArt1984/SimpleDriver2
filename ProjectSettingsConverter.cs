@@ -653,6 +653,162 @@ public static class ProjectSettingsConverter
         return root.ToString(Formatting.Indented);
     }
 
+    // ======================================================================================================
+
+    /// <summary>
+    /// Extracts tags from the "Blocks" section of the JSON, adds a "Block" property to each extracted tag
+    /// with the value corresponding to its nesting path, appends these tags to the root-level "Tags" array,
+    /// and then removes the "Blocks" section from the JSON.
+    /// </summary>
+    public static string ExtractTagsFromBlocks(string inputJson)
+    {
+        JObject root = JObject.Parse(inputJson);
+
+        // List to accumulate extracted tags from the Blocks section.
+        List<JObject> extractedTags = new List<JObject>();
+
+        // Recursive function to traverse the Blocks structure.
+        void TraverseBlocks(JToken token, string currentPath)
+        {
+            if (token is JObject obj)
+            {
+                // For each property update the path and recursively traverse its value.
+                foreach (var prop in obj.Properties())
+                {
+                    string newPath = string.IsNullOrEmpty(currentPath) ? prop.Name : currentPath + "." + prop.Name;
+                    TraverseBlocks(prop.Value, newPath);
+                }
+            }
+            else if (token is JArray array)
+            {
+                // Assume array elements are tags.
+                foreach (JToken item in array)
+                {
+                    if (item is JObject tagObj)
+                    {
+                        // Set the "Block" property to the current path.
+                        tagObj["Block"] = currentPath;
+                        extractedTags.Add(tagObj);
+                    }
+                }
+            }
+            // Other token types are ignored.
+        }
+
+        // If the JSON contains a "Blocks" section, traverse it.
+        if (root["Blocks"] != null)
+        {
+            TraverseBlocks(root["Blocks"], "");
+            // After extraction, remove the "Blocks" section.
+            root.Remove("Blocks");
+        }
+
+        // Obtain or create the root-level "Tags" array.
+        JArray rootTags;
+        if (root["Tags"] != null && root["Tags"].Type == JTokenType.Array)
+        {
+            rootTags = (JArray)root["Tags"];
+        }
+        else
+        {
+            rootTags = new JArray();
+            root["Tags"] = rootTags;
+        }
+
+        // Add all extracted tags to the root-level "Tags" array.
+        foreach (var tag in extractedTags)
+        {
+            rootTags.Add(tag);
+        }
+
+        return root.ToString(Formatting.Indented);
+    }
+
+    /// <summary>
+    /// Reinserts tags into a nested "Blocks" structure based on their "Block" property.
+    /// For each tag in the root-level "Tags" array that contains a "Block" property,
+    /// the method removes that property from the tag and uses its value (which is expected 
+    /// to be a dot-separated string, e.g. "Name.A.4") to create a nested structure in a new 
+    /// "Blocks" section. The tag is then appended to the array at the leaf node of that structure.
+    /// Tags that do not have a "Block" property remain in the root-level "Tags" array.
+    /// After processing, the "Blocks" section is added to the root if not empty.
+    /// </summary>
+    public static string ReintegrateTagsToBlocks(string inputJson)
+    {
+        JObject root = JObject.Parse(inputJson);
+
+        // Create a new JObject to build the Blocks structure.
+        JObject blocks = new JObject();
+
+        // Get the root-level Tags array. If absent, создаём пустой.
+        JArray tags = root["Tags"] as JArray ?? new JArray();
+
+        // List для хранения тегов, у которых не задан параметр Block.
+        List<JObject> remainingTags = new List<JObject>();
+
+        // Обходим все теги в корневом массиве.
+        foreach (JObject tag in tags.OfType<JObject>().ToList())
+        {
+            JToken blockToken = tag["Block"];
+            if (blockToken != null)
+            {
+                // Извлекаем значение свойства Block, например "Name.A.4"
+                string blockPath = blockToken.ToString();
+                // Удаляем свойство "Block" из тега, поскольку оно больше не потребуется.
+                tag.Remove("Block");
+
+                // Разбиваем путь по точке.
+                string[] pathParts = blockPath.Split('.');
+                JObject current = blocks;
+                // Проходим по всем частям пути, кроме последней, создавая вложенные объекты, если их нет.
+                for (int i = 0; i < pathParts.Length - 1; i++)
+                {
+                    string key = pathParts[i];
+                    if (current[key] == null || current[key].Type != JTokenType.Object)
+                    {
+                        current[key] = new JObject();
+                    }
+                    current = (JObject)current[key];
+                }
+                // Последняя часть пути используется как ключ для массива тегов.
+                string leafKey = pathParts.Last();
+                JArray tagArray;
+                if (current[leafKey] == null || current[leafKey].Type != JTokenType.Array)
+                {
+                    tagArray = new JArray();
+                    current[leafKey] = tagArray;
+                }
+                else
+                {
+                    tagArray = (JArray)current[leafKey];
+                }
+                // Добавляем тег в найденный (или созданный) массив.
+                tagArray.Add(tag);
+            }
+            else
+            {
+                // Если у тега нет свойства Block, оставляем его в корневом массиве.
+                remainingTags.Add(tag);
+            }
+        }
+
+        // Обновляем корневой массив "Tags" оставшимися тегами.
+        root["Tags"] = new JArray(remainingTags);
+
+        // Если полученная структура Blocks содержит данные, добавляем её в корневой объект.
+        if (blocks.HasValues)
+        {
+            root["Blocks"] = blocks;
+        }
+        else
+        {
+            // Если Blocks пуст, убираем его (если оно было).
+            root.Remove("Blocks");
+        }
+
+        return root.ToString(Formatting.Indented);
+    }
+
 
 }
 
