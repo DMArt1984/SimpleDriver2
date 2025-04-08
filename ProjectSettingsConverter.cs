@@ -656,6 +656,53 @@ public static class ProjectSettingsConverter
     // ======================================================================================================
 
     /// <summary>
+    /// Преобразует вложенную структуру Blocks в плоскую, минимально вложенную.
+    /// Для каждого листового массива тегов в исходном Blocks создаётся составной ключ,
+    /// который формируется объединением имен всех уровней (разделённых точкой).
+    /// Результирующий объект Blocks содержит только пары "составной ключ" – "массив тегов".
+    /// </summary>
+    public static string FlattenBlocksToMinimalNesting(string inputJson)
+    {
+        // Парсинг исходного JSON
+        JObject root = JObject.Parse(inputJson);
+        // Новый объект, в который будем складывать плоскую структуру Blocks
+        JObject flatBlocks = new JObject();
+
+        // Рекурсивная функция для обхода вложенной структуры Blocks.
+        // currentPath накапливает составное имя ключа по мере обхода.
+        void TraverseBlocks(JToken token, string currentPath)
+        {
+            if (token is JObject obj)
+            {
+                foreach (var prop in obj.Properties())
+                {
+                    // Формируем новый составной ключ: если currentPath пустой, то просто имя свойства,
+                    // иначе объединяем через точку.
+                    string newPath = string.IsNullOrEmpty(currentPath) ? prop.Name : currentPath + "." + prop.Name;
+                    TraverseBlocks(prop.Value, newPath);
+                }
+            }
+            else if (token is JArray arr)
+            {
+                // Достигли листового узла (массив тегов).
+                // Сохраняем массив в flatBlocks с составным ключом.
+                flatBlocks[currentPath] = arr;
+            }
+            // Если токен имеет иной тип, его можно игнорировать.
+        }
+
+        // Если в корневом объекте есть Blocks, обходим его и формируем плоскую структуру
+        if (root["Blocks"] != null)
+        {
+            TraverseBlocks(root["Blocks"], "");
+            // Заменяем исходное свойство Blocks на полученную плоскую структуру.
+            root["Blocks"] = flatBlocks;
+        }
+
+        return root.ToString(Formatting.Indented);
+    }
+
+    /// <summary>
     /// Extracts tags from the "Blocks" section of the JSON, adds a "Block" property to each extracted tag
     /// with the value corresponding to its nesting path, appends these tags to the root-level "Tags" array,
     /// and then removes the "Blocks" section from the JSON.
