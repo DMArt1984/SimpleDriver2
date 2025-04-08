@@ -848,18 +848,20 @@ public static class ProjectSettingsConverter
     /// Переставляет теги из корневого массива "Tags" в раздел "Blocks" согласно значению их свойства "Block".
     /// Для каждого тега, у которого задано свойство "Block" (представляющее вложенность в виде строки с разделителями точками),
     /// метод удаляет это свойство из тега и перемещает тег в соответствующую ветку в разделе "Blocks".
-    /// Если раздел "Blocks" уже существует, новые теги будут добавлены в существующие или новые ветки внутри него.
-    /// Если раздел "Blocks" отсутствует, он будет создан.
+    /// Если в пути обнаруживается, что по ключу уже существует массив (то есть ранее созданная ветка представлена в виде массива тегов),
+    /// то этот массив преобразуется в объект с дополнительным свойством "_tags", в котором будут сохранены ранее добавленные теги,
+    /// после чего дальнейшая вложенность будет создаваться в этом объекте.
+    /// Если раздел "Blocks" уже существует, новые теги добавляются в существующие или создаются новые ветки.
+    /// Если раздел "Blocks" отсутствует, он создаётся.
     /// Теги, у которых не задано свойство "Block", остаются в корневом массиве "Tags".
-    /// </summary>
     public static string ReintegrateTagsToBlocks(string inputJson)
     {
         JObject root = JObject.Parse(inputJson);
 
-        // Получаем или создаем корневой массив "Tags".
+        // Получаем корневой массив "Tags". Если его нет, создаем новый.
         JArray tags = root["Tags"] as JArray ?? new JArray();
 
-        // Если раздел "Blocks" уже существует, используем его; иначе создаем новый.
+        // Получаем или создаем корневой объект "Blocks"
         JObject blocks;
         if (root["Blocks"] != null && root["Blocks"].Type == JTokenType.Object)
         {
@@ -871,59 +873,91 @@ public static class ProjectSettingsConverter
             root["Blocks"] = blocks;
         }
 
-        // Список для тегов, у которых не задано свойство "Block".
+        // Список для хранения тегов без свойства Block.
         List<JObject> remainingTags = new List<JObject>();
 
-        // Обходим все теги в корневом массиве.
+        // Рекурсивный алгоритм: для каждого тега с заданным Block создаем вложенную структуру.
         foreach (JObject tag in tags.OfType<JObject>().ToList())
         {
             JToken blockToken = tag["Block"];
             if (blockToken != null)
             {
                 string blockPath = blockToken.ToString();
-                // Удаляем свойство "Block" из тега, так как оно будет перенесено.
+                // Удаляем свойство "Block" из тега, так как оно станет частью вложенной структуры.
                 tag.Remove("Block");
 
-                // Разбиваем путь вложенности по точке.
+                // Разбиваем путь по точке.
                 string[] pathParts = blockPath.Split('.');
                 JObject current = blocks;
-                // Проходим по всем частям пути, кроме последней, создавая вложенные объекты, если они отсутствуют.
+                // Проходим по всем частям пути, кроме последней.
                 for (int i = 0; i < pathParts.Length - 1; i++)
                 {
                     string key = pathParts[i];
-                    if (current[key] == null || current[key].Type != JTokenType.Object)
+                    // Если ключ отсутствует или не является объектом, пытаемся создать объект.
+                    if (current[key] == null)
                     {
+                        current[key] = new JObject();
+                    }
+                    else if (current[key].Type == JTokenType.Array)
+                    {
+                        // Если там уже есть массив, преобразуем его в объект с резервным массивом "_tags".
+                        JArray existingArray = (JArray)current[key];
+                        JObject newObj = new JObject();
+                        newObj["_tags"] = existingArray;
+                        current[key] = newObj;
+                    }
+                    else if (current[key].Type != JTokenType.Object)
+                    {
+                        // На всякий случай, если тип не объект, перезаписываем новым объектом.
                         current[key] = new JObject();
                     }
                     current = (JObject)current[key];
                 }
-                // Последняя часть пути используется как ключ для массива тегов.
+                // Последняя часть пути – ключ для массива тегов.
                 string leafKey = pathParts.Last();
-                JArray tagArray;
-                if (current[leafKey] == null || current[leafKey].Type != JTokenType.Array)
+                if (current[leafKey] == null)
                 {
-                    tagArray = new JArray();
-                    current[leafKey] = tagArray;
+                    // Если еще нет свойства, создаем массив тегов.
+                    JArray arr = new JArray();
+                    arr.Add(tag);
+                    current[leafKey] = arr;
+                }
+                else if (current[leafKey].Type == JTokenType.Array)
+                {
+                    // Если массив уже существует, добавляем тег.
+                    ((JArray)current[leafKey]).Add(tag);
+                }
+                else if (current[leafKey].Type == JTokenType.Object)
+                {
+                    // Если там объект, проверяем, есть ли резервный массив "_tags"
+                    JObject leafObj = (JObject)current[leafKey];
+                    if (leafObj["_tags"] == null || leafObj["_tags"].Type != JTokenType.Array)
+                    {
+                        leafObj["_tags"] = new JArray();
+                    }
+                    ((JArray)leafObj["_tags"]).Add(tag);
                 }
                 else
                 {
-                    tagArray = (JArray)current[leafKey];
+                    // Если значение имеет иной тип, переопределяем его массивом тегов.
+                    JArray arr = new JArray();
+                    arr.Add(tag);
+                    current[leafKey] = arr;
                 }
-                // Добавляем тег в массив, если его там еще нет.
-                tagArray.Add(tag);
             }
             else
             {
-                // Если у тега нет свойства "Block", оставляем его в корневом массиве.
+                // Если у тега нет свойства Block, оставляем его в корневом массиве.
                 remainingTags.Add(tag);
             }
         }
 
-        // Обновляем корневой массив "Tags" оставшимися тегами (без свойства Block).
+        // Обновляем корневой массив Tags оставшимися тегами (без свойства Block).
         root["Tags"] = new JArray(remainingTags);
 
         return root.ToString(Formatting.Indented);
     }
+
 
 
     // ============================================================================================================
@@ -933,11 +967,6 @@ public static class ProjectSettingsConverter
     /// с ключами "Sources", "Groups" и "Tags". Если мы находимся внутри раздела Blocks,
     /// то любой обнаруженный массив считается как массив тегов.
     /// </summary>
-    /// <param name="token">Текущий JSON-узел для обхода.</param>
-    /// <param name="sourceCount">Суммарное количество найденных элементов в массивах Sources.</param>
-    /// <param name="groupCount">Суммарное количество найденных элементов в массивах Groups.</param>
-    /// <param name="tagCount">Суммарное количество найденных элементов в массивах Tags.</param>
-    /// <param name="inBlocks">Флаг, указывающий, что текущий узел находится внутри раздела Blocks.</param>
     private static void CountTokens(JToken token, ref int sourceCount, ref int groupCount, ref int tagCount, bool inBlocks = false)
     {
         if (token is JObject obj)
@@ -1001,10 +1030,6 @@ public static class ProjectSettingsConverter
     /// Подсчитывает статистику по количеству источников (Sources), групп (Groups) и тегов (Tags)
     /// во входном JSON с учетом вложенности, включая массивы внутри Blocks.
     /// </summary>
-    /// <param name="inputJson">Исходная строка JSON.</param>
-    /// <param name="sourceCount">Выходное количество объектов в массивах Sources.</param>
-    /// <param name="groupCount">Выходное количество объектов в массивах Groups.</param>
-    /// <param name="tagCount">Выходное количество объектов в массивах Tags.</param>
     public static void GetJsonStatistics(string inputJson, out int sourceCount, out int groupCount, out int tagCount)
     {
         JObject root = JObject.Parse(inputJson);
