@@ -458,6 +458,172 @@ public static class ProjectSettingsConverter
         return root.ToString(Formatting.Indented);
     }
 
+    /// <summary>
+    /// Нормализует настройки, обрабатывая дублирующиеся значения свойства "Title".
+    /// Для каждого массива (Sources, Groups, Tags) если встречаются объекты с одинаковым Title,
+    /// то для второго и последующих экземпляров к Title добавляется суффикс _copyN, где N – номер копии.
+    /// Первый экземпляр с данным Title остаётся без изменений.
+    /// </summary>
+    public static string NormalizeDuplicateEntries(string inputJson)
+    {
+        JObject root = JObject.Parse(inputJson);
+        // Список имен массивов, которые нужно обработать
+        string[] arrayNames = { "Sources", "Groups", "Tags" };
+
+        foreach (var arrayName in arrayNames)
+        {
+            if (root[arrayName] != null && root[arrayName].Type == JTokenType.Array)
+            {
+                var array = (JArray)root[arrayName];
+                // Словарь для хранения количества встреч Title
+                Dictionary<string, int> titleCounts = new Dictionary<string, int>();
+                foreach (JObject item in array.OfType<JObject>())
+                {
+                    JToken titleToken = item["Title"];
+                    if (titleToken != null)
+                    {
+                        string title = titleToken.ToString();
+                        if (!titleCounts.ContainsKey(title))
+                        {
+                            // Первый экземпляр – сохраняем как есть.
+                            titleCounts[title] = 0;
+                        }
+                        else
+                        {
+                            // Повторный экземпляр – увеличиваем счётчик и обновляем Title
+                            titleCounts[title]++;
+                            string newTitle = $"{title}_copy{titleCounts[title]}";
+                            item["Title"] = newTitle;
+                        }
+                    }
+                }
+            }
+        }
+
+        return root.ToString(Formatting.Indented);
+    }
+
+    /// <summary>
+    /// Нормализует дублирующиеся записи в корневых массивах (например, "Sources", "Groups" или "Tags") по свойству "Title".
+    /// Если для объектов с одинаковым Title можно выполнить объединение (то есть все совпадающие свойства имеют идентичные значения),
+    /// то все эти объекты объединяются в один (при этом объединяются все уникальные свойства);
+    /// если объединить объекты невозможно (при обнаружении конфликта – например, один объект имеет свойство "Desc" со значением A, а другой – "Desc" со значением B),
+    /// то объединение не выполняется, и для каждого объекта из этой группы применяется переименование, добавляя суффиксы _copy1, _copy2 и т.д. (первый объект остаётся без изменений).
+    /// В итоге для каждого Title либо происходит объединение, либо остаются все оригинальные объекты с уникальными именами.
+    /// </summary>
+    /// <param name="inputJson">
+    /// Исходная строка JSON, содержащая корневые массивы, например, "Sources", "Groups" и "Tags".
+    /// </param>
+    /// <returns>
+    /// Нормализованная строка JSON, в которой для каждого массива дублирующиеся объекты обработаны согласно вышеописанному правилу.
+    /// </returns>
+    public static string NormalizeDuplicateEntriesMerge(string inputJson)
+    {
+        JObject root = JObject.Parse(inputJson);
+        // Массивы, для которых проводится нормализация
+        string[] arrayNames = { "Sources", "Groups", "Tags" };
+
+        foreach (var arrayName in arrayNames)
+        {
+            if (root[arrayName] != null && root[arrayName].Type == JTokenType.Array)
+            {
+                JArray array = (JArray)root[arrayName];
+                // Группируем объекты по значению свойства "Title"
+                var groupsByTitle = array.OfType<JObject>()
+                                         .GroupBy(obj => obj["Title"]?.ToString() ?? string.Empty)
+                                         .Where(g => !string.IsNullOrEmpty(g.Key) && g.Count() > 1);
+
+                // Для хранения объектов, которые мы будем добавлять вместо объединённой группы
+                List<JObject> mergedObjects = new List<JObject>();
+                // Для хранения объектов, для которых объединение не удалось – будем применять переименование (fallback)
+                List<JObject> nonMergedObjects = new List<JObject>();
+
+                // Итоговый список объектов, который заменит исходный массив
+                List<JObject> resultObjects = new List<JObject>();
+
+                // Создадим список всех объектов, группируя по Title.
+                // Для тех Title, которые встречаются один раз, оставляем объект без изменений.
+                var singleObjects = array.OfType<JObject>()
+                                           .Where(obj => string.IsNullOrEmpty(obj["Title"]?.ToString()) ||
+                                                         array.Count(x => x["Title"]?.ToString() == obj["Title"]?.ToString()) == 1);
+                resultObjects.AddRange(singleObjects);
+
+                // Обрабатываем каждую группу с одинаковым Title
+                foreach (var group in groupsByTitle)
+                {
+                    bool mergeable = true;
+                    Dictionary<string, JToken> mergedProperties = new Dictionary<string, JToken>();
+                    string commonTitle = group.Key;
+
+                    // Перебираем все объекты в группе.
+                    foreach (JObject obj in group)
+                    {
+                        foreach (var prop in obj.Properties())
+                        {
+                            // Пропускаем свойство Title
+                            if (prop.Name == "Title")
+                                continue;
+
+                            // Если такое свойство уже встречалось в предыдущих объектах группы
+                            if (mergedProperties.ContainsKey(prop.Name))
+                            {
+                                // Если значение отличается, устанавливаем флаг невозможности объединения.
+                                if (!JToken.DeepEquals(mergedProperties[prop.Name], prop.Value))
+                                {
+                                    mergeable = false;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                // Добавляем свойство, если ранее не встречалось.
+                                mergedProperties[prop.Name] = prop.Value.DeepClone();
+                            }
+                        }
+                        if (!mergeable)
+                            break;
+                    }
+
+                    if (mergeable)
+                    {
+                        // Объединяем все объекты в один
+                        JObject merged = new JObject();
+                        merged["Title"] = commonTitle;
+                        foreach (var kvp in mergedProperties)
+                        {
+                            merged[kvp.Key] = kvp.Value;
+                        }
+                        mergedObjects.Add(merged);
+                        resultObjects.Add(merged);
+                    }
+                    else
+                    {
+                        // Если объединить объекты нельзя – применяем fallback:
+                        // Оставляем все объекты этой группы, но переименовываем их, добавляя суффикс _copyN
+                        int count = 0;
+                        foreach (JObject obj in group)
+                        {
+                            // Клонируем объект, чтобы не изменять оригинал.
+                            JObject clone = (JObject)obj.DeepClone();
+                            if (count > 0)
+                            {
+                                clone["Title"] = $"{commonTitle}_copy{count}";
+                            }
+                            nonMergedObjects.Add(clone);
+                            resultObjects.Add(clone);
+                            count++;
+                        }
+                    }
+                }
+
+                // Заменяем исходный массив на результат
+                root[arrayName] = new JArray(resultObjects);
+            }
+        }
+
+        return root.ToString(Formatting.Indented);
+    }
+
 
 }
 
