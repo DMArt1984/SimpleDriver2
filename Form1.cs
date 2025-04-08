@@ -432,12 +432,6 @@ namespace WinSimpleIDriver
             if (String.IsNullOrWhiteSpace(input))
                 return;
 
-            var result1 = ProjectSettingsConverter.ConvertToLongForm(input);
-            var result2 = ProjectSettingsConverter.ConvertToShortForm(input);
-            var result3 = ProjectSettingsConverter.ConvertToSourceNestedForm(input);
-            var result4 = ProjectSettingsConverter.ConvertToGroupNestedForm(input);
-
-
             AppTitle(Settings.settingsFileName, fileName);
 
             // Последние файлы

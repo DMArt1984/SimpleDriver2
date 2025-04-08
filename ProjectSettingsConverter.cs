@@ -1039,6 +1039,72 @@ public static class ProjectSettingsConverter
         CountTokens(root, ref sourceCount, ref groupCount, ref tagCount, false);
     }
 
+    // ============================================================================================================
+
+    /// <summary>
+    /// Извлекает заданную область из строки JSON.
+    /// Например, если входной JSON содержит корневой объект с ключами "Sources", "Groups", "Tags", 
+    /// метод может вернуть содержимое одного из этих ключей.
+    /// </summary>
+    public static string ExtractSection(string inputJson, string sectionName)
+    {
+        if (string.IsNullOrWhiteSpace(inputJson))
+        {
+            throw new ArgumentException("Входной JSON не может быть пустым.", nameof(inputJson));
+        }
+        if (string.IsNullOrWhiteSpace(sectionName))
+        {
+            throw new ArgumentException("Имя секции не может быть пустым.", nameof(sectionName));
+        }
+
+        JObject obj = JObject.Parse(inputJson);
+
+        // Если требуется извлечь область, например, "Sources", "Groups", "Tags" или любую другую.
+        JToken token = obj[sectionName];
+        if (token == null)
+        {
+            return null;
+        }
+
+        // Возвращаем отформатированную строку этой области.
+        return token.ToString(Formatting.Indented);
+    }
+
+    /// <summary>
+    /// Заменяет выбранную область (секцию) в входном JSON строке на заданное новое содержимое.
+    /// Если указанная секция существует, она заменяется; если нет, то она добавляется в корневой объект.
+    /// </summary>
+    public static string ReplaceSection(string inputJson, string sectionName, string newSectionJson)
+    {
+        if (string.IsNullOrWhiteSpace(inputJson))
+            throw new ArgumentException("Входной JSON не может быть пустым.", nameof(inputJson));
+
+        if (string.IsNullOrWhiteSpace(sectionName))
+            throw new ArgumentException("Имя секции не может быть пустым.", nameof(sectionName));
+
+        if (string.IsNullOrWhiteSpace(newSectionJson))
+            throw new ArgumentException("Новое содержимое секции не может быть пустым.", nameof(newSectionJson));
+
+        // Парсим исходный JSON
+        JObject root = JObject.Parse(inputJson);
+
+        // Парсим новое содержимое секции
+        JToken newSectionToken;
+        try
+        {
+            newSectionToken = JToken.Parse(newSectionJson);
+        }
+        catch (JsonException ex)
+        {
+            throw new ArgumentException("Новое содержимое секции не является валидным JSON.", nameof(newSectionJson), ex);
+        }
+
+        // Если секция уже существует, заменяем её, иначе добавляем новую секцию в корневой объект.
+        root[sectionName] = newSectionToken;
+
+        // Возвращаем обновленный JSON с форматированием.
+        return root.ToString(Formatting.Indented);
+    }
 
 }
 
