@@ -450,6 +450,9 @@ namespace WinSimpleIDriver
                 EditorControl.UnpackProject(input);
             });
 
+            // test
+            var ret = EditorControl.PackProject();
+
             // Обновление UI (обновление меню и формы)
             UpdateRecentFilesMenu();
             ProjectToForm();

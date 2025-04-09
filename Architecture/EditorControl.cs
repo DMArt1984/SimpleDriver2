@@ -1,5 +1,6 @@
 ﻿using Connector;
 using DML;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -197,8 +198,180 @@ namespace WinSimpleIDriver
         // Упаковка проекта
         static public dynamic PackProject()
         {
-            // здесь нужен код...
-            return null; // нужно вернуть dynamic data
+            // Создаём корневой объект для настроек проекта
+            JObject root = new JObject();
+
+            // Формирование раздела Data с Sources, Groups и Tags
+            JObject data = new JObject();
+
+            // Источники
+            JArray arrSources = new JArray();
+            if (sources != null)
+            {
+                foreach (var src in sources)
+                {
+                    // Собираем свойства источника согласно схеме UnpackProject
+                    JObject jSrc = new JObject();
+                    //jSrc["Id"] = src.Id;
+                    jSrc["Title"] = src.title;
+                    jSrc["Driver"] = src.driver.ToString(); // можно изменить вывод драйвера при необходимости
+                    jSrc["Address"] = src.address;
+
+                    if (src.disableOnStart)
+                        jSrc["Off"] = src.disableOnStart;
+
+                    if (String.IsNullOrWhiteSpace(src.description) == false)
+                        jSrc["Desc"] = src.description;
+
+                    if (src.auto)
+                        jSrc["Auto"] = src.auto;
+
+                    if (src.reconnect)
+                        jSrc["Reconnect"] = src.reconnect;
+                    
+                    arrSources.Add(jSrc);
+                }
+            }
+            data["Sources"] = arrSources;
+
+            // Группы
+            JArray arrGroups = new JArray();
+            if (groups != null)
+            {
+                foreach (var grp in groups)
+                {
+                    JObject jGrp = new JObject();
+                    //jGrp["Id"] = grp.Id;
+                    jGrp["Title"] = grp.title;
+                    jGrp["UpdateRate"] = grp.updateRate;
+                    jGrp["Source"] = grp.sourceTitle;
+
+                    if (grp.disableOnStart)
+                        jGrp["Off"] = grp.disableOnStart;
+
+                    if (String.IsNullOrWhiteSpace(grp.description) == false)
+                        jGrp["Desc"] = grp.description;
+
+                    arrGroups.Add(jGrp);
+                }
+            }
+            data["Groups"] = arrGroups;
+
+            // Теги
+            JArray arrTags = new JArray();
+            if (tags != null)
+            {
+                foreach (var tag in tags)
+                {
+                    JObject jTag = new JObject();
+                    //jTag["Id"] = tag.Id;
+                    jTag["Title"] = tag.title;
+                    jTag["Group"] = tag.groupTitle;
+                    jTag["DataType"] = tag.dataType.ToString();
+                    jTag["Addr"] = tag.address;
+                    
+                    if (tag.disableOnStart)
+                        jTag["Off"] = tag.disableOnStart;
+
+                    if (String.IsNullOrWhiteSpace(tag.description) == false)
+                        jTag["Desc"] = tag.description;
+
+                    if (String.IsNullOrWhiteSpace(tag.writeTitle) == false)
+                        jTag["Write"] = tag.writeTitle;
+
+                    if (String.IsNullOrWhiteSpace(tag.constValue) == false)
+                        jTag["Value"] = tag.constValue;
+
+                    if (tag.isCommand)
+                        jTag["Command"] = tag.isCommand;
+
+                    if (String.IsNullOrWhiteSpace(tag.block) == false)
+                        jTag["Block"] = tag.block;
+
+                    arrTags.Add(jTag);
+                }
+            }
+            data["Tags"] = arrTags;
+
+            root["Data"] = data;
+
+            // Формирование раздела Structures если данные присутствуют
+            if (structures != null && structures.Count > 0)
+            {
+                JArray arrStructures = new JArray();
+                foreach (var structEditor in structures)
+                {
+                    JObject jStruct = new JObject();
+                    jStruct["Id"] = structEditor.Id;
+                    jStruct["Title"] = structEditor.title;
+                    jStruct["Join"] = structEditor.join;
+                    jStruct["Address"] = structEditor.templateAddress;
+                    jStruct["DataType"] = structEditor.dataType.ToString();
+                    jStruct["Source"] = structEditor.tagSource;
+                    jStruct["Group"] = structEditor.group;
+                    // Формирование массива SourceTags по данным из structTags
+                    JArray arrSourceTags = new JArray();
+                    if (structTags != null)
+                    {
+                        foreach (var st in structTags.Where(t => t.structureTitle == structEditor.title))
+                        {
+                            arrSourceTags.Add(st.title);
+                        }
+                    }
+                    jStruct["SourceTags"] = arrSourceTags;
+                    // Формирование массива TargetTags по данным из structTargets
+                    JArray arrTargetTags = new JArray();
+                    if (structTargets != null)
+                    {
+                        foreach (var tt in structTargets.Where(t => t.structureTitle == structEditor.title))
+                        {
+                            JObject jTarget = new JObject();
+                            jTarget["Title"] = tt.title;
+                            jTarget["Address"] = tt.innerAddress;
+                            jTarget["Desc"] = tt.desc;
+                            arrTargetTags.Add(jTarget);
+                        }
+                    }
+                    jStruct["TargetTags"] = arrTargetTags;
+                    arrStructures.Add(jStruct);
+                }
+                root["Structures"] = arrStructures;
+            }
+
+            // Формирование раздела Includes если данные присутствуют
+            if (includes != null && includes.Count > 0)
+            {
+                JArray arrIncludes = new JArray();
+                foreach (var incl in includes)
+                {
+                    JObject jIncl = new JObject();
+                    jIncl["Id"] = incl.Id;
+                    jIncl["fileName"] = incl.fileName;
+                    jIncl["prefix"] = incl.prefix;
+                    // Для изменений собираем словарь изменений из includeChilds по совпадению префикса
+                    JObject jChanges = new JObject();
+                    if (includeChilds != null)
+                    {
+                        foreach (var child in includeChilds.Where(c => c.prefix == incl.prefix))
+                        {
+                            jChanges[child.changeFrom] = child.changeTo;
+                        }
+                    }
+                    jIncl["changes"] = jChanges;
+                    arrIncludes.Add(jIncl);
+                }
+                root["Includes"] = arrIncludes;
+            }
+
+            // Дополнительно можно сохранить имя файла проекта
+            //if (!string.IsNullOrWhiteSpace(fullFileName))
+            //{
+            //    root["fullFileName"] = fullFileName;
+            //}
+
+            // получение строки из JSON данных
+            string settings = JsonControl.Serialize_Json_Data(root);
+            return settings;
         }
 
         #endregion
