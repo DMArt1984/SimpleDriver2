@@ -80,28 +80,15 @@ namespace WinSimpleIDriver
 
                 // Распаковка источников
                 if (SourceLib.InProject(data))
-                    ParseSources(data.Sources);
+                    sources = ParseSources(data.Sources);
 
                 // Распаковка групп
                 if (GroupLib.InProject(data))
-                    ParseGroups(data.Groups);
+                    groups = ParseGroups(data.Groups);
 
                 // Распаковка тегов
                 if (TagLib.InProject(data))
-                    ParseTags(data.Tags);
-
-                // Блоки с тегами
-                //if (false && TagLib.IsListBlocks(data))
-                //{
-                //    if (data.Blocks != null)
-                //    {
-                //        foreach (var elItem in data.Blocks)
-                //        {
-                //            string nm = GetBlockName(elItem);
-                //            ParseTags(elItem.Tags, 0, 0, nm);
-                //        }
-                //    }
-                //}
+                    tags = ParseTags(data.Tags);
 
             }
 
