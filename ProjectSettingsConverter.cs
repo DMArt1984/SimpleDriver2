@@ -8,6 +8,8 @@ public static class ProjectSettingsConverter
 {
     #region Normalize
 
+    
+
     /// <summary>
     /// Приводит исходный JSON в базовую длинную форму и последовательно выполняет нормализацию:
     /// 1. ConvertToLongForm – перевод всех объектов в корневые массивы (Sources, Groups, Tags).
