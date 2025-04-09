@@ -159,7 +159,10 @@ namespace DML
             static public TextBox tbFilter;
 
             #region DGV.Add
-            
+            static public void DataToTable(List<SourceEditor> sources)
+            {
+                SourceLib.DataToTable(dgv, col, sources);
+            }
             #endregion
 
             static public List<SourceEditor> TableToData()
@@ -302,7 +305,10 @@ namespace DML
             static public ComboBox coFilterSource;
 
             #region DGV.Add
-            
+            static public void DataToTable(List<GroupEditor> groups)
+            {
+                GroupLib.DataToTable(dgv, col, groups);
+            }
             #endregion
 
             static public List<GroupEditor> TableToData()
@@ -423,71 +429,7 @@ namespace DML
             #region DGV.Add
             static public void DataToTable(List<TagEditor> tags)
             {
-                // Проверка на null DataGridView
-                if (dgv == null)
-                {
-                    MessageBox.Show("DataGridView не инициализирован!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                // Инициализация DataTable, если DataSource отсутствует
-                if (dgv.DataSource == null)
-                {
-                    tagTable = new DataTable();
-
-                    // Добавляем только те столбцы, которые уже существуют в DataGridView
-                    foreach (DataGridViewColumn column in dgv.Columns)
-                    {
-                            Type columnType = column.ValueType ?? typeof(string); // Если тип null, используем string
-                            tagTable.Columns.Add(column.Name, columnType);
-                    }
-
-                    // Создание BindingSource и привязка к DataGridView
-                    bindingSource = new BindingSource { DataSource = tagTable };
-                    dgv.DataSource = bindingSource;
-                }
-                else
-                {
-                    // Получаем существующую DataTable из DataSource
-                    if (dgv.DataSource is BindingSource binding && binding.DataSource is DataTable existingTable)
-                    {
-                        tagTable = existingTable;
-                        tagTable.Clear(); // Очищаем таблицу перед добавлением новых данных
-                    }
-                    else
-                    {
-                        MessageBox.Show("Не удалось получить DataTable из DataSource!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                }
-
-                if (tags != null)
-                {
-                    // Добавляем данные в DataTable
-                    foreach (var item in tags)
-                    {
-                        var row = tagTable.NewRow();
-                        row[0] = item.Id;
-                        row[3] = !item.disableOnStart;
-                        row[col.Title] = item.title;
-                        row[col.DataType] = item.dataType.ToString();
-                        row[col.Group] = item.groupTitle;
-                        row[col.Address] = item.address;
-                        row[col.Desc] = item.description;
-                        row[col.Block] = item.block;
-                        row[col.Page] = "";
-
-                        row[col.Calc] = false;
-                        row[col.Status] = "";
-                        row[col.Message] = "";
-                        row[col.Value] = "";
-
-                        tagTable.Rows.Add(row);
-                    }
-                }
-
-                // Обновляем данные в DataGridView
-                bindingSource.ResetBindings(false);
+                TagLib.DataToTable(dgv, col, tagTable, bindingSource, tags);
             }
             #endregion
 

@@ -464,7 +464,7 @@ namespace WinSimpleIDriver
         // Рисование на форме
         private void ProjectToForm()
         {
-            SourceLib.DataToTable(DataTableLib.dtSource.dgv, DataTableLib.dtSource.col, EditorControl.sources);
+            DataTableLib.dtSource.DataToTable(EditorControl.sources);
             DataTableLib.dtGroup.DataToTable(EditorControl.groups);
             DataTableLib.dtTag.DataToTable(EditorControl.tags);
 
