@@ -126,7 +126,7 @@ namespace WinSimpleIDriver
                         auto = auto,
                         reconnect = reconnect
                     };
-                    sources.Add(rowSource);
+                    items.Add(rowSource);
                 }
             }
             return items;
