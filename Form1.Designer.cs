@@ -242,6 +242,11 @@ namespace WinSimpleIDriver
             this.splitContainerLogMain = new System.Windows.Forms.SplitContainer();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonJsonToModels = new System.Windows.Forms.Button();
+            this.buttonModelsToTables = new System.Windows.Forms.Button();
+            this.buttonTablesToModels = new System.Windows.Forms.Button();
+            this.buttonModelsToJson = new System.Windows.Forms.Button();
+            this.buttonModelsToRuntime = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTreeMain)).BeginInit();
@@ -322,70 +327,70 @@ namespace WinSimpleIDriver
             // ToolStripMenuItemNew
             // 
             this.ToolStripMenuItemNew.Name = "ToolStripMenuItemNew";
-            this.ToolStripMenuItemNew.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemNew.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemNew.Text = "Новый";
             this.ToolStripMenuItemNew.Click += new System.EventHandler(this.ToolStripMenuItemNew_Click);
             // 
             // ToolStripMenuItemOpen
             // 
             this.ToolStripMenuItemOpen.Name = "ToolStripMenuItemOpen";
-            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemOpen.Text = "Открыть";
             this.ToolStripMenuItemOpen.Click += new System.EventHandler(this.ToolStripMenuItemOpen_Click);
             // 
             // ToolStripMenuItemSave
             // 
             this.ToolStripMenuItemSave.Name = "ToolStripMenuItemSave";
-            this.ToolStripMenuItemSave.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemSave.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemSave.Text = "Сохранить";
             this.ToolStripMenuItemSave.Click += new System.EventHandler(this.ToolStripMenuItemSave_Click);
             // 
             // ToolStripMenuItemSaveAs
             // 
             this.ToolStripMenuItemSaveAs.Name = "ToolStripMenuItemSaveAs";
-            this.ToolStripMenuItemSaveAs.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemSaveAs.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemSaveAs.Text = "Сохранить как...";
             this.ToolStripMenuItemSaveAs.Click += new System.EventHandler(this.ToolStripMenuItemSaveAs_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(160, 6);
             // 
             // ToolStripMenuItemLastFiles
             // 
             this.ToolStripMenuItemLastFiles.Name = "ToolStripMenuItemLastFiles";
-            this.ToolStripMenuItemLastFiles.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemLastFiles.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemLastFiles.Text = "Последние";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(160, 6);
             // 
             // ToolStripMenuItemImport
             // 
             this.ToolStripMenuItemImport.Name = "ToolStripMenuItemImport";
-            this.ToolStripMenuItemImport.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemImport.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemImport.Text = "Импорт";
             this.ToolStripMenuItemImport.Click += new System.EventHandler(this.ToolStripMenuItemImport_Click);
             // 
             // ToolStripMenuItemExport
             // 
             this.ToolStripMenuItemExport.Name = "ToolStripMenuItemExport";
-            this.ToolStripMenuItemExport.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemExport.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemExport.Text = "Экспорт";
             this.ToolStripMenuItemExport.Click += new System.EventHandler(this.ToolStripMenuItemExport_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(160, 6);
             // 
             // ToolStripMenuItemExit
             // 
             this.ToolStripMenuItemExit.Name = "ToolStripMenuItemExit";
-            this.ToolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemExit.Size = new System.Drawing.Size(163, 22);
             this.ToolStripMenuItemExit.Text = "Выход";
             this.ToolStripMenuItemExit.Click += new System.EventHandler(this.ToolStripMenuItemExit_Click);
             // 
@@ -594,6 +599,11 @@ namespace WinSimpleIDriver
             // 
             // tabPageJson
             // 
+            this.tabPageJson.Controls.Add(this.buttonModelsToRuntime);
+            this.tabPageJson.Controls.Add(this.buttonModelsToJson);
+            this.tabPageJson.Controls.Add(this.buttonTablesToModels);
+            this.tabPageJson.Controls.Add(this.buttonModelsToTables);
+            this.tabPageJson.Controls.Add(this.buttonJsonToModels);
             this.tabPageJson.Controls.Add(this.statusStrip2);
             this.tabPageJson.Controls.Add(this.toolStrip1);
             this.tabPageJson.Controls.Add(this.richTextBoxJsonProject);
@@ -726,7 +736,7 @@ namespace WinSimpleIDriver
             this.richTextBoxJsonProject.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.richTextBoxJsonProject.Location = new System.Drawing.Point(4, 30);
             this.richTextBoxJsonProject.Name = "richTextBoxJsonProject";
-            this.richTextBoxJsonProject.Size = new System.Drawing.Size(1111, 355);
+            this.richTextBoxJsonProject.Size = new System.Drawing.Size(1111, 327);
             this.richTextBoxJsonProject.TabIndex = 0;
             this.richTextBoxJsonProject.Text = "";
             // 
@@ -743,11 +753,11 @@ namespace WinSimpleIDriver
             this.tabPageSource.Controls.Add(this.buttonSourceDel);
             this.tabPageSource.Controls.Add(this.buttonSourceCopy);
             this.tabPageSource.Controls.Add(this.dataGridViewSource);
-            this.tabPageSource.Location = new System.Drawing.Point(4, 24);
+            this.tabPageSource.Location = new System.Drawing.Point(4, 22);
             this.tabPageSource.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageSource.Name = "tabPageSource";
             this.tabPageSource.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPageSource.Size = new System.Drawing.Size(1122, 410);
+            this.tabPageSource.Size = new System.Drawing.Size(1122, 412);
             this.tabPageSource.TabIndex = 0;
             this.tabPageSource.Text = "Источники данных";
             this.tabPageSource.UseVisualStyleBackColor = true;
@@ -891,7 +901,7 @@ namespace WinSimpleIDriver
             this.dataGridViewSource.MultiSelect = false;
             this.dataGridViewSource.Name = "dataGridViewSource";
             this.dataGridViewSource.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewSource.Size = new System.Drawing.Size(1109, 373);
+            this.dataGridViewSource.Size = new System.Drawing.Size(1109, 375);
             this.dataGridViewSource.TabIndex = 1;
             this.dataGridViewSource.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewSource_CellBeginEdit);
             this.dataGridViewSource.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewSource_CellEndEdit);
@@ -1012,11 +1022,11 @@ namespace WinSimpleIDriver
             this.tabPageGroup.Controls.Add(this.buttonGroupDel);
             this.tabPageGroup.Controls.Add(this.buttonGroupCopy);
             this.tabPageGroup.Controls.Add(this.dataGridViewGroup);
-            this.tabPageGroup.Location = new System.Drawing.Point(4, 24);
+            this.tabPageGroup.Location = new System.Drawing.Point(4, 22);
             this.tabPageGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageGroup.Name = "tabPageGroup";
             this.tabPageGroup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPageGroup.Size = new System.Drawing.Size(1122, 410);
+            this.tabPageGroup.Size = new System.Drawing.Size(1122, 412);
             this.tabPageGroup.TabIndex = 1;
             this.tabPageGroup.Text = "Группы опроса";
             this.tabPageGroup.UseVisualStyleBackColor = true;
@@ -1170,7 +1180,7 @@ namespace WinSimpleIDriver
             this.dataGridViewGroup.MultiSelect = false;
             this.dataGridViewGroup.Name = "dataGridViewGroup";
             this.dataGridViewGroup.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewGroup.Size = new System.Drawing.Size(1109, 339);
+            this.dataGridViewGroup.Size = new System.Drawing.Size(1109, 341);
             this.dataGridViewGroup.TabIndex = 9;
             this.dataGridViewGroup.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewGroup_CellBeginEdit);
             this.dataGridViewGroup.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewGroup_CellEndEdit);
@@ -1276,10 +1286,10 @@ namespace WinSimpleIDriver
             this.tabPageTag.Controls.Add(this.buttonTagDel);
             this.tabPageTag.Controls.Add(this.buttonTagCopy);
             this.tabPageTag.Controls.Add(this.dataGridViewTag);
-            this.tabPageTag.Location = new System.Drawing.Point(4, 24);
+            this.tabPageTag.Location = new System.Drawing.Point(4, 22);
             this.tabPageTag.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPageTag.Name = "tabPageTag";
-            this.tabPageTag.Size = new System.Drawing.Size(1122, 410);
+            this.tabPageTag.Size = new System.Drawing.Size(1122, 412);
             this.tabPageTag.TabIndex = 2;
             this.tabPageTag.Text = "Теги";
             this.tabPageTag.UseVisualStyleBackColor = true;
@@ -1521,7 +1531,7 @@ namespace WinSimpleIDriver
             this.dataGridViewTag.MultiSelect = false;
             this.dataGridViewTag.Name = "dataGridViewTag";
             this.dataGridViewTag.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewTag.Size = new System.Drawing.Size(1109, 309);
+            this.dataGridViewTag.Size = new System.Drawing.Size(1109, 311);
             this.dataGridViewTag.TabIndex = 9;
             this.dataGridViewTag.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewTag_CellBeginEdit);
             this.dataGridViewTag.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTag_CellEndEdit);
@@ -1670,9 +1680,9 @@ namespace WinSimpleIDriver
             this.tabPageStructure.Controls.Add(this.buttonStructDel);
             this.tabPageStructure.Controls.Add(this.buttonStructCopy);
             this.tabPageStructure.Controls.Add(this.splitContainerStructure);
-            this.tabPageStructure.Location = new System.Drawing.Point(4, 24);
+            this.tabPageStructure.Location = new System.Drawing.Point(4, 22);
             this.tabPageStructure.Name = "tabPageStructure";
-            this.tabPageStructure.Size = new System.Drawing.Size(1122, 410);
+            this.tabPageStructure.Size = new System.Drawing.Size(1122, 412);
             this.tabPageStructure.TabIndex = 5;
             this.tabPageStructure.Text = "Структуры тегов";
             this.tabPageStructure.UseVisualStyleBackColor = true;
@@ -1755,7 +1765,7 @@ namespace WinSimpleIDriver
             this.splitContainerStructure.Panel2.Controls.Add(this.label3);
             this.splitContainerStructure.Panel2.Controls.Add(this.label2);
             this.splitContainerStructure.Panel2.Controls.Add(this.buttonStructureRight);
-            this.splitContainerStructure.Size = new System.Drawing.Size(1116, 371);
+            this.splitContainerStructure.Size = new System.Drawing.Size(1116, 373);
             this.splitContainerStructure.SplitterDistance = 163;
             this.splitContainerStructure.TabIndex = 0;
             // 
@@ -1906,7 +1916,7 @@ namespace WinSimpleIDriver
             // splitContainerStructTagTarget.Panel2
             // 
             this.splitContainerStructTagTarget.Panel2.Controls.Add(this.dataGridViewStructureTarget);
-            this.splitContainerStructTagTarget.Size = new System.Drawing.Size(1115, 169);
+            this.splitContainerStructTagTarget.Size = new System.Drawing.Size(1115, 171);
             this.splitContainerStructTagTarget.SplitterDistance = 423;
             this.splitContainerStructTagTarget.TabIndex = 25;
             // 
@@ -1925,7 +1935,7 @@ namespace WinSimpleIDriver
             this.dataGridViewStructureTag.MultiSelect = false;
             this.dataGridViewStructureTag.Name = "dataGridViewStructureTag";
             this.dataGridViewStructureTag.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewStructureTag.Size = new System.Drawing.Size(411, 157);
+            this.dataGridViewStructureTag.Size = new System.Drawing.Size(411, 159);
             this.dataGridViewStructureTag.TabIndex = 23;
             this.dataGridViewStructureTag.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStructureTag_CellEndEdit);
             this.dataGridViewStructureTag.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewStructureTag_UserAddedRow);
@@ -1971,7 +1981,7 @@ namespace WinSimpleIDriver
             this.dataGridViewStructureTarget.MultiSelect = false;
             this.dataGridViewStructureTarget.Name = "dataGridViewStructureTarget";
             this.dataGridViewStructureTarget.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewStructureTarget.Size = new System.Drawing.Size(680, 157);
+            this.dataGridViewStructureTarget.Size = new System.Drawing.Size(680, 159);
             this.dataGridViewStructureTarget.TabIndex = 11;
             this.dataGridViewStructureTarget.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStructureTarget_CellEndEdit);
             this.dataGridViewStructureTarget.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewTarget_UserAddedRow);
@@ -2050,9 +2060,9 @@ namespace WinSimpleIDriver
             this.tabPageInclude.Controls.Add(this.buttonIncludeDel);
             this.tabPageInclude.Controls.Add(this.buttonIncludeCopy);
             this.tabPageInclude.Controls.Add(this.splitContainerInclude);
-            this.tabPageInclude.Location = new System.Drawing.Point(4, 24);
+            this.tabPageInclude.Location = new System.Drawing.Point(4, 22);
             this.tabPageInclude.Name = "tabPageInclude";
-            this.tabPageInclude.Size = new System.Drawing.Size(1122, 410);
+            this.tabPageInclude.Size = new System.Drawing.Size(1122, 412);
             this.tabPageInclude.TabIndex = 4;
             this.tabPageInclude.Text = "Классы (внешние проекты)";
             this.tabPageInclude.UseVisualStyleBackColor = true;
@@ -2133,7 +2143,7 @@ namespace WinSimpleIDriver
             this.splitContainerInclude.Panel2.Controls.Add(this.textBoxIncludeChildFilter);
             this.splitContainerInclude.Panel2.Controls.Add(this.buttonIncludeRight);
             this.splitContainerInclude.Panel2.Controls.Add(this.dataGridViewIncludeChild);
-            this.splitContainerInclude.Size = new System.Drawing.Size(1116, 369);
+            this.splitContainerInclude.Size = new System.Drawing.Size(1116, 371);
             this.splitContainerInclude.SplitterDistance = 552;
             this.splitContainerInclude.SplitterWidth = 10;
             this.splitContainerInclude.TabIndex = 4;
@@ -2164,7 +2174,7 @@ namespace WinSimpleIDriver
             // buttonIncludeLeft
             // 
             this.buttonIncludeLeft.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.buttonIncludeLeft.Location = new System.Drawing.Point(530, 121);
+            this.buttonIncludeLeft.Location = new System.Drawing.Point(530, 122);
             this.buttonIncludeLeft.Name = "buttonIncludeLeft";
             this.buttonIncludeLeft.Size = new System.Drawing.Size(17, 118);
             this.buttonIncludeLeft.TabIndex = 3;
@@ -2187,7 +2197,7 @@ namespace WinSimpleIDriver
             this.dataGridViewInclude.MultiSelect = false;
             this.dataGridViewInclude.Name = "dataGridViewInclude";
             this.dataGridViewInclude.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewInclude.Size = new System.Drawing.Size(523, 331);
+            this.dataGridViewInclude.Size = new System.Drawing.Size(523, 333);
             this.dataGridViewInclude.TabIndex = 2;
             this.dataGridViewInclude.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewInclude_CellEndEdit);
             this.dataGridViewInclude.SelectionChanged += new System.EventHandler(this.dataGridViewInclude_SelectionChanged);
@@ -2232,7 +2242,7 @@ namespace WinSimpleIDriver
             // buttonIncludeChildFilter
             // 
             this.buttonIncludeChildFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonIncludeChildFilter.Location = new System.Drawing.Point(445, 3);
+            this.buttonIncludeChildFilter.Location = new System.Drawing.Point(439, 3);
             this.buttonIncludeChildFilter.Name = "buttonIncludeChildFilter";
             this.buttonIncludeChildFilter.Size = new System.Drawing.Size(75, 24);
             this.buttonIncludeChildFilter.TabIndex = 16;
@@ -2247,7 +2257,7 @@ namespace WinSimpleIDriver
             this.textBoxIncludeChildFilter.Location = new System.Drawing.Point(231, 4);
             this.textBoxIncludeChildFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxIncludeChildFilter.Name = "textBoxIncludeChildFilter";
-            this.textBoxIncludeChildFilter.Size = new System.Drawing.Size(208, 21);
+            this.textBoxIncludeChildFilter.Size = new System.Drawing.Size(202, 21);
             this.textBoxIncludeChildFilter.TabIndex = 15;
             this.textBoxIncludeChildFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxIncludeChildFilter.TextChanged += new System.EventHandler(this.textBoxChangeFilter_TextChanged);
@@ -2255,7 +2265,7 @@ namespace WinSimpleIDriver
             // buttonIncludeRight
             // 
             this.buttonIncludeRight.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonIncludeRight.Location = new System.Drawing.Point(4, 121);
+            this.buttonIncludeRight.Location = new System.Drawing.Point(4, 122);
             this.buttonIncludeRight.Name = "buttonIncludeRight";
             this.buttonIncludeRight.Size = new System.Drawing.Size(17, 118);
             this.buttonIncludeRight.TabIndex = 4;
@@ -2279,7 +2289,7 @@ namespace WinSimpleIDriver
             this.dataGridViewIncludeChild.MultiSelect = false;
             this.dataGridViewIncludeChild.Name = "dataGridViewIncludeChild";
             this.dataGridViewIncludeChild.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewIncludeChild.Size = new System.Drawing.Size(494, 331);
+            this.dataGridViewIncludeChild.Size = new System.Drawing.Size(488, 333);
             this.dataGridViewIncludeChild.TabIndex = 3;
             this.dataGridViewIncludeChild.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewIncludeChild_CellEndEdit);
             this.dataGridViewIncludeChild.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewIncludeChild_UserAddedRow);
@@ -2390,6 +2400,56 @@ namespace WinSimpleIDriver
             this.notifyIcon1.Text = "WinSimpleDriver";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
+            // buttonJsonToModels
+            // 
+            this.buttonJsonToModels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonJsonToModels.Location = new System.Drawing.Point(4, 361);
+            this.buttonJsonToModels.Name = "buttonJsonToModels";
+            this.buttonJsonToModels.Size = new System.Drawing.Size(122, 23);
+            this.buttonJsonToModels.TabIndex = 3;
+            this.buttonJsonToModels.Text = "JSON > Models";
+            this.buttonJsonToModels.UseVisualStyleBackColor = true;
+            // 
+            // buttonModelsToTables
+            // 
+            this.buttonModelsToTables.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonModelsToTables.Location = new System.Drawing.Point(132, 361);
+            this.buttonModelsToTables.Name = "buttonModelsToTables";
+            this.buttonModelsToTables.Size = new System.Drawing.Size(122, 23);
+            this.buttonModelsToTables.TabIndex = 4;
+            this.buttonModelsToTables.Text = "Models > Tables";
+            this.buttonModelsToTables.UseVisualStyleBackColor = true;
+            // 
+            // buttonTablesToModels
+            // 
+            this.buttonTablesToModels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonTablesToModels.Location = new System.Drawing.Point(864, 361);
+            this.buttonTablesToModels.Name = "buttonTablesToModels";
+            this.buttonTablesToModels.Size = new System.Drawing.Size(122, 23);
+            this.buttonTablesToModels.TabIndex = 5;
+            this.buttonTablesToModels.Text = "Tables > Models";
+            this.buttonTablesToModels.UseVisualStyleBackColor = true;
+            // 
+            // buttonModelsToJson
+            // 
+            this.buttonModelsToJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonModelsToJson.Location = new System.Drawing.Point(992, 361);
+            this.buttonModelsToJson.Name = "buttonModelsToJson";
+            this.buttonModelsToJson.Size = new System.Drawing.Size(122, 23);
+            this.buttonModelsToJson.TabIndex = 6;
+            this.buttonModelsToJson.Text = "Models > JSON";
+            this.buttonModelsToJson.UseVisualStyleBackColor = true;
+            // 
+            // buttonModelsToRuntime
+            // 
+            this.buttonModelsToRuntime.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.buttonModelsToRuntime.Location = new System.Drawing.Point(473, 361);
+            this.buttonModelsToRuntime.Name = "buttonModelsToRuntime";
+            this.buttonModelsToRuntime.Size = new System.Drawing.Size(173, 23);
+            this.buttonModelsToRuntime.TabIndex = 7;
+            this.buttonModelsToRuntime.Text = "Models > RUNTIME";
+            this.buttonModelsToRuntime.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -2667,6 +2727,11 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.StatusStrip statusStrip2;
         private System.Windows.Forms.ToolStripStatusLabel jsonProjectStatistic;
+        private System.Windows.Forms.Button buttonModelsToJson;
+        private System.Windows.Forms.Button buttonTablesToModels;
+        private System.Windows.Forms.Button buttonModelsToTables;
+        private System.Windows.Forms.Button buttonJsonToModels;
+        private System.Windows.Forms.Button buttonModelsToRuntime;
     }
 }
 
