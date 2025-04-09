@@ -196,7 +196,7 @@ namespace WinSimpleIDriver
         #region Pack
 
         // Упаковка проекта
-        static public dynamic PackProject()
+        static public string PackProject()
         {
             // Создаём корневой объект для настроек проекта
             JObject root = new JObject();

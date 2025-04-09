@@ -451,7 +451,7 @@ namespace WinSimpleIDriver
             });
 
             // test
-            var ret = EditorControl.PackProject();
+            //var ret = EditorControl.PackProject();
 
             // Обновление UI (обновление меню и формы)
             UpdateRecentFilesMenu();
@@ -497,13 +497,15 @@ namespace WinSimpleIDriver
         {
             SetLeftLabelMessage1("Сохранение проекта...");
 
-
+            // Упаковка проекта
+            string output = await Task.Run(() => EditorControl.PackProject());
 
             await Task.Run(() =>
             {
                 
             });
 
+            FileControl.SaveToFile(ref fileName, out string path, output); // запись в файл...
 
             SetLeftLabelMessage1("Проект сохранен!");
         }
