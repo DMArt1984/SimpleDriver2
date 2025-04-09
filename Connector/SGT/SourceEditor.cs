@@ -1,6 +1,7 @@
 ﻿
 using DML;
 using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -78,6 +79,51 @@ namespace Connector
             return items;
         }
 
+        // Передача в таблицу
+        static public void DataToTable(DataGridView dgv, DGVSourcesCol col, List<SourceEditor> sources)
+        {
+            // Таблица источников
+            dgv.Rows.Clear();
+            foreach (var item in sources)
+            {
+                DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                row.Cells[0].Value = item.Id;
+                row.Cells[3].Value = !item.disableOnStart;
+                row.Cells[4].Value = item.auto; // автоматический опрос
+                row.Cells[5].Value = item.reconnect; // автоматическое переподключение
+
+                row.Cells[col.Title].Value = item.title;
+                row.Cells[col.Driver].Value = item.driver.ToString();
+                row.Cells[col.Address].Value = item.address;
+                row.Cells[col.Desc].Value = item.description;
+                row.Cells[col.CountTags].Value = 0;
+
+                row.Cells[col.Calc].Value = false;
+                row.Cells[col.Status].Value = "";
+                row.Cells[col.Message].Value = "";
+
+                // -
+                dgv.Rows.Add(row);
+            }
+        }
+
+        static public DGVSourcesCol GetCols(DataGridView dgv)
+        {
+            DGVSourcesCol col = new DGVSourcesCol
+            {
+                Calc = dgv.Columns["sourceCalc"].Index,
+                Title = dgv.Columns["sourceTitle"].Index,
+                Driver = dgv.Columns["sourceDriver"].Index,
+                Address = dgv.Columns["sourceAddress"].Index,
+                Desc = dgv.Columns["sourceDesc"].Index,
+                Status = dgv.Columns["sourceStatus"].Index,
+                Message = dgv.Columns["sourceMessage"].Index,
+                CountTags = dgv.Columns["sourceTags"].Index
+            };
+            return col;
+        }
+
+        // Упаковка источников
         static public JArray PackSources(List<SourceEditor> sources)
         {
             // Источники

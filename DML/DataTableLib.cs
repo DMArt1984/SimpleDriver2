@@ -159,32 +159,7 @@ namespace DML
             static public TextBox tbFilter;
 
             #region DGV.Add
-            static public void DataToTable(List<SourceEditor> sources)
-            {
-                // Таблица источников
-                dgv.Rows.Clear();
-                foreach (var item in sources)
-                {
-                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
-                    row.Cells[0].Value = item.Id;
-                    row.Cells[3].Value = !item.disableOnStart;
-                    row.Cells[4].Value = item.auto; // автоматический опрос
-                    row.Cells[5].Value = item.reconnect; // автоматическое переподключение
-
-                    row.Cells[col.Title].Value = item.title;
-                    row.Cells[col.Driver].Value = item.driver.ToString();
-                    row.Cells[col.Address].Value = item.address;
-                    row.Cells[col.Desc].Value = item.description;
-                    row.Cells[col.CountTags].Value = 0;
-
-                    row.Cells[col.Calc].Value = false;
-                    row.Cells[col.Status].Value = "";
-                    row.Cells[col.Message].Value = "";
-
-                    // -
-                    dgv.Rows.Add(row);
-                }
-            }
+            
             #endregion
 
             static public List<SourceEditor> TableToData()
@@ -251,17 +226,7 @@ namespace DML
             static public void LinkColumns(DataGridView sources)
             {
                 dgv = sources;
-                col = new DGVSourcesCol
-                {
-                    Calc = dgv.Columns["sourceCalc"].Index,
-                    Title = dgv.Columns["sourceTitle"].Index,
-                    Driver = dgv.Columns["sourceDriver"].Index,
-                    Address = dgv.Columns["sourceAddress"].Index,
-                    Desc = dgv.Columns["sourceDesc"].Index,
-                    Status = dgv.Columns["sourceStatus"].Index,
-                    Message = dgv.Columns["sourceMessage"].Index,
-                    CountTags = dgv.Columns["sourceTags"].Index
-                };
+                col = SourceLib.GetCols(dgv);
             }
 
             // Источники. Номера колонок для фильтра в массив
@@ -337,28 +302,7 @@ namespace DML
             static public ComboBox coFilterSource;
 
             #region DGV.Add
-            static public void DataToTable(List<GroupEditor> groups)
-            {
-                // Таблица групп
-                dgv.Rows.Clear();
-                foreach (var item in groups)
-                {
-                    DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
-                    row.Cells[0].Value = item.Id;
-                    row.Cells[3].Value = !item.disableOnStart;
-                    row.Cells[5].Value = item.updateRate.ToString();
-
-                    row.Cells[col.Title].Value = item.title;
-                    row.Cells[col.Source].Value = item.sourceTitle;
-                    row.Cells[col.Desc].Value = item.description;
-                    row.Cells[col.CountTags].Value = 0;
-
-                    row.Cells[col.Status].Value = "";
-
-                    // -
-                    dgv.Rows.Add(row);
-                }
-            }
+            
             #endregion
 
             static public List<GroupEditor> TableToData()
@@ -422,15 +366,7 @@ namespace DML
             static public void LinkColumns(DataGridView groups)
             {
                 dgv = groups;
-                col = new DGVGroupsCol
-                {
-                    Calc = dgv.Columns["groupCalc"].Index,
-                    Title = dgv.Columns["groupTitle"].Index,
-                    Source = dgv.Columns["groupSource"].Index,
-                    Desc = dgv.Columns["groupDesc"].Index,
-                    Status = dgv.Columns["groupStatus"].Index,
-                    CountTags = dgv.Columns["groupTags"].Index
-                };
+                col = GroupLib.GetCols(dgv);
             }
 
             // Группы. Номера колонок для фильтра в массив

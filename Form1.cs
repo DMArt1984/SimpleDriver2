@@ -13,6 +13,7 @@ using DML.Log;
 using DML;
 using System.IO;
 using WinSimpleIDriver.Editor;
+using Connector;
 
 namespace WinSimpleIDriver
 {
@@ -463,9 +464,10 @@ namespace WinSimpleIDriver
         // Рисование на форме
         private void ProjectToForm()
         {
-            DataTableLib.dtSource.DataToTable(EditorControl.sources);
+            SourceLib.DataToTable(DataTableLib.dtSource.dgv, DataTableLib.dtSource.col, EditorControl.sources);
             DataTableLib.dtGroup.DataToTable(EditorControl.groups);
             DataTableLib.dtTag.DataToTable(EditorControl.tags);
+
             DataTableLib.dtStructure.DataToTable(EditorControl.structures);
             DataTableLib.dtStructTarget.DataToTable(EditorControl.structTargets);
             DataTableLib.dtStructTag.DataToTable(EditorControl.structTags);

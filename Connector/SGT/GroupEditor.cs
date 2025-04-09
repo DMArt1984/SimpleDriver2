@@ -1,5 +1,6 @@
 ﻿using DML;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,45 @@ namespace Connector
             }
             return items;
         }
+
+        // Передача в таблицу
+        static public void DataToTable(DataGridView dgv, DGVGroupsCol col, List<GroupEditor> groups)
+        {
+            // Таблица групп
+            dgv.Rows.Clear();
+            foreach (var item in groups)
+            {
+                DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                row.Cells[0].Value = item.Id;
+                row.Cells[3].Value = !item.disableOnStart;
+                row.Cells[5].Value = item.updateRate.ToString();
+
+                row.Cells[col.Title].Value = item.title;
+                row.Cells[col.Source].Value = item.sourceTitle;
+                row.Cells[col.Desc].Value = item.description;
+                row.Cells[col.CountTags].Value = 0;
+
+                row.Cells[col.Status].Value = "";
+
+                // -
+                dgv.Rows.Add(row);
+            }
+        }
+        static public DGVGroupsCol GetCols(DataGridView dgv)
+        {
+            DGVGroupsCol col = new DGVGroupsCol
+            {
+                Calc = dgv.Columns["groupCalc"].Index,
+                Title = dgv.Columns["groupTitle"].Index,
+                Source = dgv.Columns["groupSource"].Index,
+                Desc = dgv.Columns["groupDesc"].Index,
+                Status = dgv.Columns["groupStatus"].Index,
+                CountTags = dgv.Columns["groupTags"].Index
+            };
+            return col;
+        }
+
+
         // Упаковка
         static public JArray PackGroups(List<GroupEditor> groups)
         {
