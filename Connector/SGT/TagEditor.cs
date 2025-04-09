@@ -199,6 +199,7 @@ namespace Connector
             desc = JsonControl.GetString(item, "Desc", title);
         }
 
+
         //
         static public void DataToTable(DataGridView dgv, DGVTagsCol col, DataTable tagTable, BindingSource bindingSource, List<TagEditor> tags)
         {
@@ -267,6 +268,30 @@ namespace Connector
 
             // Обновляем данные в DataGridView
             bindingSource.ResetBindings(false);
+        }
+        static public List<TagEditor> TableToData(DataGridView dgv, DGVTagsCol col)
+        {
+            List<TagEditor> tags = new List<TagEditor>();
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+
+                TagEditor te = new TagEditor
+                {
+                    Id = Convert.ToUInt16(row.Cells[0].Value),
+                    disableOnStart = !Convert.ToBoolean(row.Cells[3].Value),
+                    title = row.Cells[col.Title].Value.ToString(),
+                    address = row.Cells[col.Address].Value.ToString(),
+                    dataType = (eDataType)Enum.Parse(typeof(eDataType), row.Cells[col.DataType].Value.ToString(), true),
+                    groupTitle = row.Cells[col.Group].Value.ToString(),
+                    block = row.Cells[col.Block].Value.ToString(),
+                    description = row.Cells[col.Desc].Value.ToString(),
+                    //...
+                };
+                tags.Add(te);
+            }
+            return tags;
         }
 
 

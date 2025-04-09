@@ -106,6 +106,29 @@ namespace Connector
                 dgv.Rows.Add(row);
             }
         }
+        static public List<SourceEditor> TableToData(DataGridView dgv, DGVSourcesCol col)
+        {
+            List<SourceEditor> sources = new List<SourceEditor>();
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+
+                SourceEditor se = new SourceEditor
+                {
+                    Id = Convert.ToUInt16(row.Cells[0].Value),
+                    disableOnStart = !Convert.ToBoolean(row.Cells[3].Value),
+                    auto = Convert.ToBoolean(row.Cells[4].Value),
+                    reconnect = Convert.ToBoolean(row.Cells[5].Value),
+                    title = row.Cells[col.Title].Value.ToString(),
+                    driver = (eDriverType)Enum.Parse(typeof(eDriverType), row.Cells[col.Driver].Value.ToString(), true),
+                    address = row.Cells[col.Address].Value.ToString(),
+                    description = row.Cells[col.Desc].Value.ToString(),
+                };
+                sources.Add(se);
+            }
+            return sources;
+        }
 
         static public DGVSourcesCol GetCols(DataGridView dgv)
         {

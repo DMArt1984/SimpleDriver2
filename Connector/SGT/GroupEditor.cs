@@ -93,6 +93,27 @@ namespace Connector
                 dgv.Rows.Add(row);
             }
         }
+        static public List<GroupEditor> TableToData(DataGridView dgv, DGVGroupsCol col)
+        {
+            List<GroupEditor> groups = new List<GroupEditor>();
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+
+                GroupEditor ge = new GroupEditor
+                {
+                    Id = Convert.ToUInt16(row.Cells[0].Value),
+                    disableOnStart = !Convert.ToBoolean(row.Cells[3].Value),
+                    updateRate = Convert.ToUInt32(row.Cells[5].Value),
+                    title = row.Cells[col.Title].Value.ToString(),
+                    sourceTitle = row.Cells[col.Source].Value.ToString(),
+                    description = row.Cells[col.Desc].Value.ToString()
+                };
+                groups.Add(ge);
+            }
+            return groups;
+        }
         static public DGVGroupsCol GetCols(DataGridView dgv)
         {
             DGVGroupsCol col = new DGVGroupsCol
