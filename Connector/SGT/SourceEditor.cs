@@ -37,14 +37,14 @@ namespace Connector
     static public class SourceLib
     {
         static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Sources");
-        static public void ParseItemSource(dynamic item, uint forId, out string title, out eDriverType driver, out string connection, out bool disableOnStart, out string description, out dynamic tags, out bool auto, out bool reopen)
+        static public void ParseItemSource(dynamic item, uint forId, out string title, out eDriverType driver, out string connection, out bool disableOnStart, out string description, out bool auto, out bool reopen)
         {
             title = JsonControl.GetString(item, "Title", $"Source #{forId}");
             driver = JsonControl.GetTypeEnum<eDriverType>(item, "Driver", eDriverType.None);
             connection = JsonControl.GetString(item, "Address");
             disableOnStart = JsonControl.GetBool(item, "Off");
             description = JsonControl.GetString(item, "Desc");
-            tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;
+            //tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;
             auto = JsonControl.GetBool(item, "Auto");
             reopen = JsonControl.GetBool(item, "Reconnect");
         }

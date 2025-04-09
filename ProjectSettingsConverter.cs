@@ -6,6 +6,8 @@ using System.Linq;
 
 public static class ProjectSettingsConverter
 {
+    #region Normalize
+
     /// <summary>
     /// Приводит исходный JSON в базовую длинную форму и последовательно выполняет нормализацию:
     /// 1. ConvertToLongForm – перевод всех объектов в корневые массивы (Sources, Groups, Tags).
@@ -36,7 +38,6 @@ public static class ProjectSettingsConverter
 
         return result;
     }
-
 
     /// <summary>
     /// Преобразует входной JSON в длинный вид, где массивы Sources, Groups и Tags находятся на корневом уровне.
@@ -270,7 +271,7 @@ public static class ProjectSettingsConverter
         return result.ToString(Formatting.Indented);
     }
 
-    // ======================================================================================================================
+    // -----------------------------------------------------------------------------------------------
 
     /// <summary>
     /// Нормализует настройки, обрабатывая параметр "Group" у объектов Source.
@@ -726,7 +727,11 @@ public static class ProjectSettingsConverter
         return root.ToString(Formatting.Indented);
     }
 
-    // ======================================================================================================
+    #endregion
+
+    // ============================================================================================================
+
+    #region Blocks
 
     /// <summary>
     /// Преобразует вложенную структуру Blocks в плоскую, минимально вложенную.
@@ -958,9 +963,11 @@ public static class ProjectSettingsConverter
         return root.ToString(Formatting.Indented);
     }
 
-
+    #endregion
 
     // ============================================================================================================
+
+    #region Statistics
 
     /// <summary>
     /// Рекурсивно обходит JSON-узел и подсчитывает количество объектов, найденных в массивах
@@ -1039,7 +1046,11 @@ public static class ProjectSettingsConverter
         CountTokens(root, ref sourceCount, ref groupCount, ref tagCount, false);
     }
 
+    #endregion
+
     // ============================================================================================================
+
+    #region Section
 
     /// <summary>
     /// Извлекает заданную область из строки JSON.
@@ -1106,6 +1117,7 @@ public static class ProjectSettingsConverter
         return root.ToString(Formatting.Indented);
     }
 
+    #endregion
 }
 
 

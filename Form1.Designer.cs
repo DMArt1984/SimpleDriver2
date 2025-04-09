@@ -34,6 +34,7 @@ namespace WinSimpleIDriver
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Блоки");
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Структуры");
             System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Классы");
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -42,7 +43,6 @@ namespace WinSimpleIDriver
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,6 +76,20 @@ namespace WinSimpleIDriver
             this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.tabFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlProject = new System.Windows.Forms.TabControl();
+            this.tabPageJson = new System.Windows.Forms.TabPage();
+            this.statusStrip2 = new System.Windows.Forms.StatusStrip();
+            this.jsonProjectStatistic = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonNormalize = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonLong = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonShort = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonGroup = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSource = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonInBlock = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonOutBlock = new System.Windows.Forms.ToolStripButton();
+            this.richTextBoxJsonProject = new System.Windows.Forms.RichTextBox();
             this.tabPageSource = new System.Windows.Forms.TabPage();
             this.buttonSourceFilter = new System.Windows.Forms.Button();
             this.buttonSourceHelp = new System.Windows.Forms.Button();
@@ -228,20 +242,6 @@ namespace WinSimpleIDriver
             this.splitContainerLogMain = new System.Windows.Forms.SplitContainer();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.tabPageJson = new System.Windows.Forms.TabPage();
-            this.richTextBoxJsonProject = new System.Windows.Forms.RichTextBox();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonLong = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonShort = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonGroup = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonSource = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonInBlock = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonOutBlock = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonNormalize = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.statusStrip2 = new System.Windows.Forms.StatusStrip();
-            this.jsonProjectStatistic = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTreeMain)).BeginInit();
@@ -250,6 +250,9 @@ namespace WinSimpleIDriver
             this.splitContainerTreeMain.SuspendLayout();
             this.contextMenuStripTreeProj.SuspendLayout();
             this.tabControlProject.SuspendLayout();
+            this.tabPageJson.SuspendLayout();
+            this.statusStrip2.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.tabPageSource.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSource)).BeginInit();
             this.tabPageGroup.SuspendLayout();
@@ -280,9 +283,6 @@ namespace WinSimpleIDriver
             this.splitContainerLogMain.Panel1.SuspendLayout();
             this.splitContainerLogMain.Panel2.SuspendLayout();
             this.splitContainerLogMain.SuspendLayout();
-            this.tabPageJson.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
-            this.statusStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -591,6 +591,144 @@ namespace WinSimpleIDriver
             this.tabControlProject.Size = new System.Drawing.Size(1130, 438);
             this.tabControlProject.TabIndex = 0;
             this.tabControlProject.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
+            // 
+            // tabPageJson
+            // 
+            this.tabPageJson.Controls.Add(this.statusStrip2);
+            this.tabPageJson.Controls.Add(this.toolStrip1);
+            this.tabPageJson.Controls.Add(this.richTextBoxJsonProject);
+            this.tabPageJson.Location = new System.Drawing.Point(4, 24);
+            this.tabPageJson.Name = "tabPageJson";
+            this.tabPageJson.Size = new System.Drawing.Size(1122, 410);
+            this.tabPageJson.TabIndex = 6;
+            this.tabPageJson.Text = "Проект.Data (json)";
+            this.tabPageJson.UseVisualStyleBackColor = true;
+            // 
+            // statusStrip2
+            // 
+            this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.jsonProjectStatistic});
+            this.statusStrip2.Location = new System.Drawing.Point(0, 388);
+            this.statusStrip2.Name = "statusStrip2";
+            this.statusStrip2.Size = new System.Drawing.Size(1122, 22);
+            this.statusStrip2.TabIndex = 2;
+            this.statusStrip2.Text = "statusStrip2";
+            // 
+            // jsonProjectStatistic
+            // 
+            this.jsonProjectStatistic.Name = "jsonProjectStatistic";
+            this.jsonProjectStatistic.Size = new System.Drawing.Size(107, 17);
+            this.jsonProjectStatistic.Text = "jsonProjectStatistic";
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonNormalize,
+            this.toolStripButtonLong,
+            this.toolStripButtonShort,
+            this.toolStripSeparator1,
+            this.toolStripButtonGroup,
+            this.toolStripButtonSource,
+            this.toolStripSeparator2,
+            this.toolStripButtonInBlock,
+            this.toolStripButtonOutBlock});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1122, 25);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButtonNormalize
+            // 
+            this.toolStripButtonNormalize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonNormalize.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNormalize.Image")));
+            this.toolStripButtonNormalize.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonNormalize.Name = "toolStripButtonNormalize";
+            this.toolStripButtonNormalize.Size = new System.Drawing.Size(94, 22);
+            this.toolStripButtonNormalize.Text = "Нормализация";
+            this.toolStripButtonNormalize.Click += new System.EventHandler(this.toolStripButtonNormalize_Click);
+            // 
+            // toolStripButtonLong
+            // 
+            this.toolStripButtonLong.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonLong.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLong.Image")));
+            this.toolStripButtonLong.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonLong.Name = "toolStripButtonLong";
+            this.toolStripButtonLong.Size = new System.Drawing.Size(97, 22);
+            this.toolStripButtonLong.Text = "Длинный стиль";
+            this.toolStripButtonLong.Click += new System.EventHandler(this.toolStripButtonLong_Click);
+            // 
+            // toolStripButtonShort
+            // 
+            this.toolStripButtonShort.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonShort.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonShort.Image")));
+            this.toolStripButtonShort.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonShort.Name = "toolStripButtonShort";
+            this.toolStripButtonShort.Size = new System.Drawing.Size(98, 22);
+            this.toolStripButtonShort.Text = "Короткий стиль";
+            this.toolStripButtonShort.Click += new System.EventHandler(this.toolStripButtonShort_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButtonGroup
+            // 
+            this.toolStripButtonGroup.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonGroup.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGroup.Image")));
+            this.toolStripButtonGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonGroup.Name = "toolStripButtonGroup";
+            this.toolStripButtonGroup.Size = new System.Drawing.Size(145, 22);
+            this.toolStripButtonGroup.Text = "Групповая вложенность";
+            this.toolStripButtonGroup.Click += new System.EventHandler(this.toolStripButtonGroup_Click);
+            // 
+            // toolStripButtonSource
+            // 
+            this.toolStripButtonSource.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonSource.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSource.Image")));
+            this.toolStripButtonSource.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSource.Name = "toolStripButtonSource";
+            this.toolStripButtonSource.Size = new System.Drawing.Size(156, 22);
+            this.toolStripButtonSource.Text = "Вложенность в источники";
+            this.toolStripButtonSource.Click += new System.EventHandler(this.toolStripButtonSource_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButtonInBlock
+            // 
+            this.toolStripButtonInBlock.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonInBlock.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonInBlock.Image")));
+            this.toolStripButtonInBlock.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonInBlock.Name = "toolStripButtonInBlock";
+            this.toolStripButtonInBlock.Size = new System.Drawing.Size(108, 22);
+            this.toolStripButtonInBlock.Text = "Упаковка в блоки";
+            this.toolStripButtonInBlock.Click += new System.EventHandler(this.toolStripButtonInBlock_Click);
+            // 
+            // toolStripButtonOutBlock
+            // 
+            this.toolStripButtonOutBlock.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonOutBlock.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonOutBlock.Image")));
+            this.toolStripButtonOutBlock.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonOutBlock.Name = "toolStripButtonOutBlock";
+            this.toolStripButtonOutBlock.Size = new System.Drawing.Size(132, 22);
+            this.toolStripButtonOutBlock.Text = "Распаковка из блоков";
+            this.toolStripButtonOutBlock.Click += new System.EventHandler(this.toolStripButtonOutBlock_Click);
+            // 
+            // richTextBoxJsonProject
+            // 
+            this.richTextBoxJsonProject.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBoxJsonProject.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.richTextBoxJsonProject.Location = new System.Drawing.Point(4, 30);
+            this.richTextBoxJsonProject.Name = "richTextBoxJsonProject";
+            this.richTextBoxJsonProject.Size = new System.Drawing.Size(1111, 355);
+            this.richTextBoxJsonProject.TabIndex = 0;
+            this.richTextBoxJsonProject.Text = "";
             // 
             // tabPageSource
             // 
@@ -2094,7 +2232,7 @@ namespace WinSimpleIDriver
             // buttonIncludeChildFilter
             // 
             this.buttonIncludeChildFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonIncludeChildFilter.Location = new System.Drawing.Point(451, 3);
+            this.buttonIncludeChildFilter.Location = new System.Drawing.Point(445, 3);
             this.buttonIncludeChildFilter.Name = "buttonIncludeChildFilter";
             this.buttonIncludeChildFilter.Size = new System.Drawing.Size(75, 24);
             this.buttonIncludeChildFilter.TabIndex = 16;
@@ -2109,7 +2247,7 @@ namespace WinSimpleIDriver
             this.textBoxIncludeChildFilter.Location = new System.Drawing.Point(231, 4);
             this.textBoxIncludeChildFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxIncludeChildFilter.Name = "textBoxIncludeChildFilter";
-            this.textBoxIncludeChildFilter.Size = new System.Drawing.Size(214, 21);
+            this.textBoxIncludeChildFilter.Size = new System.Drawing.Size(208, 21);
             this.textBoxIncludeChildFilter.TabIndex = 15;
             this.textBoxIncludeChildFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxIncludeChildFilter.TextChanged += new System.EventHandler(this.textBoxChangeFilter_TextChanged);
@@ -2141,7 +2279,7 @@ namespace WinSimpleIDriver
             this.dataGridViewIncludeChild.MultiSelect = false;
             this.dataGridViewIncludeChild.Name = "dataGridViewIncludeChild";
             this.dataGridViewIncludeChild.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewIncludeChild.Size = new System.Drawing.Size(500, 331);
+            this.dataGridViewIncludeChild.Size = new System.Drawing.Size(494, 331);
             this.dataGridViewIncludeChild.TabIndex = 3;
             this.dataGridViewIncludeChild.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewIncludeChild_CellEndEdit);
             this.dataGridViewIncludeChild.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewIncludeChild_UserAddedRow);
@@ -2253,144 +2391,6 @@ namespace WinSimpleIDriver
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // tabPageJson
-            // 
-            this.tabPageJson.Controls.Add(this.statusStrip2);
-            this.tabPageJson.Controls.Add(this.toolStrip1);
-            this.tabPageJson.Controls.Add(this.richTextBoxJsonProject);
-            this.tabPageJson.Location = new System.Drawing.Point(4, 24);
-            this.tabPageJson.Name = "tabPageJson";
-            this.tabPageJson.Size = new System.Drawing.Size(1122, 410);
-            this.tabPageJson.TabIndex = 6;
-            this.tabPageJson.Text = "Проект.json";
-            this.tabPageJson.UseVisualStyleBackColor = true;
-            // 
-            // richTextBoxJsonProject
-            // 
-            this.richTextBoxJsonProject.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBoxJsonProject.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.richTextBoxJsonProject.Location = new System.Drawing.Point(4, 30);
-            this.richTextBoxJsonProject.Name = "richTextBoxJsonProject";
-            this.richTextBoxJsonProject.Size = new System.Drawing.Size(1111, 353);
-            this.richTextBoxJsonProject.TabIndex = 0;
-            this.richTextBoxJsonProject.Text = "";
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonNormalize,
-            this.toolStripButtonLong,
-            this.toolStripButtonShort,
-            this.toolStripSeparator1,
-            this.toolStripButtonGroup,
-            this.toolStripButtonSource,
-            this.toolStripSeparator2,
-            this.toolStripButtonInBlock,
-            this.toolStripButtonOutBlock});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1122, 25);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripButtonLong
-            // 
-            this.toolStripButtonLong.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonLong.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLong.Image")));
-            this.toolStripButtonLong.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonLong.Name = "toolStripButtonLong";
-            this.toolStripButtonLong.Size = new System.Drawing.Size(97, 22);
-            this.toolStripButtonLong.Text = "Длинный стиль";
-            this.toolStripButtonLong.Click += new System.EventHandler(this.toolStripButtonLong_Click);
-            // 
-            // toolStripButtonShort
-            // 
-            this.toolStripButtonShort.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonShort.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonShort.Image")));
-            this.toolStripButtonShort.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonShort.Name = "toolStripButtonShort";
-            this.toolStripButtonShort.Size = new System.Drawing.Size(98, 22);
-            this.toolStripButtonShort.Text = "Короткий стиль";
-            this.toolStripButtonShort.Click += new System.EventHandler(this.toolStripButtonShort_Click);
-            // 
-            // toolStripButtonGroup
-            // 
-            this.toolStripButtonGroup.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonGroup.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGroup.Image")));
-            this.toolStripButtonGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonGroup.Name = "toolStripButtonGroup";
-            this.toolStripButtonGroup.Size = new System.Drawing.Size(145, 22);
-            this.toolStripButtonGroup.Text = "Групповая вложенность";
-            this.toolStripButtonGroup.Click += new System.EventHandler(this.toolStripButtonGroup_Click);
-            // 
-            // toolStripButtonSource
-            // 
-            this.toolStripButtonSource.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonSource.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSource.Image")));
-            this.toolStripButtonSource.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonSource.Name = "toolStripButtonSource";
-            this.toolStripButtonSource.Size = new System.Drawing.Size(156, 22);
-            this.toolStripButtonSource.Text = "Вложенность в источники";
-            this.toolStripButtonSource.Click += new System.EventHandler(this.toolStripButtonSource_Click);
-            // 
-            // toolStripButtonInBlock
-            // 
-            this.toolStripButtonInBlock.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonInBlock.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonInBlock.Image")));
-            this.toolStripButtonInBlock.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonInBlock.Name = "toolStripButtonInBlock";
-            this.toolStripButtonInBlock.Size = new System.Drawing.Size(108, 22);
-            this.toolStripButtonInBlock.Text = "Упаковка в блоки";
-            this.toolStripButtonInBlock.Click += new System.EventHandler(this.toolStripButtonInBlock_Click);
-            // 
-            // toolStripButtonOutBlock
-            // 
-            this.toolStripButtonOutBlock.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonOutBlock.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonOutBlock.Image")));
-            this.toolStripButtonOutBlock.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonOutBlock.Name = "toolStripButtonOutBlock";
-            this.toolStripButtonOutBlock.Size = new System.Drawing.Size(132, 22);
-            this.toolStripButtonOutBlock.Text = "Распаковка из блоков";
-            this.toolStripButtonOutBlock.Click += new System.EventHandler(this.toolStripButtonOutBlock_Click);
-            // 
-            // toolStripButtonNormalize
-            // 
-            this.toolStripButtonNormalize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonNormalize.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNormalize.Image")));
-            this.toolStripButtonNormalize.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonNormalize.Name = "toolStripButtonNormalize";
-            this.toolStripButtonNormalize.Size = new System.Drawing.Size(94, 22);
-            this.toolStripButtonNormalize.Text = "Нормализация";
-            this.toolStripButtonNormalize.Click += new System.EventHandler(this.toolStripButtonNormalize_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // statusStrip2
-            // 
-            this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.jsonProjectStatistic});
-            this.statusStrip2.Location = new System.Drawing.Point(0, 388);
-            this.statusStrip2.Name = "statusStrip2";
-            this.statusStrip2.Size = new System.Drawing.Size(1122, 22);
-            this.statusStrip2.TabIndex = 2;
-            this.statusStrip2.Text = "statusStrip2";
-            // 
-            // jsonProjectStatistic
-            // 
-            this.jsonProjectStatistic.Name = "jsonProjectStatistic";
-            this.jsonProjectStatistic.Size = new System.Drawing.Size(107, 17);
-            this.jsonProjectStatistic.Text = "jsonProjectStatistic";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -2416,6 +2416,12 @@ namespace WinSimpleIDriver
             this.splitContainerTreeMain.ResumeLayout(false);
             this.contextMenuStripTreeProj.ResumeLayout(false);
             this.tabControlProject.ResumeLayout(false);
+            this.tabPageJson.ResumeLayout(false);
+            this.tabPageJson.PerformLayout();
+            this.statusStrip2.ResumeLayout(false);
+            this.statusStrip2.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.tabPageSource.ResumeLayout(false);
             this.tabPageSource.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSource)).EndInit();
@@ -2455,12 +2461,6 @@ namespace WinSimpleIDriver
             this.splitContainerLogMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLogMain)).EndInit();
             this.splitContainerLogMain.ResumeLayout(false);
-            this.tabPageJson.ResumeLayout(false);
-            this.tabPageJson.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
-            this.statusStrip2.ResumeLayout(false);
-            this.statusStrip2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

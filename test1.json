@@ -1,13 +1,15 @@
 {
+  "Data":
+  {
     "Sources": [
-        {
-            "Title": "Crane1",
-            "Driver": "ModbusRTUclient",
-            "Address": "port=COM3;baudrate=9600;parity=None;dataBits=8;stopBits=2;timeout=500;fails=10",
-            "Off": true,
-            "Reconnect": true,
-            "Desc": "Описание источника"
-        }
+      {
+        "Title": "Crane1",
+        "Driver": "ModbusRTUclient",
+        "Address": "port=COM3;baudrate=9600;parity=None;dataBits=8;stopBits=2;timeout=500;fails=10",
+        "Off": true,
+        "Reconnect": true,
+        "Desc": "Описание источника"
+      }
     ],
 
     "Groups": [
@@ -124,4 +126,6 @@
         "Group": "Folder02"
       }
     ]
+  }
+
 }

@@ -422,17 +422,19 @@ namespace WinSimpleIDriver
             // Загрузка проекта JSON
             string input = FileControl.LoadFromFile(ref fileName, out string path, select); // чтение из файла...
 
-            // окно файла проекта
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            jsonProjStatustic();
-
-            return; // временно! потом УДАЛИТЬ!!!
-
             // Далее?
             if (String.IsNullOrWhiteSpace(input))
                 return;
 
-            AppTitle(Settings.settingsFileName, fileName);
+            // окно данных проекта из файла
+            string data = ProjectSettingsConverter.ExtractSection(input, "Data"); 
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, data);
+            jsonProjStatustic();
+
+            // Нормализация секции Data
+            data = ProjectSettingsConverter.NormalizeAll(data);
+            // Замена секции Data на нормализованную
+            input = ProjectSettingsConverter.ReplaceSection(input, "Data", data); 
 
             // Последние файлы
             string fullFileName = Path.Combine(path, fileName);
@@ -440,6 +442,10 @@ namespace WinSimpleIDriver
 
             //
             EditorControl.fullFileName = fullFileName;
+
+            //return; // временно! потом УДАЛИТЬ!!!
+
+            AppTitle(Settings.settingsFileName, fileName);
 
             await Task.Run(() =>
             {

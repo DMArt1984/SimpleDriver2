@@ -1,160 +1,162 @@
 {
-  "Sources": [
-    {
-      "Title": "Crane1",
-      "Driver": "ModbusRTUclient",
-      "Address": "port=COM3;baudrate=9600;parity=None;dataBits=8;stopBits=2;timeout=500;fails=10",
-      "Off": true,
-      "Reconnect": true,
-      "Desc": "Описание источника"
-    }
-  ],
+  "Data": {
 
-  "Groups": [
-    {
-      "Title": "Folder02",
-      "Desc": "Описание группы",
-      "UpdateRate": 500,
-      "Off": false,
-      "Source": "Crane1"
-    }
-  ],
-
-  "Tags": [
-    {
-      "Title": "ValueLISTB1",
-      "DataType": "STRING",
-      "Addr": "LISTB(� � � � �|1+1)",
-      "Desc": "sample for LISTB",
-      "Off": 0,
-      "Group": "Folder02",
-      "Block": "Name.A"
-    },
-    {
-      "Title": "ValueLISTC2",
-      "DataType": "STRING",
-      "Addr": "LISTC(�~�~�~�~�|2+1)",
-      "Desc": "sample for LISTC",
-      "Off": 0,
-      "Group": "Folder02",
-      "Block": "SQLData"
-    },
-    {
-      "Title": "ValueINSIDE3",
-      "DataType": "STRING",
-      "Addr": "INSIDE(value[501];[;]) and INSIDE(value=502;value=;) and INSIDE(503END;;END)",
-      "Desc": "sample for INSIDE",
-      "Off": 0,
-      "Group": "Folder02"
-    },
-    {
-      "Title": "ValueIndex4",
-      "DataType": "Float",
-      "Addr": "{Value7}",
-      "Desc": "sample for {}",
-      "Group": "Folder02",
-      "Block": "Name.A.4"
-    },
-    {
-      "Title": "ValueColor5",
-      "DataType": "STRING",
-      "Addr": "Coral",
-      "Group": "Folder02"
-    }
-  ],
-
-  "Blocks": {
-    "Name.A.4": [
+    "Sources": [
       {
-        "Title": "Value7_6",
-        "DataType": "Int",
-        "Addr": "XXX",
-        "Desc": "text7",
+        "Title": "Crane1",
+        "Driver": "ModbusRTUclient",
+        "Address": "port=COM3;baudrate=9600;parity=None;dataBits=8;stopBits=2;timeout=500;fails=10",
+        "Off": true,
+        "Reconnect": true,
+        "Desc": "Описание источника"
+      }
+    ],
+
+    "Groups": [
+      {
+        "Title": "Folder02",
+        "Desc": "Описание группы",
+        "UpdateRate": 500,
+        "Off": false,
+        "Source": "Crane1"
+      }
+    ],
+
+    "Tags": [
+      {
+        "Title": "ValueLISTB1",
+        "DataType": "STRING",
+        "Addr": "LISTB(� � � � �|1+1)",
+        "Desc": "sample for LISTB",
         "Off": 0,
         "Group": "Folder02",
-        "Write": "Value8"
+        "Block": "Name.A"
       },
       {
-        "Title": "Value71_7",
-        "DataType": "Int",
-        "Addr": "(100 + 200)/25",
-        "Desc": "text7",
+        "Title": "ValueLISTC2",
+        "DataType": "STRING",
+        "Addr": "LISTC(�~�~�~�~�|2+1)",
+        "Desc": "sample for LISTC",
+        "Off": 0,
+        "Group": "Folder02",
+        "Block": "SQLData"
+      },
+      {
+        "Title": "ValueINSIDE3",
+        "DataType": "STRING",
+        "Addr": "INSIDE(value[501];[;]) and INSIDE(value=502;value=;) and INSIDE(503END;;END)",
+        "Desc": "sample for INSIDE",
         "Off": 0,
         "Group": "Folder02"
       },
       {
-        "Title": "ValueCMD_8",
-        "DataType": "Short",
-        "Addr": "HR-1",
-        "Desc": "for command",
-        "Off": 0,
+        "Title": "ValueIndex4",
+        "DataType": "Float",
+        "Addr": "{Value7}",
+        "Desc": "sample for {}",
         "Group": "Folder02",
-        "Value": 0,
-        "Command": true
+        "Block": "Name.A.4"
+      },
+      {
+        "Title": "ValueColor5",
+        "DataType": "STRING",
+        "Addr": "Coral",
+        "Group": "Folder02"
       }
     ],
-    "Name": {
-      "B.2": [
+
+    "Blocks": {
+      "Name.A.4": [
         {
-          "Title": "ValueB-82_9",
+          "Title": "Value7_6",
           "DataType": "Int",
-          "Addr": "HR-2",
-          "Desc": "text2",
+          "Addr": "XXX",
+          "Desc": "text7",
+          "Off": 0,
+          "Group": "Folder02",
+          "Write": "Value8"
+        },
+        {
+          "Title": "Value71_7",
+          "DataType": "Int",
+          "Addr": "(100 + 200)/25",
+          "Desc": "text7",
           "Off": 0,
           "Group": "Folder02"
+        },
+        {
+          "Title": "ValueCMD_8",
+          "DataType": "Short",
+          "Addr": "HR-1",
+          "Desc": "for command",
+          "Off": 0,
+          "Group": "Folder02",
+          "Value": 0,
+          "Command": true
         }
       ],
-      "B.3": [
+      "Name": {
+        "B.2": [
+          {
+            "Title": "ValueB-82_9",
+            "DataType": "Int",
+            "Addr": "HR-2",
+            "Desc": "text2",
+            "Off": 0,
+            "Group": "Folder02"
+          }
+        ],
+        "B.3": [
+          {
+            "Title": "ValueB-83_10",
+            "DataType": "Int",
+            "Addr": "HR-2",
+            "Desc": "text2",
+            "Off": 0,
+            "Group": "Folder02"
+          }
+        ]
+      },
+      "SQLData": [
         {
-          "Title": "ValueB-83_10",
-          "DataType": "Int",
-          "Addr": "HR-2",
+          "Title": "Value200_11",
+          "DataType": "Short",
+          "Addr": "HR-8",
           "Desc": "text2",
+          "Group": "Folder02",
+          "Value": 549
+        },
+        {
+          "Title": "ValueArrayC_12",
+          "DataType": "STRING",
+          "Addr": "E~100",
+          "Off": 0,
+          "Group": "Folder02"
+        },
+        {
+          "Title": "ValueArrayEindex_13",
+          "DataType": "Int",
+          "Addr": "{ValueArrayC[E]}",
+          "Off": 0,
+          "Group": "Folder02"
+        },
+        {
+          "Title": "ValueDIC_14",
+          "DataType": "Int",
+          "Addr": "DICT(a;b;c|8;8+1;10|b)",
+          "Desc": "sample for DICTIONARY",
+          "Off": 0,
+          "Group": "Folder02"
+        },
+        {
+          "Title": "ValueLIST_15",
+          "DataType": "STRING",
+          "Addr": "LIST(�;�;�;�;�|0+1)",
+          "Desc": "sample for LIST",
           "Off": 0,
           "Group": "Folder02"
         }
       ]
-    },
-    "SQLData": [
-      {
-        "Title": "Value200_11",
-        "DataType": "Short",
-        "Addr": "HR-8",
-        "Desc": "text2",
-        "Group": "Folder02",
-        "Value": 549
-      },
-      {
-        "Title": "ValueArrayC_12",
-        "DataType": "STRING",
-        "Addr": "E~100",
-        "Off": 0,
-        "Group": "Folder02"
-      },
-      {
-        "Title": "ValueArrayEindex_13",
-        "DataType": "Int",
-        "Addr": "{ValueArrayC[E]}",
-        "Off": 0,
-        "Group": "Folder02"
-      },
-      {
-        "Title": "ValueDIC_14",
-        "DataType": "Int",
-        "Addr": "DICT(a;b;c|8;8+1;10|b)",
-        "Desc": "sample for DICTIONARY",
-        "Off": 0,
-        "Group": "Folder02"
-      },
-      {
-        "Title": "ValueLIST_15",
-        "DataType": "STRING",
-        "Addr": "LIST(�;�;�;�;�|0+1)",
-        "Desc": "sample for LIST",
-        "Off": 0,
-        "Group": "Folder02"
-      }
-    ]
+    }
   }
-
 }

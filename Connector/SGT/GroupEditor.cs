@@ -32,14 +32,14 @@ namespace Connector
     static public class GroupLib {
         static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Groups");
         // Получение параметров группы
-        static public void ParseItemGroup(dynamic item, uint forindex, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle, out dynamic tags)
+        static public void ParseItemGroup(dynamic item, uint forindex, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle)
         {
             title = JsonControl.GetString(item, "Title", $"Group #{forindex}");
             updateRate = (uint)JsonControl.GetInt(item, "UpdateRate");
             disableOnStart = JsonControl.GetBool(item, "Off");
             description = JsonControl.GetString(item, "Desc");
             sourceTitle = JsonControl.GetString(item, "Source");
-            tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;
+            //tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;
         }
     }
 

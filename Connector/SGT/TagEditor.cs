@@ -85,10 +85,9 @@ namespace Connector
         static public bool IsListBlocks(dynamic output) => JsonControl.IsProp(output, "Blocks");
 
         // Получение параметров тега
-        static public void ParseItemTag(dynamic item, uint forId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand)
+        static public void ParseItemTag(dynamic item, uint forId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand, out string block)
         {
             title = JsonControl.GetString(item, "Title", $"Tag #{forId}");
-            //source = JsonControl.GetString(item, "Source");
             groupTitle = JsonControl.GetString(item, "Group");
             dataType = JsonControl.GetTypeEnum<eDataType>(item, "DataType", eDataType.Binary);
             address = JsonControl.GetString(item, "Addr");
@@ -97,6 +96,7 @@ namespace Connector
             writeTitle = JsonControl.GetString(item, "Write");
             constValue = JsonControl.GetString(item, "Value", null);
             isCommand = JsonControl.GetBool(item, "Command");
+            block = JsonControl.GetString(item, "Block");
         }
 
         // Получение параметров структуры

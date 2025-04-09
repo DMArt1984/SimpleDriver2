@@ -67,61 +67,67 @@ namespace WinSimpleIDriver
         #region Unpack
 
         // Распаковка проекта
-        static public void UnpackProject(dynamic data)
+        static public void UnpackProject(dynamic settings)
         {
             Clear();
 
-            if (data == null)
+            if (settings == null)
                 return;
 
-            // Распаковка источников
-            if (SourceLib.InProject(data))
-                ParseSources(data.Sources);
-
-            // Распаковка групп
-            if (GroupLib.InProject(data))
-                ParseGroups(data.Groups);
-
-            // Распаковка тегов
-            if (TagLib.InProject(data))
-                ParseTags(data.Tags);
-
-            // Блоки с тегами
-            if (TagLib.IsListBlocks(data))
+            if (JsonControl.IsProp(settings, "Data"))
             {
-                if (data.Blocks != null)
-                {
-                    foreach (var elItem in data.Blocks)
-                    {
-                        string nm = GetBlockName(elItem);
-                        ParseTags(elItem.Tags, 0, 0, nm);
-                    }
-                }
+                var data = settings.Data; // Sources, Groups, Tags
+
+                // Распаковка источников
+                if (SourceLib.InProject(data))
+                    ParseSources(data.Sources);
+
+                // Распаковка групп
+                if (GroupLib.InProject(data))
+                    ParseGroups(data.Groups);
+
+                // Распаковка тегов
+                if (TagLib.InProject(data))
+                    ParseTags(data.Tags);
+
+                // Блоки с тегами
+                //if (false && TagLib.IsListBlocks(data))
+                //{
+                //    if (data.Blocks != null)
+                //    {
+                //        foreach (var elItem in data.Blocks)
+                //        {
+                //            string nm = GetBlockName(elItem);
+                //            ParseTags(elItem.Tags, 0, 0, nm);
+                //        }
+                //    }
+                //}
+
             }
 
             // Установить ID и Title для объектов
             //CalcIdAndTitle();
 
             // Распаковка структур
-            if (TagLib.IsStructures(data))
-                ParseStructures(data.Structures);
+            if (TagLib.IsStructures(settings))
+                ParseStructures(settings.Structures);
 
             // Внешние проекты
-            if (Include.InProject(data))
-                ParseIncludes(data.Includes); // Распаковка настроек внешних проектов
-
+            if (Include.InProject(settings))
+                ParseIncludes(settings.Includes); // Распаковка настроек внешних проектов
 
         }
 
         // Распаковка источников
-        static void ParseSources(dynamic data)
+        static List<SourceEditor> ParseSources(dynamic section)
         {
-            if (data != null)
+            List<SourceEditor> items = new List<SourceEditor>();
+            ushort sourceId = 0; // ID 
+            if (section != null)
             {
-                
-                foreach (dynamic item in data)
+                foreach (dynamic item in section)
                 {
-                    SourceLib.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool disableOnStart, out string description, out dynamic tagsInSource, out bool auto, out bool reconnect);
+                    SourceLib.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool disableOnStart, out string description, out bool auto, out bool reconnect);
                     SourceEditor rowSource = new SourceEditor
                     {
                         Id = sourceId,
@@ -134,43 +140,21 @@ namespace WinSimpleIDriver
                         reconnect = reconnect
                     };
                     sources.Add(rowSource);
-
-                    // теги
-                    if (tagsInSource != null)
-                        ParseTags(tagsInSource, sourceId, 0);
-
-                    // Блоки с тегами
-                    if (TagLib.IsListBlocks(item))
-                    {
-                        if (item.Blocks != null)
-                        {
-                            foreach (var elItem in item.Blocks)
-                            {
-                                string nm = GetBlockName(elItem);
-                                ParseTags(elItem.Tags, sourceId, 0, nm);
-                            }
-                        }
-                    }
-
-
-
                 }
-
-
             }
-
-
+            return items;
         }
 
         // Распаковка групп
-        static void ParseGroups(dynamic data)
+        static List<GroupEditor> ParseGroups(dynamic section)
         {
-            if (data != null)
+            List<GroupEditor> items = new List<GroupEditor>();
+            ushort groupId = 0; // ID 
+            if (section != null)
             {
-                
-                foreach (dynamic item in data)
+                foreach (dynamic item in section)
                 {
-                    GroupLib.ParseItemGroup(item, ++groupId, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle, out dynamic tagsInSource);
+                    GroupLib.ParseItemGroup(item, ++groupId, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle);
                     GroupEditor rowGroup = new GroupEditor
                     {
                         Id = groupId,
@@ -180,41 +164,22 @@ namespace WinSimpleIDriver
                         description = description,
                         sourceTitle = sourceTitle
                     };
-                    groups.Add(rowGroup);
-
-                    // теги
-                    if (tagsInSource != null)
-                        ParseTags(tagsInSource, 0, groupId);
-
-                    // Блоки с тегами
-                    if (TagLib.IsListBlocks(item))
-                    {
-                        if (item.Blocks != null)
-                        {
-                            foreach (var elItem in item.Blocks)
-                            {
-                                if (JsonControl.IsProp(elItem, "Tags") && elItem.Tags != null)
-                                {
-                                    string nm = GetBlockName(elItem);
-                                    ParseTags(elItem.Tags, 0, groupId, nm);
-                                }
-                            }
-                        }
-                    }
-
+                    items.Add(rowGroup);
                 }
             }
+            return items;
         }
 
         // Распаковка тегов
-        static void ParseTags(dynamic data, ushort sourceId = 0, ushort groupId = 0, string block = null)
+        static List<TagEditor> ParseTags(dynamic section)
         {
-            if (data != null)
+            List <TagEditor> items = new List<TagEditor>();
+            ushort tagId = 0; // ID
+            if (section != null)
             {
-                
-                foreach (dynamic item in data)
+                foreach (dynamic item in section)
                 {
-                    TagLib.ParseItemTag(item, ++tagId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand);
+                    TagLib.ParseItemTag(item, ++tagId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand, out string block);
                     TagEditor oneTag = new TagEditor
                     {
                         Id = tagId,
@@ -229,9 +194,10 @@ namespace WinSimpleIDriver
                         description = description,
                         block = block
                     };
-                    tags.Add(oneTag);
+                    items.Add(oneTag);
                 }
             }
+            return items;
         }
 
         // Установить ID и Title для объектов
@@ -354,7 +320,7 @@ namespace WinSimpleIDriver
 
         #endregion
 
-        // ===========================================================
+        // =============================================================================================================
 
         // Получить название блока
         static string GetBlockName(dynamic item, string prefix = "")
