@@ -1,5 +1,7 @@
 ﻿
 using DML;
+using DocumentFormat.OpenXml.Bibliography;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,7 +78,38 @@ namespace Connector
             return items;
         }
 
+        static public JArray PackSources(List<SourceEditor> sources)
+        {
+            // Источники
+            JArray arrSources = new JArray();
+            if (sources != null)
+            {
+                foreach (var src in sources)
+                {
+                    // Собираем свойства источника согласно схеме UnpackProject
+                    JObject jSrc = new JObject();
+                    //jSrc["Id"] = src.Id;
+                    jSrc["Title"] = src.title;
+                    jSrc["Driver"] = src.driver.ToString(); // можно изменить вывод драйвера при необходимости
+                    jSrc["Address"] = src.address;
 
+                    if (src.disableOnStart)
+                        jSrc["Off"] = src.disableOnStart;
+
+                    if (String.IsNullOrWhiteSpace(src.description) == false)
+                        jSrc["Desc"] = src.description;
+
+                    if (src.auto)
+                        jSrc["Auto"] = src.auto;
+
+                    if (src.reconnect)
+                        jSrc["Reconnect"] = src.reconnect;
+
+                    arrSources.Add(jSrc);
+                }
+            }
+            return arrSources;
+        }
 
     }
 
