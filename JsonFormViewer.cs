@@ -54,9 +54,13 @@ namespace WinSimpleIDriver
                 }
                 else if (level == 1)
                 {
-                    fontSize = baseFontSize * 1.2f;
+                    fontSize = baseFontSize * 1.3f;
                 }
-                // Для уровней 2 и выше оставляем базовый размер.
+                else if (level == 2)
+                {
+                    fontSize = baseFontSize * 1.15f;
+                }
+                // Для уровней 3 и выше оставляем базовый размер.
 
                 Font lineFont = new Font(fontFamily, fontSize);
                 // Запоминаем текущую длину текста, чтобы установить форматирование для новой строки.

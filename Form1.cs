@@ -1603,76 +1603,43 @@ namespace WinSimpleIDriver
         private void toolStripButtonNormalize_Click(object sender, EventArgs e)
         {
             // NormalizeAll
-
-            // Получить с экрана
-            string input = richTextBoxJsonProject.Text;
-
-            // Извлечение секции Data
-            string data = ProjectSettingsConverter.ExtractSection(input, "Data");
-
-            // Нормализация секции Data
-            data = ProjectSettingsConverter.NormalizeAll(data);
-
-            // Замена секции Data на нормализованную
-            input = ProjectSettingsConverter.ReplaceSection(input, "Data", data);
-
-            // Вернуть на экран
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            jsonProjStatustic();
+            ApplyNormalization(ProjectSettingsConverter.NormalizeAll);
         }
 
         private void toolStripButtonLong_Click(object sender, EventArgs e)
         {
             // ConvertToLongForm
-            string input = richTextBoxJsonProject.Text;
-            input = ProjectSettingsConverter.ConvertToLongForm(input);
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            jsonProjStatustic();
+            ApplyNormalization(ProjectSettingsConverter.ConvertToLongForm);
         }
 
         private void toolStripButtonShort_Click(object sender, EventArgs e)
         {
             // ConvertToShortForm
-            string input = richTextBoxJsonProject.Text;
-            input = ProjectSettingsConverter.ConvertToShortForm(input);
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            jsonProjStatustic();
+            ApplyNormalization(ProjectSettingsConverter.ConvertToShortForm);
         }
 
         private void toolStripButtonGroup_Click(object sender, EventArgs e)
         {
             // ConvertToGroupNestedForm
-            string input = richTextBoxJsonProject.Text;
-            input = ProjectSettingsConverter.ConvertToGroupNestedForm(input);
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            jsonProjStatustic();
+            ApplyNormalization(ProjectSettingsConverter.ConvertToGroupNestedForm);
         }
 
         private void toolStripButtonSource_Click(object sender, EventArgs e)
         {
             // ConvertToSourceNestedForm
-            string input = richTextBoxJsonProject.Text;
-            input = ProjectSettingsConverter.ConvertToSourceNestedForm(input);
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            jsonProjStatustic();
+            ApplyNormalization(ProjectSettingsConverter.ConvertToSourceNestedForm);
         }
 
         private void toolStripButtonInBlock_Click(object sender, EventArgs e)
         {
             // ReintegrateTagsToBlocks
-            string input = richTextBoxJsonProject.Text;
-            input = ProjectSettingsConverter.ReintegrateTagsToBlocks(input);
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            jsonProjStatustic();
+            ApplyNormalization(ProjectSettingsConverter.ReintegrateTagsToBlocks);
         }
 
         private void toolStripButtonOutBlock_Click(object sender, EventArgs e)
         {
             // ExtractTagsFromBlocks
-            string input = richTextBoxJsonProject.Text;
-            input = ProjectSettingsConverter.ExtractTagsFromBlocks(input);
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            jsonProjStatustic();
+            ApplyNormalization(ProjectSettingsConverter.ExtractTagsFromBlocks);
         }
 
         // Статистика
