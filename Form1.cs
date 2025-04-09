@@ -442,14 +442,11 @@ namespace WinSimpleIDriver
 
             //
             EditorControl.fullFileName = fullFileName;
-
-            //return; // временно! потом УДАЛИТЬ!!!
-
             AppTitle(Settings.settingsFileName, fileName);
 
+            // распаковка проекта
             await Task.Run(() =>
             {
-                // распаковка проекта
                 EditorControl.UnpackProject(input);
             });
 
