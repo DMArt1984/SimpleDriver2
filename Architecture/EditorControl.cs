@@ -208,64 +208,12 @@ namespace WinSimpleIDriver
             data["Sources"] = SourceLib.PackSources(sources);
 
             // Группы
-            JArray arrGroups = new JArray();
-            if (groups != null)
-            {
-                foreach (var grp in groups)
-                {
-                    JObject jGrp = new JObject();
-                    //jGrp["Id"] = grp.Id;
-                    jGrp["Title"] = grp.title;
-                    jGrp["UpdateRate"] = grp.updateRate;
-                    jGrp["Source"] = grp.sourceTitle;
-
-                    if (grp.disableOnStart)
-                        jGrp["Off"] = grp.disableOnStart;
-
-                    if (String.IsNullOrWhiteSpace(grp.description) == false)
-                        jGrp["Desc"] = grp.description;
-
-                    arrGroups.Add(jGrp);
-                }
-            }
-            data["Groups"] = arrGroups;
+            data["Groups"] = GroupLib.PackGroups(groups);
 
             // Теги
-            JArray arrTags = new JArray();
-            if (tags != null)
-            {
-                foreach (var tag in tags)
-                {
-                    JObject jTag = new JObject();
-                    //jTag["Id"] = tag.Id;
-                    jTag["Title"] = tag.title;
-                    jTag["Group"] = tag.groupTitle;
-                    jTag["DataType"] = tag.dataType.ToString();
-                    jTag["Addr"] = tag.address;
-                    
-                    if (tag.disableOnStart)
-                        jTag["Off"] = tag.disableOnStart;
+            data["Tags"] = TagLib.PackTags(tags);
 
-                    if (String.IsNullOrWhiteSpace(tag.description) == false)
-                        jTag["Desc"] = tag.description;
-
-                    if (String.IsNullOrWhiteSpace(tag.writeTitle) == false)
-                        jTag["Write"] = tag.writeTitle;
-
-                    if (String.IsNullOrWhiteSpace(tag.constValue) == false)
-                        jTag["Value"] = tag.constValue;
-
-                    if (tag.isCommand)
-                        jTag["Command"] = tag.isCommand;
-
-                    if (String.IsNullOrWhiteSpace(tag.block) == false)
-                        jTag["Block"] = tag.block;
-
-                    arrTags.Add(jTag);
-                }
-            }
-            data["Tags"] = arrTags;
-
+            // 
             root["Data"] = data;
 
             // Формирование раздела Structures если данные присутствуют
@@ -335,12 +283,6 @@ namespace WinSimpleIDriver
                 }
                 root["Includes"] = arrIncludes;
             }
-
-            // Дополнительно можно сохранить имя файла проекта
-            //if (!string.IsNullOrWhiteSpace(fullFileName))
-            //{
-            //    root["fullFileName"] = fullFileName;
-            //}
 
             // получение строки из JSON данных
             string settings = JsonControl.Serialize_Json_Data(root);

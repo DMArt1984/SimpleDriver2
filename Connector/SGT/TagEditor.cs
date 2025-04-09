@@ -1,4 +1,5 @@
 ﻿using DML;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -127,7 +128,44 @@ namespace Connector
             }
             return items;
         }
+        // Упаковка
+        static public JArray PackTags(List<TagEditor> tags)
+        {
+            JArray arrTags = new JArray();
+            if (tags != null)
+            {
+                foreach (var tag in tags)
+                {
+                    JObject jTag = new JObject();
+                    //jTag["Id"] = tag.Id;
+                    jTag["Title"] = tag.title;
+                    jTag["Group"] = tag.groupTitle;
+                    jTag["DataType"] = tag.dataType.ToString();
+                    jTag["Addr"] = tag.address;
 
+                    if (tag.disableOnStart)
+                        jTag["Off"] = tag.disableOnStart;
+
+                    if (String.IsNullOrWhiteSpace(tag.description) == false)
+                        jTag["Desc"] = tag.description;
+
+                    if (String.IsNullOrWhiteSpace(tag.writeTitle) == false)
+                        jTag["Write"] = tag.writeTitle;
+
+                    if (String.IsNullOrWhiteSpace(tag.constValue) == false)
+                        jTag["Value"] = tag.constValue;
+
+                    if (tag.isCommand)
+                        jTag["Command"] = tag.isCommand;
+
+                    if (String.IsNullOrWhiteSpace(tag.block) == false)
+                        jTag["Block"] = tag.block;
+
+                    arrTags.Add(jTag);
+                }
+            }
+            return arrTags;
+        }
 
         // Получение параметров структуры
         static public void UnpackItemStructure(dynamic item, out string title, out string join, out string templateAddress, out eDataType dataType, out string tagSource, out string group, out string[] sourceTags, out List<TargetTag> targetTags)
@@ -158,6 +196,9 @@ namespace Connector
             title = JsonControl.GetString(item, "Title", $"index{address}");
             desc = JsonControl.GetString(item, "Desc", title);
         }
+
+        
+
 
         // Получение адреса тега с подстановками
         static public string ExpTagAddress(string address, out bool success, List<Tag> items, ITagClient tag = null)

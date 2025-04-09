@@ -1,4 +1,6 @@
 ﻿using DML;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +67,31 @@ namespace Connector
                 }
             }
             return items;
+        }
+        // Упаковка
+        static public JArray PackGroups(List<GroupEditor> groups)
+        {
+            JArray arrGroups = new JArray();
+            if (groups != null)
+            {
+                foreach (var grp in groups)
+                {
+                    JObject jGrp = new JObject();
+                    //jGrp["Id"] = grp.Id;
+                    jGrp["Title"] = grp.title;
+                    jGrp["UpdateRate"] = grp.updateRate;
+                    jGrp["Source"] = grp.sourceTitle;
+
+                    if (grp.disableOnStart)
+                        jGrp["Off"] = grp.disableOnStart;
+
+                    if (String.IsNullOrWhiteSpace(grp.description) == false)
+                        jGrp["Desc"] = grp.description;
+
+                    arrGroups.Add(jGrp);
+                }
+            }
+            return arrGroups;
         }
     }
 
