@@ -48,6 +48,34 @@ namespace Connector
             auto = JsonControl.GetBool(item, "Auto");
             reopen = JsonControl.GetBool(item, "Reconnect");
         }
+
+        // Распаковка источников
+        static public List<SourceEditor> ParseSources(dynamic section)
+        {
+            List<SourceEditor> items = new List<SourceEditor>();
+            ushort sourceId = 0; // ID 
+            if (section != null)
+            {
+                foreach (dynamic item in section)
+                {
+                    SourceLib.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool disableOnStart, out string description, out bool auto, out bool reconnect);
+                    SourceEditor rowSource = new SourceEditor
+                    {
+                        Id = sourceId,
+                        driver = driver,
+                        title = title,
+                        address = address,
+                        disableOnStart = disableOnStart,
+                        description = description,
+                        auto = auto,
+                        reconnect = reconnect
+                    };
+                    items.Add(rowSource);
+                }
+            }
+            return items;
+        }
+
     }
 
 }

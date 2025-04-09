@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using WinSimpleIDriver.Connector;
 
 namespace WinSimpleIDriver
@@ -67,8 +66,11 @@ namespace WinSimpleIDriver
         #region Unpack
 
         // Распаковка проекта
-        static public void UnpackProject(dynamic settings)
+        static public void UnpackProject(string input)
         {
+            // получение JSON данных
+            dynamic settings = JsonControl.Deserialize_Json_Data(input);
+
             Clear();
 
             if (settings == null)
@@ -80,20 +82,17 @@ namespace WinSimpleIDriver
 
                 // Распаковка источников
                 if (SourceLib.InProject(data))
-                    sources = ParseSources(data.Sources);
+                    sources = SourceLib.ParseSources(data.Sources);
 
                 // Распаковка групп
                 if (GroupLib.InProject(data))
-                    groups = ParseGroups(data.Groups);
+                    groups = GroupLib.ParseGroups(data.Groups);
 
                 // Распаковка тегов
                 if (TagLib.InProject(data))
-                    tags = ParseTags(data.Tags);
+                    tags = TagLib.ParseTags(data.Tags);
 
             }
-
-            // Установить ID и Title для объектов
-            //CalcIdAndTitle();
 
             // Распаковка структур
             if (TagLib.IsStructures(settings))
@@ -104,109 +103,6 @@ namespace WinSimpleIDriver
                 ParseIncludes(settings.Includes); // Распаковка настроек внешних проектов
 
         }
-
-        // Распаковка источников
-        static List<SourceEditor> ParseSources(dynamic section)
-        {
-            List<SourceEditor> items = new List<SourceEditor>();
-            ushort sourceId = 0; // ID 
-            if (section != null)
-            {
-                foreach (dynamic item in section)
-                {
-                    SourceLib.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool disableOnStart, out string description, out bool auto, out bool reconnect);
-                    SourceEditor rowSource = new SourceEditor
-                    {
-                        Id = sourceId,
-                        driver = driver,
-                        title = title,
-                        address = address,
-                        disableOnStart = disableOnStart,
-                        description = description,
-                        auto = auto,
-                        reconnect = reconnect
-                    };
-                    items.Add(rowSource);
-                }
-            }
-            return items;
-        }
-
-        // Распаковка групп
-        static List<GroupEditor> ParseGroups(dynamic section)
-        {
-            List<GroupEditor> items = new List<GroupEditor>();
-            ushort groupId = 0; // ID 
-            if (section != null)
-            {
-                foreach (dynamic item in section)
-                {
-                    GroupLib.ParseItemGroup(item, ++groupId, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle);
-                    GroupEditor rowGroup = new GroupEditor
-                    {
-                        Id = groupId,
-                        title = title,
-                        disableOnStart = disableOnStart,
-                        updateRate = updateRate,
-                        description = description,
-                        sourceTitle = sourceTitle
-                    };
-                    items.Add(rowGroup);
-                }
-            }
-            return items;
-        }
-
-        // Распаковка тегов
-        static List<TagEditor> ParseTags(dynamic section)
-        {
-            List <TagEditor> items = new List<TagEditor>();
-            ushort tagId = 0; // ID
-            if (section != null)
-            {
-                foreach (dynamic item in section)
-                {
-                    TagLib.ParseItemTag(item, ++tagId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand, out string block);
-                    TagEditor oneTag = new TagEditor
-                    {
-                        Id = tagId,
-                        title = title,
-                        dataType = dataType,
-                        groupTitle = groupTitle,
-                        address = address,
-                        disableOnStart = disableOnStart,
-                        isCommand = isCommand,
-                        writeTitle = writeTitle,
-                        constValue = constValue,
-                        description = description,
-                        block = block
-                    };
-                    items.Add(oneTag);
-                }
-            }
-            return items;
-        }
-
-        // Установить ID и Title для объектов
-        //static void CalcIdAndTitle()
-        //{
-        //    var sourceDict = sources.ToDictionary(x => x.Id);
-        //    var groupDict = groups.ToDictionary(x => x.Id);
-
-        //    foreach (var tag in tags)
-        //    {
-        //        if (sourceDict.TryGetValue(tag.sourceId, out var source))
-        //        {
-        //            tag.sourceTitle = source.title;
-        //            tag.sourceId = source.Id;
-        //        }
-        //        if (groupDict.TryGetValue(tag.groupId, out var group))
-        //        {
-        //            tag.groupTitle = group.title;
-        //            tag.groupId = group.Id;
-        //        }
-        //    }
-        //}
 
         // Распаковка структур
         static void ParseStructures(dynamic data)

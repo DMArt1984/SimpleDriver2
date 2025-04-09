@@ -449,11 +449,8 @@ namespace WinSimpleIDriver
 
             await Task.Run(() =>
             {
-                // получение JSON данных
-                dynamic output = JsonControl.Deserialize_Json_Data(input);
-
                 // распаковка проекта
-                EditorControl.UnpackProject(output);
+                EditorControl.UnpackProject(input);
             });
 
             // Обновление UI (обновление меню и формы)

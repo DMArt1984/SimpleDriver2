@@ -41,6 +41,31 @@ namespace Connector
             sourceTitle = JsonControl.GetString(item, "Source");
             //tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;
         }
+
+        // Распаковка групп
+        static public List<GroupEditor> ParseGroups(dynamic section)
+        {
+            List<GroupEditor> items = new List<GroupEditor>();
+            ushort groupId = 0; // ID 
+            if (section != null)
+            {
+                foreach (dynamic item in section)
+                {
+                    GroupLib.ParseItemGroup(item, ++groupId, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle);
+                    GroupEditor rowGroup = new GroupEditor
+                    {
+                        Id = groupId,
+                        title = title,
+                        disableOnStart = disableOnStart,
+                        updateRate = updateRate,
+                        description = description,
+                        sourceTitle = sourceTitle
+                    };
+                    items.Add(rowGroup);
+                }
+            }
+            return items;
+        }
     }
 
 }

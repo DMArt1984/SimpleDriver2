@@ -98,6 +98,36 @@ namespace Connector
             isCommand = JsonControl.GetBool(item, "Command");
             block = JsonControl.GetString(item, "Block");
         }
+        // Распаковка тегов
+        static public List<TagEditor> ParseTags(dynamic section)
+        {
+            List<TagEditor> items = new List<TagEditor>();
+            ushort tagId = 0; // ID
+            if (section != null)
+            {
+                foreach (dynamic item in section)
+                {
+                    TagLib.ParseItemTag(item, ++tagId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand, out string block);
+                    TagEditor oneTag = new TagEditor
+                    {
+                        Id = tagId,
+                        title = title,
+                        dataType = dataType,
+                        groupTitle = groupTitle,
+                        address = address,
+                        disableOnStart = disableOnStart,
+                        isCommand = isCommand,
+                        writeTitle = writeTitle,
+                        constValue = constValue,
+                        description = description,
+                        block = block
+                    };
+                    items.Add(oneTag);
+                }
+            }
+            return items;
+        }
+
 
         // Получение параметров структуры
         static public void ParseItemStructure(dynamic item, out string title, out string join, out string templateAddress, out eDataType dataType, out string tagSource, out string group, out string[] sourceTags, out List<TargetTag> targetTags)
