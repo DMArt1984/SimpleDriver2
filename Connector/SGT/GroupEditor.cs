@@ -32,7 +32,7 @@ namespace Connector
     static public class GroupLib {
         static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Groups");
         // Получение параметров группы
-        static public void ParseItemGroup(dynamic item, uint forindex, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle)
+        static public void UnpackItemGroup(dynamic item, uint forindex, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle)
         {
             title = JsonControl.GetString(item, "Title", $"Group #{forindex}");
             updateRate = (uint)JsonControl.GetInt(item, "UpdateRate");
@@ -43,7 +43,7 @@ namespace Connector
         }
 
         // Распаковка групп
-        static public List<GroupEditor> ParseGroups(dynamic section)
+        static public List<GroupEditor> UnpackGroups(dynamic section)
         {
             List<GroupEditor> items = new List<GroupEditor>();
             ushort groupId = 0; // ID 
@@ -51,7 +51,7 @@ namespace Connector
             {
                 foreach (dynamic item in section)
                 {
-                    GroupLib.ParseItemGroup(item, ++groupId, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle);
+                    GroupLib.UnpackItemGroup(item, ++groupId, out string title, out uint updateRate, out bool disableOnStart, out string description, out string sourceTitle);
                     GroupEditor rowGroup = new GroupEditor
                     {
                         Id = groupId,

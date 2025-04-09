@@ -37,7 +37,7 @@ namespace Connector
     static public class SourceLib
     {
         static public bool InProject(dynamic output) => JsonControl.IsProp(output, "Sources");
-        static public void ParseItemSource(dynamic item, uint forId, out string title, out eDriverType driver, out string connection, out bool disableOnStart, out string description, out bool auto, out bool reopen)
+        static public void UnpackItemSource(dynamic item, uint forId, out string title, out eDriverType driver, out string connection, out bool disableOnStart, out string description, out bool auto, out bool reopen)
         {
             title = JsonControl.GetString(item, "Title", $"Source #{forId}");
             driver = JsonControl.GetTypeEnum<eDriverType>(item, "Driver", eDriverType.None);
@@ -50,7 +50,7 @@ namespace Connector
         }
 
         // Распаковка источников
-        static public List<SourceEditor> ParseSources(dynamic section)
+        static public List<SourceEditor> UnpackSources(dynamic section)
         {
             List<SourceEditor> items = new List<SourceEditor>();
             ushort sourceId = 0; // ID 
@@ -58,7 +58,7 @@ namespace Connector
             {
                 foreach (dynamic item in section)
                 {
-                    SourceLib.ParseItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool disableOnStart, out string description, out bool auto, out bool reconnect);
+                    SourceLib.UnpackItemSource(item, ++sourceId, out string title, out eDriverType driver, out string address, out bool disableOnStart, out string description, out bool auto, out bool reconnect);
                     SourceEditor rowSource = new SourceEditor
                     {
                         Id = sourceId,
@@ -75,6 +75,8 @@ namespace Connector
             }
             return items;
         }
+
+
 
     }
 

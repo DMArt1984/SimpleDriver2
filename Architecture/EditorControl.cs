@@ -83,15 +83,15 @@ namespace WinSimpleIDriver
 
                 // Распаковка источников
                 if (SourceLib.InProject(data))
-                    sources = SourceLib.ParseSources(data.Sources);
+                    sources = SourceLib.UnpackSources(data.Sources);
 
                 // Распаковка групп
                 if (GroupLib.InProject(data))
-                    groups = GroupLib.ParseGroups(data.Groups);
+                    groups = GroupLib.UnpackGroups(data.Groups);
 
                 // Распаковка тегов
                 if (TagLib.InProject(data))
-                    tags = TagLib.ParseTags(data.Tags);
+                    tags = TagLib.UnpackTags(data.Tags);
 
             }
 
@@ -114,7 +114,7 @@ namespace WinSimpleIDriver
                 {
                     if (TagLib.IsTargetTags(item))
                     {
-                        TagLib.ParseItemStructure(item, out string title, out string join, out string address, out eDataType dataType, out string source, out string group, out string[] sourceTags, out List <TargetTag> targetTags);
+                        TagLib.UnpackItemStructure(item, out string title, out string join, out string address, out eDataType dataType, out string source, out string group, out string[] sourceTags, out List <TargetTag> targetTags);
                         //---
                         StructureEditor oneStructure = new StructureEditor
                         {

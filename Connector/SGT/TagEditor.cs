@@ -85,7 +85,7 @@ namespace Connector
         static public bool IsListBlocks(dynamic output) => JsonControl.IsProp(output, "Blocks");
 
         // Получение параметров тега
-        static public void ParseItemTag(dynamic item, uint forId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand, out string block)
+        static public void UnpackItemTag(dynamic item, uint forId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand, out string block)
         {
             title = JsonControl.GetString(item, "Title", $"Tag #{forId}");
             groupTitle = JsonControl.GetString(item, "Group");
@@ -99,7 +99,7 @@ namespace Connector
             block = JsonControl.GetString(item, "Block");
         }
         // Распаковка тегов
-        static public List<TagEditor> ParseTags(dynamic section)
+        static public List<TagEditor> UnpackTags(dynamic section)
         {
             List<TagEditor> items = new List<TagEditor>();
             ushort tagId = 0; // ID
@@ -107,7 +107,7 @@ namespace Connector
             {
                 foreach (dynamic item in section)
                 {
-                    TagLib.ParseItemTag(item, ++tagId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand, out string block);
+                    TagLib.UnpackItemTag(item, ++tagId, out string title, out eDataType dataType, out bool disableOnStart, out string address, out string description, out string writeTitle, out string groupTitle, out string constValue, out bool isCommand, out string block);
                     TagEditor oneTag = new TagEditor
                     {
                         Id = tagId,
@@ -130,7 +130,7 @@ namespace Connector
 
 
         // Получение параметров структуры
-        static public void ParseItemStructure(dynamic item, out string title, out string join, out string templateAddress, out eDataType dataType, out string tagSource, out string group, out string[] sourceTags, out List<TargetTag> targetTags)
+        static public void UnpackItemStructure(dynamic item, out string title, out string join, out string templateAddress, out eDataType dataType, out string tagSource, out string group, out string[] sourceTags, out List<TargetTag> targetTags)
         {
             title = JsonControl.GetString(item, "Title", $"noname #{DateTime.Now.Millisecond}");
             join = JsonControl.GetString(item, "Join", ".");
@@ -144,7 +144,7 @@ namespace Connector
             {
                 foreach (var target in item.TargetTags)
                 {
-                    ParseTargetTag(target, out string ttitle, out string taddress, out string tdesc);
+                    UnpackTargetTag(target, out string ttitle, out string taddress, out string tdesc);
                     if (String.IsNullOrWhiteSpace(taddress) == false)
                     {
                         targetTags.Add(new TargetTag { title = ttitle, address = taddress, desc = tdesc });
@@ -152,7 +152,7 @@ namespace Connector
                 }
             }
         }
-        static public void ParseTargetTag(dynamic item, out string title, out string address, out string desc)
+        static public void UnpackTargetTag(dynamic item, out string title, out string address, out string desc)
         {
             address = JsonControl.GetString(item, "Address", "");
             title = JsonControl.GetString(item, "Title", $"index{address}");
