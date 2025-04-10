@@ -14,7 +14,7 @@ namespace Connector
 {
     public struct DGVTagsCol
     {
-        public int Calc;
+        public int Runtime;
         public int Title;
         public int Value;
         public int DataType;
@@ -77,6 +77,7 @@ namespace Connector
         public string constValue; // Записываемое значение
         public string description; // Описание
         public string block; // Блок
+        public string page; // Страница
     }
 
     public struct TargetTag
@@ -195,6 +196,9 @@ namespace Connector
                     if (String.IsNullOrWhiteSpace(tag.block) == false)
                         jTag["Block"] = tag.block;
 
+                    if (String.IsNullOrWhiteSpace(tag.page) == false)
+                        jTag["Page"] = tag.page;
+
                     arrTags.Add(jTag);
                 }
             }
@@ -287,9 +291,9 @@ namespace Connector
                     row[col.Address] = item.address;
                     row[col.Desc] = item.description;
                     row[col.Block] = item.block;
-                    row[col.Page] = "";
+                    row[col.Page] = item.page;
 
-                    row[col.Calc] = false;
+                    row[col.Runtime] = false;
                     row[col.Status] = "";
                     row[col.Message] = "";
                     row[col.Value] = "";
@@ -318,6 +322,7 @@ namespace Connector
                     dataType = (eDataType)Enum.Parse(typeof(eDataType), row.Cells[col.DataType].Value.ToString(), true),
                     groupTitle = row.Cells[col.Group].Value.ToString(),
                     block = row.Cells[col.Block].Value.ToString(),
+                    page = row.Cells[col.Page].Value.ToString(),
                     description = row.Cells[col.Desc].Value.ToString(),
                     //...
                 };

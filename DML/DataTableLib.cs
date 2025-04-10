@@ -435,7 +435,7 @@ namespace DML
                 dgv = tags;
                 col = new DGVTagsCol
                 {
-                    Calc = dgv.Columns["tagCalc"].Index,
+                    Runtime = dgv.Columns["tagCalc"].Index,
                     Title = dgv.Columns["tagTitle"].Index,
                     Value = dgv.Columns["tagValue"].Index,
                     DataType = dgv.Columns["tagDataType"].Index,
