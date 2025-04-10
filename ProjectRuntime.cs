@@ -11,7 +11,7 @@ namespace Connector
     /// Класс для преобразования данных из редактора проекта (EditorControl)
     /// в доменные объекты Source, Group и Tag.
     /// </summary>
-    public static class ProjectConverter
+    public static class ProjectRuntime
     {
         #region Source
 
