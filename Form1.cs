@@ -501,20 +501,24 @@ namespace WinSimpleIDriver
         {
             SetLeftLabelMessage1("Сохранение проекта...");
 
-            // Упаковка проекта
-            string output = await Task.Run(() => EditorControl.PackProject());
+            //
+            FormToProject();
 
-            await Task.Run(() =>
-            {
-                
-            });
+            // упаковка проекта
+            string output = await Task.Run(EditorControl.PackProject);
 
+            // Вернуть на экран
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, output);
+            jsonProjStatustic();
+
+            // Нарисовать дерево
+            JsonTreeViewHelper.PopulateTreeViewFromJson(output, treeViewJsonProject);
+
+            //
             FileControl.SaveToFile(ref fileName, out string path, output); // запись в файл...
 
             SetLeftLabelMessage1("Проект сохранен!");
         }
-
-
 
         #region Last open files
 
