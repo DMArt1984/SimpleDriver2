@@ -589,6 +589,10 @@ namespace WinSimpleIDriver
         {
             DataTableLib.dtSource.Help();
         }
+        private void buttonSourceView_Click(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         #region Source.Filter
@@ -645,7 +649,6 @@ namespace WinSimpleIDriver
 
         #endregion
 
-
         #endregion
 
         // ================================================================================================================
@@ -653,7 +656,18 @@ namespace WinSimpleIDriver
         #region Group
 
         #region Group.Event
+        private void buttonGroupView_Click(object sender, EventArgs e)
+        {
 
+        }
+        private void buttonGroupDel_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void buttonGroupCopy_Click(object sender, EventArgs e)
+        {
+
+        }
         private void checkBoxGroupEditor_CheckedChanged(object sender, EventArgs e)
         {
             DataTableLib.dtGroup.CheckColumns();
@@ -800,6 +814,18 @@ namespace WinSimpleIDriver
         {
             DataTableLib.dtTag.Help();
         }
+        private void buttonTagView_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void buttonTagDel_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void buttonTagCopy_Click(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         #region Tag.Filter
@@ -873,16 +899,16 @@ namespace WinSimpleIDriver
             FormLib.SaveTextComboBox(comboBoxTagFilterPage);
             DataTableLib.dtTag.TextFilter();
         }
-        
+
 
         #endregion
 
         #region Tag.DGV
-        
+
         #endregion
 
         #region Tag.DGV.Event
-
+        
         private void dataGridViewTag_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
 
@@ -926,8 +952,6 @@ namespace WinSimpleIDriver
         #endregion
 
         #endregion
-
-        
 
         // ================================================================================================================
 
@@ -1478,15 +1502,9 @@ namespace WinSimpleIDriver
             DataTableLib.dtTag.UpdateDGVTagSourceLink();
         }
 
-        private void buttonTagCopy_Click(object sender, EventArgs e)
-        {
+        
 
-        }
 
-        private void buttonGroupCopy_Click(object sender, EventArgs e)
-        {
-
-        }
 
 
         // Открыть форму дизайна
@@ -1723,5 +1741,7 @@ namespace WinSimpleIDriver
             JsonTreeViewHelper.PopulateTreeViewFromJson(output, treeViewJsonProject);
 
         }
+
+        
     }
 }
