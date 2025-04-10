@@ -14,12 +14,15 @@ namespace Connector
 {
     public struct DGVGroupsCol
     {
-        public int Calc;
+        public int Runtime;
         public int Title;
+        public int OnOff; // !
         public int Source;
+        public int UpdateRate; // !
         public int Desc;
         public int Status;
         public int CountTags;
+        public int Statistic; // !
     }
     public struct cellGroup
     {
@@ -52,7 +55,6 @@ namespace Connector
             disableOnStart = JsonControl.GetBool(item, "Off");
             description = JsonControl.GetString(item, "Desc");
             sourceTitle = JsonControl.GetString(item, "Source");
-            //tags = JsonControl.IsProp(item, "Tags") ? item.Tags : null;
         }
 
         // Распаковка групп
@@ -91,16 +93,15 @@ namespace Connector
             {
                 DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
                 row.Cells[0].Value = item.Id;
-                row.Cells[3].Value = !item.disableOnStart;
-                row.Cells[5].Value = item.updateRate.ToString();
-
+                row.Cells[col.Runtime].Value = false;
                 row.Cells[col.Title].Value = item.title;
+                row.Cells[col.OnOff].Value = !item.disableOnStart;
                 row.Cells[col.Source].Value = item.sourceTitle;
+                row.Cells[col.UpdateRate].Value = item.updateRate.ToString();
                 row.Cells[col.Desc].Value = item.description;
-                row.Cells[col.CountTags].Value = 0;
-
                 row.Cells[col.Status].Value = "";
-
+                row.Cells[col.CountTags].Value = 0;
+                row.Cells[col.Statistic].Value = "";
                 // -
                 dgv.Rows.Add(row);
             }
@@ -116,11 +117,13 @@ namespace Connector
                 GroupEditor ge = new GroupEditor
                 {
                     Id = Convert.ToUInt16(row.Cells[0].Value),
-                    disableOnStart = !Convert.ToBoolean(row.Cells[3].Value),
-                    updateRate = Convert.ToUInt32(row.Cells[5].Value),
+                    // Runtime - не надо
                     title = row.Cells[col.Title].Value.ToString(),
+                    disableOnStart = !Convert.ToBoolean(row.Cells[col.OnOff].Value),
                     sourceTitle = row.Cells[col.Source].Value.ToString(),
+                    updateRate = Convert.ToUInt32(row.Cells[col.UpdateRate].Value),
                     description = row.Cells[col.Desc].Value.ToString()
+                    // остальные поля не нужны
                 };
                 groups.Add(ge);
             }
@@ -130,12 +133,15 @@ namespace Connector
         {
             DGVGroupsCol col = new DGVGroupsCol
             {
-                Calc = dgv.Columns["groupCalc"].Index,
+                Runtime = dgv.Columns["groupCalc"].Index,
                 Title = dgv.Columns["groupTitle"].Index,
+                OnOff = dgv.Columns["groupOn"].Index,
                 Source = dgv.Columns["groupSource"].Index,
+                UpdateRate = dgv.Columns["groupPeriod"].Index,
                 Desc = dgv.Columns["groupDesc"].Index,
                 Status = dgv.Columns["groupStatus"].Index,
-                CountTags = dgv.Columns["groupTags"].Index
+                CountTags = dgv.Columns["groupTags"].Index,
+                Statistic = dgv.Columns["groupStatistic"].Index
             };
             return col;
         }
