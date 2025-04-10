@@ -1,5 +1,4 @@
-﻿
-using DML;
+﻿using DML;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json.Linq;
@@ -14,14 +13,18 @@ namespace Connector
 {
     public struct DGVSourcesCol
     {
-        public int Calc;
-        public int Title;
-        public int Driver;
-        public int Address;
-        public int Desc;
-        public int Status;
-        public int Message;
-        public int CountTags;
+        public int Runtime; // !
+        public int Title; // Название источника
+        public int OnOff; // !
+        public int OpenAfterStart; // !
+        public int AutoReopen; // !
+        public int Driver; // Тип драйвера
+        public int Address; // Строка подключения
+        public int Desc; // Описание
+        public int Status; // Статус
+        public int Message; // Сообщение
+        public int CountTags; // Теги
+        public int Statistic; // Статистика
     }
     public struct cellSource
     {
@@ -101,20 +104,18 @@ namespace Connector
             {
                 DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
                 row.Cells[0].Value = item.Id;
-                row.Cells[3].Value = !item.disableOnStart;
-                row.Cells[4].Value = item.auto; // автоматический опрос
-                row.Cells[5].Value = item.reconnect; // автоматическое переподключение
-
+                row.Cells[col.Runtime].Value = false; // Runtime
                 row.Cells[col.Title].Value = item.title;
+                row.Cells[col.OnOff].Value = !item.disableOnStart;
+                row.Cells[col.OpenAfterStart].Value = item.auto; // автоматический опрос
+                row.Cells[col.AutoReopen].Value = item.reconnect; // автоматическое переподключение
                 row.Cells[col.Driver].Value = item.driver.ToString();
                 row.Cells[col.Address].Value = item.address;
                 row.Cells[col.Desc].Value = item.description;
-                row.Cells[col.CountTags].Value = 0;
-
-                row.Cells[col.Calc].Value = false;
                 row.Cells[col.Status].Value = "";
                 row.Cells[col.Message].Value = "";
-
+                row.Cells[col.CountTags].Value = 0;
+                row.Cells[col.Statistic].Value = "";
                 // -
                 dgv.Rows.Add(row);
             }
@@ -130,13 +131,15 @@ namespace Connector
                 SourceEditor se = new SourceEditor
                 {
                     Id = Convert.ToUInt16(row.Cells[0].Value),
-                    disableOnStart = !Convert.ToBoolean(row.Cells[3].Value),
-                    auto = Convert.ToBoolean(row.Cells[4].Value),
-                    reconnect = Convert.ToBoolean(row.Cells[5].Value),
+                    // col.Runtime - не нужен
                     title = row.Cells[col.Title].Value.ToString(),
+                    disableOnStart = !Convert.ToBoolean(row.Cells[col.OnOff].Value),
+                    auto = Convert.ToBoolean(row.Cells[col.OpenAfterStart].Value),
+                    reconnect = Convert.ToBoolean(row.Cells[col.AutoReopen].Value),
                     driver = (eDriverType)Enum.Parse(typeof(eDriverType), row.Cells[col.Driver].Value.ToString(), true),
                     address = row.Cells[col.Address].Value.ToString(),
                     description = row.Cells[col.Desc].Value.ToString(),
+                    // остальные тоже не нужны
                 };
                 sources.Add(se);
             }
@@ -147,14 +150,18 @@ namespace Connector
         {
             DGVSourcesCol col = new DGVSourcesCol
             {
-                Calc = dgv.Columns["sourceCalc"].Index,
+                Runtime = dgv.Columns["sourceCalc"].Index,
                 Title = dgv.Columns["sourceTitle"].Index,
+                OnOff = dgv.Columns["sourceON"].Index,
+                OpenAfterStart = dgv.Columns["sourceAutomation"].Index,
+                AutoReopen = dgv.Columns["sourceAutoRestart"].Index,
                 Driver = dgv.Columns["sourceDriver"].Index,
                 Address = dgv.Columns["sourceAddress"].Index,
                 Desc = dgv.Columns["sourceDesc"].Index,
                 Status = dgv.Columns["sourceStatus"].Index,
                 Message = dgv.Columns["sourceMessage"].Index,
-                CountTags = dgv.Columns["sourceTags"].Index
+                CountTags = dgv.Columns["sourceTags"].Index,
+                Statistic = dgv.Columns["sourceStatistic"].Index
             };
             return col;
         }
