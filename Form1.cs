@@ -1706,8 +1706,17 @@ namespace WinSimpleIDriver
             FormToProject();
         }
 
-        private void buttonModelsToJson_Click(object sender, EventArgs e)
+        private async void buttonModelsToJson_Click(object sender, EventArgs e)
         {
+            // упаковка проекта
+            string output = await Task.Run(EditorControl.PackProject);
+
+            // Вернуть на экран
+            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, output);
+            jsonProjStatustic();
+
+            // Нарисовать дерево
+            JsonTreeViewHelper.PopulateTreeViewFromJson(output, treeViewJsonProject);
 
         }
     }
