@@ -377,6 +377,9 @@ namespace WinSimpleIDriver
             //
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, json);
             jsonProjStatustic();
+
+            // Нарисовать дерево
+            JsonTreeViewHelper.PopulateTreeViewFromJson(json, treeViewJsonProject);
         }
 
         private async void ToolStripMenuItemExport_Click(object sender, EventArgs e)
