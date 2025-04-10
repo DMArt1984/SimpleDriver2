@@ -437,16 +437,21 @@ namespace DML
                 {
                     Runtime = dgv.Columns["tagCalc"].Index,
                     Title = dgv.Columns["tagTitle"].Index,
+                    OnOff = dgv.Columns["tagON"].Index,
                     Value = dgv.Columns["tagValue"].Index,
-                    DataType = dgv.Columns["tagDataType"].Index,
-                    Address = dgv.Columns["tagAddress"].Index,
-                    Desc = dgv.Columns["tagDesc"].Index,
-                    Status = dgv.Columns["tagStatus"].Index,
-                    Message = dgv.Columns["tagMessage"].Index,
                     Source = dgv.Columns["tagSource"].Index,
                     Group = dgv.Columns["tagGroup"].Index,
+                    DataType = dgv.Columns["tagDataType"].Index,
+                    Address = dgv.Columns["tagAddress"].Index,
+                    RefreshCommand = dgv.Columns["tagCommand"].Index,
+                    WriteValue = dgv.Columns["tagWriteValue"].Index,
+                    WriteTagTitle = dgv.Columns["tagWriteTagTitle"].Index,
+                    Desc = dgv.Columns["tagDesc"].Index,
                     Block = dgv.Columns["tagBlock"].Index,
                     Page = dgv.Columns["tagPage"].Index
+                    Status = dgv.Columns["tagStatus"].Index,
+                    Message = dgv.Columns["tagMessage"].Index,
+                    Statistic = dgv.Columns["tagStatistic"].Index,
                 };
 
             }

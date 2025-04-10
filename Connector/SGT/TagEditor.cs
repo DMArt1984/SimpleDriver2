@@ -16,16 +16,21 @@ namespace Connector
     {
         public int Runtime;
         public int Title;
+        public int OnOff; // !
         public int Value;
-        public int DataType;
-        public int Address;
-        public int Desc;
-        public int Status;
-        public int Message;
         public int Source;
         public int Group;
+        public int DataType;
+        public int Address;
+        public int RefreshCommand; // !
+        public int WriteValue; // !
+        public int WriteTagTitle; // !
+        public int Desc;
         public int Block;
         public int Page;
+        public int Status;
+        public int Message;
+        public int Statistic; // !
     }
 
     public struct DGVStructureCol
@@ -72,9 +77,9 @@ namespace Connector
         public string groupTitle; // Название группы
         public string address; // адрес
         public bool disableOnStart; // // Отключен при старте
-        public bool isCommand; // запрос по команде
-        public string writeTitle; // Источник новых значений (имя тега)
-        public string constValue; // Записываемое значение
+        public bool RefreshCommand; // запрос по команде
+        public string writeTagTitle; // Источник новых значений (имя тега)
+        public string writeValue; // Записываемое значение
         public string description; // Описание
         public string block; // Блок
         public string page; // Страница
@@ -152,9 +157,9 @@ namespace Connector
                         groupTitle = groupTitle,
                         address = address,
                         disableOnStart = disableOnStart,
-                        isCommand = isCommand,
-                        writeTitle = writeTitle,
-                        constValue = constValue,
+                        RefreshCommand = isCommand,
+                        writeTagTitle = writeTitle,
+                        writeValue = constValue,
                         description = description,
                         block = block
                     };
@@ -184,14 +189,14 @@ namespace Connector
                     if (String.IsNullOrWhiteSpace(tag.description) == false)
                         jTag["Desc"] = tag.description;
 
-                    if (String.IsNullOrWhiteSpace(tag.writeTitle) == false)
-                        jTag["Write"] = tag.writeTitle;
+                    if (String.IsNullOrWhiteSpace(tag.writeTagTitle) == false)
+                        jTag["Write"] = tag.writeTagTitle;
 
-                    if (String.IsNullOrWhiteSpace(tag.constValue) == false)
-                        jTag["Value"] = tag.constValue;
+                    if (String.IsNullOrWhiteSpace(tag.writeValue) == false)
+                        jTag["Value"] = tag.writeValue;
 
-                    if (tag.isCommand)
-                        jTag["Command"] = tag.isCommand;
+                    if (tag.RefreshCommand)
+                        jTag["Command"] = tag.RefreshCommand;
 
                     if (String.IsNullOrWhiteSpace(tag.block) == false)
                         jTag["Block"] = tag.block;
@@ -284,20 +289,24 @@ namespace Connector
                 {
                     var row = tagTable.NewRow();
                     row[0] = item.Id;
-                    row[3] = !item.disableOnStart;
+                    row[col.Runtime] = false;
                     row[col.Title] = item.title;
-                    row[col.DataType] = item.dataType.ToString();
+                    row[col.OnOff] = !item.disableOnStart;
+                    row[col.Value] = "";
+                    row[col.Source] = "";
                     row[col.Group] = item.groupTitle;
+                    row[col.DataType] = item.dataType.ToString();
                     row[col.Address] = item.address;
+                    row[col.RefreshCommand] = item.RefreshCommand;
+                    row[col.WriteValue] = item.writeValue;
+                    row[col.WriteTagTitle] = item.writeTagTitle;
                     row[col.Desc] = item.description;
                     row[col.Block] = item.block;
                     row[col.Page] = item.page;
-
-                    row[col.Runtime] = false;
                     row[col.Status] = "";
                     row[col.Message] = "";
-                    row[col.Value] = "";
-
+                    row[col.Statistic] = "";
+                    // ---
                     tagTable.Rows.Add(row);
                 }
             }
@@ -316,15 +325,21 @@ namespace Connector
                 TagEditor te = new TagEditor
                 {
                     Id = Convert.ToUInt16(row.Cells[0].Value),
-                    disableOnStart = !Convert.ToBoolean(row.Cells[3].Value),
+                    // Runtime не используется
                     title = row.Cells[col.Title].Value.ToString(),
-                    address = row.Cells[col.Address].Value.ToString(),
-                    dataType = (eDataType)Enum.Parse(typeof(eDataType), row.Cells[col.DataType].Value.ToString(), true),
+                    disableOnStart = !Convert.ToBoolean(row.Cells[col.OnOff].Value),
+                    // value не используется
+                    // source не используется
                     groupTitle = row.Cells[col.Group].Value.ToString(),
+                    dataType = (eDataType)Enum.Parse(typeof(eDataType), row.Cells[col.DataType].Value.ToString(), true),
+                    address = row.Cells[col.Address].Value.ToString(),
+                    RefreshCommand = Convert.ToBoolean(row.Cells[col.RefreshCommand].Value),
+                    writeValue = row.Cells[col.WriteValue].Value.ToString(),
+                    writeTagTitle = row.Cells[col.WriteTagTitle].Value.ToString(),
+                    description = row.Cells[col.Desc].Value.ToString(),
                     block = row.Cells[col.Block].Value.ToString(),
                     page = row.Cells[col.Page].Value.ToString(),
-                    description = row.Cells[col.Desc].Value.ToString(),
-                    //...
+                    // остальные не используются
                 };
                 tags.Add(te);
             }
