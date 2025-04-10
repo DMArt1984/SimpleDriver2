@@ -430,19 +430,6 @@ namespace WinSimpleIDriver
             // NormalizeAll
             ApplyNormalization(ProjectSettingsConverter.NormalizeAll, input);
 
-            //// Извлечение секции Data из JSON
-            //string data = ProjectSettingsConverter.ExtractSection(input, "Data");
-
-            //// Нормализация секции Data
-            //data = ProjectSettingsConverter.NormalizeAll(data);
-
-            //// Замена секции Data на нормализованную
-            //input = ProjectSettingsConverter.ReplaceSection(input, "Data", data);
-
-            //// окно проекта из файла
-            //JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            //jsonProjStatustic();
-
             // Последние файлы
             string fullFileName = Path.Combine(path, fileName);
             FileControl.AddToRecentFiles(fullFileName); // Сохранение файла в истории
@@ -1693,15 +1680,11 @@ namespace WinSimpleIDriver
                 EditorControl.UnpackProject(input);
             });
 
-            // Обновление UI (обновление меню и формы)
-            UpdateRecentFilesMenu();
-            ProjectToForm();
-
         }
 
         private void buttonModelsToTables_Click(object sender, EventArgs e)
         {
-
+            ProjectToForm();
         }
 
         private void buttonModelsToRuntime_Click(object sender, EventArgs e)

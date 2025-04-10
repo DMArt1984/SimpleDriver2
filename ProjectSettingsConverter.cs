@@ -48,6 +48,9 @@ public static class ProjectSettingsConverter
     /// </summary>
     public static string ConvertToLongForm(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         JObject root = JObject.Parse(inputJson);
 
         // Массивы для итоговых источников, групп и тегов
@@ -135,6 +138,9 @@ public static class ProjectSettingsConverter
     /// </summary>
     public static string ConvertToShortForm(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         // Сначала получаем длинный вид.
         string longFormJson = ConvertToLongForm(inputJson);
         JObject longForm = JObject.Parse(longFormJson);
@@ -193,6 +199,9 @@ public static class ProjectSettingsConverter
     /// </summary>
     public static string ConvertToGroupNestedForm(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         // Получаем длинный вид для гарантии наличия всех массивов на корневом уровне.
         string longFormJson = ConvertToLongForm(inputJson);
         JObject longForm = JObject.Parse(longFormJson);
@@ -235,6 +244,9 @@ public static class ProjectSettingsConverter
     /// </summary>
     public static string ConvertToSourceNestedForm(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         // Преобразуем входной JSON в длинный вид, где все массивы находятся на корневом уровне.
         string longFormJson = ConvertToLongForm(inputJson);
         JObject longForm = JObject.Parse(longFormJson);
@@ -291,6 +303,9 @@ public static class ProjectSettingsConverter
     /// </returns>
     public static string NormalizeSourceGroup(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         JObject root = JObject.Parse(inputJson);
 
         // Получаем списки источников и групп из корневых массивов.
@@ -350,6 +365,9 @@ public static class ProjectSettingsConverter
     /// </summary>
     public static string NormalizeSingleGroupAndSource(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         JObject root = JObject.Parse(inputJson);
 
         // Получаем списки источников, групп и тегов из корневых массивов.
@@ -400,6 +418,9 @@ public static class ProjectSettingsConverter
     /// </summary>
     public static string NormalizeSourceTagsToGroup(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         JObject root = JObject.Parse(inputJson);
 
         // Получаем массивы Sources и Groups из корневого уровня.
@@ -477,6 +498,9 @@ public static class ProjectSettingsConverter
     /// </returns>
     public static string NormalizeSourceTagsToUniqueGroup(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         JObject root = JObject.Parse(inputJson);
 
         // Получаем список объектов Sources и Groups из корневого уровня.
@@ -571,6 +595,9 @@ public static class ProjectSettingsConverter
     /// </summary>
     public static string NormalizeDuplicateEntries(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         JObject root = JObject.Parse(inputJson);
         // Список имен массивов, которые нужно обработать
         string[] arrayNames = { "Sources", "Groups", "Tags" };
@@ -624,6 +651,9 @@ public static class ProjectSettingsConverter
     /// </returns>
     public static string NormalizeDuplicateEntriesMerge(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         JObject root = JObject.Parse(inputJson);
         // Массивы, для которых проводится нормализация
         string[] arrayNames = { "Sources", "Groups", "Tags" };
@@ -743,6 +773,9 @@ public static class ProjectSettingsConverter
     /// </summary>
     public static string FlattenBlocksToMinimalNesting(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         // Парсинг исходного JSON
         JObject root = JObject.Parse(inputJson);
         // Новый объект, в который будем складывать плоскую структуру Blocks
@@ -789,6 +822,9 @@ public static class ProjectSettingsConverter
     /// </summary>
     public static string ExtractTagsFromBlocks(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         JObject root = JObject.Parse(inputJson);
 
         // List to accumulate extracted tags from the Blocks section.
@@ -863,6 +899,9 @@ public static class ProjectSettingsConverter
     /// Теги, у которых не задано свойство "Block", остаются в корневом массиве "Tags".
     public static string ReintegrateTagsToBlocks(string inputJson)
     {
+        if (String.IsNullOrWhiteSpace(inputJson))
+            return null;
+
         JObject root = JObject.Parse(inputJson);
 
         // Получаем корневой массив "Tags". Если его нет, создаем новый.
@@ -1063,11 +1102,13 @@ public static class ProjectSettingsConverter
     {
         if (string.IsNullOrWhiteSpace(inputJson))
         {
-            throw new ArgumentException("Входной JSON не может быть пустым.", nameof(inputJson));
+            return null;
+            //throw new ArgumentException("Входной JSON не может быть пустым.", nameof(inputJson));
         }
         if (string.IsNullOrWhiteSpace(sectionName))
         {
-            throw new ArgumentException("Имя секции не может быть пустым.", nameof(sectionName));
+            return null;
+            //throw new ArgumentException("Имя секции не может быть пустым.", nameof(sectionName));
         }
 
         JObject obj = JObject.Parse(inputJson);
@@ -1090,13 +1131,16 @@ public static class ProjectSettingsConverter
     public static string ReplaceSection(string inputJson, string sectionName, string newSectionJson)
     {
         if (string.IsNullOrWhiteSpace(inputJson))
-            throw new ArgumentException("Входной JSON не может быть пустым.", nameof(inputJson));
+            return null;
+            //throw new ArgumentException("Входной JSON не может быть пустым.", nameof(inputJson));
 
         if (string.IsNullOrWhiteSpace(sectionName))
-            throw new ArgumentException("Имя секции не может быть пустым.", nameof(sectionName));
+            return null;
+            //throw new ArgumentException("Имя секции не может быть пустым.", nameof(sectionName));
 
         if (string.IsNullOrWhiteSpace(newSectionJson))
-            throw new ArgumentException("Новое содержимое секции не может быть пустым.", nameof(newSectionJson));
+            return null;
+            //throw new ArgumentException("Новое содержимое секции не может быть пустым.", nameof(newSectionJson));
 
         // Парсим исходный JSON
         JObject root = JObject.Parse(inputJson);

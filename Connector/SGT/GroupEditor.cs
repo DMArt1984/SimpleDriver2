@@ -1,4 +1,5 @@
 ﻿using DML;
+using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json.Linq;
@@ -75,6 +76,8 @@ namespace Connector
         {
             // Таблица групп
             dgv.Rows.Clear();
+            if (groups == null)
+                return;
             foreach (var item in groups)
             {
                 DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();

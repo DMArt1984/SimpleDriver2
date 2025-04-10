@@ -84,6 +84,8 @@ namespace Connector
         {
             // Таблица источников
             dgv.Rows.Clear();
+            if (sources == null)
+                return;
             foreach (var item in sources)
             {
                 DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
