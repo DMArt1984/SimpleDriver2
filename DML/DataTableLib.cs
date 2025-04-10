@@ -115,25 +115,25 @@ namespace DML
             static public void CheckColumns()
             {
                 bool checkE = cbEditor.Checked;
-                dgv.Columns["sourceID"].Visible = checkE;
-                dgv.Columns["sourceAutomation"].Visible = checkE;
-                dgv.Columns["sourceAutoRestart"].Visible = checkE;
-                dgv.Columns["sourceDriver"].Visible = checkE;
-                dgv.Columns["sourceAddress"].Visible = checkE;
+                dgv.Columns[0].Visible = checkE;
+                dgv.Columns[col.OpenAfterStart].Visible = checkE;
+                dgv.Columns[col.AutoReopen].Visible = checkE;
+                dgv.Columns[col.Driver].Visible = checkE;
+                dgv.Columns[col.Address].Visible = checkE;
                 dgv.RowHeadersVisible = checkE;
                 dgv.ReadOnly = !checkE;
 
                 bool checkD = cbDesc.Checked;
-                dgv.Columns["sourceDesc"].Visible = checkD;
+                dgv.Columns[col.Desc].Visible = checkD;
 
                 bool checkR = cbRuntime.Checked;
-                dgv.Columns["sourceCalc"].Visible = checkR;
-                dgv.Columns["sourceStatus"].Visible = checkR;
-                dgv.Columns["sourceMessage"].Visible = checkR;
+                dgv.Columns[col.Runtime].Visible = checkR;
+                dgv.Columns[col.Status].Visible = checkR;
+                dgv.Columns[col.Message].Visible = checkR;
 
                 bool checkS = cbStatistic.Checked;
-                dgv.Columns["sourceTags"].Visible = checkS;
-                dgv.Columns["sourceStatistic"].Visible = checkS;
+                dgv.Columns[col.CountTags].Visible = checkS;
+                dgv.Columns[col.Statistic].Visible = checkS;
             }
 
             #endregion
@@ -240,24 +240,24 @@ namespace DML
             static public void CheckColumns()
             {
                 bool checkE = cbEditor.Checked;
-                dgv.Columns["groupID"].Visible = checkE;
-                dgv.Columns["groupPeriod"].Visible = checkE;
+                dgv.Columns[0].Visible = checkE;
+                dgv.Columns[col.UpdateRate].Visible = checkE;
                 dgv.RowHeadersVisible = checkE;
                 dgv.ReadOnly = !checkE;
 
                 bool checkD = cbDesc.Checked;
-                dgv.Columns["groupDesc"].Visible = checkD;
+                dgv.Columns[col.Desc].Visible = checkD;
 
                 bool checkR = cbRuntime.Checked;
-                dgv.Columns["groupCalc"].Visible = checkR;
-                dgv.Columns["groupStatus"].Visible = checkR;
+                dgv.Columns[col.Runtime].Visible = checkR;
+                dgv.Columns[col.Status].Visible = checkR;
 
                 bool checkST = cbStatistic.Checked;
-                dgv.Columns["groupTags"].Visible = checkST;
-                dgv.Columns["groupStatistic"].Visible = checkST;
+                dgv.Columns[col.CountTags].Visible = checkST;
+                dgv.Columns[col.Statistic].Visible = checkST;
 
                 bool checkSource = cbGroupSource.Checked;
-                dgv.Columns["groupSource"].Visible = checkSource;
+                dgv.Columns[col.Source].Visible = checkSource;
             }
             #endregion
 
@@ -345,37 +345,38 @@ namespace DML
             static public void CheckColumns()
             {
                 bool checkE = cbEditor.Checked;
-                dgv.Columns["tagID"].Visible = checkE;
-                dgv.Columns["tagCommand"].Visible = checkE;
+                dgv.Columns[0].Visible = checkE;
+                dgv.Columns[col.Runtime].Visible = checkE;
+                dgv.Columns[col.RefreshCommand].Visible = checkE;
                 dgv.RowHeadersVisible = checkE;
                 dgv.ReadOnly = !checkE;
 
                 bool checkD = cbDesc.Checked;
-                dgv.Columns["tagDesc"].Visible = checkD;
+                dgv.Columns[col.Desc].Visible = checkD;
 
                 bool checkR = cbRuntime.Checked;
-                dgv.Columns["tagCalc"].Visible = checkR;
-                dgv.Columns["tagValue"].Visible = checkR;
-                dgv.Columns["tagStatus"].Visible = checkR;
-                dgv.Columns["tagMessage"].Visible = checkR;
+                dgv.Columns[col.Runtime].Visible = checkR;
+                dgv.Columns[col.Value].Visible = checkR;
+                dgv.Columns[col.Status].Visible = checkR;
+                dgv.Columns[col.Message].Visible = checkR;
 
                 bool checkS = cbStatistic.Checked;
-                dgv.Columns["tagStatistic"].Visible = checkS;
+                dgv.Columns[col.Statistic].Visible = checkS;
 
                 bool checkBP = cbBP.Checked;
-                dgv.Columns["tagBlock"].Visible = checkBP;
-                dgv.Columns["tagPage"].Visible = checkBP;
+                dgv.Columns[col.Block].Visible = checkBP;
+                dgv.Columns[col.Page].Visible = checkBP;
 
                 bool checkSG = cbSG.Checked;
-                dgv.Columns["tagSource"].Visible = checkSG;
-                dgv.Columns["tagGroup"].Visible = checkSG;
+                dgv.Columns[col.Source].Visible = checkSG;
+                dgv.Columns[col.Group].Visible = checkSG;
 
                 bool checkSave = cbSave.Checked;
-                dgv.Columns["tagWriteValue"].Visible = checkSave;
-                dgv.Columns["tagWriteTagTitle"].Visible = checkSave;
+                dgv.Columns[col.WriteValue].Visible = checkSave;
+                dgv.Columns[col.WriteTagTitle].Visible = checkSave;
 
                 bool checkAddress = cbAddress.Checked;
-                dgv.Columns["tagAddress"].Visible = checkAddress;
+                dgv.Columns[col.Address].Visible = checkAddress;
             }
             #endregion
 
