@@ -152,16 +152,16 @@
     <Compile Include="Architecture\ExcelJsonConverter.cs" />
     <Compile Include="Architecture\JsonFormViewer.cs" />
     <Compile Include="Architecture\JsonTreeViewHelper.cs" />
-    <Compile Include="Form1Partials\Form1_Tree.cs">
+    <Compile Include="Form1Partials\Form1.Tree.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1Partials\Form1_Tags.cs">
+    <Compile Include="Form1Partials\Form1.Tags.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1Partials\Form1_Groups.cs">
+    <Compile Include="Form1Partials\Form1.Groups.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1Partials\Form1_Sources.cs">
+    <Compile Include="Form1Partials\Form1.Sources.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LogCodeMessage\CodeMessage.cs" />
