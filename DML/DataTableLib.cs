@@ -158,14 +158,17 @@ namespace DML
 
             static public TextBox tbFilter;
 
-            #region DGV.Add
+            #region DGV
             static public void DataToTable(List<SourceEditor> sources)
             {
                 SourceLib.DataToTable(dgv, col, sources);
             }
             #endregion
+            static public List<SourceEditor> TableToData()
+            {
+                return SourceLib.TableToData(dgv, col);
+            }
 
-            
 
             #region DGV.Columns
             static public void CheckColumns()
@@ -282,10 +285,14 @@ namespace DML
             static public TextBox tbFilter;
             static public ComboBox coFilterSource;
 
-            #region DGV.Add
+            #region DGV
             static public void DataToTable(List<GroupEditor> groups)
             {
                 GroupLib.DataToTable(dgv, col, groups);
+            }
+            static public List<GroupEditor> TableToData()
+            {
+                return GroupLib.TableToData(dgv, col);
             }
             #endregion
 
@@ -382,14 +389,18 @@ namespace DML
                 tagTable.Rows.Clear();
             }
 
-            #region DGV.Add
+            #region DGV
             static public void DataToTable(List<TagEditor> tags)
             {
                 TagLib.DataToTable(dgv, col, tagTable, bindingSource, tags);
             }
+            static public List<TagEditor> TableToData()
+            {
+                return TagLib.TableToData(dgv, col);
+            }
             #endregion
 
-            
+
 
             #region DGV.Columns
             static public void CheckColumns()
