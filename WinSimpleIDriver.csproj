@@ -152,6 +152,9 @@
     <Compile Include="Architecture\ExcelJsonConverter.cs" />
     <Compile Include="Architecture\JsonFormViewer.cs" />
     <Compile Include="Architecture\JsonTreeViewHelper.cs" />
+    <Compile Include="Form1Partials\Form1_Tree.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1Partials\Form1_Tags.cs">
       <SubType>Form</SubType>
     </Compile>
