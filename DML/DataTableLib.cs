@@ -12,65 +12,6 @@ using WinSimpleIDriver.Connector;
 namespace DML
 {
     #region DGV
-    public struct DGVSourcesCol
-    {
-        public int Calc;
-        public int Title;
-        public int Driver;
-        public int Address;
-        public int Desc;
-        public int Status;
-        public int Message;
-        public int CountTags;
-    }
-    public struct DGVGroupsCol
-    {
-        public int Calc;
-        public int Title;
-        public int Source;
-        public int Desc;
-        public int Status;
-        public int CountTags;
-    }
-    public struct DGVTagsCol
-    {
-        public int Calc;
-        public int Title;
-        public int Value;
-        public int DataType;
-        public int Address;
-        public int Desc;
-        public int Status;
-        public int Message;
-        public int Source;
-        public int Group;
-        public int Block;
-        public int Page;
-    }
-
-
-    public struct DGVStructureCol
-    {
-        public int Title;
-        public int Join;
-        public int TemplateAddress;
-        public int Group;
-        public int DataType;
-    }
-    public struct DGVStructTargetCol
-    {
-        public int Structure;
-        public int InnerTitle;
-        public int InnerAddress;
-        public int Desc;
-    }
-    public struct DGVStructTagCol
-    {
-        public int Structure;
-        public int TagTitle;
-    }
-
-
     public struct DGVIncludeCol
     {
         public int Prefix;
@@ -193,7 +134,6 @@ namespace DML
                 bool checkS = cbStatistic.Checked;
                 dgv.Columns["sourceTags"].Visible = checkS;
                 dgv.Columns["sourceStatistic"].Visible = checkS;
-
             }
 
             #endregion
@@ -401,7 +341,6 @@ namespace DML
             #endregion
 
 
-
             #region DGV.Columns
             static public void CheckColumns()
             {
@@ -437,7 +376,6 @@ namespace DML
 
                 bool checkAddress = cbAddress.Checked;
                 dgv.Columns["tagAddress"].Visible = checkAddress;
-
             }
             #endregion
 

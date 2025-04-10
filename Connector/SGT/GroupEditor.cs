@@ -12,6 +12,15 @@ using System.Windows.Forms;
 
 namespace Connector
 {
+    public struct DGVGroupsCol
+    {
+        public int Calc;
+        public int Title;
+        public int Source;
+        public int Desc;
+        public int Status;
+        public int CountTags;
+    }
     public struct cellGroup
     {
         public ushort Id;

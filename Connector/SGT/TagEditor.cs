@@ -12,6 +12,42 @@ using System.Windows.Forms;
 
 namespace Connector
 {
+    public struct DGVTagsCol
+    {
+        public int Calc;
+        public int Title;
+        public int Value;
+        public int DataType;
+        public int Address;
+        public int Desc;
+        public int Status;
+        public int Message;
+        public int Source;
+        public int Group;
+        public int Block;
+        public int Page;
+    }
+
+    public struct DGVStructureCol
+    {
+        public int Title;
+        public int Join;
+        public int TemplateAddress;
+        public int Group;
+        public int DataType;
+    }
+    public struct DGVStructTargetCol
+    {
+        public int Structure;
+        public int InnerTitle;
+        public int InnerAddress;
+        public int Desc;
+    }
+    public struct DGVStructTagCol
+    {
+        public int Structure;
+        public int TagTitle;
+    }
     public struct cellTag
     {
         public ushort Id;
@@ -24,7 +60,6 @@ namespace Connector
         public DataGridViewCell code;
         public DataGridViewCell message;
         public DataGridViewCell comment;
-
     }
 
     #region EDITOR
@@ -34,9 +69,6 @@ namespace Connector
         public ushort Id; // Уникальный идентификатор (0 - нет Id)
         public string title; // Название
         public eDataType dataType;
-        //public ushort sourceId; // ID драйвера
-        //public ushort groupId; // ID группы
-        //public string sourceTitle; // Название драйвера
         public string groupTitle; // Название группы
         public string address; // адрес
         public bool disableOnStart; // // Отключен при старте

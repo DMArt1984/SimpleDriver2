@@ -12,6 +12,17 @@ using System.Windows.Forms;
 
 namespace Connector
 {
+    public struct DGVSourcesCol
+    {
+        public int Calc;
+        public int Title;
+        public int Driver;
+        public int Address;
+        public int Desc;
+        public int Status;
+        public int Message;
+        public int CountTags;
+    }
     public struct cellSource
     {
         //ED public ushort Id;
