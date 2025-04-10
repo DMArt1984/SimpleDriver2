@@ -15,7 +15,7 @@ namespace WinSimpleIDriver
         {
             if (string.IsNullOrWhiteSpace(json))
             {
-                json = "{ \"Data\": {} }";
+                json = CreateDefaultDataJson();
             }
             else
             {
@@ -23,21 +23,57 @@ namespace WinSimpleIDriver
                 {
                     var obj = JObject.Parse(json);
 
-                    if (obj["Data"] == null)
+                    // Проверка наличия секции "Data"
+                    if (obj["Data"] == null || obj["Data"].Type != JTokenType.Object)
                     {
-                        obj["Data"] = new JObject(); // или new JArray() — если ожидается массив
-                        json = obj.ToString();       // перезаписываем json c добавленной секцией
+                        obj["Data"] = CreateDataObject();
                     }
+                    else
+                    {
+                        var data = (JObject)obj["Data"];
+
+                        if (data["Sources"] == null || data["Sources"].Type != JTokenType.Array)
+                            data["Sources"] = new JArray();
+
+                        if (data["Groups"] == null || data["Groups"].Type != JTokenType.Array)
+                            data["Groups"] = new JArray();
+
+                        if (data["Tags"] == null || data["Tags"].Type != JTokenType.Array)
+                            data["Tags"] = new JArray();
+                    }
+
+                    json = obj.ToString();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    // В случае некорректного JSON — безопасный fallback
-                    json = "{ \"Data\": {} }";
-                    // Можно логировать ex.Message, если нужно
+                    json = CreateDefaultDataJson();
                 }
             }
+
             return json;
         }
+
+        private static JObject CreateDataObject()
+        {
+            return new JObject
+            {
+                ["Sources"] = new JArray(),
+                ["Groups"] = new JArray(),
+                ["Tags"] = new JArray()
+            };
+        }
+
+        private static string CreateDefaultDataJson()
+        {
+            var obj = new JObject
+            {
+                ["Data"] = CreateDataObject()
+            };
+
+            return obj.ToString();
+        }
+
+        // -----------------------------------------------------------------------------------------------
 
         /// <summary>
         /// Приводит исходный JSON в базовую длинную форму и последовательно выполняет нормализацию:

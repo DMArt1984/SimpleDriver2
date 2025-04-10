@@ -325,10 +325,26 @@ namespace WinSimpleIDriver
                 splitContainerLogMain.Panel2Collapsed = false;
             }
         }
-        private void ToolStripMenuItemNew_Click(object sender, EventArgs e)
+        private async void ToolStripMenuItemNew_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Новый проект");
-            FormClear();
+            //FormClear();
+
+            string input = ProjectSettingsConverter.CheckSectionData("");
+            richTextBoxJsonProject.Text = input;
+            // Нарисовать дерево
+            JsonTreeViewHelper.PopulateTreeViewFromJson(input, treeViewJsonProject);
+
+            // распаковка проекта
+            await Task.Run(() =>
+            {
+                EditorControl.UnpackProject(input);
+            });
+
+            // Обновление UI (обновление меню и формы)
+            ProjectToForm();
+
+            //
             AppTitle(Settings.settingsFileName, "");
         }
 
@@ -466,9 +482,6 @@ namespace WinSimpleIDriver
             {
                 EditorControl.UnpackProject(input);
             });
-
-            // test
-            //var ret = EditorControl.PackProject();
 
             // Обновление UI (обновление меню и формы)
             UpdateRecentFilesMenu();
