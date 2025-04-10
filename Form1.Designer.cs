@@ -77,6 +77,11 @@ namespace WinSimpleIDriver
             this.tabFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlProject = new System.Windows.Forms.TabControl();
             this.tabPageJson = new System.Windows.Forms.TabPage();
+            this.buttonModelsToRuntime = new System.Windows.Forms.Button();
+            this.buttonModelsToJson = new System.Windows.Forms.Button();
+            this.buttonTablesToModels = new System.Windows.Forms.Button();
+            this.buttonModelsToTables = new System.Windows.Forms.Button();
+            this.buttonJsonToModels = new System.Windows.Forms.Button();
             this.statusStrip2 = new System.Windows.Forms.StatusStrip();
             this.jsonProjectStatistic = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -242,11 +247,8 @@ namespace WinSimpleIDriver
             this.splitContainerLogMain = new System.Windows.Forms.SplitContainer();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonJsonToModels = new System.Windows.Forms.Button();
-            this.buttonModelsToTables = new System.Windows.Forms.Button();
-            this.buttonTablesToModels = new System.Windows.Forms.Button();
-            this.buttonModelsToJson = new System.Windows.Forms.Button();
-            this.buttonModelsToRuntime = new System.Windows.Forms.Button();
+            this.splitContainerJsonProject = new System.Windows.Forms.SplitContainer();
+            this.treeViewJsonProject = new System.Windows.Forms.TreeView();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerTreeMain)).BeginInit();
@@ -288,6 +290,10 @@ namespace WinSimpleIDriver
             this.splitContainerLogMain.Panel1.SuspendLayout();
             this.splitContainerLogMain.Panel2.SuspendLayout();
             this.splitContainerLogMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerJsonProject)).BeginInit();
+            this.splitContainerJsonProject.Panel1.SuspendLayout();
+            this.splitContainerJsonProject.Panel2.SuspendLayout();
+            this.splitContainerJsonProject.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -327,70 +333,70 @@ namespace WinSimpleIDriver
             // ToolStripMenuItemNew
             // 
             this.ToolStripMenuItemNew.Name = "ToolStripMenuItemNew";
-            this.ToolStripMenuItemNew.Size = new System.Drawing.Size(163, 22);
+            this.ToolStripMenuItemNew.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemNew.Text = "Новый";
             this.ToolStripMenuItemNew.Click += new System.EventHandler(this.ToolStripMenuItemNew_Click);
             // 
             // ToolStripMenuItemOpen
             // 
             this.ToolStripMenuItemOpen.Name = "ToolStripMenuItemOpen";
-            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(163, 22);
+            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemOpen.Text = "Открыть";
             this.ToolStripMenuItemOpen.Click += new System.EventHandler(this.ToolStripMenuItemOpen_Click);
             // 
             // ToolStripMenuItemSave
             // 
             this.ToolStripMenuItemSave.Name = "ToolStripMenuItemSave";
-            this.ToolStripMenuItemSave.Size = new System.Drawing.Size(163, 22);
+            this.ToolStripMenuItemSave.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemSave.Text = "Сохранить";
             this.ToolStripMenuItemSave.Click += new System.EventHandler(this.ToolStripMenuItemSave_Click);
             // 
             // ToolStripMenuItemSaveAs
             // 
             this.ToolStripMenuItemSaveAs.Name = "ToolStripMenuItemSaveAs";
-            this.ToolStripMenuItemSaveAs.Size = new System.Drawing.Size(163, 22);
+            this.ToolStripMenuItemSaveAs.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemSaveAs.Text = "Сохранить как...";
             this.ToolStripMenuItemSaveAs.Click += new System.EventHandler(this.ToolStripMenuItemSaveAs_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(160, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(177, 6);
             // 
             // ToolStripMenuItemLastFiles
             // 
             this.ToolStripMenuItemLastFiles.Name = "ToolStripMenuItemLastFiles";
-            this.ToolStripMenuItemLastFiles.Size = new System.Drawing.Size(163, 22);
+            this.ToolStripMenuItemLastFiles.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemLastFiles.Text = "Последние";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(160, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // ToolStripMenuItemImport
             // 
             this.ToolStripMenuItemImport.Name = "ToolStripMenuItemImport";
-            this.ToolStripMenuItemImport.Size = new System.Drawing.Size(163, 22);
+            this.ToolStripMenuItemImport.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemImport.Text = "Импорт";
             this.ToolStripMenuItemImport.Click += new System.EventHandler(this.ToolStripMenuItemImport_Click);
             // 
             // ToolStripMenuItemExport
             // 
             this.ToolStripMenuItemExport.Name = "ToolStripMenuItemExport";
-            this.ToolStripMenuItemExport.Size = new System.Drawing.Size(163, 22);
+            this.ToolStripMenuItemExport.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemExport.Text = "Экспорт";
             this.ToolStripMenuItemExport.Click += new System.EventHandler(this.ToolStripMenuItemExport_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(160, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
             // 
             // ToolStripMenuItemExit
             // 
             this.ToolStripMenuItemExit.Name = "ToolStripMenuItemExit";
-            this.ToolStripMenuItemExit.Size = new System.Drawing.Size(163, 22);
+            this.ToolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemExit.Text = "Выход";
             this.ToolStripMenuItemExit.Click += new System.EventHandler(this.ToolStripMenuItemExit_Click);
             // 
@@ -599,6 +605,7 @@ namespace WinSimpleIDriver
             // 
             // tabPageJson
             // 
+            this.tabPageJson.Controls.Add(this.splitContainerJsonProject);
             this.tabPageJson.Controls.Add(this.buttonModelsToRuntime);
             this.tabPageJson.Controls.Add(this.buttonModelsToJson);
             this.tabPageJson.Controls.Add(this.buttonTablesToModels);
@@ -606,13 +613,67 @@ namespace WinSimpleIDriver
             this.tabPageJson.Controls.Add(this.buttonJsonToModels);
             this.tabPageJson.Controls.Add(this.statusStrip2);
             this.tabPageJson.Controls.Add(this.toolStrip1);
-            this.tabPageJson.Controls.Add(this.richTextBoxJsonProject);
             this.tabPageJson.Location = new System.Drawing.Point(4, 24);
             this.tabPageJson.Name = "tabPageJson";
             this.tabPageJson.Size = new System.Drawing.Size(1122, 410);
             this.tabPageJson.TabIndex = 6;
             this.tabPageJson.Text = "Проект.Data (json)";
             this.tabPageJson.UseVisualStyleBackColor = true;
+            // 
+            // buttonModelsToRuntime
+            // 
+            this.buttonModelsToRuntime.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.buttonModelsToRuntime.Location = new System.Drawing.Point(473, 363);
+            this.buttonModelsToRuntime.Name = "buttonModelsToRuntime";
+            this.buttonModelsToRuntime.Size = new System.Drawing.Size(173, 23);
+            this.buttonModelsToRuntime.TabIndex = 7;
+            this.buttonModelsToRuntime.Text = "Models > RUNTIME";
+            this.buttonModelsToRuntime.UseVisualStyleBackColor = true;
+            this.buttonModelsToRuntime.Click += new System.EventHandler(this.buttonModelsToRuntime_Click);
+            // 
+            // buttonModelsToJson
+            // 
+            this.buttonModelsToJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonModelsToJson.Location = new System.Drawing.Point(992, 363);
+            this.buttonModelsToJson.Name = "buttonModelsToJson";
+            this.buttonModelsToJson.Size = new System.Drawing.Size(122, 23);
+            this.buttonModelsToJson.TabIndex = 6;
+            this.buttonModelsToJson.Text = "Models > JSON";
+            this.buttonModelsToJson.UseVisualStyleBackColor = true;
+            this.buttonModelsToJson.Click += new System.EventHandler(this.buttonModelsToJson_Click);
+            // 
+            // buttonTablesToModels
+            // 
+            this.buttonTablesToModels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonTablesToModels.Location = new System.Drawing.Point(864, 363);
+            this.buttonTablesToModels.Name = "buttonTablesToModels";
+            this.buttonTablesToModels.Size = new System.Drawing.Size(122, 23);
+            this.buttonTablesToModels.TabIndex = 5;
+            this.buttonTablesToModels.Text = "Tables > Models";
+            this.buttonTablesToModels.UseVisualStyleBackColor = true;
+            this.buttonTablesToModels.Click += new System.EventHandler(this.buttonTablesToModels_Click);
+            // 
+            // buttonModelsToTables
+            // 
+            this.buttonModelsToTables.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonModelsToTables.Location = new System.Drawing.Point(132, 363);
+            this.buttonModelsToTables.Name = "buttonModelsToTables";
+            this.buttonModelsToTables.Size = new System.Drawing.Size(122, 23);
+            this.buttonModelsToTables.TabIndex = 4;
+            this.buttonModelsToTables.Text = "Models > Tables";
+            this.buttonModelsToTables.UseVisualStyleBackColor = true;
+            this.buttonModelsToTables.Click += new System.EventHandler(this.buttonModelsToTables_Click);
+            // 
+            // buttonJsonToModels
+            // 
+            this.buttonJsonToModels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonJsonToModels.Location = new System.Drawing.Point(4, 363);
+            this.buttonJsonToModels.Name = "buttonJsonToModels";
+            this.buttonJsonToModels.Size = new System.Drawing.Size(122, 23);
+            this.buttonJsonToModels.TabIndex = 3;
+            this.buttonJsonToModels.Text = "JSON > Models";
+            this.buttonJsonToModels.UseVisualStyleBackColor = true;
+            this.buttonJsonToModels.Click += new System.EventHandler(this.buttonJsonToModels_Click);
             // 
             // statusStrip2
             // 
@@ -730,13 +791,12 @@ namespace WinSimpleIDriver
             // 
             // richTextBoxJsonProject
             // 
-            this.richTextBoxJsonProject.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBoxJsonProject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBoxJsonProject.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.richTextBoxJsonProject.Location = new System.Drawing.Point(4, 30);
+            this.richTextBoxJsonProject.Location = new System.Drawing.Point(0, 0);
             this.richTextBoxJsonProject.Name = "richTextBoxJsonProject";
-            this.richTextBoxJsonProject.Size = new System.Drawing.Size(1111, 327);
+            this.richTextBoxJsonProject.ReadOnly = true;
+            this.richTextBoxJsonProject.Size = new System.Drawing.Size(549, 329);
             this.richTextBoxJsonProject.TabIndex = 0;
             this.richTextBoxJsonProject.Text = "";
             // 
@@ -2242,7 +2302,7 @@ namespace WinSimpleIDriver
             // buttonIncludeChildFilter
             // 
             this.buttonIncludeChildFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonIncludeChildFilter.Location = new System.Drawing.Point(439, 3);
+            this.buttonIncludeChildFilter.Location = new System.Drawing.Point(433, 3);
             this.buttonIncludeChildFilter.Name = "buttonIncludeChildFilter";
             this.buttonIncludeChildFilter.Size = new System.Drawing.Size(75, 24);
             this.buttonIncludeChildFilter.TabIndex = 16;
@@ -2257,7 +2317,7 @@ namespace WinSimpleIDriver
             this.textBoxIncludeChildFilter.Location = new System.Drawing.Point(231, 4);
             this.textBoxIncludeChildFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxIncludeChildFilter.Name = "textBoxIncludeChildFilter";
-            this.textBoxIncludeChildFilter.Size = new System.Drawing.Size(202, 21);
+            this.textBoxIncludeChildFilter.Size = new System.Drawing.Size(196, 21);
             this.textBoxIncludeChildFilter.TabIndex = 15;
             this.textBoxIncludeChildFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxIncludeChildFilter.TextChanged += new System.EventHandler(this.textBoxChangeFilter_TextChanged);
@@ -2289,7 +2349,7 @@ namespace WinSimpleIDriver
             this.dataGridViewIncludeChild.MultiSelect = false;
             this.dataGridViewIncludeChild.Name = "dataGridViewIncludeChild";
             this.dataGridViewIncludeChild.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewIncludeChild.Size = new System.Drawing.Size(488, 333);
+            this.dataGridViewIncludeChild.Size = new System.Drawing.Size(482, 333);
             this.dataGridViewIncludeChild.TabIndex = 3;
             this.dataGridViewIncludeChild.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewIncludeChild_CellEndEdit);
             this.dataGridViewIncludeChild.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewIncludeChild_UserAddedRow);
@@ -2401,55 +2461,32 @@ namespace WinSimpleIDriver
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // buttonJsonToModels
+            // splitContainerJsonProject
             // 
-            this.buttonJsonToModels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonJsonToModels.Location = new System.Drawing.Point(4, 361);
-            this.buttonJsonToModels.Name = "buttonJsonToModels";
-            this.buttonJsonToModels.Size = new System.Drawing.Size(122, 23);
-            this.buttonJsonToModels.TabIndex = 3;
-            this.buttonJsonToModels.Text = "JSON > Models";
-            this.buttonJsonToModels.UseVisualStyleBackColor = true;
+            this.splitContainerJsonProject.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainerJsonProject.Location = new System.Drawing.Point(4, 30);
+            this.splitContainerJsonProject.Name = "splitContainerJsonProject";
             // 
-            // buttonModelsToTables
+            // splitContainerJsonProject.Panel1
             // 
-            this.buttonModelsToTables.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonModelsToTables.Location = new System.Drawing.Point(132, 361);
-            this.buttonModelsToTables.Name = "buttonModelsToTables";
-            this.buttonModelsToTables.Size = new System.Drawing.Size(122, 23);
-            this.buttonModelsToTables.TabIndex = 4;
-            this.buttonModelsToTables.Text = "Models > Tables";
-            this.buttonModelsToTables.UseVisualStyleBackColor = true;
+            this.splitContainerJsonProject.Panel1.Controls.Add(this.richTextBoxJsonProject);
             // 
-            // buttonTablesToModels
+            // splitContainerJsonProject.Panel2
             // 
-            this.buttonTablesToModels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonTablesToModels.Location = new System.Drawing.Point(864, 361);
-            this.buttonTablesToModels.Name = "buttonTablesToModels";
-            this.buttonTablesToModels.Size = new System.Drawing.Size(122, 23);
-            this.buttonTablesToModels.TabIndex = 5;
-            this.buttonTablesToModels.Text = "Tables > Models";
-            this.buttonTablesToModels.UseVisualStyleBackColor = true;
+            this.splitContainerJsonProject.Panel2.Controls.Add(this.treeViewJsonProject);
+            this.splitContainerJsonProject.Size = new System.Drawing.Size(1110, 329);
+            this.splitContainerJsonProject.SplitterDistance = 549;
+            this.splitContainerJsonProject.TabIndex = 8;
             // 
-            // buttonModelsToJson
+            // treeViewJsonProject
             // 
-            this.buttonModelsToJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonModelsToJson.Location = new System.Drawing.Point(992, 361);
-            this.buttonModelsToJson.Name = "buttonModelsToJson";
-            this.buttonModelsToJson.Size = new System.Drawing.Size(122, 23);
-            this.buttonModelsToJson.TabIndex = 6;
-            this.buttonModelsToJson.Text = "Models > JSON";
-            this.buttonModelsToJson.UseVisualStyleBackColor = true;
-            // 
-            // buttonModelsToRuntime
-            // 
-            this.buttonModelsToRuntime.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.buttonModelsToRuntime.Location = new System.Drawing.Point(473, 361);
-            this.buttonModelsToRuntime.Name = "buttonModelsToRuntime";
-            this.buttonModelsToRuntime.Size = new System.Drawing.Size(173, 23);
-            this.buttonModelsToRuntime.TabIndex = 7;
-            this.buttonModelsToRuntime.Text = "Models > RUNTIME";
-            this.buttonModelsToRuntime.UseVisualStyleBackColor = true;
+            this.treeViewJsonProject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewJsonProject.Location = new System.Drawing.Point(0, 0);
+            this.treeViewJsonProject.Name = "treeViewJsonProject";
+            this.treeViewJsonProject.Size = new System.Drawing.Size(557, 329);
+            this.treeViewJsonProject.TabIndex = 0;
             // 
             // Form1
             // 
@@ -2521,6 +2558,10 @@ namespace WinSimpleIDriver
             this.splitContainerLogMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLogMain)).EndInit();
             this.splitContainerLogMain.ResumeLayout(false);
+            this.splitContainerJsonProject.Panel1.ResumeLayout(false);
+            this.splitContainerJsonProject.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerJsonProject)).EndInit();
+            this.splitContainerJsonProject.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2732,6 +2773,8 @@ namespace WinSimpleIDriver
         private System.Windows.Forms.Button buttonModelsToTables;
         private System.Windows.Forms.Button buttonJsonToModels;
         private System.Windows.Forms.Button buttonModelsToRuntime;
+        private System.Windows.Forms.SplitContainer splitContainerJsonProject;
+        private System.Windows.Forms.TreeView treeViewJsonProject;
     }
 }
 

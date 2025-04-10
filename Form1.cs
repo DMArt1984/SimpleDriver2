@@ -1568,6 +1568,10 @@ namespace WinSimpleIDriver
 
         #endregion
 
+        // ====================================================================================================
+
+        #region Project file
+
         /// <summary>
         /// Применяет переданную функцию нормализации к входной строке и возвращает результат.
         /// </summary>
@@ -1597,6 +1601,9 @@ namespace WinSimpleIDriver
             // Вернуть на экран
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
             jsonProjStatustic();
+
+            // Нарисовать дерево
+            JsonTreeViewHelper.PopulateTreeViewFromJson(input, treeViewJsonProject);
 
         }
 
@@ -1649,6 +1656,56 @@ namespace WinSimpleIDriver
             jsonProjectStatistic.Text = $"{s} - {g} - {t}";
         }
 
+        // ------------------------------------------------------------------------------------------------------------------
 
+
+
+        #endregion
+
+        private async void buttonJsonToModels_Click(object sender, EventArgs e)
+        {
+            // Получить с экрана
+            string input = richTextBoxJsonProject.Text;
+
+            // Извлечение секции Data из JSON
+            string data = ProjectSettingsConverter.ExtractSection(input, "Data");
+
+            // Нормализация секции Data
+            data = ProjectSettingsConverter.NormalizeAll(data);
+
+            // Замена секции Data на нормализованную
+            input = ProjectSettingsConverter.ReplaceSection(input, "Data", data);
+
+            // распаковка проекта
+            await Task.Run(() =>
+            {
+                EditorControl.UnpackProject(input);
+            });
+
+            // Обновление UI (обновление меню и формы)
+            UpdateRecentFilesMenu();
+            ProjectToForm();
+
+        }
+
+        private void buttonModelsToTables_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonModelsToRuntime_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonTablesToModels_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonModelsToJson_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
