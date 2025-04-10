@@ -454,7 +454,7 @@ namespace WinSimpleIDriver
             SetLeftLabelMessage1("Проект открыт!");
         }
 
-        // Рисование на форме
+        // Положить на форму
         private void ProjectToForm()
         {
             DataTableLib.dtSource.DataToTable(EditorControl.sources);
@@ -483,6 +483,15 @@ namespace WinSimpleIDriver
             //
             SetComboPlaceholder();
 
+        }
+
+
+        // Забрать из формы
+        private void FormToProject()
+        {
+            EditorControl.sources = DataTableLib.dtSource.TableToData();
+            EditorControl.groups = DataTableLib.dtGroup.TableToData();
+            EditorControl.tags = DataTableLib.dtTag.TableToData();
         }
 
         // ---
@@ -1694,7 +1703,7 @@ namespace WinSimpleIDriver
 
         private void buttonTablesToModels_Click(object sender, EventArgs e)
         {
-
+            FormToProject();
         }
 
         private void buttonModelsToJson_Click(object sender, EventArgs e)
