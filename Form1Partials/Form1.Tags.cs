@@ -312,5 +312,20 @@ namespace WinSimpleIDriver
 
         #endregion
 
+        private void dataGridViewStructure_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeStructure();
+        }
+
+        private void dataGridViewStructureTag_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeStructure();
+        }
+
+        private void dataGridViewStructureTarget_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeStructure();
+        }
+
     }
 }
