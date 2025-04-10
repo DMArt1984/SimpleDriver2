@@ -372,7 +372,7 @@ namespace DML
 
                 bool checkSave = cbSave.Checked;
                 dgv.Columns["tagWriteValue"].Visible = checkSave;
-                dgv.Columns["tagWriteTag"].Visible = checkSave;
+                dgv.Columns["tagWriteTagTitle"].Visible = checkSave;
 
                 bool checkAddress = cbAddress.Checked;
                 dgv.Columns["tagAddress"].Visible = checkAddress;
