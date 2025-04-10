@@ -448,7 +448,7 @@ namespace DML
                     WriteTagTitle = dgv.Columns["tagWriteTagTitle"].Index,
                     Desc = dgv.Columns["tagDesc"].Index,
                     Block = dgv.Columns["tagBlock"].Index,
-                    Page = dgv.Columns["tagPage"].Index
+                    Page = dgv.Columns["tagPage"].Index,
                     Status = dgv.Columns["tagStatus"].Index,
                     Message = dgv.Columns["tagMessage"].Index,
                     Statistic = dgv.Columns["tagStatistic"].Index,
