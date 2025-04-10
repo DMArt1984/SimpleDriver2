@@ -28,5 +28,57 @@ namespace WinSimpleIDriver
             }
             return input;
         }
+
+        public static Encoding GetEncodingFromString(string encodingName)
+        {
+            if (string.IsNullOrWhiteSpace(encodingName))
+                return Encoding.Default;
+
+            try
+            {
+                return Encoding.GetEncoding(encodingName);
+            }
+            catch (ArgumentException)
+            {
+                // Попробуем дополнительно обработать часто используемые псевдонимы
+                switch (encodingName.Trim().ToLowerInvariant())
+                {
+                    case "utf8":
+                    case "utf-8":
+                        return Encoding.UTF8;
+
+                    case "utf7":
+                    case "utf-7":
+                        return Encoding.UTF7;
+
+                    case "utf32":
+                    case "utf-32":
+                        return Encoding.UTF32;
+
+                    case "ascii":
+                        return Encoding.ASCII;
+
+                    case "unicode":
+                        return Encoding.Unicode;
+
+                    case "bigendianunicode":
+                        return Encoding.BigEndianUnicode;
+
+                    case "default":
+                        return Encoding.Default;
+
+                    case "latin1":
+                    case "iso-8859-1":
+                        return Encoding.GetEncoding("iso-8859-1");
+
+                    case "windows1251":
+                    case "windows-1251":
+                        return Encoding.GetEncoding(1251); // кириллица
+
+                    default:
+                        throw new NotSupportedException($"Неизвестная кодировка: {encodingName}");
+                }
+            }
+        }
     }
 }

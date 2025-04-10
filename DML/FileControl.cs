@@ -22,7 +22,7 @@ public static class FileControl
     }
 
     // Прочитать JSON-файл
-    public static string LoadFromFile(ref string fileName, out string path, bool select = false, bool showNotFound = true, string filter = @"JSON-файл (*.json)|*.json")
+    public static string LoadFromFile(ref string fileName, out string path, Encoding enc, bool select = false, bool showNotFound = true, string filter = @"JSON-файл (*.json)|*.json")
     {
         path = string.Empty;
 
@@ -40,11 +40,11 @@ public static class FileControl
         fileName = Path.GetFileName(fullFileName);
         path = Path.GetDirectoryName(fullFileName) ?? string.Empty;
 
-        return ReadFileContent(fullFileName, Encoding.Default);
+        return ReadFileContent(fullFileName, enc);
     }
 
     // Записать JSON-файл
-    public static void SaveToFile(ref string fileName, out string path, string json, string filter = @"JSON-файл (*.json)|*.json")
+    public static void SaveToFile(ref string fileName, out string path, string json, Encoding enc, string filter = @"JSON-файл (*.json)|*.json")
     {
         path = string.Empty;
         if (string.IsNullOrWhiteSpace(json))
@@ -57,7 +57,7 @@ public static class FileControl
         fileName = Path.GetFileName(fullFileName);
         path = Path.GetDirectoryName(fullFileName) ?? string.Empty;
 
-        WriteFileContent(fullFileName, json, Encoding.Default);
+        WriteFileContent(fullFileName, json, enc);
     }
 
     // Прочитать XML-файл

@@ -80,6 +80,7 @@ namespace WinSimpleIDriver
 
             #endregion
 
+            toolStripComboBoxEncoding.SelectedIndex = 0; // UTF-8
 
             // Form: Source
             DataTableLib.dtSource.LinkColumns(dataGridViewSource);
@@ -420,8 +421,12 @@ namespace WinSimpleIDriver
         {
             SetLeftLabelMessage1("Открытие проекта...");
 
+            // Получаем кодировку
+            string encoding = toolStripComboBoxEncoding.Text;
+            var enc = DecodeEncode.GetEncodingFromString(encoding);
+
             // Загрузка проекта JSON
-            string input = FileControl.LoadFromFile(ref fileName, out string path, select); // чтение из файла...
+            string input = FileControl.LoadFromFile(ref fileName, out string path, enc, select); // чтение из файла...
 
             // Далее?
             if (String.IsNullOrWhiteSpace(input))
@@ -514,8 +519,12 @@ namespace WinSimpleIDriver
             // Нарисовать дерево
             JsonTreeViewHelper.PopulateTreeViewFromJson(output, treeViewJsonProject);
 
+            // Получаем кодировку
+            string encoding = toolStripComboBoxEncoding.Text;
+            var enc = DecodeEncode.GetEncodingFromString(encoding);
+
             //
-            FileControl.SaveToFile(ref fileName, out string path, output); // запись в файл...
+            FileControl.SaveToFile(ref fileName, out string path, output, enc); // запись в файл...
 
             SetLeftLabelMessage1("Проект сохранен!");
         }
