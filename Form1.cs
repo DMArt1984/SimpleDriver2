@@ -166,9 +166,8 @@ namespace WinSimpleIDriver
 
             // Combo
             SetComboPlaceholder();
-            
 
-            // Новый проект
+            // Очистить проект
             FormClear();
 
             // DataTables
@@ -330,6 +329,12 @@ namespace WinSimpleIDriver
             SetLeftLabelMessage1("Новый проект");
             //FormClear();
 
+            await NewProject();
+
+        }
+
+        private async Task NewProject()
+        {
             string input = ProjectSettingsConverter.CheckSectionData("");
             richTextBoxJsonProject.Text = input;
             // Нарисовать дерево
@@ -1782,6 +1787,10 @@ namespace WinSimpleIDriver
 
         }
 
-        
+        // Новый проект после загрузки формы
+        private async void Form1_Shown(object sender, EventArgs e)
+        {
+            await NewProject();
+        }
     }
 }
