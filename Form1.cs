@@ -427,18 +427,21 @@ namespace WinSimpleIDriver
             if (String.IsNullOrWhiteSpace(input))
                 return;
 
-            // Извлечение секции Data из JSON
-            string data = ProjectSettingsConverter.ExtractSection(input, "Data");
+            // NormalizeAll
+            ApplyNormalization(ProjectSettingsConverter.NormalizeAll, input);
 
-            // Нормализация секции Data
-            data = ProjectSettingsConverter.NormalizeAll(data);
+            //// Извлечение секции Data из JSON
+            //string data = ProjectSettingsConverter.ExtractSection(input, "Data");
 
-            // Замена секции Data на нормализованную
-            input = ProjectSettingsConverter.ReplaceSection(input, "Data", data);
+            //// Нормализация секции Data
+            //data = ProjectSettingsConverter.NormalizeAll(data);
 
-            // окно проекта из файла
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            jsonProjStatustic();
+            //// Замена секции Data на нормализованную
+            //input = ProjectSettingsConverter.ReplaceSection(input, "Data", data);
+
+            //// окно проекта из файла
+            //JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
+            //jsonProjStatustic();
 
             // Последние файлы
             string fullFileName = Path.Combine(path, fileName);
@@ -1581,13 +1584,21 @@ namespace WinSimpleIDriver
         /// Например, функция NormalizeAll.
         /// </param>
         /// <returns>Строка, полученная в результате применения normalizeFunc к inputJson.</returns>
-        private void ApplyNormalization(Func<string, string> normalizeFunc)
+        private void ApplyNormalization(Func<string, string> normalizeFunc, string fromExternal = null)
         {
             if (normalizeFunc == null)
                 throw new ArgumentNullException(nameof(normalizeFunc));
 
-            // Получить с экрана
-            string input = richTextBoxJsonProject.Text;
+            // Получить json
+            string input = "";
+            if (fromExternal == null)
+            {
+                input = richTextBoxJsonProject.Text;
+            }
+            else
+            {
+                input = fromExternal;
+            }
 
             // Извлечение секции Data
             string data = ProjectSettingsConverter.ExtractSection(input, "Data");
