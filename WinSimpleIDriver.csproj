@@ -147,11 +147,11 @@
     <Compile Include="Connector\Driver\TestTable.cs" />
     <Compile Include="Connector\SGT\TagEditor.cs" />
     <Compile Include="Connector\SGT\TagErrorHandler.cs" />
-    <Compile Include="DecodeEncode.cs" />
+    <Compile Include="Architecture\DecodeEncode.cs" />
     <Compile Include="DML\BaseLogger.cs" />
-    <Compile Include="ExcelJsonConverter.cs" />
-    <Compile Include="JsonFormViewer.cs" />
-    <Compile Include="JsonTreeViewHelper.cs" />
+    <Compile Include="Architecture\ExcelJsonConverter.cs" />
+    <Compile Include="Architecture\JsonFormViewer.cs" />
+    <Compile Include="Architecture\JsonTreeViewHelper.cs" />
     <Compile Include="LogCodeMessage\CodeMessage.cs" />
     <Compile Include="LogCodeMessage\CodeMessageFactory.cs" />
     <Compile Include="DML\ColorConverterHelper.cs" />
@@ -199,8 +199,8 @@
     <Compile Include="DML\FormLib.cs" />
     <Compile Include="Architecture\myTree.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectRuntime.cs" />
-    <Compile Include="ProjectSettingsConverter.cs" />
+    <Compile Include="Connector\ProjectRuntime.cs" />
+    <Compile Include="Architecture\ProjectSettingsConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DML\Settings.cs" />
     <Compile Include="Connector\Driver\Component\SimpleConverter.cs" />
