@@ -10,7 +10,34 @@ namespace WinSimpleIDriver
     {
         #region Normalize
 
+        //
+        public static string CheckSectionData(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                json = "{ \"Data\": {} }";
+            }
+            else
+            {
+                try
+                {
+                    var obj = JObject.Parse(json);
 
+                    if (obj["Data"] == null)
+                    {
+                        obj["Data"] = new JObject(); // или new JArray() — если ожидается массив
+                        json = obj.ToString();       // перезаписываем json c добавленной секцией
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // В случае некорректного JSON — безопасный fallback
+                    json = "{ \"Data\": {} }";
+                    // Можно логировать ex.Message, если нужно
+                }
+            }
+            return json;
+        }
 
         /// <summary>
         /// Приводит исходный JSON в базовую длинную форму и последовательно выполняет нормализацию:

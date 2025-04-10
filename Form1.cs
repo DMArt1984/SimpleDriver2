@@ -364,8 +364,17 @@ namespace WinSimpleIDriver
                 jsonProjectStatistic.Text = $"{processed}";
             });
 
-            string json = await ExcelJsonConverter.ExcelToJsonAsync(file, progress);
+            // Импорт из Excel секции Data
+            string data = await ExcelJsonConverter.ExcelToJsonAsync(file, progress);
 
+            // Замена секции Data на нормализованную
+            string input = richTextBoxJsonProject.Text;
+            input = ProjectSettingsConverter.CheckSectionData(input);
+
+            //
+            string json = ProjectSettingsConverter.ReplaceSection(input, "Data", data);
+
+            //
             JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, json);
             jsonProjStatustic();
         }
@@ -385,9 +394,15 @@ namespace WinSimpleIDriver
             });
 
             string json = richTextBoxJsonProject.Text;
-            json = ProjectSettingsConverter.NormalizeAll(json);
+            json = ProjectSettingsConverter.CheckSectionData(json);
 
-            await ExcelJsonConverter.JsonToExcelAsync(json, file, progress);
+            // Извлечение секции Data
+            string data = ProjectSettingsConverter.ExtractSection(json, "Data");
+
+            data= ProjectSettingsConverter.NormalizeAll(data);
+
+            // Экспорт в Excel секции Data
+            await ExcelJsonConverter.JsonToExcelAsync(data, file, progress);
 
         }
 
