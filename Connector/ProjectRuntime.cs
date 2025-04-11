@@ -13,6 +13,11 @@ namespace Connector
     /// </summary>
     public static class ProjectRuntime
     {
+        static public List<Source> sources = new List<Source>();
+        static public List<Group> groups = new List<Group>();
+        static public List<Tag> tags = new List<Tag>();
+
+
         #region Source
 
         public static List<Source> ConvertEditorToControlSources(
@@ -273,6 +278,63 @@ namespace Connector
         }
 
         #endregion
+
+        // Запуск Runtime
+        public static void StartRuntime(Form1 frm)
+        {
+            // Фабрика устройств (предположим, уже создана в форме)
+            IDeviceFactory deviceFactory = new DeviceFactory();
+
+            ProjectRuntime.sources = ProjectRuntime.ConvertEditorToControlSources(
+                    EditorControl.sources,
+                    deviceFactory,
+                    frm.SubscribeToSource);
+
+            ProjectRuntime.groups = ProjectRuntime.ConvertEditorToControlGroups(
+                    ProjectRuntime.sources,
+                    EditorControl.groups,
+                    frm.SubscribeToGroup);
+
+            ProjectRuntime.tags = ProjectRuntime.ConvertEditorToControlTags(
+                    ProjectRuntime.groups,
+                    EditorControl.tags,
+                    frm.SubscribeToTag);
+        }
+
+        // Остановка Runtime
+        public static void StopRuntime(Form1 frm)
+        {
+            foreach (var source in sources)
+            {
+                frm.UnsubscribeFromSource(source);
+
+                source.Off = true;
+            }
+
+            foreach (var group in groups)
+            {
+                frm.UnsubscribeFromGroup(group);
+
+                group.Stop();
+                group.Dispose();
+                group.UnbindSource();
+            }
+
+            foreach (var tag in tags)
+            {
+                frm.UnsubscribeFromTag(tag);
+            }
+
+            sources.Clear();
+            groups.Clear();
+            tags.Clear();
+
+            Source.Clear();
+            Group.Clear();
+            Tag.Clear();
+
+            GC.Collect();
+        }
 
     }
 }

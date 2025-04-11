@@ -330,10 +330,16 @@ namespace WinSimpleIDriver
 
         // =================================================================================================================
 
-        private void SubscribeToTag(Tag tag)
+        // Подписка на события тегов
+        public void SubscribeToTag(Tag tag)
         {
             tag.eventRuntime += TagOnRuntimeChanged;
             tag.eventParam += TagOnParamChanged;
+        }
+        public void UnsubscribeFromTag(Tag tag)
+        {
+            tag.eventRuntime -= TagOnRuntimeChanged;
+            tag.eventParam -= TagOnParamChanged;
         }
 
         private void TagOnRuntimeChanged(ushort id)

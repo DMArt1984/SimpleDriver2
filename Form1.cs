@@ -1101,28 +1101,16 @@ namespace WinSimpleIDriver
             await NewProject();
         }
 
+        // Запуск Runtime
         private void buttonModelsToRuntime_Click(object sender, EventArgs e)
         {
-            // Фабрика устройств (предположим, уже создана в форме)
-            IDeviceFactory deviceFactory = new DeviceFactory();
+            ProjectRuntime.StartRuntime(this);
+        }
 
-            var runtimeSources = ProjectRuntime.ConvertEditorToControlSources(
-                    EditorControl.sources,
-                    deviceFactory,
-                    SubscribeToSource);
-
-            var runtimeGroups = ProjectRuntime.ConvertEditorToControlGroups(
-                    runtimeSources, 
-                    EditorControl.groups, 
-                    SubscribeToGroup);
-
-            var runtimeTags = ProjectRuntime.ConvertEditorToControlTags(
-                    runtimeGroups,
-                    EditorControl.tags,
-                    SubscribeToTag);
-
-
-
+        // Стоп Runtime
+        private void buttonStopRuntime_Click(object sender, EventArgs e)
+        {
+            ProjectRuntime.StopRuntime(this);
         }
 
 

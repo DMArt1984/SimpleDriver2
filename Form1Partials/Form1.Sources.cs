@@ -111,12 +111,21 @@ namespace WinSimpleIDriver
 
         #region Runtime
 
-        private void SubscribeToSource(Source src)
+        // Подписка на события источника
+        public void SubscribeToSource(Source src)
         {
             src.eventStatus += SourceOnStatusChanged;
             src.eventError += SourceOnError;
             src.eventParams += SourceOnParamsChanged;
             src.eventReq += SourceOnDataReceived;
+        }
+
+        public void UnsubscribeFromSource(Source src)
+        {
+            src.eventStatus -= SourceOnStatusChanged;
+            src.eventError -= SourceOnError;
+            src.eventParams -= SourceOnParamsChanged;
+            src.eventReq -= SourceOnDataReceived;
         }
 
         private void SourceOnStatusChanged(ushort id, eSourceStatus status)
