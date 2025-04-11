@@ -1,4 +1,5 @@
-﻿using DML;
+﻿using Connector;
+using DML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -326,6 +327,27 @@ namespace WinSimpleIDriver
         {
             TreeLib.DrawTreeStructure();
         }
+
+        // =================================================================================================================
+
+        private void SubscribeToTag(Tag tag)
+        {
+            tag.eventRuntime += TagOnRuntimeChanged;
+            tag.eventParam += TagOnParamChanged;
+        }
+
+        private void TagOnRuntimeChanged(ushort id)
+        {
+            //Log($"Тег {id} обновил значение");
+            // Можно обновить ячейку в DataGridView, статус и т.д.
+        }
+
+        private void TagOnParamChanged(TagParam param)
+        {
+            //Log($"Тег {param.Id}: обновлены параметры — Addr={param.address}, Тип={param.dataType}, Off={param.off}");
+            // Можно отразить это в таблице или UI
+        }
+
 
     }
 }

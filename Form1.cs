@@ -1074,10 +1074,7 @@ namespace WinSimpleIDriver
             ProjectToForm();
         }
 
-        private void buttonModelsToRuntime_Click(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void buttonTablesToModels_Click(object sender, EventArgs e)
         {
@@ -1103,5 +1100,31 @@ namespace WinSimpleIDriver
         {
             await NewProject();
         }
+
+        private void buttonModelsToRuntime_Click(object sender, EventArgs e)
+        {
+            // Фабрика устройств (предположим, уже создана в форме)
+            IDeviceFactory deviceFactory = new DeviceFactory();
+
+            var runtimeSources = ProjectRuntime.ConvertEditorToControlSources(
+                    EditorControl.sources,
+                    deviceFactory,
+                    SubscribeToSource);
+
+            var runtimeGroups = ProjectRuntime.ConvertEditorToControlGroups(
+                    runtimeSources, 
+                    EditorControl.groups, 
+                    SubscribeToGroup);
+
+            var runtimeTags = ProjectRuntime.ConvertEditorToControlTags(
+                    runtimeGroups,
+                    EditorControl.tags,
+                    SubscribeToTag);
+
+
+
+        }
+
+
     }
 }

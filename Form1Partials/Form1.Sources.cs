@@ -1,4 +1,6 @@
-﻿using DML;
+﻿using Connector;
+using DML;
+using LogCodeMessage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,6 +109,36 @@ namespace WinSimpleIDriver
 
         #endregion
 
-        
+        #region Runtime
+
+        private void SubscribeToSource(Source src)
+        {
+            src.eventStatus += SourceOnStatusChanged;
+            src.eventError += SourceOnError;
+            src.eventParams += SourceOnParamsChanged;
+            src.eventReq += SourceOnDataReceived;
+        }
+
+        private void SourceOnStatusChanged(ushort id, eSourceStatus status)
+        {
+            // например, обновление таблицы/лога
+        }
+
+        private void SourceOnError(ushort id, CodeMessage error)
+        {
+            // лог ошибки
+        }
+
+        private void SourceOnParamsChanged(SourceParam param)
+        {
+            // возможно, обновление UI
+        }
+
+        private void SourceOnDataReceived(ushort sourceId, ushort groupId, List<ITagResult> results, int counter, int fails, int all, int good)
+        {
+            // работа с результатами
+        }
+        #endregion
+
     }
 }

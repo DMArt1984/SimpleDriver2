@@ -15,7 +15,10 @@ namespace Connector
     {
         #region Source
 
-        public static List<Source> ConvertEditorToControlSources(List<SourceEditor> eSources, IDeviceFactory deviceFactory)
+        public static List<Source> ConvertEditorToControlSources(
+                                        List<SourceEditor> eSources,
+                                        IDeviceFactory deviceFactory,
+                                        Action<Source> onCreate = null)
         {
             var cSources = new List<Source>();
             if (eSources != null)
@@ -33,6 +36,9 @@ namespace Connector
                         se.reconnect,      // авто-переподключение
                         se.address,
                         se.description);
+
+                    onCreate?.Invoke(source); // <<< подключение обработчиков
+
                     cSources.Add(source);
 
                 }
@@ -106,7 +112,10 @@ namespace Connector
 
         #region Group
 
-        public static List<Group> ConvertEditorToControlGroups(List<Source> cSources, List<GroupEditor> eGroups)
+        public static List<Group> ConvertEditorToControlGroups(
+                                        List<Source> cSources,
+                                        List<GroupEditor> eGroups,
+                                        Action<Group> onCreate = null)
         {
             var groups = new List<Group>();
             if (eGroups != null)
@@ -124,6 +133,9 @@ namespace Connector
                             ge.updateRate,
                             ge.disableOnStart,          // здесь можем интерпретировать off как waitOff (при необходимости можно добавить отдельное свойство)
                             ge.description);
+
+                        onCreate?.Invoke(group); // 👈 колбэк для подписки
+
                         groups.Add(group);
                     }
                 }
@@ -176,7 +188,10 @@ namespace Connector
 
         #region Tag
 
-        public static List<Tag> ConvertEditorToControlTags(List<Group> groups, List<TagEditor> eTags)
+        public static List<Tag> ConvertEditorToControlTags(
+                                        List<Group> groups,
+                                        List<TagEditor> eTags,
+                                        Action<Tag> onCreate = null)
         {
             var tags = new List<Tag>();
             if (eTags != null)
@@ -194,6 +209,9 @@ namespace Connector
                             te.dataType,
                             te.address,
                             te.description);
+
+                        onCreate?.Invoke(tag); // 👈 подключение обработчиков событий
+
                         tags.Add(tag);
                     }
                 }
