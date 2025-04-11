@@ -160,11 +160,20 @@ namespace WinSimpleIDriver
         // Забрать из формы
         private void FormToProject()
         {
-            EditorControl.sources = DataTableLib.dtSource.TableToData();
-            EditorControl.groups = DataTableLib.dtGroup.TableToData();
-            EditorControl.tags = DataTableLib.dtTag.TableToData();
+            loggerA.OK(SetLeftLabelMessage1("Получение моделей из таблиц..."), eMessageCategory.App); // Лог и статус
+            try
+            {
+                EditorControl.sources = DataTableLib.dtSource.TableToData();
+                EditorControl.groups = DataTableLib.dtGroup.TableToData();
+                EditorControl.tags = DataTableLib.dtTag.TableToData();
+                loggerA.OK(SetLeftLabelMessage1("Получение моделей из таблиц выполнено"), eMessageCategory.App); // Лог и статус
+            }
+            catch (Exception ex)
+            {
+                loggerA.Error(ex.HResult, SetLeftLabelMessage1($"Ошибка получения моделей из таблиц: {ex.Message}"), eMessageCategory.App);
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
         // ---
 
         private async Task InportProjectFromExcel()
@@ -386,6 +395,31 @@ namespace WinSimpleIDriver
             catch (Exception ex)
             {
                 loggerA.Error(ex.HResult, SetLeftLabelMessage1($"Ошибка передачи Json в модели: {ex.Message}"), eMessageCategory.App);
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async Task ModelsToJson()
+        {
+            loggerA.OK(SetLeftLabelMessage1("Получение Json из моделей..."), eMessageCategory.App); // Лог и статус
+
+            try
+            {
+                // упаковка проекта
+                string output = await Task.Run(EditorControl.PackProject);
+
+                // Вернуть на экран
+                JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, output);
+                jsonProjStatustic();
+
+                // Нарисовать дерево
+                JsonTreeViewHelper.PopulateTreeViewFromJson(output, treeViewJsonProject);
+
+                loggerA.OK(SetLeftLabelMessage1("Получение Json из моделей выполнено"), eMessageCategory.App); // Лог и статус
+            }
+            catch (Exception ex)
+            {
+                loggerA.Error(ex.HResult, SetLeftLabelMessage1($"Ошибка получения Json из моделей: {ex.Message}"), eMessageCategory.App);
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
