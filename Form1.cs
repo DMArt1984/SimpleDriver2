@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WinSimpleIDriver.Connector;
 using DML.Log;
 using DML;
 using System.IO;
@@ -177,8 +176,6 @@ namespace WinSimpleIDriver
 
             SetLeftLabelMessage1();
 
-            //var codeMessage = CodeMessageFactory.FromEnum(eSourceStatus.closed);
-            //MessageBox.Show(Settings.x);
         }
 
         
@@ -1102,15 +1099,15 @@ namespace WinSimpleIDriver
         }
 
         // Запуск Runtime
-        private void buttonModelsToRuntime_Click(object sender, EventArgs e)
+        private async void buttonModelsToRuntime_Click(object sender, EventArgs e)
         {
-            ProjectRuntime.StartRuntime(this);
+            await Task.Run(() => ProjectRuntime.StartRuntime(this));
         }
 
         // Стоп Runtime
-        private void buttonStopRuntime_Click(object sender, EventArgs e)
+        private async void buttonStopRuntime_Click(object sender, EventArgs e)
         {
-            ProjectRuntime.StopRuntime(this);
+            await Task.Run(() => ProjectRuntime.StopRuntime(this));
         }
 
 
