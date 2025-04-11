@@ -174,7 +174,8 @@ namespace WinSimpleIDriver
             // DataTables
             dtTags = DataTableLib.GetEmptyDataTableForTags(dataGridViewTag, "Tags");
 
-            SetLeftLabelMessage1();
+            // Лог и статус
+            loggerA.OK(SetLeftLabelMessage1("Приложение WinSimpleDriver запущено"), eMessageCategory.App);
 
         }
 
@@ -221,93 +222,37 @@ namespace WinSimpleIDriver
         }
         private async void ToolStripMenuItemNew_Click(object sender, EventArgs e)
         {
-            SetLeftLabelMessage1("Новый проект");
-            //FormClear();
-
             await NewProject();
-
         }
 
         private async void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
         {
-            SetLeftLabelMessage1("Открыть проект");
             await OpenProjectAsync(true);
         }
 
         private async void ToolStripMenuItemSave_Click(object sender, EventArgs e)
         {
-            SetLeftLabelMessage1("Сохранить проект");
             await SaveProjectAsync(false, EditorControl.fullFileName);
         }
 
         private async void ToolStripMenuItemSaveAs_Click(object sender, EventArgs e)
         {
-            SetLeftLabelMessage1("Сохранить проект как...");
             await SaveProjectAsync(true);
         }
 
         private async void ToolStripMenuItemImport_Click(object sender, EventArgs e)
         {
-            SetLeftLabelMessage1("Импорт проекта");
-            string file = FileControl.SelectExcelImportFile();
-            if (string.IsNullOrEmpty(file))
-                return;
-
-            // Создаем объект IProgress<int>, который обновляет метку lblStatus
-            IProgress<string> progress = new Progress<string>(processed =>
-            {
-                // Обновление UI происходит в UI-потоке автоматически
-                jsonProjectStatistic.Text = $"{processed}";
-            });
-
-            // Импорт из Excel секции Data
-            string data = await ExcelJsonConverter.ExcelToJsonAsync(file, progress);
-
-            // Замена секции Data на нормализованную
-            string input = richTextBoxJsonProject.Text;
-            input = ProjectSettingsConverter.CheckSectionData(input);
-
-            //
-            string json = ProjectSettingsConverter.ReplaceSection(input, "Data", data);
-
-            //
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, json);
-            jsonProjStatustic();
-
-            // Нарисовать дерево
-            JsonTreeViewHelper.PopulateTreeViewFromJson(json, treeViewJsonProject);
+            await InportProjectFromExcel();
         }
 
         private async void ToolStripMenuItemExport_Click(object sender, EventArgs e)
         {
-            SetLeftLabelMessage1("Экспорт проекта");
-            string file = FileControl.SelectExcelExportFile();
-            if (string.IsNullOrEmpty(file))
-                return;
-
-            // Создаем объект IProgress<int>, который обновляет метку lblStatus
-            IProgress<int> progress = new Progress<int>(processed =>
-            {
-                // Обновление UI происходит в UI-потоке автоматически
-                jsonProjectStatistic.Text = $"Обработано тегов: {processed}";
-            });
-
-            string json = richTextBoxJsonProject.Text;
-            json = ProjectSettingsConverter.CheckSectionData(json);
-
-            // Извлечение секции Data
-            string data = ProjectSettingsConverter.ExtractSection(json, "Data");
-
-            data= ProjectSettingsConverter.NormalizeAll(data);
-
-            // Экспорт в Excel секции Data
-            await ExcelJsonConverter.JsonToExcelAsync(data, file, progress);
-
+            await ExportProjectToExcel();
         }
 
         private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
         {
-            SetLeftLabelMessage1("Выход из приложения");
+            loggerA.OK(SetLeftLabelMessage1("Выход из приложения!"), eMessageCategory.App); // Лог и статус
             this.Close();
         }
 
@@ -673,24 +618,7 @@ namespace WinSimpleIDriver
 
         private async void buttonJsonToModels_Click(object sender, EventArgs e)
         {
-            // Получить с экрана
-            string input = richTextBoxJsonProject.Text;
-
-            // Извлечение секции Data из JSON
-            string data = ProjectSettingsConverter.ExtractSection(input, "Data");
-
-            // Нормализация секции Data
-            data = ProjectSettingsConverter.NormalizeAll(data);
-
-            // Замена секции Data на нормализованную
-            input = ProjectSettingsConverter.ReplaceSection(input, "Data", data);
-
-            // распаковка проекта
-            await Task.Run(() =>
-            {
-                EditorControl.UnpackProject(input);
-            });
-
+            await JsonToModels();
         }
 
         private void buttonModelsToTables_Click(object sender, EventArgs e)
@@ -728,13 +656,31 @@ namespace WinSimpleIDriver
         // Запуск Runtime
         private async void buttonModelsToRuntime_Click(object sender, EventArgs e)
         {
-            await Task.Run(() => ProjectRuntime.StartRuntime(this));
+            loggerA.OK(SetLeftLabelMessage1("Запуск Runtime..."), eMessageCategory.App); // Лог и статус
+            try
+            {
+                await Task.Run(() => ProjectRuntime.StartRuntime(this));
+                loggerA.OK(SetLeftLabelMessage1("Runtime запущен"), eMessageCategory.App); // Лог и статус
+            }
+            catch (Exception ex)
+            {
+                loggerA.Error(ex.HResult, SetLeftLabelMessage1("Ошибка запуска Runtime: " + ex.Message), eMessageCategory.App);
+            }
         }
 
         // Стоп Runtime
         private async void buttonStopRuntime_Click(object sender, EventArgs e)
         {
-            await Task.Run(() => ProjectRuntime.StopRuntime(this));
+            loggerA.OK(SetLeftLabelMessage1("Останов Runtime..."), eMessageCategory.App); // Лог и статус
+            try
+            {
+                await Task.Run(() => ProjectRuntime.StopRuntime(this));
+                loggerA.OK(SetLeftLabelMessage1("Runtime остановлен"), eMessageCategory.App); // Лог и статус
+            }
+            catch (Exception ex)
+            {
+                loggerA.Error(ex.HResult, SetLeftLabelMessage1("Ошибка остановки Runtime: " + ex.Message), eMessageCategory.App);
+            }
         }
 
         #region Group

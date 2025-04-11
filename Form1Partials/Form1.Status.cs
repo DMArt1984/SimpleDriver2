@@ -20,7 +20,7 @@ namespace WinSimpleIDriver
             toolStripStatusLabelMessage1.Text = message;
             //ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly);
             //_tempLog.Info(message);
-            loggerB.Info(message);
+            //loggerB.Info(message);
             return message;
         }
         // Установить сообщение 2
@@ -29,7 +29,7 @@ namespace WinSimpleIDriver
             toolStripStatusLabelMessage2.Text = message;
             //ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly);
             //_tempLog.Info(message);
-            loggerB.Info(message);
+            //loggerB.Info(message);
             return message;
         }
         // Установить сообщение 3
@@ -38,7 +38,7 @@ namespace WinSimpleIDriver
             toolStripStatusLabelMessage3.Text = message;
             //ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly);
             //_tempLog.Info(message);
-            loggerB.Info(message);
+            //loggerB.Info(message);
             return message;
         }
 

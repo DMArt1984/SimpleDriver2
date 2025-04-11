@@ -1,9 +1,8 @@
-﻿using System;
+﻿using DML.Log;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Connector;
 using WinSimpleIDriver;
-using WinSimpleIDriver.Connector; // для доступа к EditorControl
 
 namespace Connector
 {
@@ -13,10 +12,18 @@ namespace Connector
     /// </summary>
     public static class ProjectRuntime
     {
+        static private bool _online = false; // true - в режиме реального времени, false - в режиме редактирования
+        static private bool _transition = false; // true - переход в режим реального времени, false - переход в режим редактирования
+        static public bool online => _online; // свойство для доступа к состоянию
+        static public bool transition => _transition; // свойство для доступа к состоянию перехода
+
+        // ------------------------------------------------------------------------------------------------------------------
+
         static public List<Source> sources = new List<Source>();
         static public List<Group> groups = new List<Group>();
         static public List<Tag> tags = new List<Tag>();
 
+        // ==================================================================================================================
 
         #region Source
 
@@ -279,9 +286,12 @@ namespace Connector
 
         #endregion
 
+
         // Запуск Runtime
         public static void StartRuntime(Form1 frm)
         {
+            _transition = true;
+
             // Фабрика устройств (предположим, уже создана в форме)
             IDeviceFactory deviceFactory = new DeviceFactory();
 
@@ -299,11 +309,15 @@ namespace Connector
                     ProjectRuntime.groups,
                     EditorControl.tags,
                     frm.SubscribeToTag);
+
+            _online = true;
         }
 
         // Остановка Runtime
         public static void StopRuntime(Form1 frm)
         {
+            _transition = false;
+
             foreach (var source in sources)
             {
                 frm.UnsubscribeFromSource(source);
@@ -334,6 +348,8 @@ namespace Connector
             Tag.Clear();
 
             GC.Collect();
+
+            _online = false;
         }
 
     }
