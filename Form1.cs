@@ -159,9 +159,11 @@ namespace WinSimpleIDriver
 
             #region View
             // Вид - Дерево
+            ToolStripMenuItemViewTree.Checked = false;
             bool check = ToolStripMenuItemViewTree.Checked;
             splitContainerTreeMain.Panel1Collapsed = !check;
-
+            // Вид - Лог
+            splitContainerLogMain.Panel2Collapsed = true;
             #endregion
 
             // Combo
