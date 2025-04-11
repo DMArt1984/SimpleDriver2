@@ -178,8 +178,6 @@ namespace WinSimpleIDriver
 
         }
 
-        
-
         // ================================================================================================================
 
         private void AppTitle(string settings, string fileName)
@@ -192,108 +190,6 @@ namespace WinSimpleIDriver
         {
             this.WindowState = FormWindowState.Normal;
         }
-
-        // ================================================================================================================
-
-        #region Status
-        // Установить сообщение 1
-        private string SetLeftLabelMessage1(string message = "")
-        {
-            toolStripStatusLabelMessage1.Text = message;
-            //ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly);
-            //_tempLog.Info(message);
-            loggerB.Info(message);
-            return message;
-        }
-        // Установить сообщение 2
-        private string SetMidLabelMessage2(string message = "")
-        {
-            toolStripStatusLabelMessage2.Text = message;
-            //ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly);
-            //_tempLog.Info(message);
-            loggerB.Info(message);
-            return message;
-        }
-        // Установить сообщение 3
-        private string SetRightLabelMessage3(string message = "")
-        {
-            toolStripStatusLabelMessage3.Text = message;
-            //ProcessMaster _tempLog = new ProcessMaster(LogTarget.FileOnly);
-            //_tempLog.Info(message);
-            loggerB.Info(message);
-            return message;
-        }
-
-        #endregion
-
-
-        #region LOG
-
-        /// <summary>
-        /// Добавляет строку в dataGridViewLog с информацией о логе и меняет цвет фона строки в зависимости от типа сообщения.
-        /// После добавления строки применяется текущая сортировка таблицы.
-        /// Если в таблице более 100 строк, то удаляются 10 строк с наименьшим значением logID.
-        /// </summary>
-        /// <param name="mt">Тип сообщения (например, OK, info, error).</param>
-        /// <param name="category">Категория лога.</param>
-        /// <param name="code">Код сообщения.</param>
-        /// <param name="message">Текст сообщения.</param>
-        private void AddLogRow(eMessageType mt, eMessageCategory category, int code, string message)
-        {
-            // Добавляем новую строку в dataGridViewLog
-            int rowIndex = dataGridViewLog.Rows.Add();
-            DataGridViewRow row = dataGridViewLog.Rows[rowIndex];
-
-            // Заполняем ячейки данными
-            row.Cells["logDT"].Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            row.Cells["logCategory"].Value = category.ToString();
-            row.Cells["logType"].Value = mt.ToString();
-            row.Cells["logCode"].Value = code.ToString();
-            row.Cells["logText"].Value = message;
-
-            // Меняем цвет фона строки в зависимости от типа сообщения
-            switch (mt)
-            {
-                case eMessageType.OK:
-                    row.DefaultCellStyle.BackColor = System.Drawing.Color.LightGreen;
-                    break;
-                case eMessageType.ERROR:
-                    row.DefaultCellStyle.BackColor = System.Drawing.Color.LightCoral;
-                    break;
-                default:
-                    row.DefaultCellStyle.BackColor = System.Drawing.Color.White;
-                    break;
-            }
-
-            // Если в таблице более 100 строк, удаляем 10 строк с наименьшим значением logID
-            int maxRows = 100;
-            int removeRows = 10;
-            if (dataGridViewLog.Rows.Count > maxRows)
-            {
-                var rowsToRemove = dataGridViewLog.Rows
-                    .Cast<DataGridViewRow>()
-                    .OrderBy(r => (r.Cells["logDT"].Value))
-                    .Take(removeRows)
-                    .ToList();
-                foreach (var r in rowsToRemove)
-                {
-                    dataGridViewLog.Rows.Remove(r);
-                }
-            }
-
-            // Применяем текущую сортировку таблицы, если она задана
-            if (dataGridViewLog.SortedColumn != null)
-            {
-                // Определяем направление сортировки
-                ListSortDirection direction = dataGridViewLog.SortOrder == SortOrder.Ascending ?
-                                                ListSortDirection.Ascending : ListSortDirection.Descending;
-                // Сортируем по текущему отсортированному столбцу с указанным направлением
-                dataGridViewLog.Sort(dataGridViewLog.SortedColumn, direction);
-            }
-        }
-
-        #endregion
-
 
         // ================================================================================================================
 
@@ -330,26 +226,6 @@ namespace WinSimpleIDriver
 
             await NewProject();
 
-        }
-
-        private async Task NewProject()
-        {
-            string input = ProjectSettingsConverter.CheckSectionData("");
-            richTextBoxJsonProject.Text = input;
-            // Нарисовать дерево
-            JsonTreeViewHelper.PopulateTreeViewFromJson(input, treeViewJsonProject);
-
-            // распаковка проекта
-            await Task.Run(() =>
-            {
-                EditorControl.UnpackProject(input);
-            });
-
-            // Обновление UI (обновление меню и формы)
-            ProjectToForm();
-
-            //
-            AppTitle(Settings.settingsFileName, "");
         }
 
         private async void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
@@ -429,171 +305,11 @@ namespace WinSimpleIDriver
 
         }
 
-        // Новый проект
-        private void FormClear()
-        {
-            // окно файла проекта
-            richTextBoxJsonProject.Text = "";
-
-            // DGV
-            DataTableLib.Clear();
-
-            // treeView
-            TreeLib.DrawTreeSGT();
-            TreeLib.DrawTreeBlock();
-            TreeLib.DrawTreeStructure();
-            TreeLib.DrawTreeInclude();
-
-            //DataTableLib.dtTag.DrawTable(EditorControl.tags);
-
-        }
-
         private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
         {
             SetLeftLabelMessage1("Выход из приложения");
             this.Close();
         }
-
-        // Открыть проект (распаковка настроек из файла)
-        private async Task OpenProjectAsync(bool select = true, string fileName = "")
-        {
-            SetLeftLabelMessage1("Открытие проекта...");
-
-            // Получаем кодировку
-            string encoding = toolStripComboBoxEncoding.Text;
-            var enc = DecodeEncode.GetEncodingFromString(encoding);
-
-            // Загрузка проекта JSON
-            string input = FileControl.LoadFromFile(ref fileName, out string path, enc, select); // чтение из файла...
-
-            // Далее?
-            if (String.IsNullOrWhiteSpace(input))
-                return;
-
-            // NormalizeAll
-            ApplyNormalization(ProjectSettingsConverter.NormalizeAll, input);
-
-            // Последние файлы
-            string fullFileName = Path.Combine(path, fileName);
-            FileControl.AddToRecentFiles(fullFileName); // Сохранение файла в истории
-
-            //
-            EditorControl.fullFileName = fullFileName;
-            AppTitle(Settings.settingsFileName, fileName);
-
-            // распаковка проекта
-            await Task.Run(() =>
-            {
-                EditorControl.UnpackProject(input);
-            });
-
-            // Обновление UI (обновление меню и формы)
-            UpdateRecentFilesMenu();
-            ProjectToForm();
-
-            SetLeftLabelMessage1("Проект открыт!");
-        }
-
-        // Положить на форму
-        private void ProjectToForm()
-        {
-            DataTableLib.dtSource.DataToTable(EditorControl.sources);
-            DataTableLib.dtGroup.DataToTable(EditorControl.groups);
-            DataTableLib.dtTag.DataToTable(EditorControl.tags);
-
-            DataTableLib.dtStructure.DataToTable(EditorControl.structures);
-            DataTableLib.dtStructTarget.DataToTable(EditorControl.structTargets);
-            DataTableLib.dtStructTag.DataToTable(EditorControl.structTags);
-            DataTableLib.dtInclude.DataToTable(EditorControl.includes);
-            DataTableLib.dtIncludeChild.DataToTable(EditorControl.includeChilds);
-            //...
-
-            // link group -> source
-            DataTableLib.dtTag.UpdateDGVTagSourceLink();
-            // count
-            DataTableLib.SetCountTagForUsed(dataGridViewSource, dataGridViewTag, DataTableLib.dtSource.col.Title, DataTableLib.dtSource.col.CountTags, DataTableLib.dtTag.col.Source);
-            DataTableLib.SetCountTagForUsed(dataGridViewGroup, dataGridViewTag, DataTableLib.dtGroup.col.Title, DataTableLib.dtGroup.col.CountTags, DataTableLib.dtTag.col.Group);
-
-            //
-            TreeLib.DrawTreeSGT();
-            TreeLib.DrawTreeBlock();
-            TreeLib.DrawTreeStructure();
-            TreeLib.DrawTreeInclude();
-
-            //
-            SetComboPlaceholder();
-
-        }
-
-
-        // Забрать из формы
-        private void FormToProject()
-        {
-            EditorControl.sources = DataTableLib.dtSource.TableToData();
-            EditorControl.groups = DataTableLib.dtGroup.TableToData();
-            EditorControl.tags = DataTableLib.dtTag.TableToData();
-        }
-
-        // ---
-
-        // Открыть проект (распаковка настроек из файла)
-        private async Task SaveProjectAsync(bool select = true, string fileName = "")
-        {
-            SetLeftLabelMessage1("Сохранение проекта...");
-
-            //
-            FormToProject();
-
-            // упаковка проекта
-            string output = await Task.Run(EditorControl.PackProject);
-
-            // Вернуть на экран
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, output);
-            jsonProjStatustic();
-
-            // Нарисовать дерево
-            JsonTreeViewHelper.PopulateTreeViewFromJson(output, treeViewJsonProject);
-
-            // Получаем кодировку
-            string encoding = toolStripComboBoxEncoding.Text;
-            var enc = DecodeEncode.GetEncodingFromString(encoding);
-
-            //
-            FileControl.SaveToFile(ref fileName, out string path, output, enc); // запись в файл...
-
-            SetLeftLabelMessage1("Проект сохранен!");
-        }
-
-        #region Last open files
-
-        // Заполняем меню "Последние файлы"
-        private void UpdateRecentFilesMenu()
-        {
-            ToolStripMenuItemLastFiles.DropDownItems.Clear();
-
-            List<string> recentFiles = FileControl.LoadRecentFiles();
-
-            if (recentFiles.Count == 0)
-            {
-                ToolStripMenuItemLastFiles.DropDownItems.Add("Нет недавних файлов").Enabled = false;
-                return;
-            }
-
-            foreach (string file in recentFiles)
-            {
-                ToolStripMenuItem item = new ToolStripMenuItem(file);
-                item.Click += (sender, e) => OpenProjectFromRecent(file);
-                ToolStripMenuItemLastFiles.DropDownItems.Add(item);
-            }
-        }
-
-        // Открыть проект из списка последних файлов
-        private async void OpenProjectFromRecent(string filePath)
-        {
-            await OpenProjectAsync(false, filePath);
-        }
-
-        #endregion
 
         #endregion
 
@@ -868,10 +584,6 @@ namespace WinSimpleIDriver
             DataTableLib.dtTag.UpdateDGVTagSourceLink();
         }
 
-        
-
-
-
 
         // Открыть форму дизайна
         private void ToolStripMenuItemDesign_Click(object sender, EventArgs e)
@@ -890,7 +602,6 @@ namespace WinSimpleIDriver
 
         }
 
-        
 
         private void dataGridViewInclude_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
@@ -904,91 +615,7 @@ namespace WinSimpleIDriver
 
         // ====================================================================================================
 
-        #region LabelAndText
-        private void OnlyLabel(eMessageType mtype, string message, ToolStripStatusLabel labelType = null, ToolStripStatusLabel labelMessage = null)
-        {
-            if (labelType != null)
-            {
-                labelType.ForeColor = LogHelper.GetColorForMessage(mtype);
-                labelType.Text = FormText(LogHelper.TypeMessage(mtype));
-            }
-
-            if (labelMessage != null)
-            {
-                if (labelType == null)
-                    labelMessage.ForeColor = LogHelper.GetColorForMessage(mtype);
-                labelMessage.Text = FormText(message);
-            }
-        }
-
-        private string FormText(string value)
-        {
-            int w = this.Width / 8;
-            if (value.Length > w)
-                return value.Substring(0, w) + "...";
-
-            return value;
-        }
-        #endregion
-        #region Draw Label
-        private void DrawLabelLeft(eMessageType messageType, string message)
-        {
-            OnlyLabel(messageType, message, toolStripStatusLabelMessage1, null);
-        }
-        private void DrawLabelRight(eMessageType messageType, string message)
-        {
-            OnlyLabel(messageType, message, toolStripStatusLabelMessage2, toolStripStatusLabelMessage3);
-        }
-
-        #endregion
-
-        // ====================================================================================================
-
         #region Project file
-
-        /// <summary>
-        /// Применяет переданную функцию нормализации к входной строке и возвращает результат.
-        /// </summary>
-        /// <param name="inputJson">Входная строка JSON, которую необходимо нормализовать.</param>
-        /// <param name="normalizeFunc">
-        /// Функция нормализации, принимающая строку JSON и возвращающая нормализованную строку.
-        /// Например, функция NormalizeAll.
-        /// </param>
-        /// <returns>Строка, полученная в результате применения normalizeFunc к inputJson.</returns>
-        private void ApplyNormalization(Func<string, string> normalizeFunc, string fromExternal = null)
-        {
-            if (normalizeFunc == null)
-                throw new ArgumentNullException(nameof(normalizeFunc));
-
-            // Получить json
-            string input = "";
-            if (fromExternal == null)
-            {
-                input = richTextBoxJsonProject.Text;
-            }
-            else
-            {
-                input = fromExternal;
-            }
-
-            // Извлечение секции Data
-            string data = ProjectSettingsConverter.ExtractSection(input, "Data");
-
-            // Нормализация секции Data
-            data = normalizeFunc(data);
-
-            // Замена секции Data на нормализованную
-            input = ProjectSettingsConverter.ReplaceSection(input, "Data", data);
-
-            // Вернуть на экран
-            JsonFormViewer.DisplayColoredJson(richTextBoxJsonProject, input);
-            jsonProjStatustic();
-
-            // Нарисовать дерево
-            JsonTreeViewHelper.PopulateTreeViewFromJson(input, treeViewJsonProject);
-
-        }
-
         private void toolStripButtonNormalize_Click(object sender, EventArgs e)
         {
             // NormalizeAll
@@ -1110,6 +737,530 @@ namespace WinSimpleIDriver
             await Task.Run(() => ProjectRuntime.StopRuntime(this));
         }
 
+        #region Group
+
+        #region Group.Event
+        private void buttonGroupView_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void buttonGroupDel_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void buttonGroupCopy_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void checkBoxGroupEditor_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtGroup.CheckColumns();
+        }
+
+        private void checkBoxGroupDesc_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtGroup.CheckColumns();
+        }
+
+        private void checkBoxGroupStatistic_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtGroup.CheckColumns();
+        }
+
+        private void checkBoxGroupRuntime_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtGroup.CheckColumns();
+        }
+
+        private void checkBoxGroupSource_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtGroup.CheckColumns();
+        }
+        #endregion
+
+        #region Group.Filter
+
+        #region Group.ComboFilter.Event
+
+        private void comboBoxGroupFilterSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtGroup.TextFilter();
+        }
+
+        private void comboBoxGroupFilterSource_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(comboBoxGroupFilterSource.Text))
+                DataTableLib.dtGroup.TextFilter();
+        }
+
+        #endregion
+
+        #region Group.TextFilter.Event
+        private void textBoxGroupFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(textBoxGroupFilter.Text))
+                DataTableLib.dtGroup.TextFilter();
+        }
+        #endregion
+
+        private void buttonGroupFilter_Click(object sender, EventArgs e)
+        {
+            GroupFilter();
+        }
+
+        private void GroupFilter()
+        {
+            FormLib.SaveTextComboBox(comboBoxGroupFilterSource);
+            DataTableLib.dtGroup.TextFilter();
+        }
+
+        #endregion
+
+        #region Group.DGV.Event
+
+        private void dataGridViewGroup_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewGroup_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeSGT();
+        }
+
+        private void dataGridViewGroup_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewGroup_SelectionChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridViewGroup_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewGroup);
+        }
+
+        private void dataGridViewGroup_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+
+        }
+        #endregion
+
+
+        #endregion
+
+        #region Source
+
+        #region Source.Event
+        private void checkBoxSourceEditor_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtSource.CheckColumns();
+        }
+
+        private void checkBoxSourceRuntime_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtSource.CheckColumns();
+        }
+
+        private void checkBoxSourceDesc_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtSource.CheckColumns();
+        }
+
+        private void checkBoxSourceStatistic_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtSource.CheckColumns();
+        }
+        private void buttonSourceCopy_Click(object sender, EventArgs e)
+        {
+            DataTableLib.dtSource.CopyDGVRow();
+        }
+        private void buttonSourceDel_Click(object sender, EventArgs e)
+        {
+            DataTableLib.dtSource.DelDGVRow();
+        }
+        private void buttonSourceHelp_Click(object sender, EventArgs e)
+        {
+            DataTableLib.dtSource.Help();
+        }
+        private void buttonSourceView_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+
+        #region Source.Filter
+
+        #region Source.TextFilter.Event
+        private void textBoxSourceFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(textBoxSourceFilter.Text))
+                DataTableLib.dtSource.TextFilter();
+        }
+
+        private void buttonSourceFilter_Click(object sender, EventArgs e)
+        {
+            DataTableLib.dtSource.TextFilter();
+        }
+
+        #endregion
+
+
+
+        #endregion
+
+        #region Source.DGV.Event
+
+        private void dataGridViewSource_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewSource_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeSGT();
+        }
+
+        private void dataGridViewSource_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewSource_SelectionChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridViewSource_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewSource);
+        }
+
+        private void dataGridViewSource_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Tag
+
+        #region Tag.Event
+        private void checkBoxTagEditor_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.CheckColumns();
+        }
+
+        private void checkBoxTagRuntime_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.CheckColumns();
+        }
+
+        private void checkBoxTagDesc_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.CheckColumns();
+        }
+
+        private void checkBoxTagStatistic_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.CheckColumns();
+        }
+
+        private void checkBoxTagBP_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.CheckColumns();
+        }
+
+        private void checkBoxTagSG_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.CheckColumns();
+        }
+        private void checkBoxTagSave_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.CheckColumns();
+        }
+        private void checkBoxTagAddress_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.CheckColumns();
+        }
+        private void buttonTagHelp_Click(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.Help();
+        }
+        private void buttonTagView_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void buttonTagDel_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void buttonTagCopy_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+
+        #region Tag.Filter
+
+        #region Tag.ComboFilter.Event
+
+        private void comboBoxTagFilterSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.TextFilter();
+        }
+
+        private void comboBoxTagFilterSource_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(comboBoxTagFilterSource.Text))
+                DataTableLib.dtTag.TextFilter();
+        }
+
+        private void comboBoxTagFilterGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.TextFilter();
+        }
+
+        private void comboBoxTagFilterGroup_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(comboBoxTagFilterGroup.Text))
+                DataTableLib.dtTag.TextFilter();
+        }
+
+        private void comboBoxTagFilterBlock_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.TextFilter();
+        }
+
+        private void comboBoxTagFilterBlock_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(comboBoxTagFilterBlock.Text))
+                DataTableLib.dtTag.TextFilter();
+        }
+
+        private void comboBoxTagFilterPage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtTag.TextFilter();
+        }
+
+        private void comboBoxTagFilterPage_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(comboBoxTagFilterPage.Text))
+                DataTableLib.dtTag.TextFilter();
+        }
+
+        #endregion
+
+        #region Tag.TextFilter.Event
+        private void textBoxTagFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(textBoxTagFilter.Text))
+                DataTableLib.dtTag.TextFilter();
+        }
+        #endregion
+
+        private void buttonTagFilter_Click(object sender, EventArgs e)
+        {
+            TagFilter();
+        }
+
+        private void TagFilter()
+        {
+            FormLib.SaveTextComboBox(comboBoxTagFilterSource);
+            FormLib.SaveTextComboBox(comboBoxTagFilterGroup);
+            FormLib.SaveTextComboBox(comboBoxTagFilterBlock);
+            FormLib.SaveTextComboBox(comboBoxTagFilterPage);
+            DataTableLib.dtTag.TextFilter();
+        }
+
+
+        #endregion
+
+        #region Tag.DGV
+
+        #endregion
+
+        #region Tag.DGV.Event
+
+        private void dataGridViewTag_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewTag_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridViewTag.CurrentCell.ColumnIndex == DataTableLib.dtTag.col.Group)
+            {
+                DataTableLib.dtTag.UpdateDGVTagSourceLink();
+            }
+            TreeLib.DrawTreeSGT();
+            TreeLib.DrawTreeBlock();
+        }
+
+        private void dataGridViewTag_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewTag_SelectionChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridViewTag_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewTag);
+        }
+
+        private void dataGridViewTag_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+
+        }
+
+
+
+
+
+
+        #endregion
+
+        #endregion
+
+        #region Structure
+
+        #region Structure.Event
+        private void buttonStructureLeft_Click(object sender, EventArgs e)
+        {
+            splitContainerStructure.Panel2Collapsed = !splitContainerStructure.Panel2Collapsed;
+            SetComboBoxTargetFilterStructure();
+        }
+
+        private void dataGridViewStructure_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewStructure);
+        }
+        #endregion
+
+        #region Structure.Filter
+
+        #region Structure.TextFilter.Event
+        private void textBoxStructureFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(textBoxStructureFilter.Text))
+            {
+                DataTableLib.dtStructure.StructureFilter();
+                //DataTableLib.dtStructTarget.StructureTargetFilter();
+            }
+        }
+        private void buttonStructureFilter_Click(object sender, EventArgs e)
+        {
+            DataTableLib.dtStructure.StructureFilter();
+            //DataTableLib.dtStructTarget.StructureTargetFilter();
+        }
+
+
+        #endregion
+        private void dataGridViewStructure_SelectionChanged(object sender, EventArgs e)
+        {
+            FormLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
+            SetComboBoxTargetFilterStructure();
+        }
+
+        private void SetComboBoxTargetFilterStructure()
+        {
+            string text = (splitContainerStructure.Panel1Collapsed) ? "" : (DataTableLib.GetValueFromCurrentRow(dataGridViewStructure, DataTableLib.dtStructure.col.Title));
+            comboBoxStructureTargetFilterParent.Text = text;
+            DataTableLib.dtStructTarget.StructureTargetFilter();
+            DataTableLib.dtStructTag.StructureTagFilter();
+        }
+
+
+
+        #endregion
+
+        #region Structure-Target
+
+        private void buttonStructureRight_Click(object sender, EventArgs e)
+        {
+            splitContainerStructure.Panel1Collapsed = !splitContainerStructure.Panel1Collapsed;
+            SetComboBoxTargetFilterStructure();
+        }
+
+        #region StructureTarget.Filter
+
+        #region StructureTarget.ComboFilter.Event
+        private void comboBoxTargetFilterSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataTableLib.dtStructTarget.StructureTargetFilter();
+            DataTableLib.dtStructTag.StructureTagFilter();
+        }
+        private void comboBoxTargetFilterSource_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(comboBoxStructureTargetFilterParent.Text))
+                DataTableLib.dtStructTarget.StructureTargetFilter();
+        }
+
+        private void buttonTargetFilter_Click(object sender, EventArgs e)
+        {
+            TargetAndTagFilter();
+        }
+
+        private void TargetAndTagFilter()
+        {
+            FormLib.SaveTextComboBox(comboBoxStructureTargetFilterParent);
+            DataTableLib.dtStructTarget.StructureTargetFilter();
+            DataTableLib.dtStructTag.StructureTagFilter();
+        }
+
+        private void dataGridViewTarget_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            DataTableLib.ForNewRow(dataGridViewStructureTarget); // new ID
+
+            DataTableLib.SetParentInRow(dataGridViewStructureTarget, comboBoxStructureTargetFilterParent, DataTableLib.dtStructTarget.col.Structure); // filter
+
+        }
+
+
+
+
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+
+        private void checkBoxStructCol_CheckedChanged(object sender, EventArgs e)
+        {
+            var check = checkBoxStructCol.Checked;
+            dataGridViewStructureTag.Columns[DataTableLib.dtStructTag.col.Structure].Visible = check;
+            dataGridViewStructureTarget.Columns[DataTableLib.dtStructTarget.col.Structure].Visible = check;
+
+        }
+
+
+        #endregion
+
+        private void dataGridViewStructure_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeStructure();
+        }
+
+        private void dataGridViewStructureTag_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeStructure();
+        }
+
+        private void dataGridViewStructureTarget_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            TreeLib.DrawTreeStructure();
+        }
 
     }
 }
