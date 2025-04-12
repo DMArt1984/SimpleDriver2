@@ -162,7 +162,7 @@ namespace Connector
 
             ChangeClient(address);
 
-            logger.Info($"new SOURCE ID {Id} {title} {driverType} {address}", eMessageCategory.Source);
+            logger.OK($"Источник ID {Id} {title} {driverType} {address}", eMessageCategory.Source);
         }
 
         ~Source()
@@ -176,13 +176,13 @@ namespace Connector
 
         public void ChangeClient(string address)
         {
-            logger.Info($" step3: CreateClient(paramClient)", eMessageCategory.Source);
+            logger.OK($" step: CreateClient(paramClient)", eMessageCategory.Source);
             CodeMessage result = (_device as Device)?.CreateClient(address) ?? new CodeMessage(-1, "Invalid device");
             if (result.code != 0)
                 codeMessage = result;
             Status = (result.code == 0) ? eSourceStatus.closed : eSourceStatus.noClient;
 
-            logger.Info($" step4: _disable = ", eMessageCategory.Source);
+            logger.OK($" step: _disable = ", eMessageCategory.Source);
             _disable = _disable || result.code != 0;
         }
 

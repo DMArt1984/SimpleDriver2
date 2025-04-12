@@ -47,6 +47,8 @@ namespace Connector
 
             ParentGroup = parentGroup;
             ParentGroup.AddTag(this);
+
+            logger.OK($"Тег ID {Id} {title} {dataType} {address} {description}", eMessageCategory.Tag);
         }
 
         public eCommand Command

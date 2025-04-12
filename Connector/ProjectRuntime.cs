@@ -288,7 +288,7 @@ namespace Connector
 
 
         // Запуск Runtime
-        public static void StartRuntime(Form1 frm)
+        public static void StartRuntime(Form1 frm, ILogger logger)
         {
             _transition = true;
 
@@ -299,22 +299,25 @@ namespace Connector
                     EditorControl.sources,
                     deviceFactory,
                     frm.SubscribeToSource);
+            logger.OK("Источники (подключения) загружены", eMessageCategory.App); // Лог и статус
 
             ProjectRuntime.groups = ProjectRuntime.ConvertEditorToControlGroups(
                     ProjectRuntime.sources,
                     EditorControl.groups,
                     frm.SubscribeToGroup);
+            logger.OK("Группа (опроса) загружены", eMessageCategory.App); // Лог и статус
 
             ProjectRuntime.tags = ProjectRuntime.ConvertEditorToControlTags(
                     ProjectRuntime.groups,
                     EditorControl.tags,
                     frm.SubscribeToTag);
+            logger.OK("Теги загружены", eMessageCategory.App); // Лог и статус
 
             _online = true;
         }
 
         // Остановка Runtime
-        public static void StopRuntime(Form1 frm)
+        public static void StopRuntime(Form1 frm, ILogger logger)
         {
             _transition = false;
 
@@ -324,6 +327,7 @@ namespace Connector
 
                 source.Off = true;
             }
+            logger.OK("Источники (подключения) остановлены", eMessageCategory.App); // Лог и статус
 
             foreach (var group in groups)
             {
@@ -333,11 +337,13 @@ namespace Connector
                 group.Dispose();
                 group.UnbindSource();
             }
+            logger.OK("Группа (опроса) остановлены", eMessageCategory.App); // Лог и статус
 
             foreach (var tag in tags)
             {
                 frm.UnsubscribeFromTag(tag);
             }
+            logger.OK("Теги остановлены", eMessageCategory.App); // Лог и статус
 
             sources.Clear();
             groups.Clear();
@@ -348,6 +354,7 @@ namespace Connector
             Tag.Clear();
 
             GC.Collect();
+            logger.OK("Память очищена", eMessageCategory.App); // Лог и статус
 
             _online = false;
         }

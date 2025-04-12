@@ -650,7 +650,7 @@ namespace WinSimpleIDriver
             loggerA.OK(SetLeftLabelMessage1("Запуск Runtime..."), eMessageCategory.App); // Лог и статус
             try
             {
-                await Task.Run(() => ProjectRuntime.StartRuntime(this));
+                await Task.Run(() => ProjectRuntime.StartRuntime(this, loggerA));
                 loggerA.OK(SetLeftLabelMessage1("Runtime запущен"), eMessageCategory.App); // Лог и статус
             }
             catch (Exception ex)
@@ -665,7 +665,7 @@ namespace WinSimpleIDriver
             loggerA.OK(SetLeftLabelMessage1("Останов Runtime..."), eMessageCategory.App); // Лог и статус
             try
             {
-                await Task.Run(() => ProjectRuntime.StopRuntime(this));
+                await Task.Run(() => ProjectRuntime.StopRuntime(this, loggerA));
                 loggerA.OK(SetLeftLabelMessage1("Runtime остановлен"), eMessageCategory.App); // Лог и статус
             }
             catch (Exception ex)

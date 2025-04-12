@@ -24,7 +24,7 @@ namespace Connector
             UpdateRate = updateRate;
             _waitOff = waitOff;
             ParentSource = parentSource;
-            logger.Info($"new group ID {Id} {title} {updateRate}", eMessageCategory.Source);
+            logger.OK($"Группа опроса ID {Id} {title} {updateRate}", eMessageCategory.Group);
         }
         public void Dispose()
         {

@@ -23,6 +23,8 @@ namespace DML.Log
         SYNC = 64,
         SQL = 128,
         Source = 256,
+        Group = 512,
+        Tag = 1024,
         Json = 512
     }
 
