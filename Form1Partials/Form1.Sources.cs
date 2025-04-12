@@ -18,7 +18,7 @@ namespace WinSimpleIDriver
         #region Runtime
 
         // Подписка на события источника
-        public void SubscribeToSource(Source src)
+        public void SubscribeToSource(SOURCE src)
         {
             src.eventStatus += SourceOnStatusChanged;
             src.eventError += SourceOnError;
@@ -26,7 +26,7 @@ namespace WinSimpleIDriver
             src.eventReq += SourceOnDataReceived;
         }
 
-        public void UnsubscribeFromSource(Source src)
+        public void UnsubscribeFromSource(SOURCE src)
         {
             src.eventStatus -= SourceOnStatusChanged;
             src.eventError -= SourceOnError;

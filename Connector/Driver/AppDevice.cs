@@ -132,22 +132,22 @@ namespace Connector.Driver
                                 switch (part[1].ToLower())
                                 {
                                     case "count":
-                                        Value = Source.items.Count();
+                                        Value = SOURCE.items.Count();
                                         break;
                                     case "list":
-                                        Value = Source.items.Select(x => x.title).ToArray();
+                                        Value = SOURCE.items.Select(x => x.title).ToArray();
                                         break;
 
                                     default:
-                                        Source source = null;
+                                        SOURCE source = null;
                                         bool idOK = ushort.TryParse(part[1], out ushort Id);
                                         if (idOK)
                                         {
-                                            source = Source.Item(Id); // .items.FirstOrDefault(x => x.Id == Id);
+                                            source = SOURCE.Item(Id); // .items.FirstOrDefault(x => x.Id == Id);
                                         }
                                         else
                                         {
-                                            source = Source.Item(part[1]); //.items.FirstOrDefault(x => x.title == part[1]);
+                                            source = SOURCE.Item(part[1]); //.items.FirstOrDefault(x => x.title == part[1]);
                                         }
 
                                         if (source != null && part.Length >= 3)
@@ -203,7 +203,7 @@ namespace Connector.Driver
                                                     Value = source.TryTcpConnect();
                                                     break;
                                                 case "dicvalue":
-                                                    var resItems = Tag.items.Where(x => x.sourceId == source.Id).ToArray();
+                                                    var resItems = TAG.items.Where(x => x.sourceId == source.Id).ToArray();
                                                     if (resItems != null && resItems.Any())
                                                     {
                                                         Value = resItems.Select(x => $"{x.title}~{TagLib.ValuesString(x.LastGoodValue)}~{TagLib.ValuesString(x.codeMessage.code)}").ToArray();
@@ -247,22 +247,22 @@ namespace Connector.Driver
                                 switch (part[1].ToLower())
                                 {
                                     case "count":
-                                        Value = Group.items.Count();
+                                        Value = GROUP.items.Count();
                                         break;
                                     case "list":
-                                        Value = Group.items.Select(x => x.title).ToArray();
+                                        Value = GROUP.items.Select(x => x.title).ToArray();
                                         break;
 
                                     default:
-                                        Group group = null;
+                                        GROUP group = null;
                                         bool idOK = ushort.TryParse(part[1], out ushort Id);
                                         if (idOK)
                                         {
-                                            group = Group.Item(Id); // .items.FirstOrDefault(x => x.Id == Id);
+                                            group = GROUP.Item(Id); // .items.FirstOrDefault(x => x.Id == Id);
                                         }
                                         else
                                         {
-                                            group = Group.Item(part[1]); //.items.FirstOrDefault(x => x.title == part[1]);
+                                            group = GROUP.Item(part[1]); //.items.FirstOrDefault(x => x.title == part[1]);
                                         }
 
                                         if (group != null && part.Length >= 3)
@@ -294,7 +294,7 @@ namespace Connector.Driver
                                                     Value = group.UpdateRate;
                                                     break;
                                                 case "dicvalue":
-                                                    var resItems = Tag.items.Where(x => x.groupId == group.Id).ToArray();
+                                                    var resItems = TAG.items.Where(x => x.groupId == group.Id).ToArray();
                                                     if (resItems != null && resItems.Any())
                                                     {
                                                         Value = resItems.Select(x => $"{x.title}~{TagLib.ValuesString(x.LastGoodValue)}~{x.codeMessage.code}").ToArray();
@@ -336,28 +336,28 @@ namespace Connector.Driver
                                 switch (part[1].ToLower())
                                 {
                                     case "count":
-                                        Value = Tag.items.Count();
+                                        Value = TAG.items.Count();
                                         break;
                                     case "list":
-                                        Value = Tag.items.Select(x => x.title).ToArray();
+                                        Value = TAG.items.Select(x => x.title).ToArray();
                                         break;
                                     case "good":
-                                        Value = (short)Tag.items.Count(x => x.Good);
+                                        Value = (short)TAG.items.Count(x => x.Good);
                                         break;
                                     case "dicvalue":
-                                        Value = Tag.items.Select(x => $"{x.title}~{TagLib.ValuesString(x.LastGoodValue)}~{x.codeMessage.code}").ToArray();
+                                        Value = TAG.items.Select(x => $"{x.title}~{TagLib.ValuesString(x.LastGoodValue)}~{x.codeMessage.code}").ToArray();
                                         break;
 
                                     default:
-                                        Tag tag = null;
+                                        TAG tag = null;
                                         bool idOK = ushort.TryParse(part[1], out ushort Id);
                                         if (idOK)
                                         {
-                                            tag = Tag.Item(Id); // Tag.items.FirstOrDefault(x => x.Id == Id);
+                                            tag = TAG.Item(Id); // Tag.items.FirstOrDefault(x => x.Id == Id);
                                         }
                                         else
                                         {
-                                            tag = Tag.Item(part[1]); // Tag.items.FirstOrDefault(x => x.title == part[1]);
+                                            tag = TAG.Item(part[1]); // Tag.items.FirstOrDefault(x => x.title == part[1]);
                                         }
 
                                         if (tag != null && part.Length >= 3)
@@ -501,7 +501,7 @@ namespace Connector.Driver
                                 {
                                     case "modifed":
                                         {
-                                            var wTag = Tag.items.FirstOrDefault(x => x.title == part[2]);
+                                            var wTag = TAG.items.FirstOrDefault(x => x.title == part[2]);
                                             if (wTag != null)
                                             {
                                                 if (CashValues.ContainsKey(wTag.title) == false)
@@ -519,7 +519,7 @@ namespace Connector.Driver
 
                                     case "frozen":
                                         {
-                                            var wTag = Tag.items.FirstOrDefault(x => x.title == part[2]);
+                                            var wTag = TAG.items.FirstOrDefault(x => x.title == part[2]);
                                             if (wTag != null)
                                             {
                                                 if (CashValues.ContainsKey(wTag.title) == false)
@@ -537,7 +537,7 @@ namespace Connector.Driver
 
                                     case "posfront":
                                         {
-                                            var wTag = Tag.items.FirstOrDefault(x => x.title == part[2]);
+                                            var wTag = TAG.items.FirstOrDefault(x => x.title == part[2]);
                                             if (wTag != null)
                                             {
                                                 if (CashValues.ContainsKey(wTag.title) == false)
@@ -555,7 +555,7 @@ namespace Connector.Driver
 
                                     case "negfront":
                                         {
-                                            var wTag = Tag.items.FirstOrDefault(x => x.title == part[2]);
+                                            var wTag = TAG.items.FirstOrDefault(x => x.title == part[2]);
                                             if (wTag != null)
                                             {
                                                 if (CashValues.ContainsKey(wTag.title) == false)
@@ -576,7 +576,7 @@ namespace Connector.Driver
                             case "timerrun": // работа таймеров
                                 {
                                     Value = false;
-                                    var wTag = Tag.items.FirstOrDefault(x => x.title == part[1]);
+                                    var wTag = TAG.items.FirstOrDefault(x => x.title == part[1]);
                                     if (wTag != null && part.Length >= 4)
                                     {
                                         string timerTitle = part[2]; // название таймера
@@ -639,7 +639,7 @@ namespace Connector.Driver
         public override TagResult SetValue(string address, eDataType DataType, dynamic newValue = null)
         {
             if (newValue == null)
-                return new TagResult(newValue, Tag.CM.NewValueIsNull);
+                return new TagResult(newValue, TAG.CM.NewValueIsNull);
 
             // добавляем адрес в список
             if (fronts.ContainsKey(address) == false)

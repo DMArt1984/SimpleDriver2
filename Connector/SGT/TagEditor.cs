@@ -348,19 +348,19 @@ namespace Connector
 
 
         // Получение адреса тега с подстановками
-        static public string ExpTagAddress(string address, out bool success, List<Tag> items, ITagClient tag = null)
+        static public string ExpTagAddress(string address, out bool success, List<TAG> items, ITagClient tag = null)
         {
             success = true;
 
             // Если tag задан, но у него не заполнены внутренние теги, возвращаем адрес без изменений.
-            if (tag != null && (tag is Tag tTag && (tTag.InnerTags == null || !tTag.InnerTags.Any())))
+            if (tag != null && (tag is TAG tTag && (tTag.InnerTags == null || !tTag.InnerTags.Any())))
                 return address;
 
             if (address.Contains("{") && address.Contains("}"))
             {
                 // Если tag не null, отбираем только те теги, которые присутствуют в его InnerTags.
                 HashSet<ushort> innerIds = null;
-                if (tag != null && tag is Tag t)
+                if (tag != null && tag is TAG t)
                 {
                     innerIds = new HashSet<ushort>(t.InnerTags.Select(x => x.Id));
                 }
@@ -605,7 +605,7 @@ namespace Connector
                 return "";
             }
         }
-        static public string ValueToAdvText(Tag item, string valueTrue = "True", string valueFalse = "False", string[] valueList = null)
+        static public string ValueToAdvText(TAG item, string valueTrue = "True", string valueFalse = "False", string[] valueList = null)
         {
             var tagValue = item.LastGoodValue; // последнее достоверное значение
             if (tagValue != null)
@@ -651,7 +651,7 @@ namespace Connector
         #region Info
 
         // Зависимости адреса
-        static public string AddressLinks(string address, List<Tag> items, string tagTitle = "")
+        static public string AddressLinks(string address, List<TAG> items, string tagTitle = "")
         {
             string retval = "";
             if (address.Contains("{") && address.Contains("}"))
@@ -689,7 +689,7 @@ namespace Connector
         }
 
         // Зависимости тега
-        static public List<string> TagLinks(List<Tag> tagItems, string address, string tagTitle = "", bool levels = true)
+        static public List<string> TagLinks(List<TAG> tagItems, string address, string tagTitle = "", bool levels = true)
         {
             List<string> retval = new List<string>();
             if (address.Contains("{") && address.Contains("}"))

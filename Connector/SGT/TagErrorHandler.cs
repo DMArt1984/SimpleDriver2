@@ -24,9 +24,9 @@ namespace Connector
         /// </summary>
         /// <param name="tags">Список тегов для проверки</param>
         /// <returns>Возвращает true, если число ошибок превысило порог, иначе false.</returns>
-        public bool ProcessErrors(List<Tag> tags)
+        public bool ProcessErrors(List<TAG> tags)
         {
-            bool breakError = tags.Any(x => x.codeMessage.code == Tag.CM.BreakError.code);
+            bool breakError = tags.Any(x => x.codeMessage.code == TAG.CM.BreakError.code);
             bool anyGood = tags.Any(x => x.Good && x.Command == eCommand.None && x.WriteTagId == 0 && x.WriteTagValue == null);
 
             if (breakError && !anyGood)

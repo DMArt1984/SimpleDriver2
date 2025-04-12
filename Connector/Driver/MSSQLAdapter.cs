@@ -269,7 +269,7 @@ namespace Connector.Driver
                 if (ex.Number == 0)
                 {
                     log?.Invoke(new CodeMessage(ex.HResult, $"Ошибка связи с SQL сервером:[{ex.Number}] {ex.Message}"));
-                    return new TagResult(0, Tag.CM.BreakError.code, $"{ex.HResult} [{ex.Number}] {ex.Message}");
+                    return new TagResult(0, TAG.CM.BreakError.code, $"{ex.HResult} [{ex.Number}] {ex.Message}");
                 }
                 return new TagResult(Value, ex.HResult, $"[{ex.Number}] {ex.Message}");
             }
@@ -278,7 +278,7 @@ namespace Connector.Driver
                 if (ex.HResult.ToString("X") == "80131904" || ex.HResult.ToString("X") == "FFFFFDA8") // ошибка сервера?
                 {
                     log?.Invoke(new CodeMessage(ex.HResult, $"Ошибка SQL сервера: {ex.Message}"));
-                    return new TagResult(0, Tag.CM.BreakError.code, $"{ex.HResult} {ex.Message}");
+                    return new TagResult(0, TAG.CM.BreakError.code, $"{ex.HResult} {ex.Message}");
                 }
                 return new TagResult(Value, ex);
             }
@@ -289,7 +289,7 @@ namespace Connector.Driver
         public override TagResult SetValue(string address, eDataType DataType, dynamic newValue = null)
         {
             if (newValue == null)
-                return new TagResult(newValue, Tag.CM.NewValueIsNull);
+                return new TagResult(newValue, TAG.CM.NewValueIsNull);
 
             // добавляем адрес в список
             if (fronts.ContainsKey(address) == false)

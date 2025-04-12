@@ -184,7 +184,7 @@ namespace Connector.Driver
                 if (ex.HResult.ToString("X") == "80131500") // Error establishing a connection OR BadConnectionClosed
                 {
                     log?.Invoke(new CodeMessage(ex.HResult, $"Ошибка связи с сервером: {ex.Message}"));
-                    return new TagResult(0, Tag.CM.BreakError.code, $"{ex.HResult} {ex.Message}");
+                    return new TagResult(0, TAG.CM.BreakError.code, $"{ex.HResult} {ex.Message}");
                 }
 
                 log?.Invoke(CodeMessageFactory.FromException(ex));
@@ -197,7 +197,7 @@ namespace Connector.Driver
         public override TagResult SetValue(string address, eDataType DataType, dynamic newValue = null)
         {
             if (newValue == null)
-                return new TagResult(newValue, Tag.CM.NewValueIsNull);
+                return new TagResult(newValue, TAG.CM.NewValueIsNull);
 
             try {
                 // ...
@@ -238,7 +238,7 @@ namespace Connector.Driver
                 if (ex.HResult.ToString("X") == "80131500") // Error establishing a connection OR BadConnectionClosed
                 {
                     log?.Invoke(new CodeMessage(ex.HResult, $"Ошибка связи с сервером: {ex.Message}"));
-                    return new TagResult(0, Tag.CM.BreakError.code, $"{ex.HResult} {ex.Message}");
+                    return new TagResult(0, TAG.CM.BreakError.code, $"{ex.HResult} {ex.Message}");
                 }
 
                 log?.Invoke(CodeMessageFactory.FromException(ex));

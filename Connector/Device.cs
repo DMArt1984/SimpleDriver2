@@ -128,12 +128,12 @@ namespace Connector
 
         protected virtual void WorkTag(ITagClient tag)
         {
-            string raddress = TagLib.ExpTagAddress(tag.Address, out bool success, Tag.items, tag);
+            string raddress = TagLib.ExpTagAddress(tag.Address, out bool success, TAG.items, tag);
             logTraffic?.Invoke($"{tag.title}: {raddress}");
 
             if (success == false)
             {
-                tag.SetResult(new TagResult(null, Tag.CM.NotReliableA));
+                tag.SetResult(new TagResult(null, TAG.CM.NotReliableA));
                 return;
             }
 
@@ -155,15 +155,15 @@ namespace Connector
                 if (tag.directFull == eDirectFull.WriteTagValue) // запись из другого тега
                 {
                     var writeTagId = tag.WriteTagId;
-                    var writeTag = (writeTagId > 0) ? Tag.items.FirstOrDefault(x => x.Id == writeTagId) : null;
+                    var writeTag = (writeTagId > 0) ? TAG.items.FirstOrDefault(x => x.Id == writeTagId) : null;
                     if (writeTag == null)
                     {
-                        tag.SetResult(new TagResult(null, Tag.CM.NoTagForWrite));
+                        tag.SetResult(new TagResult(null, TAG.CM.NoTagForWrite));
                         return;
                     }
                     if (writeTag.Status != eTagStatus.tagOn)
                     {
-                        tag.SetResult(new TagResult(null, Tag.CM.NotReliableTW));
+                        tag.SetResult(new TagResult(null, TAG.CM.NotReliableTW));
                         return;
                     }
                     
@@ -196,11 +196,11 @@ namespace Connector
 
         public virtual TagResult GetValue(string address, eDataType dataType)
         {
-            return new TagResult(0, Tag.CM.NoData);
+            return new TagResult(0, TAG.CM.NoData);
         }
         public virtual TagResult SetValue(string address, eDataType dataType, dynamic newValue)
         {
-            return new TagResult(newValue, Tag.CM.NoData);
+            return new TagResult(newValue, TAG.CM.NoData);
         }
 
         // ======================================================================================

@@ -57,11 +57,11 @@ namespace Connector.Driver.Component
             {
                 case "title":
                     // Здесь можно вернуть, например, значение из централизованного хранилища.
-                    return new TagResult("Название приложения", Tag.CM.Good);
+                    return new TagResult("Название приложения", TAG.CM.Good);
                 case "time":
-                    return new TagResult(DateTime.Now.TimeOfDay.ToString(), Tag.CM.Good);
+                    return new TagResult(DateTime.Now.TimeOfDay.ToString(), TAG.CM.Good);
                 case "date":
-                    return new TagResult(DateTime.Now.Date.ToString(), Tag.CM.Good);
+                    return new TagResult(DateTime.Now.Date.ToString(), TAG.CM.Good);
                 default:
                     return new TagResult(null, new CodeMessage(-1, $"Неизвестная команда для 'app': {parts[1]}"));
             }
@@ -78,10 +78,10 @@ namespace Connector.Driver.Component
             {
                 case "enable":
                     // Возвращаем значение включения лицензии
-                    return new TagResult(true, Tag.CM.Good);
+                    return new TagResult(true, TAG.CM.Good);
                 case "check":
                     // Возвращаем результат проверки лицензии
-                    return new TagResult("Проверено", Tag.CM.Good);
+                    return new TagResult("Проверено", TAG.CM.Good);
                 default:
                     return new TagResult(null, new CodeMessage(-1, $"Неизвестная команда для 'license': {parts[1]}"));
             }
@@ -102,9 +102,9 @@ namespace Connector.Driver.Component
             switch (parts[1].ToLower())
             {
                 case "count":
-                    return new TagResult(Source.items.Count, Tag.CM.Good);
+                    return new TagResult(SOURCE.items.Count, TAG.CM.Good);
                 case "list":
-                    return new TagResult(Source.items.Select(x => x.title).ToArray(), Tag.CM.Good);
+                    return new TagResult(SOURCE.items.Select(x => x.title).ToArray(), TAG.CM.Good);
                 // Можно добавить и другие команды для источника.
                 default:
                     return new TagResult(null, new CodeMessage(-1, $"Неизвестная команда для 'source': {parts[1]}"));
@@ -120,9 +120,9 @@ namespace Connector.Driver.Component
             switch (parts[1].ToLower())
             {
                 case "count":
-                    return new TagResult(Group.items.Count, Tag.CM.Good);
+                    return new TagResult(GROUP.items.Count, TAG.CM.Good);
                 case "list":
-                    return new TagResult(Group.items.Select(x => x.title).ToArray(), Tag.CM.Good);
+                    return new TagResult(GROUP.items.Select(x => x.title).ToArray(), TAG.CM.Good);
                 default:
                     return new TagResult(null, new CodeMessage(-1, $"Неизвестная команда для 'group': {parts[1]}"));
             }
@@ -137,9 +137,9 @@ namespace Connector.Driver.Component
             switch (parts[1].ToLower())
             {
                 case "count":
-                    return new TagResult(Tag.items.Count, Tag.CM.Good);
+                    return new TagResult(TAG.items.Count, TAG.CM.Good);
                 case "list":
-                    return new TagResult(Tag.items.Select(x => x.title).ToArray(), Tag.CM.Good);
+                    return new TagResult(TAG.items.Select(x => x.title).ToArray(), TAG.CM.Good);
                 default:
                     // Здесь можно добавить более тонкую обработку, например, поиск по Id или по названию и обращение к свойствам
                     return new TagResult(null, new CodeMessage(-1, $"Неизвестная команда для 'tag': {parts[1]}"));

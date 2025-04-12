@@ -19,26 +19,26 @@ namespace Connector
 
         // ------------------------------------------------------------------------------------------------------------------
 
-        static public List<Source> sources = new List<Source>();
-        static public List<Group> groups = new List<Group>();
-        static public List<Tag> tags = new List<Tag>();
+        static public List<SOURCE> sources = new List<SOURCE>();
+        static public List<GROUP> groups = new List<GROUP>();
+        static public List<TAG> tags = new List<TAG>();
 
         // ==================================================================================================================
 
         #region Source
 
-        public static List<Source> ConvertEditorToControlSources(
+        public static List<SOURCE> ConvertEditorToControlSources(
                                         List<SourceEditor> eSources,
                                         IDeviceFactory deviceFactory,
-                                        Action<Source> onCreate = null)
+                                        Action<SOURCE> onCreate = null)
         {
-            var cSources = new List<Source>();
+            var cSources = new List<SOURCE>();
             if (eSources != null)
             {
                 foreach (var se in eSources)
                 {
                     // Преобразуем идентификатор (uint) в ushort (при условии, что он входит в диапазон)
-                    var source = new Source(
+                    var source = new SOURCE(
                         (ushort)se.Id,
                         se.title,
                         se.driver,         // eDriverType
@@ -54,13 +54,13 @@ namespace Connector
                     cSources.Add(source);
 
                 }
-                Source.items = cSources; // Сохраняем список источников в статическом классе Source
-                Source.SetStatus(eSourceStatus.created); // Устанавливаем статус созданного источника
+                SOURCE.items = cSources; // Сохраняем список источников в статическом классе Source
+                SOURCE.SetStatus(eSourceStatus.created); // Устанавливаем статус созданного источника
             }
             return cSources;
         }
 
-        public static void UpdateEditorToControlSources(List<SourceEditor> eSources, List<Source> cSources, IDeviceFactory deviceFactory)
+        public static void UpdateEditorToControlSources(List<SourceEditor> eSources, List<SOURCE> cSources, IDeviceFactory deviceFactory)
         {
             // Получаем новый список источников
             var newSources = ConvertEditorToControlSources(eSources, deviceFactory);
@@ -126,21 +126,21 @@ namespace Connector
 
         #region Group
 
-        public static List<Group> ConvertEditorToControlGroups(
-                                        List<Source> cSources,
+        public static List<GROUP> ConvertEditorToControlGroups(
+                                        List<SOURCE> cSources,
                                         List<GroupEditor> eGroups,
-                                        Action<Group> onCreate = null)
+                                        Action<GROUP> onCreate = null)
         {
-            var cGroups = new List<Group>();
+            var cGroups = new List<GROUP>();
             if (eGroups != null)
             {
                 foreach (var ge in eGroups)
                 {
                     // Ищем родительский источник по совпадению названия
-                    Source parentSource = cSources.FirstOrDefault(s => s.title.Equals(ge.sourceTitle, StringComparison.OrdinalIgnoreCase));
+                    SOURCE parentSource = cSources.FirstOrDefault(s => s.title.Equals(ge.sourceTitle, StringComparison.OrdinalIgnoreCase));
                     if (parentSource != null)
                     {
-                        var group = new Group(
+                        var group = new GROUP(
                             (ushort)ge.Id,
                             ge.title,
                             parentSource,
@@ -153,12 +153,12 @@ namespace Connector
                         cGroups.Add(group);
                     }
                 }
-                Group.items = cGroups; // Сохраняем список групп в статическом классе Group
-                Group.SetStatus(eGroupStatus.created); // Устанавливаем статус созданного
+                GROUP.items = cGroups; // Сохраняем список групп в статическом классе Group
+                GROUP.SetStatus(eGroupStatus.created); // Устанавливаем статус созданного
             }
             return cGroups;
         }
-        public static void UpdateEditorToControlGroups(List<Source> updatedSources, List<GroupEditor> eGroups, List<Group> cGroups)
+        public static void UpdateEditorToControlGroups(List<SOURCE> updatedSources, List<GroupEditor> eGroups, List<GROUP> cGroups)
         {
             // Получаем новый список групп, используя обновленные источники
             var newGroups = ConvertEditorToControlGroups(updatedSources, eGroups);
@@ -204,21 +204,21 @@ namespace Connector
 
         #region Tag
 
-        public static List<Tag> ConvertEditorToControlTags(
-                                        List<Group> groups,
+        public static List<TAG> ConvertEditorToControlTags(
+                                        List<GROUP> groups,
                                         List<TagEditor> eTags,
-                                        Action<Tag> onCreate = null)
+                                        Action<TAG> onCreate = null)
         {
-            var cTags = new List<Tag>();
+            var cTags = new List<TAG>();
             if (eTags != null)
             {
                 foreach (var te in eTags)
                 {
                     // Ищем родительскую группу по совпадению названия
-                    Group parentGroup = groups.FirstOrDefault(g => g.title.Equals(te.groupTitle, StringComparison.OrdinalIgnoreCase));
+                    GROUP parentGroup = groups.FirstOrDefault(g => g.title.Equals(te.groupTitle, StringComparison.OrdinalIgnoreCase));
                     if (parentGroup != null)
                     {
-                        var tag = new Tag(
+                        var tag = new TAG(
                             (ushort)te.Id,
                             te.title,
                             parentGroup,
@@ -231,12 +231,12 @@ namespace Connector
                         cTags.Add(tag);
                     }
                 }
-                Tag.items = cTags; // Сохраняем список тегов в статическом классе Tag
-                Tag.SetStatus(eTagStatus.created); // Устанавливаем статус созданного
+                TAG.items = cTags; // Сохраняем список тегов в статическом классе Tag
+                TAG.SetStatus(eTagStatus.created); // Устанавливаем статус созданного
             }
             return cTags;
         }
-        public static void UpdateEditorToControlTags(List<Group> updatedGroups, List<TagEditor> eTags, List<Tag> cTags)
+        public static void UpdateEditorToControlTags(List<GROUP> updatedGroups, List<TagEditor> eTags, List<TAG> cTags)
         {
             // Получаем новый список тегов из обновлённых групп.
             var newTags = ConvertEditorToControlTags(updatedGroups, eTags);
@@ -355,9 +355,9 @@ namespace Connector
             groups.Clear();
             tags.Clear();
 
-            Source.Clear();
-            Group.Clear();
-            Tag.Clear();
+            SOURCE.Clear();
+            GROUP.Clear();
+            TAG.Clear();
 
             GC.Collect();
             logger.OK("Память очищена", eMessageCategory.App); // Лог и статус

@@ -7,7 +7,7 @@ using LogCodeMessage;
 
 namespace Connector
 {
-    public class Group : BaseLogger, IGroupOff, IDisposable
+    public class GROUP : BaseLogger, IGroupOff, IDisposable
     {
         public ushort Id { get; }
         public string title { get; }
@@ -15,7 +15,7 @@ namespace Connector
 
 
         // Конструктор
-        public Group(ushort id, string title, Source parentSource, uint updateRate = 100, bool waitOff = false, string description = "")
+        public GROUP(ushort id, string title, SOURCE parentSource, uint updateRate = 100, bool waitOff = false, string description = "")
             : base(LogTarget.FileConsoleForm, null)
         {
             Id = id;
@@ -59,7 +59,7 @@ namespace Connector
                 if (_status != value)
                 {
                     _status = value;
-                    Tag.UpdateStatusForList(Tags.Cast<ITagStatus>().ToList());
+                    TAG.UpdateStatusForList(Tags.Cast<ITagStatus>().ToList());
                     SafeInvokeHandlerGroupStatus(eventStatus, this.Id, _status);
                 }
             }
@@ -183,7 +183,7 @@ namespace Connector
 
         public override bool Equals(object obj)
         {
-            if (obj is Group other)
+            if (obj is GROUP other)
             {
                 return Id == other.Id || title == other.title;
             }
@@ -196,8 +196,8 @@ namespace Connector
         }
 
         #region Builder
-        private Source _parentSource;
-        public Source ParentSource
+        private SOURCE _parentSource;
+        public SOURCE ParentSource
         {
             get => _parentSource;
             set
@@ -222,7 +222,7 @@ namespace Connector
         /// Отписывает группу от старого источника и привязывает к новому.
         /// </summary>
         /// <param name="newSource">Новый объект Source, который будет установлен как родительский для группы.</param>
-        public void RebindSource(Source newSource)
+        public void RebindSource(SOURCE newSource)
         {
             // Если новый источник совпадает со старым, ничего не меняем.
             if (newSource == _parentSource)
@@ -258,9 +258,9 @@ namespace Connector
 
         // Приватная коллекция тегов с объектом-замком
         private readonly object _tagsLock = new object();
-        private List<Tag> _tags = new List<Tag>();
+        private List<TAG> _tags = new List<TAG>();
         // Публичное свойство, возвращающее копию списка для потокобезопасного доступа
-        public List<Tag> Tags
+        public List<TAG> Tags
         {
             get
             {
@@ -272,7 +272,7 @@ namespace Connector
         }
 
         public int TagsCountGood => Tags.Count(tag => tag.Good);
-        public void UseTags(List<Tag> tags)
+        public void UseTags(List<TAG> tags)
         {
             lock (_tagsLock)
             {
@@ -288,7 +288,7 @@ namespace Connector
             }
         }
         // Метод для добавления тега
-        public void AddTag(Tag tag)
+        public void AddTag(TAG tag)
         {
             if (tag != null)
             {
@@ -304,7 +304,7 @@ namespace Connector
         }
 
         // Метод для удаления тега
-        public void RemoveTag(Tag tag)
+        public void RemoveTag(TAG tag)
         {
             if (tag != null)
             {
@@ -328,12 +328,12 @@ namespace Connector
 
         // Статическая коллекция с объектом-замком
         private static readonly object _itemsLock = new object();
-        public static List<Group> items = new List<Group>();
+        public static List<GROUP> items = new List<GROUP>();
 
         public static ushort lastId = 0;
         public static bool log = false;
 
-        public static bool Exist(Group group) => items.Any(x => x.Equals(group));
+        public static bool Exist(GROUP group) => items.Any(x => x.Equals(group));
 
         // Пример обновления статической коллекции
         public static void Clear()
@@ -341,18 +341,18 @@ namespace Connector
             lock (_itemsLock)
             {
                 lastId = 0;
-                items = new List<Group>();
+                items = new List<GROUP>();
             }
         }
 
-        public static Group Item(ushort id)
+        public static GROUP Item(ushort id)
         {
             lock (_itemsLock)
             {
                 return items.FirstOrDefault(x => x.Id == id);
             }
         }
-        public static Group Item(string title)
+        public static GROUP Item(string title)
         {
             lock (_itemsLock)
             {
@@ -364,7 +364,7 @@ namespace Connector
         {
             foreach (var group in items)
             {
-                var useTags = Tag.items.Where(x => x.groupId == group.Id).ToList();
+                var useTags = TAG.items.Where(x => x.groupId == group.Id).ToList();
                 group.UseTags(useTags);
             }
         }

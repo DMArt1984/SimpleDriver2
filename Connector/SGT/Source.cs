@@ -25,17 +25,17 @@ namespace Connector
         }
     }
 
-    public class Source : BaseLogger, ISource
+    public class SOURCE : BaseLogger, ISource
     {
         public ushort Id { get; } // ID источника данных
         public string title { get; set; } // Название источника
         public string description { get; set; } // Описание источника
 
         // Вместо локального списка групп используем вычисляемое свойство
-        public IEnumerable<Group> Groups => Group.items.Where(g => g.ParentSource == this);
+        public IEnumerable<GROUP> Groups => GROUP.items.Where(g => g.ParentSource == this);
 
         // Теги вычисляются через группы
-        public List<Tag> Tags => Groups.SelectMany(g => g.Tags).ToList();
+        public List<TAG> Tags => Groups.SelectMany(g => g.Tags).ToList();
         public int TagsCount => Groups.Sum(g => g.Tags.Count);
         public int TagsCountGood => Groups.Sum(g => g.Tags.Count(x => x.Good));
 
@@ -136,7 +136,7 @@ namespace Connector
         public eDriverType driverType => _driverType;
 
         // Конструкторы
-        public Source(ushort Id, string title,
+        public SOURCE(ushort Id, string title,
             eDriverType driverType, IDeviceFactory deviceFactory,
             bool disable,
             bool auto, bool reopen, string address = "", string description = "")
@@ -165,7 +165,7 @@ namespace Connector
             logger.OK($"Источник ID {Id} {title} {driverType} {address}", eMessageCategory.Source);
         }
 
-        ~Source()
+        ~SOURCE()
         {
             if (_device is Device dr)
             {
@@ -282,7 +282,7 @@ namespace Connector
             if (_device is INetDevice && (_device as DeviceNet).disableHostForOpen)
             {
                 if (!IsHostReachable())
-                    result = Tag.CM.NoPing;
+                    result = TAG.CM.NoPing;
             }
             else
             {
@@ -500,7 +500,7 @@ namespace Connector
                 if (_status != value)
                 {
                     _status = value;
-                    Tag.UpdateStatusForList(Tags.Cast<ITagStatus>().ToList());
+                    TAG.UpdateStatusForList(Tags.Cast<ITagStatus>().ToList());
                     SafeInvokeHandlerStatus(eventStatus, Id, _status);
                 }
             }
@@ -618,14 +618,14 @@ namespace Connector
                 _process = true;
                 groupNow = groupId;
 
-                List<Tag> clientTags;
+                List<TAG> clientTags;
                 if (groupId == 0)
                 {
                     return;
                 }
 
                 var group = Groups.FirstOrDefault(g => g.Id == groupId);
-                clientTags = group != null ? group.Tags.Where(x => !x.Off).ToList() : new List<Tag>();
+                clientTags = group != null ? group.Tags.Where(x => !x.Off).ToList() : new List<TAG>();
 
                 if (clientTags.Any())
                 {
@@ -656,7 +656,7 @@ namespace Connector
         }
 
         private TagErrorHandler _errorHandler = new TagErrorHandler(10);
-        private void HandleTagErrors(List<Tag> clientTags)
+        private void HandleTagErrors(List<TAG> clientTags)
         {
             if (_errorHandler.ProcessErrors(clientTags))
             {
@@ -671,7 +671,7 @@ namespace Connector
             if (counterBreak >= MaxBreak)
             {
                 ClearCounterBreak();
-                codeMessage = Tag.CM.BreakError;
+                codeMessage = TAG.CM.BreakError;
                 logger.Info($"NEW BREAK = ActiveError", eMessageCategory.Source);
             }
         }
@@ -727,33 +727,33 @@ namespace Connector
             if (IsNet() == false)
                 return new CodeMessage();
             if ((_device as DeviceNet).disableHostForOpen)
-                return (IsHostReachable()) ? new CodeMessage() : Tag.CM.NoPing;
+                return (IsHostReachable()) ? new CodeMessage() : TAG.CM.NoPing;
             return (_device as INetDevice).TryTcpConnect("", 0, 0);
         }
 
         #region Static
 
         private static readonly object _sourceItemsLock = new object();
-        static public List<Source> items = new List<Source>(); // все источники
+        static public List<SOURCE> items = new List<SOURCE>(); // все источники
         static public ushort lastId = 0;
 
         static public void Clear()
         {
             lock (_sourceItemsLock)
             {
-                Source.lastId = 0;
-                Source.items = new List<Source>();
+                SOURCE.lastId = 0;
+                SOURCE.items = new List<SOURCE>();
             }
         }
 
-        static public Source Item(ushort Id)
+        static public SOURCE Item(ushort Id)
         {
             lock (_sourceItemsLock)
             {
                 return items.FirstOrDefault(x => x.Id == Id);
             }
         }
-        static public Source Item(string title)
+        static public SOURCE Item(string title)
         {
             lock (_sourceItemsLock)
             {
@@ -763,7 +763,7 @@ namespace Connector
 
         static public void ActivateItems()
         {
-            List<Source> snapshot;
+            List<SOURCE> snapshot;
             lock (_sourceItemsLock)
             {
                 snapshot = items.ToList();
@@ -776,7 +776,7 @@ namespace Connector
 
         static public void SetStatus(eSourceStatus status)
         {
-            List<Source> snapshot;
+            List<SOURCE> snapshot;
             lock (_sourceItemsLock)
             {
                 snapshot = items.ToList();

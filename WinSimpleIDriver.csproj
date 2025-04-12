@@ -138,12 +138,12 @@
     <Compile Include="Connector\SGT\forGroup.cs" />
     <Compile Include="Connector\SGT\forSource.cs" />
     <Compile Include="Connector\SGT\forTag.cs" />
-    <Compile Include="Connector\SGT\Group.cs" />
+    <Compile Include="Connector\SGT\GROUP.cs" />
     <Compile Include="Connector\SGT\GroupEditor.cs" />
     <Compile Include="Connector\SGT\ReconnectTimer.cs" />
-    <Compile Include="Connector\SGT\Source.cs" />
+    <Compile Include="Connector\SGT\SOURCE.cs" />
     <Compile Include="Connector\SGT\SourceEditor.cs" />
-    <Compile Include="Connector\SGT\Tag.cs" />
+    <Compile Include="Connector\SGT\TAG.cs" />
     <Compile Include="Connector\Driver\TestTable.cs" />
     <Compile Include="Connector\SGT\TagEditor.cs" />
     <Compile Include="Connector\SGT\TagErrorHandler.cs" />

@@ -208,7 +208,7 @@ namespace Connector.Driver
  
                     } else
                     {
-                        return new TagResult(Value, Tag.CM.NoData);
+                        return new TagResult(Value, TAG.CM.NoData);
                     }
 
                     // Контроль времени
@@ -223,7 +223,7 @@ namespace Connector.Driver
                         {
                             InnerTrafficLog($" Error: {ts.TotalMilliseconds} мсек > Limit; last result = {Value}");
                             InnerTrafficLog($"  now = {DateTime.Now}; last = {recTime[hash]}");
-                            return new TagResult(Value, Tag.CM.TagTimeout);
+                            return new TagResult(Value, TAG.CM.TagTimeout);
                         }
                     }
 

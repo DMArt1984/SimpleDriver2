@@ -268,14 +268,14 @@ namespace Connector.Driver
                     if (client.statusLastAnswer == SocetModbusTCPmaster.excExceptionConnectionLost)
                     {
                         log?.Invoke(new CodeMessage(-1, $"Есть ошибки в ответе: SocetModbusTCP.excExceptionConnectionLost for {address}"));
-                        return new TagResult(0, Tag.CM.BreakError.code, $"{client.statusLastAnswer}");
+                        return new TagResult(0, TAG.CM.BreakError.code, $"{client.statusLastAnswer}");
                     }
                     return new TagResult(0, -client.statusLastAnswer, SocetModbusTCPmaster.exc[client.statusLastAnswer]);
                 }
 
                 if (bytes == null || bytes.Any() == false)
                 {
-                    return new TagResult(0, Tag.CM.NoData);
+                    return new TagResult(0, TAG.CM.NoData);
                 }
 
                 // Проверка на полноту данных
@@ -290,7 +290,7 @@ namespace Connector.Driver
                         if (bytes.Length * MBit != count * RegsInValue * MX) // <
                         {
                             log?.Invoke(new CodeMessage(1, $"Проверка на тип данных: (bytes.Length = {bytes.Length}) != (count * RegsInValue * 2 = {count * RegsInValue * 2})"));
-                            return new TagResult(0, Tag.CM.Inconsistency);
+                            return new TagResult(0, TAG.CM.Inconsistency);
                         }
                         break;
                 }
@@ -354,7 +354,7 @@ namespace Connector.Driver
                         break;
 
                     default:
-                        return new TagResult(0, Tag.CM.NotSupport);
+                        return new TagResult(0, TAG.CM.NotSupport);
                 }
 
                 // массив и одиночное значение
@@ -378,7 +378,7 @@ namespace Connector.Driver
             //    return new TagResult(newValue, (int)eTagCode.sourceDisconnect, const_SourceDisconnect);
 
             if (newValue == null)
-                return new TagResult(newValue, Tag.CM.NewValueIsNull);
+                return new TagResult(newValue, TAG.CM.NewValueIsNull);
 
             string[] newValues = DynamicToStringArray(newValue);
 
@@ -470,7 +470,7 @@ namespace Connector.Driver
 
                             default:
                                 // Этот тип данных не поддерживается
-                                return new TagResult(newValue, Tag.CM.NotSupport);
+                                return new TagResult(newValue, TAG.CM.NotSupport);
                         }
                         break;
 
@@ -548,7 +548,7 @@ namespace Connector.Driver
 
                             default:
                                 // Этот тип данных не поддерживается
-                                return new TagResult(newValue, Tag.CM.NotSupport);
+                                return new TagResult(newValue, TAG.CM.NotSupport);
                         }
                         break;
                 }
@@ -560,7 +560,7 @@ namespace Connector.Driver
                     if (client.statusLastAnswer == SocetModbusTCPmaster.excExceptionConnectionLost)
                     {
                         log?.Invoke(new CodeMessage(-1, $"Есть ошибки в ответе: SocetModbusTCP.excExceptionConnectionLost for {address}"));
-                        return new TagResult(0, Tag.CM.BreakError);
+                        return new TagResult(0, TAG.CM.BreakError);
                     }
                     return new TagResult(0, -client.statusLastAnswer, SocetModbusTCPmaster.exc[client.statusLastAnswer]);
                 }

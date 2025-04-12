@@ -17,12 +17,12 @@ namespace WinSimpleIDriver
         // =================================================================================================================
 
         // Подписка на события тегов
-        public void SubscribeToTag(Tag tag)
+        public void SubscribeToTag(TAG tag)
         {
             tag.eventRuntime += TagOnRuntimeChanged;
             tag.eventParam += TagOnParamChanged;
         }
-        public void UnsubscribeFromTag(Tag tag)
+        public void UnsubscribeFromTag(TAG tag)
         {
             tag.eventRuntime -= TagOnRuntimeChanged;
             tag.eventParam -= TagOnParamChanged;
@@ -30,7 +30,15 @@ namespace WinSimpleIDriver
 
         private void TagOnRuntimeChanged(ushort Id)
         {
-            
+            var tag = TAG.Item(Id);
+            if (tag != null)
+            {
+                var row = DataTableLib.dtTag.FindRowByID(Id);
+                if (row != null)
+                {
+                    row.Cells[DataTableLib.dtTag.col.Status].Value = tag.Status.GetText();
+                }
+            }
         }
 
         private void TagOnParamChanged(TagParam param)

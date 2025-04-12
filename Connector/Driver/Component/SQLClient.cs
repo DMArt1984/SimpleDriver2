@@ -229,7 +229,7 @@ namespace Connector.Driver
             rows = new List<List<string>>();
             if (String.IsNullOrWhiteSpace(SQL))
             {
-                return Tag.CM.EmptyRequest;
+                return TAG.CM.EmptyRequest;
             }
 
             CodeMessage cm;
@@ -282,7 +282,7 @@ namespace Connector.Driver
                         return cm;
                 }
 
-                return Tag.CM.Good;
+                return TAG.CM.Good;
             }
             catch (SqlException ex)
             {
@@ -300,7 +300,7 @@ namespace Connector.Driver
             rows = 0;
             if (String.IsNullOrWhiteSpace(SQL))
             {
-                return Tag.CM.EmptyRequest;
+                return TAG.CM.EmptyRequest;
             }
 
             CodeMessage cm;
@@ -331,7 +331,7 @@ namespace Connector.Driver
                         return cm;
                 }
 
-                return Tag.CM.Good;
+                return TAG.CM.Good;
             }
             catch (SqlException ex)
             {

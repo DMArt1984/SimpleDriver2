@@ -16,13 +16,13 @@ namespace WinSimpleIDriver
         #region Runtime
 
         // Подписка на события группы
-        public void SubscribeToGroup(Group group)
+        public void SubscribeToGroup(GROUP group)
         {
             group.eventStatus += GroupOnStatusChanged;
             group.eventParams += GroupOnParamsChanged;
             group.tikTakReq += GroupOnCycleRequest;
         }
-        public void UnsubscribeFromGroup(Group group)
+        public void UnsubscribeFromGroup(GROUP group)
         {
             group.eventStatus -= GroupOnStatusChanged;
             group.eventParams -= GroupOnParamsChanged;

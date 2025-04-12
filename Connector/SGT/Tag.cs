@@ -8,7 +8,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Connector
 {
-    public class Tag : BaseLogger, ITagStatus, ITagClient, ITagResult, IAppendTag
+    public class TAG : BaseLogger, ITagStatus, ITagClient, ITagResult, IAppendTag
     {
         public static class CM
         {
@@ -36,7 +36,7 @@ namespace Connector
         public bool lic = false; // тег для контроля лицензии
 
         // Конструктор
-        public Tag(ushort Id, string title, Group parentGroup, eDataType dataType, string address, string description = "")
+        public TAG(ushort Id, string title, GROUP parentGroup, eDataType dataType, string address, string description = "")
             : base(LogTarget.FileConsoleForm, null)
         {
             this.Id = Id;
@@ -304,7 +304,7 @@ namespace Connector
                 if (_writeTagId != value)
                 {
                     _writeTagId = value;
-                    appendTag = Tag.Item(value);
+                    appendTag = TAG.Item(value);
                     EventChangeParam(true);
                 }
             }
@@ -342,21 +342,21 @@ namespace Connector
             SimValue = value;
             if (SimEnable)
             {
-                codeMessage = Tag.CM.Good;
+                codeMessage = TAG.CM.Good;
                 this.value = value;
             }
             else
             {
-                codeMessage = Tag.CM.Good;
+                codeMessage = TAG.CM.Good;
             }
         }
         #endregion
 
         #region Builder
 
-        public Tag[] InnerTags { get; set; } // Массив внутренних тегов, соответствующих тегам, найденным в адресе
+        public TAG[] InnerTags { get; set; } // Массив внутренних тегов, соответствующих тегам, найденным в адресе
 
-        public Group ParentGroup { get; set; } // Группа тега
+        public GROUP ParentGroup { get; set; } // Группа тега
 
         private ushort _groupId = 0;
         public ushort groupId => _groupId;
@@ -365,7 +365,7 @@ namespace Connector
         public string sourceTitle => ParentGroup?.ParentSource?.title ?? "";
         public ushort sourceId => ParentGroup?.ParentSource?.Id ?? 0;
 
-        public void RebindGroup(Group newGroup)
+        public void RebindGroup(GROUP newGroup)
         {
             if (ParentGroup == newGroup)
                 return;
@@ -387,7 +387,7 @@ namespace Connector
         {
             if (!string.IsNullOrWhiteSpace(_writeTagTitle) && title != _writeTagTitle)
             {
-                var tag = Tag.Item(_writeTagTitle);
+                var tag = TAG.Item(_writeTagTitle);
                 if (tag != null)
                 {
                     WriteTagId = tag.Id;
@@ -399,7 +399,7 @@ namespace Connector
             }
             else if (WriteTagId > 0 && Id != WriteTagId)
             {
-                var tag = Tag.Item(WriteTagId);
+                var tag = TAG.Item(WriteTagId);
                 if (tag != null)
                 {
                     _writeTagTitle = tag.title;
@@ -426,7 +426,7 @@ namespace Connector
         // Объект-замок для статической коллекции тегов
         private static readonly object _tagItemsLock = new object();
 
-        public static List<Tag> items = new List<Tag>();
+        public static List<TAG> items = new List<TAG>();
         public static ushort lastId = 0;
         public static bool log = false;
 
@@ -435,18 +435,18 @@ namespace Connector
             lock (_tagItemsLock)
             {
                 lastId = 0;
-                items = new List<Tag>();
+                items = new List<TAG>();
             }
         }
 
-        public static Tag Item(ushort Id)
+        public static TAG Item(ushort Id)
         {
             lock (_tagItemsLock)
             {
                 return items.FirstOrDefault(x => x.Id == Id);
             }
         }
-        public static Tag Item(string title)
+        public static TAG Item(string title)
         {
             lock (_tagItemsLock)
             {
