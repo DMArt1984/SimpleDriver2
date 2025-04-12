@@ -623,6 +623,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "SourceForm";
             this.Text = "SourceForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SourceForm_FormClosing);
             this.Load += new System.EventHandler(this.SourceForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPageNew.ResumeLayout(false);
