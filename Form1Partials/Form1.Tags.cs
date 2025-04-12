@@ -36,15 +36,16 @@ namespace WinSimpleIDriver
                 var row = DataTableLib.dtTag.FindRowByID(Id);
                 if (row != null)
                 {
+                    row.Cells[DataTableLib.dtTag.col.Value].Value = Convert.ToString(tag.value);
                     row.Cells[DataTableLib.dtTag.col.Status].Value = tag.Status.GetText();
+                    row.Cells[DataTableLib.dtTag.col.Message].Value = $"{tag.codeMessage.code} {tag.codeMessage.message}";
                 }
             }
         }
 
         private void TagOnParamChanged(TagParam param)
         {
-            //Log($"Тег {param.Id}: обновлены параметры — Addr={param.address}, Тип={param.dataType}, Off={param.off}");
-            // Можно отразить это в таблице или UI
+            
         }
 
 

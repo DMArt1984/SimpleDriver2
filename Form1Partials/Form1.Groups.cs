@@ -40,21 +40,12 @@ namespace WinSimpleIDriver
 
         private void GroupOnParamsChanged(GroupParamStatus info)
         {
-            // Пример: обновить параметры в таблице, логах или метках
-            //Log($"Группа {info.Id}: обновлены параметры — частота {info.UpdateRate} мс, " +
-            //    $"Off={info.Off}, IsStopped={info.IsStopped}");
-
-            // Визуальное обновление, если реализовано
-            // DataTableLib.dtGroup?.UpdateParams(info);
+            
         }
 
         private void GroupOnCycleRequest(IGroupOff group)
         {
-            // Пример: лог или реакция на событие таймера группы
-            //Log($"Циклический опрос группы {group.Id}");
-
-            // Можно передать в Source, обновить UI или статистику
-            // или собрать метрики по нагрузке
+            
         }
 
         #endregion
