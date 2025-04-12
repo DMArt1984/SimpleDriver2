@@ -34,9 +34,13 @@ namespace WinSimpleIDriver
             src.eventReq -= SourceOnDataReceived;
         }
 
-        private void SourceOnStatusChanged(ushort id, eSourceStatus status)
+        private void SourceOnStatusChanged(ushort Id, eSourceStatus status)
         {
-            // например, обновление таблицы/лога
+            var row = DataTableLib.dtSource.FindRowByID(Id);
+            if (row != null)
+            {
+                row.Cells[DataTableLib.dtSource.col.Status].Value = status.GetText();
+            }
         }
 
         private void SourceOnError(ushort id, CodeMessage error)

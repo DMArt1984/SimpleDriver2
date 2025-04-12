@@ -54,6 +54,8 @@ namespace Connector
                     cSources.Add(source);
 
                 }
+                Source.items = cSources; // Сохраняем список источников в статическом классе Source
+                Source.SetStatus(eSourceStatus.created); // Устанавливаем статус созданного источника
             }
             return cSources;
         }
@@ -129,7 +131,7 @@ namespace Connector
                                         List<GroupEditor> eGroups,
                                         Action<Group> onCreate = null)
         {
-            var groups = new List<Group>();
+            var cGroups = new List<Group>();
             if (eGroups != null)
             {
                 foreach (var ge in eGroups)
@@ -148,11 +150,13 @@ namespace Connector
 
                         onCreate?.Invoke(group); // 👈 колбэк для подписки
 
-                        groups.Add(group);
+                        cGroups.Add(group);
                     }
                 }
+                Group.items = cGroups; // Сохраняем список групп в статическом классе Group
+                Group.SetStatus(eGroupStatus.created); // Устанавливаем статус созданного
             }
-            return groups;
+            return cGroups;
         }
         public static void UpdateEditorToControlGroups(List<Source> updatedSources, List<GroupEditor> eGroups, List<Group> cGroups)
         {
@@ -205,7 +209,7 @@ namespace Connector
                                         List<TagEditor> eTags,
                                         Action<Tag> onCreate = null)
         {
-            var tags = new List<Tag>();
+            var cTags = new List<Tag>();
             if (eTags != null)
             {
                 foreach (var te in eTags)
@@ -224,11 +228,13 @@ namespace Connector
 
                         onCreate?.Invoke(tag); // 👈 подключение обработчиков событий
 
-                        tags.Add(tag);
+                        cTags.Add(tag);
                     }
                 }
+                Tag.items = cTags; // Сохраняем список тегов в статическом классе Tag
+                Tag.SetStatus(eTagStatus.created); // Устанавливаем статус созданного
             }
-            return tags;
+            return cTags;
         }
         public static void UpdateEditorToControlTags(List<Group> updatedGroups, List<TagEditor> eTags, List<Tag> cTags)
         {

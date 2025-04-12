@@ -31,6 +31,7 @@ namespace Connector
     public enum eGroupStatus
     {
         zero = 0, // не определено
+        created = 800, // создан
         Off = 300, // Группа отключена
         On = 900, // Группа включена
     }
@@ -41,6 +42,8 @@ namespace Connector
         {
             switch (status)
             {
+                case eGroupStatus.created:
+                    return "Создан";
                 case eGroupStatus.zero:
                     return "Не определено";
                 case eGroupStatus.Off:

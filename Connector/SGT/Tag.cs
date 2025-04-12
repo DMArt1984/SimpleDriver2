@@ -475,6 +475,18 @@ namespace Connector
                 tag.UpdateStatus();
             }
         }
+
+        public static void SetStatus(eTagStatus status)
+        {
+            lock (_tagItemsLock)
+            {
+                foreach (var item in items)
+                {
+                    item.Status = status;
+                }
+            }
+        }
+
         #endregion
 
         // ==========================

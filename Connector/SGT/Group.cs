@@ -24,6 +24,7 @@ namespace Connector
             UpdateRate = updateRate;
             _waitOff = waitOff;
             ParentSource = parentSource;
+
             logger.OK($"Группа опроса ID {Id} {title} {updateRate}", eMessageCategory.Group);
         }
         public void Dispose()
@@ -374,6 +375,15 @@ namespace Connector
             {
                 if (group.Off)
                     group.Start();
+            }
+        }
+
+        static public void SetStatus(eGroupStatus status)
+        {
+            foreach (var group in items)
+            {
+                if (group.Off)
+                    group.Status = status;
             }
         }
 

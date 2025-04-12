@@ -773,6 +773,20 @@ namespace Connector
                 item.Activate();
             }
         }
+
+        static public void SetStatus(eSourceStatus status)
+        {
+            List<Source> snapshot;
+            lock (_sourceItemsLock)
+            {
+                snapshot = items.ToList();
+            }
+            foreach (var item in snapshot)
+            {
+                item.Status = status;
+            }
+        }
+
         #endregion
 
         // ==================================================================================================

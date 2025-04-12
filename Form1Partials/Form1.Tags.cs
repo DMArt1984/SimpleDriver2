@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WinSimpleIDriver
 {
@@ -27,10 +28,9 @@ namespace WinSimpleIDriver
             tag.eventParam -= TagOnParamChanged;
         }
 
-        private void TagOnRuntimeChanged(ushort id)
+        private void TagOnRuntimeChanged(ushort Id)
         {
-            //Log($"Тег {id} обновил значение");
-            // Можно обновить ячейку в DataGridView, статус и т.д.
+            
         }
 
         private void TagOnParamChanged(TagParam param)

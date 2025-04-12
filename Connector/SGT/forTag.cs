@@ -122,8 +122,9 @@ namespace Connector
     public enum eTagStatus
     {
         zero = 1000, // не определено
+        created = 800, // создан
         good = 0, // Тег работает корректно
-        error = -800, // Ошибка тега
+        error = -600, // Ошибка тега
         sourceDisable= 100, // Источник не активен
         groupDisable = 200, // Группа не активна
         tagOff = 300, // Тег отключен – тег не участвует в опросе
@@ -136,6 +137,8 @@ namespace Connector
         {
             switch (status)
             {
+                case eTagStatus.created:
+                    return "Создан";
                 case eTagStatus.zero:
                     return "Не определено";
                 case eTagStatus.good:

@@ -19,6 +19,7 @@ namespace Connector
     public enum eSourceStatus
     {
         zero = 1000, // не определено
+        created = 800, // создан
         noClient = 1, // нет клиента
         closing = 2, // закрытие...
         closed = 3, // закрыт
@@ -37,6 +38,8 @@ namespace Connector
         {
             switch (status)
             {
+                case eSourceStatus.created:
+                    return "Создан";
                 case eSourceStatus.cycle:
                     return "Работает";
                 case eSourceStatus.breaking:

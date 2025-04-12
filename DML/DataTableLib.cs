@@ -204,7 +204,23 @@ namespace DML
                 help.Show();
             }
 
+            public static DataGridViewRow FindRowByID(ushort id)
+            {
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    var value = row.Cells[0].Value;
+                    if (value != null && ushort.TryParse(value.ToString(), out ushort rowId) && rowId == id)
+                    {
+                        return row;
+                    }
+                }
+                return null;
+            }
         }
+
+        
 
         #endregion
 
@@ -292,6 +308,21 @@ namespace DML
                 {
                 new PairFilterCol { col = col.Source, filter = text }
                 };
+            }
+
+            public static DataGridViewRow FindRowByID(ushort id)
+            {
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    var value = row.Cells[0].Value;
+                    if (value != null && ushort.TryParse(value.ToString(), out ushort rowId) && rowId == id)
+                    {
+                        return row;
+                    }
+                }
+                return null;
             }
 
         }
@@ -526,6 +557,21 @@ namespace DML
                 };
 
                 help.Show();
+            }
+
+            public static DataGridViewRow FindRowByID(ushort id)
+            {
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    var value = row.Cells[0].Value;
+                    if (value != null && ushort.TryParse(value.ToString(), out ushort rowId) && rowId == id)
+                    {
+                        return row;
+                    }
+                }
+                return null;
             }
 
             #region Tags.AddRow
@@ -1486,6 +1532,7 @@ namespace DML
 
         #endregion
 
+        
     }
 
 }

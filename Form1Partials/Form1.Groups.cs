@@ -1,5 +1,6 @@
 ﻿using Connector;
 using DML;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +29,13 @@ namespace WinSimpleIDriver
             group.tikTakReq -= GroupOnCycleRequest;
         }
 
-        private void GroupOnStatusChanged(ushort groupId, eGroupStatus status)
+        private void GroupOnStatusChanged(ushort Id, eGroupStatus status)
         {
-            // Пример: обновить статус в таблице групп (если есть DataTableLib.dtGroup)
-            //Log($"Группа {groupId} изменила статус на {status.GetText()}");
-
-            // Обновить визуально, если нужно
-            // DataTableLib.dtGroup?.UpdateStatus(groupId, status); // если есть метод
+            var row = DataTableLib.dtGroup.FindRowByID(Id);
+            if (row != null)
+            {
+                row.Cells[DataTableLib.dtGroup.col.Status].Value = status.GetText();
+            }
         }
 
         private void GroupOnParamsChanged(GroupParamStatus info)
