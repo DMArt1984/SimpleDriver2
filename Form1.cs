@@ -13,6 +13,7 @@ using DML;
 using System.IO;
 using WinSimpleIDriver.Editor;
 using Connector;
+using WinSimpleIDriver.UserControl;
 
 namespace WinSimpleIDriver
 {
@@ -1199,5 +1200,12 @@ namespace WinSimpleIDriver
             TreeLib.DrawTreeStructure();
         }
 
+        private void dataGridViewSource_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            SourceForm myform = new SourceForm();
+            myform.Id = DataTableLib.GetSelIdFromTable(sender);
+            myform.parent = this;
+            myform.Show(this);
+        }
     }
 }

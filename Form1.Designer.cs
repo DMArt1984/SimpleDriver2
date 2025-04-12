@@ -638,7 +638,7 @@ namespace WinSimpleIDriver
             // buttonStopRuntime
             // 
             this.buttonStopRuntime.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.buttonStopRuntime.Location = new System.Drawing.Point(557, 371);
+            this.buttonStopRuntime.Location = new System.Drawing.Point(557, 373);
             this.buttonStopRuntime.Name = "buttonStopRuntime";
             this.buttonStopRuntime.Size = new System.Drawing.Size(147, 23);
             this.buttonStopRuntime.TabIndex = 9;
@@ -661,7 +661,7 @@ namespace WinSimpleIDriver
             // splitContainerJsonProject.Panel2
             // 
             this.splitContainerJsonProject.Panel2.Controls.Add(this.treeViewJsonProject);
-            this.splitContainerJsonProject.Size = new System.Drawing.Size(1110, 339);
+            this.splitContainerJsonProject.Size = new System.Drawing.Size(1110, 341);
             this.splitContainerJsonProject.SplitterDistance = 549;
             this.splitContainerJsonProject.TabIndex = 8;
             // 
@@ -672,7 +672,7 @@ namespace WinSimpleIDriver
             this.richTextBoxJsonProject.Location = new System.Drawing.Point(0, 0);
             this.richTextBoxJsonProject.Name = "richTextBoxJsonProject";
             this.richTextBoxJsonProject.ReadOnly = true;
-            this.richTextBoxJsonProject.Size = new System.Drawing.Size(549, 339);
+            this.richTextBoxJsonProject.Size = new System.Drawing.Size(549, 341);
             this.richTextBoxJsonProject.TabIndex = 0;
             this.richTextBoxJsonProject.Text = "";
             // 
@@ -682,13 +682,13 @@ namespace WinSimpleIDriver
             this.treeViewJsonProject.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.treeViewJsonProject.Location = new System.Drawing.Point(0, 0);
             this.treeViewJsonProject.Name = "treeViewJsonProject";
-            this.treeViewJsonProject.Size = new System.Drawing.Size(557, 339);
+            this.treeViewJsonProject.Size = new System.Drawing.Size(557, 341);
             this.treeViewJsonProject.TabIndex = 0;
             // 
             // buttonModelsToRuntime
             // 
             this.buttonModelsToRuntime.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.buttonModelsToRuntime.Location = new System.Drawing.Point(407, 371);
+            this.buttonModelsToRuntime.Location = new System.Drawing.Point(407, 373);
             this.buttonModelsToRuntime.Name = "buttonModelsToRuntime";
             this.buttonModelsToRuntime.Size = new System.Drawing.Size(147, 23);
             this.buttonModelsToRuntime.TabIndex = 7;
@@ -699,7 +699,7 @@ namespace WinSimpleIDriver
             // buttonModelsToJson
             // 
             this.buttonModelsToJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonModelsToJson.Location = new System.Drawing.Point(992, 371);
+            this.buttonModelsToJson.Location = new System.Drawing.Point(992, 373);
             this.buttonModelsToJson.Name = "buttonModelsToJson";
             this.buttonModelsToJson.Size = new System.Drawing.Size(122, 23);
             this.buttonModelsToJson.TabIndex = 6;
@@ -710,7 +710,7 @@ namespace WinSimpleIDriver
             // buttonTablesToModels
             // 
             this.buttonTablesToModels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonTablesToModels.Location = new System.Drawing.Point(864, 371);
+            this.buttonTablesToModels.Location = new System.Drawing.Point(864, 373);
             this.buttonTablesToModels.Name = "buttonTablesToModels";
             this.buttonTablesToModels.Size = new System.Drawing.Size(122, 23);
             this.buttonTablesToModels.TabIndex = 5;
@@ -721,7 +721,7 @@ namespace WinSimpleIDriver
             // buttonModelsToTables
             // 
             this.buttonModelsToTables.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonModelsToTables.Location = new System.Drawing.Point(132, 371);
+            this.buttonModelsToTables.Location = new System.Drawing.Point(132, 373);
             this.buttonModelsToTables.Name = "buttonModelsToTables";
             this.buttonModelsToTables.Size = new System.Drawing.Size(122, 23);
             this.buttonModelsToTables.TabIndex = 4;
@@ -732,7 +732,7 @@ namespace WinSimpleIDriver
             // buttonJsonToModels
             // 
             this.buttonJsonToModels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonJsonToModels.Location = new System.Drawing.Point(4, 371);
+            this.buttonJsonToModels.Location = new System.Drawing.Point(4, 373);
             this.buttonJsonToModels.Name = "buttonJsonToModels";
             this.buttonJsonToModels.Size = new System.Drawing.Size(122, 23);
             this.buttonJsonToModels.TabIndex = 3;
@@ -1024,6 +1024,7 @@ namespace WinSimpleIDriver
             this.dataGridViewSource.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dataGridViewSource_RowStateChanged);
             this.dataGridViewSource.SelectionChanged += new System.EventHandler(this.dataGridViewSource_SelectionChanged);
             this.dataGridViewSource.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewSource_UserAddedRow);
+            this.dataGridViewSource.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewSource_MouseDoubleClick);
             // 
             // sourceID
             // 
@@ -2361,7 +2362,7 @@ namespace WinSimpleIDriver
             // buttonIncludeChildFilter
             // 
             this.buttonIncludeChildFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonIncludeChildFilter.Location = new System.Drawing.Point(397, 3);
+            this.buttonIncludeChildFilter.Location = new System.Drawing.Point(391, 3);
             this.buttonIncludeChildFilter.Name = "buttonIncludeChildFilter";
             this.buttonIncludeChildFilter.Size = new System.Drawing.Size(75, 24);
             this.buttonIncludeChildFilter.TabIndex = 16;
@@ -2376,7 +2377,7 @@ namespace WinSimpleIDriver
             this.textBoxIncludeChildFilter.Location = new System.Drawing.Point(231, 4);
             this.textBoxIncludeChildFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxIncludeChildFilter.Name = "textBoxIncludeChildFilter";
-            this.textBoxIncludeChildFilter.Size = new System.Drawing.Size(160, 21);
+            this.textBoxIncludeChildFilter.Size = new System.Drawing.Size(154, 21);
             this.textBoxIncludeChildFilter.TabIndex = 15;
             this.textBoxIncludeChildFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBoxIncludeChildFilter.TextChanged += new System.EventHandler(this.textBoxChangeFilter_TextChanged);
@@ -2408,7 +2409,7 @@ namespace WinSimpleIDriver
             this.dataGridViewIncludeChild.MultiSelect = false;
             this.dataGridViewIncludeChild.Name = "dataGridViewIncludeChild";
             this.dataGridViewIncludeChild.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewIncludeChild.Size = new System.Drawing.Size(446, 333);
+            this.dataGridViewIncludeChild.Size = new System.Drawing.Size(440, 333);
             this.dataGridViewIncludeChild.TabIndex = 3;
             this.dataGridViewIncludeChild.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewIncludeChild_CellEndEdit);
             this.dataGridViewIncludeChild.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewIncludeChild_UserAddedRow);

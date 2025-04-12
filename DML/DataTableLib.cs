@@ -1115,12 +1115,12 @@ namespace DML
         }
 
         // Получить ID из выделенной строки DataGridView
-        public static uint GetSelIdFromTable(object senderDGV)
+        public static ushort GetSelIdFromTable(object senderDGV)
         {
             if (senderDGV is DataGridView dgv && dgv.SelectedRows.Count > 0)
             {
                 var value = dgv.SelectedRows[0].Cells[0].Value;
-                return value is uint id ? id : Convert.ToUInt32(value ?? 0);
+                return value is ushort id ? id : Convert.ToUInt16(value ?? 0);
             }
             return 0;
         }
