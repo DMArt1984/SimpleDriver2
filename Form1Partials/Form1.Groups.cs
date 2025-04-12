@@ -1,6 +1,5 @@
 ﻿using Connector;
 using DML;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +33,7 @@ namespace WinSimpleIDriver
             var row = DataTableLib.dtGroup.FindRowByID(Id);
             if (row != null)
             {
-                row.Cells[DataTableLib.dtGroup.col.Status].Value = status.GetText();
+                row.Cells[DataTableLib.dtGroup.col.Status].Value = $"{status} {status.GetText()}";
             }
         }
 

@@ -13,9 +13,6 @@ namespace WinSimpleIDriver
     public partial class Form1
     {
 
-
-        // =================================================================================================================
-
         // Подписка на события тегов
         public void SubscribeToTag(TAG tag)
         {
@@ -37,7 +34,7 @@ namespace WinSimpleIDriver
                 if (row != null)
                 {
                     row.Cells[DataTableLib.dtTag.col.Value].Value = Convert.ToString(tag.value);
-                    row.Cells[DataTableLib.dtTag.col.Status].Value = tag.Status.GetText();
+                    row.Cells[DataTableLib.dtTag.col.Status].Value = $"{tag.Status} {tag.Status.GetText()}";
                     row.Cells[DataTableLib.dtTag.col.Message].Value = $"{tag.codeMessage.code} {tag.codeMessage.message}";
                 }
             }
