@@ -12,7 +12,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WinSimpleIDriver
 {
-    public partial class Form1
+    public partial class FormMain
     {
 
         #region Runtime

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace WinSimpleIDriver
 {
-    public partial class Form1
+    public partial class FormMain
     {
         #region LOG
 

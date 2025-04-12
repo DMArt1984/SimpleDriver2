@@ -18,7 +18,7 @@ using WinSimpleIDriver.UserControl;
 namespace WinSimpleIDriver
 {
     
-    public partial class Form1 : Form
+    public partial class FormMain : Form
     {
         // Теги
         DataTable dtTags;
@@ -30,7 +30,7 @@ namespace WinSimpleIDriver
         LabelLogger lLeft;
         LabelLogger lRight;
 
-        public Form1()
+        public FormMain()
         {
             InitializeComponent();
         }

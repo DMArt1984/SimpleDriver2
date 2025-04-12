@@ -294,7 +294,7 @@ namespace Connector
 
 
         // Запуск Runtime
-        public static void StartRuntime(Form1 frm, ILogger logger)
+        public static void StartRuntime(FormMain frm, ILogger logger)
         {
             _transition = true;
 
@@ -330,7 +330,7 @@ namespace Connector
         }
 
         // Остановка Runtime
-        public static void StopRuntime(Form1 frm, ILogger logger)
+        public static void StopRuntime(FormMain frm, ILogger logger)
         {
             _transition = false;
 
