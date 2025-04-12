@@ -1,5 +1,6 @@
 ﻿using Connector;
 using DML;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using LogCodeMessage;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,11 @@ namespace WinSimpleIDriver
 
         private void SourceOnDataReceived(ushort sourceId, ushort groupId, List<ITagResult> results, int counter, int fails, int all, int good)
         {
-            
+            var row = DataTableLib.dtSource.FindRowByID(sourceId);
+            if (row != null)
+            {
+                row.Cells[DataTableLib.dtSource.col.Statistic].Value = $"{counter} [{fails}] {all}/{good}";
+            }
         }
         #endregion
 

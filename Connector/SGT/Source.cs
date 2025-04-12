@@ -571,7 +571,7 @@ namespace Connector
         private int _processing = 0; // 0 - не обрабатывается, 1 - идет обработка
 
         // Запросы
-        internal void EventRequest(IGroupOff group)
+        internal void EventRequest(IGroupTickAndOff group)
         {
             if (group == null || group.Off || !Opened || (!CyclicRequest && group.Id > 0))
                 return;

@@ -7,7 +7,7 @@ using LogCodeMessage;
 
 namespace Connector
 {
-    public class GROUP : BaseLogger, IGroupOff, IDisposable
+    public class GROUP : BaseLogger, IGroupTickAndOff, IDisposable
     {
         public ushort Id { get; }
         public string title { get; }
@@ -37,7 +37,7 @@ namespace Connector
         public delegate void HandlerParam(GroupParamStatus info);
         public event HandlerParam eventParams;
 
-        public delegate void HandlerReq(IGroupOff group);
+        public delegate void HandlerReq(IGroupTickAndOff group);
         public event HandlerReq tikTakReq;
 
         public delegate void HandlerGroupStatus(ushort Id, eGroupStatus status);
@@ -71,6 +71,8 @@ namespace Connector
 
         private Timer _timer;
         private bool _timerStop = false;
+
+        public int TickCount => _tickCount;
         private int _tickCount = 0;
 
         private uint _updateRate = 100;
@@ -106,6 +108,7 @@ namespace Connector
             if (_timer != null)
             {
                 _timerStop = true;
+                _tickCount = 0;
             }
             OffAndTimerStop();
         }
@@ -410,7 +413,7 @@ namespace Connector
         }
 
         // Безопасный вызов для HandlerReq (принимает IGroupOff)
-        private void SafeInvokeHandlerReq(HandlerReq handler, IGroupOff group)
+        private void SafeInvokeHandlerReq(HandlerReq handler, IGroupTickAndOff group)
         {
             if (handler == null)
                 return;

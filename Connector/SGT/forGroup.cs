@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Connector
 {
-    public interface IGroupOff
+    public interface IGroupTickAndOff
     {
         ushort Id { get; }
         bool Off { get; set; }
+        int TickCount { get; }
     }
 
     public struct GroupParamStatus

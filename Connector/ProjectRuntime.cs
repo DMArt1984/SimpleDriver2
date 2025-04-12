@@ -319,6 +319,13 @@ namespace Connector
                     frm.SubscribeToTag);
             logger.OK("Теги загружены", eMessageCategory.App); // Лог и статус
 
+
+            SOURCE.ActivateItems(); // Активируем источники
+            logger.OK("Источники (подключения) активны", eMessageCategory.App); // Лог и статус
+
+            GROUP.ActivateItems(); // Активируем группы
+            logger.OK("Группы (опроса) активны", eMessageCategory.App); // Лог и статус
+
             _online = true;
         }
 

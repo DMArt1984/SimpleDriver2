@@ -1,11 +1,13 @@
 ﻿using Connector;
 using DML;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WinSimpleIDriver
 {
@@ -42,9 +44,13 @@ namespace WinSimpleIDriver
             
         }
 
-        private void GroupOnCycleRequest(IGroupOff group)
+        private void GroupOnCycleRequest(IGroupTickAndOff group)
         {
-            
+            var row = DataTableLib.dtGroup.FindRowByID(group.Id);
+            if (row != null)
+            {
+                row.Cells[DataTableLib.dtGroup.col.Statistic].Value = group.TickCount;
+            }
         }
 
         #endregion
